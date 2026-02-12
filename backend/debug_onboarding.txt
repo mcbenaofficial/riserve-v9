@@ -1,0 +1,8 @@
+
+--- Chat Request 2026-02-12T17:43:13.045056+00:00 ---
+User: test@ridn.com, Role: Admin, CompanyID: None
+Progress Used: {"company_id": null, "conversation_id": "19b199ca-12bd-4948-9ffb-e5e3eb798225"}
+
+--- Chat Request 2026-02-12T17:43:40.624971+00:00 ---
+User: test@ridn.com, Role: Admin, CompanyID: None
+Progress Used: {"company_id": null, "conversation_id": "8c198c90-684c-47f8-aa2d-11979f6c77ef"}

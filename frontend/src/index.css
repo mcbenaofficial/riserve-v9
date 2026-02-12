@@ -1,0 +1,581 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cosmic Metallic Button - Blue Tinge */
+.cosmic-btn {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(45deg,
+            #0a1628 0%,
+            #1a3a5c 15%,
+            #2563eb 35%,
+            #3b82f6 50%,
+            #60a5fa 65%,
+            #2563eb 85%,
+            #0a1628 100%),
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%);
+    background-size: 300% 300%, 200% 100%;
+    border: none;
+    color: #ffffff;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow:
+        0 4px 20px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: cosmicShift 8s ease-in-out infinite, shinePulse 3s ease-in-out infinite alternate;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cosmic-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent, rgba(255, 255, 255, 0.5) 10%, rgba(255, 255, 255, 0.15) 20%, transparent 30%);
+    transform: rotate(0deg);
+    transition: transform 0.5s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.cosmic-btn:hover::before {
+    transform: rotate(180deg) translateX(15%) translateY(-15%);
+}
+
+.cosmic-btn:hover {
+    background-size: 350% 350%, 250% 120%;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow:
+        0 8px 30px rgba(59, 130, 246, 0.5),
+        0 0 25px rgba(96, 165, 250, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.cosmic-btn:active {
+    transform: translateY(0) scale(0.99);
+}
+
+.cosmic-btn>* {
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes cosmicShift {
+
+    0%,
+    100% {
+        background-position: 0% 50%, 0% 0%;
+    }
+
+    25% {
+        background-position: 100% 50%, 100% 100%;
+    }
+
+    50% {
+        background-position: 50% 100%, 50% 50%;
+    }
+
+    75% {
+        background-position: 0% 50%, 0% 0%;
+    }
+}
+
+@keyframes shinePulse {
+    0% {
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    100% {
+        box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.35);
+    }
+}
+
+html,
+body {
+    margin: 0;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    overflow: hidden;
+    /* Prevent body scroll */
+    overscroll-behavior: none;
+    /* Disable pull-to-refresh */
+}
+
+#root {
+    height: 100%;
+}
+
+code {
+    font-family:
+        source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/* Ri'Serve Theme System */
+@layer base {
+    :root {
+        /* LIGHT MODE - Ri'Serve (Calm · Editorial · Precision) */
+        --background: 220 14% 96%;
+        /* #F6F7F9 */
+        /* Subtle mesh gradient for light mode to enhance glass effect */
+        background-image:
+            radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0.03) 0px, transparent 50%),
+            radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.03) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.03) 0px, transparent 50%);
+        background-attachment: fixed;
+        --background-secondary: 220 16% 93%;
+        /* #ECEFF3 */
+        --foreground: 220 20% 7%;
+        /* #0E1116 */
+        --card: 0 0% 100%;
+        /* #FFFFFF */
+        --card-foreground: 220 20% 7%;
+        /* #0E1116 */
+        --popover: 0 0% 100%;
+        --popover-foreground: 220 20% 7%;
+        --primary: 220 20% 7%;
+        /* #0E1116 */
+        --primary-foreground: 220 14% 96%;
+        --secondary: 220 10% 34%;
+        /* #4B5563 */
+        --secondary-foreground: 220 20% 7%;
+        --muted: 220 9% 46%;
+        /* #6B7280 */
+        --muted-foreground: 220 10% 34%;
+        --accent: 199 59% 59%;
+        /* #5FA8D3 - Muted Cyan */
+        --accent-foreground: 220 20% 7%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 220 12% 85%;
+        /* #D9DEE5 */
+        --input: 220 12% 85%;
+        --ring: 199 59% 59%;
+        /* Accent color for focus */
+        --chart-1: 199 59% 59%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+        --chart-6: 220 70% 50%;
+        --radius: 0.5rem;
+
+        /* Custom Ri'Serve Colors */
+        --rs-bg-primary: #F6F7F9;
+        --rs-bg-secondary: #ECEFF3;
+        --rs-surface: #FFFFFF;
+        --rs-text-primary: #0E1116;
+        --rs-text-secondary: #4B5563;
+        --rs-text-muted: #6B7280;
+        --rs-border: #D9DEE5;
+        --rs-accent: #5FA8D3;
+        --rs-accent-hover: #4A95C0;
+        --rs-accent-active: #3D87B3;
+    }
+
+    .dark {
+        /* DARK MODE - Ri'Serve (Futuristic · Luxury · Enterprise) */
+        --background: 220 20% 4%;
+        /* #0B0D10 */
+        --background-secondary: 215 22% 9%;
+        /* #12161C */
+        --foreground: 220 11% 92%;
+        /* #E6E8EB */
+        --card: 215 17% 11%;
+        /* #171C22 */
+        --card-foreground: 220 11% 92%;
+        --popover: 215 17% 11%;
+        --popover-foreground: 220 11% 92%;
+        --primary: 220 11% 92%;
+        /* #E6E8EB */
+        --primary-foreground: 220 20% 4%;
+        --secondary: 218 11% 68%;
+        /* #A9AFB8 */
+        --secondary-foreground: 220 11% 92%;
+        --muted: 216 8% 52%;
+        /* #7D8590 */
+        --muted-foreground: 218 11% 68%;
+        --accent: 199 59% 59%;
+        /* #5FA8D3 - Muted Cyan */
+        --accent-foreground: 220 20% 4%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 220 11% 92%;
+        --border: 216 18% 14%;
+        /* #1F2630 */
+        --input: 216 18% 14%;
+        --ring: 199 59% 59%;
+        --chart-1: 199 59% 59%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+
+        /* Custom Ri'Serve Colors */
+        --rs-bg-primary: #0B0D10;
+        --rs-bg-secondary: #12161C;
+        --rs-surface: #171C22;
+        --rs-text-primary: #E6E8EB;
+        --rs-text-secondary: #A9AFB8;
+        --rs-text-muted: #7D8590;
+        --rs-border: #1F2630;
+        --rs-accent: #5FA8D3;
+        --rs-accent-hover: #74B5DA;
+        --rs-accent-active: #89C2E1;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"]>* {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border-left-width: inherit;
+        border-right-width: inherit;
+        border-top-width: inherit;
+        border-bottom-width: inherit;
+        border-left-style: inherit;
+        border-right-style: inherit;
+        border-top-style: inherit;
+        border-bottom-style: inherit;
+        border-left-color: inherit;
+        border-right-color: inherit;
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+    }
+}
+
+/* AI Agent Background Animations */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate(-50%, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -20px) scale(1.02);
+    }
+}
+
+@keyframes pulse-fast {
+
+    0%,
+    100% {
+        opacity: 0.8;
+        transform: translate(-50%, 0) scale(1.1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -10px) scale(1.15);
+    }
+}
+
+@keyframes pulse-slow {
+
+    0%,
+    100% {
+        opacity: 0.9;
+        transform: translate(-50%, 0) scale(1.05);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -5px) scale(1.08);
+    }
+}
+
+@keyframes orbit-slow {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+    }
+}
+
+@keyframes orbit-fast {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+    }
+}
+
+@keyframes particle {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: translateY(0) scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-30px) scale(1);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ─── Vorta Neon Effects ─── */
+@keyframes neonPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            inset 0 0 2px 0 rgba(168, 85, 247, 0.5),
+            0 0 10px 1px rgba(168, 85, 247, 0.2),
+            0 0 25px 2px rgba(139, 92, 246, 0.1),
+            0 0 45px 4px rgba(124, 58, 237, 0.05);
+        border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    50% {
+        box-shadow:
+            inset 0 0 4px 0 rgba(168, 85, 247, 0.7),
+            0 0 18px 2px rgba(168, 85, 247, 0.35),
+            0 0 40px 4px rgba(139, 92, 246, 0.2),
+            0 0 60px 8px rgba(124, 58, 237, 0.1);
+        border-color: rgba(168, 85, 247, 0.55);
+    }
+}
+
+@keyframes neonSpin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes neonBreath {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes neonFadeCalm {
+    0% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.85;
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-fast {
+    animation: pulse-fast 1.5s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+}
+
+.animate-orbit-slow {
+    animation: orbit-slow 20s linear infinite;
+}
+
+.animate-orbit-fast {
+    animation: orbit-fast 8s linear infinite;
+}
+
+.animate-particle {
+    animation: particle 2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+}
+
+/* Custom scrollbar for chat */
+.scrollbar-thin {
+    scrollbar-width: thin;
+}
+
+.scrollbar-thumb-\[\#1F2630\]::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar-thumb-\[\#1F2630\]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thumb-\[\#1F2630\]::-webkit-scrollbar-thumb {
+    background-color: #1F2630;
+    border-radius: 3px;
+}
+
+/* Utility classes for Ri'Serve theme */
+@layer utilities {
+    .rs-bg-primary {
+        background-color: var(--rs-bg-primary);
+    }
+
+    .rs-bg-secondary {
+        background-color: var(--rs-bg-secondary);
+    }
+
+    .rs-bg-surface {
+        background-color: var(--rs-surface);
+    }
+
+    .rs-text-primary {
+        color: var(--rs-text-primary);
+    }
+
+    .rs-text-secondary {
+        color: var(--rs-text-secondary);
+    }
+
+    .rs-text-muted {
+        color: var(--rs-text-muted);
+    }
+
+    .rs-border {
+        border-color: var(--rs-border);
+    }
+
+    .rs-accent {
+        color: var(--rs-accent);
+    }
+
+    .rs-accent-bg {
+        background-color: var(--rs-accent);
+    }
+
+    /* Accent interaction states */
+    .rs-accent-hover:hover {
+        background-color: var(--rs-accent-hover);
+    }
+
+    .rs-accent-active:active {
+        background-color: var(--rs-accent-active);
+    }
+
+    /* Focus glow effect */
+    .rs-focus-glow:focus {
+        box-shadow: 0 0 0 3px rgba(95, 168, 211, 0.15);
+        outline: none;
+    }
+
+    /* Glassmorphism Pro Max Utilities */
+    .glass-panel {
+        @apply transition-all duration-300;
+    }
+
+    /* Light Mode Glass */
+    :root .glass-panel {
+        @apply bg-white/70 backdrop-blur-lg border border-white/50 shadow-xl ring-1 ring-black/5;
+    }
+
+    /* Dark Mode Glass */
+    .dark .glass-panel {
+        @apply bg-[#12161C]/60 backdrop-blur-md border border-[#1F2630] shadow-lg ring-0;
+    }
+
+    .glass-panel-hover {
+        @apply hover:scale-[1.01];
+    }
+
+    /* Light Mode Hover */
+    :root .glass-panel-hover {
+        @apply hover:bg-white/80 hover:shadow-2xl hover:ring-black/10;
+    }
+
+    /* Dark Mode Hover */
+    .dark .glass-panel-hover {
+        @apply hover:bg-[#12161C] hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-pink-500/10 hover:border-purple-500/40;
+    }
+
+    .text-gradient-pro {
+        @apply bg-clip-text text-transparent bg-gradient-to-r;
+    }
+
+    /* Light Mode Text Gradient (Darker for contrast) */
+    :root .text-gradient-pro {
+        @apply from-purple-600 via-pink-600 to-blue-600;
+    }
+
+    /* Dark Mode Text Gradient (Lighter for contrast) */
+    .dark .text-gradient-pro {
+        @apply from-purple-400 via-pink-400 to-blue-400;
+    }
+}
+
+/* Pro Max Variables - Chart Overrides */
+@layer base {
+    .dark {
+        --chart-1: 263 70% 50%;
+        /* #8b5cf6 - Violet */
+        --chart-2: 330 81% 60%;
+        /* #ec4899 - Pink */
+        --chart-3: 217 91% 60%;
+        /* #3b82f6 - Blue */
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
+}

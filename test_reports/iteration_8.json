@@ -1,0 +1,95 @@
+{
+  "summary": "Completed comprehensive testing of Ri'DN Partner Dashboard new features: Multi-service booking, Enhanced white labeling, Invoice generation, Upcoming bookings. All backend tests passed (8/8). Frontend UI verified working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_new_features.py",
+    "/app/test_reports/pytest/pytest_new_features.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Multi-service booking implemented correctly with service_ids array in public.py",
+    "White labeling config includes all required fields: primary_color, secondary_color, text_color, background_color, font_family, logo_url, business_name, tagline",
+    "Slot config modal has all 4 tabs: General, Booking Options, Customer Fields, White Label",
+    "Invoice modal shows customer info, service details, GST (18%) calculation, and total",
+    "Upcoming Bookings widget added to Dashboard and Bookings page"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_new_features.py"
+  ],
+  "success_rate": {
+    "backend": "100% (8/8 new feature tests passed)",
+    "frontend": "100% (all new features verified working)"
+  },
+  "test_credentials": {
+    "email": "test@example.com",
+    "password": "test123"
+  },
+  "seed_data_creation": "Created 3 outlets, 3 services, 1 slot config with multi-service and white labeling, 1 multi-service booking for testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "New features tested: 1) Multi-service booking with service_ids array, 2) White labeling with Plus plan (colors, fonts, logo), 3) Invoice generation with GST, 4) Upcoming Bookings widget on Dashboard and Bookings page, 5) Copy Link button in Admin Slot Booking. Public booking URL format: /book/{embed_token}",
+  "features_tested": {
+    "admin_slot_booking_section": {
+      "status": "PASS",
+      "details": "Slot Booking Configuration section loads correctly with stats for Configured Outlets, Total Resources, Multi-Service Enabled, Online Booking Enabled"
+    },
+    "slot_config_modal_tabs": {
+      "status": "PASS",
+      "details": "Modal opens with all 4 tabs: General, Booking Options, Customer Fields, White Label"
+    },
+    "multi_service_checkbox": {
+      "status": "PASS",
+      "details": "Allow Multiple Services toggle available in Booking Options tab with info panel"
+    },
+    "white_label_tab": {
+      "status": "PASS",
+      "details": "Shows Free Plan and Plus Plan options. Plus plan enables: Logo upload, Business Name, Tagline, Primary Color, Background Color, Text Color, Button Text Color, Font Family selector, Live Preview"
+    },
+    "upcoming_bookings_section": {
+      "status": "PASS",
+      "details": "Bookings page shows Upcoming Bookings section at top with pending appointments"
+    },
+    "invoice_modal": {
+      "status": "PASS",
+      "details": "Invoice modal shows: Download button, Print button, Customer info (BILL TO), Service details, GST (18%) calculation, Total amount, Payment Status, Booking ID"
+    },
+    "public_booking_multi_service": {
+      "status": "PASS",
+      "details": "Public booking API supports service_ids array. UI shows 'Select Services (multiple allowed)' with checkboxes for each service"
+    },
+    "dashboard_upcoming_widget": {
+      "status": "PASS",
+      "details": "Dashboard can show Upcoming Bookings widget with pending/in-progress bookings"
+    },
+    "copy_link_button": {
+      "status": "PASS",
+      "details": "Copy Link button works in Admin Slot Booking, shows 'Copied!' confirmation"
+    }
+  },
+  "api_endpoints_tested": [
+    "GET /api/slot-configs - Returns configs with allow_multiple_services field",
+    "POST /api/slot-configs - Creates config with multi-service and branding",
+    "GET /api/public/slot-config/{token} - Returns config, outlet, services for public booking",
+    "POST /api/public/book - Creates booking with service_ids array",
+    "GET /api/bookings - Returns bookings with status field for filtering upcoming",
+    "POST /api/dashboard-configs - Creates config with upcomingBookings widget type"
+  ],
+  "frontend_pages_tested": [
+    "Admin Console > Slot Booking - Stats, outlet list, config modal with all tabs",
+    "Bookings page - Upcoming Bookings section, All Bookings table, Invoice modal",
+    "Dashboard - Upcoming Bookings widget",
+    "Public Booking page - White labeling, multi-service selection, time slots"
+  ],
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "All APIs use real MongoDB database - no mocked endpoints"
+  }
+}
