@@ -217,6 +217,7 @@ export const api = {
   // Human-in-the-Loop (HITL)
   generateHITLReport: (data) => axios.post(`${API}/hitl/generate-report`, data, { headers: getHeaders() }),
   getPendingHITLReports: () => axios.get(`${API}/hitl/pending`, { headers: getHeaders() }),
+  getHITLHistory: () => axios.get(`${API}/hitl/history`, { headers: getHeaders() }),
   confirmHITLReport: (data) => axios.post(`${API}/hitl/confirm`, data, { headers: getHeaders() }),
   getHITLPreferences: () => axios.get(`${API}/hitl/preferences`, { headers: getHeaders() }),
   analyzeSchedule: (data) => axios.post(`${API}/hitl/analyze-schedule`, data || {}, { headers: getHeaders() }),

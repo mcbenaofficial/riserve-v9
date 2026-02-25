@@ -285,6 +285,51 @@ async def get_pending_reports(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/history")
+async def get_history_reports(
+    current_user: User = Depends(get_current_user),
+    db = Depends(get_db)
+):
+    """Fetch resolved (historical) UI reports for a user/outlet and calculate aggregate metrics"""
+    try:
+        query = {
+            "company_id": current_user.company_id,
+            "status": {"$in": ["approved", "declined", "modified"]}
+        }
+        
+        reports = await db.hitl_reports.find(query, {"_id": 0}).sort("resolved_at", -1).to_list(500)
+        
+        # Calculate aggregates
+        total_value_gained = 0
+        total_automations = 0
+        items_restocked = 0
+        
+        for r in reports:
+            if r["status"] in ["approved", "modified"]:
+                total_automations += 1
+                r_json = r.get("report_json", {})
+                
+                # Calculate simulated value gained for the demo
+                if r["flow_type"] == "dynamic_pricing":
+                    total_value_gained += 450
+                elif r["flow_type"] == "quiet_hour_promotion":
+                    total_value_gained += 120
+                elif r["flow_type"] == "inventory_reorder":
+                    items_restocked += sum(item.get("suggested_order_qty", 0) for item in r_json.get("items_to_order", []))
+                    
+        summary = {
+            "total_value_gained": total_value_gained,
+            "total_automations": total_automations,
+            "items_restocked": items_restocked
+        }
+        
+        return {"summary": summary, "reports": reports}
+        
+    except Exception as e:
+        logger.error(f"Error fetching history reports: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/confirm")
 async def confirm_report(
     report_id: str = Body(..., embed=True),
