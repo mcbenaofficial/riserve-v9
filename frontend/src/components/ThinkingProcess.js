@@ -2,7 +2,11 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, Terminal, database, BarChart3, Box, Activity } from 'lucide-react';
 
+import { useTheme } from '../contexts/ThemeContext';
+
 const ThinkingProcess = ({ steps, isDark, isStreaming }) => {
+    const { mode } = useTheme();
+    const isZen = mode === 'zen';
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Auto-expand when streaming starts
@@ -17,8 +21,8 @@ const ThinkingProcess = ({ steps, isDark, isStreaming }) => {
             return (
                 <div className={`mb-3 rounded-xl overflow-hidden border ${isDark ? 'border-[#1F2630] bg-[#12161C]' : 'border-[#D9DEE5] bg-white'}`}>
                     <div className={`flex items-center gap-2 px-3 py-2 text-xs font-medium ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
-                        <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
-                        <Activity size={14} className={isDark ? 'text-[#5FA8D3]' : 'text-[#4A95C0]'} />
+                        <div className={`w-2 h-2 rounded-full animate-pulse ${isZen ? 'bg-stone-400' : 'bg-purple-500'}`} />
+                        <Activity size={14} className={isDark ? (isZen ? 'text-[#687988]' : 'text-[#5FA8D3]') : (isZen ? 'text-[#687988]' : 'text-[#4A95C0]')} />
                         <span>Thinking...</span>
                     </div>
                 </div>
@@ -55,8 +59,8 @@ const ThinkingProcess = ({ steps, isDark, isStreaming }) => {
                     }`}
             >
                 {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                {isStreaming && <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />}
-                <Activity size={14} className={isDark ? 'text-[#5FA8D3]' : 'text-[#4A95C0]'} />
+                {isStreaming && <div className={`w-2 h-2 rounded-full animate-pulse ${isZen ? 'bg-stone-400' : 'bg-purple-500'}`} />}
+                <Activity size={14} className={isDark ? (isZen ? 'text-[#687988]' : 'text-[#5FA8D3]') : (isZen ? 'text-[#687988]' : 'text-[#4A95C0]')} />
                 <span>{isStreaming ? `Thinking... (${steps.length} steps)` : `Thinking Process (${steps.length} steps)`}</span>
             </button>
 
@@ -66,7 +70,9 @@ const ThinkingProcess = ({ steps, isDark, isStreaming }) => {
                     {steps.map((step, index) => (
                         <div key={index} className="text-xs">
                             {step.type === 'agent_handoff' ? (
-                                <div className={`flex items-center gap-2 py-1.5 px-2 rounded-lg ${isDark ? 'bg-purple-500/10 text-purple-300' : 'bg-purple-50 text-purple-700'}`}>
+                                <div className={`flex items-center gap-2 py-1.5 px-2 rounded-lg ${isDark
+                                    ? isZen ? 'bg-[#687988]/10 text-stone-300' : 'bg-purple-500/10 text-purple-300'
+                                    : isZen ? 'bg-stone-100 text-stone-700' : 'bg-purple-50 text-purple-700'}`}>
                                     <span className="text-sm">🔀</span>
                                     <span className="font-medium">Handed off to <span className="font-bold">{step.agent?.replace('Agent', ' Agent')}</span></span>
                                 </div>
@@ -105,9 +111,9 @@ const ThinkingProcess = ({ steps, isDark, isStreaming }) => {
                     {isStreaming && (
                         <div className="flex items-center gap-2 text-xs py-1">
                             <div className="flex gap-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                                <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                                <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                                <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${isZen ? 'bg-stone-400' : 'bg-purple-400'}`} style={{ animationDelay: '0ms' }} />
+                                <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${isZen ? 'bg-stone-400' : 'bg-purple-400'}`} style={{ animationDelay: '150ms' }} />
+                                <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${isZen ? 'bg-stone-400' : 'bg-purple-400'}`} style={{ animationDelay: '300ms' }} />
                             </div>
                             <span className={isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}>Processing...</span>
                         </div>

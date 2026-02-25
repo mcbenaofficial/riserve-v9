@@ -235,6 +235,1356 @@ code {
     }
 }
 
+/* Zen Mode Overrides */
+@layer base {
+
+    /* ZEN LIGHT MODE - Quiet Luxury Warm Neutrals */
+    .zen:root {
+        --background: 30 33% 98%;
+        /* #FDFAF5 - Warm creamy off-white */
+        --background-secondary: 30 20% 93%;
+        /* #F2EDE6 - Soft warm greige */
+        --foreground: 25 13% 16%;
+        /* #2F2A25 - Deep warm charcoal */
+        --card: 30 33% 98%;
+        /* #FDFAF5 */
+        --card-foreground: 25 13% 16%;
+        --popover: 30 33% 98%;
+        --popover-foreground: 25 13% 16%;
+        --primary: 25 13% 16%;
+        --primary-foreground: 30 33% 98%;
+        --secondary: 30 16% 88%;
+        /* #E8E2D9 */
+        --secondary-foreground: 25 13% 16%;
+        --muted: 30 16% 88%;
+        --muted-foreground: 25 8% 45%;
+        /* #7A746A - Mid warm gray */
+        --accent: 12 34% 63%;
+        /* #C68A7A - Muted warm terracotta / dusty rose */
+        --accent-foreground: 30 33% 98%;
+        --border: 30 16% 88%;
+        /* #E8E2D9 - Ultra-light warm gray */
+        --input: 30 16% 88%;
+        --ring: 12 34% 63%;
+
+        /* Glassmorphism variables */
+        --glass-opacity: 0.45;
+        --glass-blur: 16px;
+        --glass-border-opacity: 0.10;
+
+        /* Zen Custom Colors */
+        --rs-bg-primary: #FDFAF5;
+        --rs-bg-secondary: #F2EDE6;
+        --rs-surface: #FDFAF5;
+        --rs-text-primary: #2F2A25;
+        --rs-text-secondary: #7A746A;
+        --rs-text-muted: #7A746A;
+        --rs-border: #E8E2D9;
+        --rs-accent: #C68A7A;
+        --rs-accent-hover: #B87A6A;
+        --rs-accent-active: #A56B5C;
+        --rs-accent-secondary: #D4BFA8;
+    }
+
+    /* ZEN DARK MODE - Warm Deep Charcoal */
+    .zen.dark {
+        --background: 25 14% 5%;
+        /* #12100D - Deep warm black-brown */
+        --background-secondary: 25 10% 13%;
+        /* #25221E - Slightly lighter charcoal */
+        --foreground: 30 20% 93%;
+        /* #F2EDE6 - Soft warm off-white */
+        --card: 25 10% 10%;
+        /* #1C1915 */
+        --card-foreground: 30 20% 93%;
+        --popover: 25 10% 10%;
+        --popover-foreground: 30 20% 93%;
+        --primary: 30 20% 93%;
+        --primary-foreground: 25 14% 5%;
+        --secondary: 25 10% 21%;
+        /* #3A3530 */
+        --secondary-foreground: 30 20% 93%;
+        --muted: 25 10% 21%;
+        --muted-foreground: 25 5% 63%;
+        /* #A8A39A - Muted warm gray */
+        --accent: 12 38% 72%;
+        /* #D4A89A - Warmer muted rose */
+        --accent-foreground: 25 14% 5%;
+        --border: 25 10% 21%;
+        /* #3A3530 - Subtle dark divider */
+        --input: 25 10% 21%;
+        --ring: 12 38% 72%;
+
+        /* Glassmorphism variables */
+        --glass-opacity: 0.45;
+        --glass-blur: 16px;
+        --glass-border-opacity: 0.10;
+
+        /* Zen Custom Colors */
+        --rs-bg-primary: #12100D;
+        --rs-bg-secondary: #25221E;
+        --rs-surface: #1C1915;
+        --rs-text-primary: #F2EDE6;
+        --rs-text-secondary: #A8A39A;
+        --rs-text-muted: #A8A39A;
+        --rs-border: #3A3530;
+        --rs-accent: #D4A89A;
+        --rs-accent-hover: #E0B5A8;
+        --rs-accent-active: #E8C5B8;
+        --rs-accent-secondary: #E8D9C5;
+    }
+
+    /* ZEN SPECIFIC UTILITIES — Glassmorphism */
+    .zen .glass-panel {
+        background: hsla(var(--card), var(--glass-opacity, 0.45));
+        backdrop-filter: blur(var(--glass-blur, 16px));
+        -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
+        border: 1px solid hsla(var(--border), var(--glass-border-opacity, 0.10));
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        border-radius: 20px;
+        @apply ring-0 transition-all duration-300;
+    }
+
+    .zen.dark .glass-panel {
+        background: hsla(var(--card), var(--glass-opacity, 0.45));
+        backdrop-filter: blur(var(--glass-blur, 16px));
+        -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
+        border: 1px solid hsla(var(--border), var(--glass-border-opacity, 0.10));
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+        border-radius: 20px;
+    }
+
+    .zen .glass-panel-hover {
+        @apply transition-all duration-300;
+    }
+
+    .zen .glass-panel-hover:hover {
+        transform: scale(1.02);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .zen.dark .glass-panel-hover:hover {
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Subtle transitions in Zen mode (no jarring animations) */
+    .zen * {
+        animation: none !important;
+        transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease,
+            box-shadow 0.3s ease, transform 0.3s ease !important;
+    }
+
+    /* Frosted header/sidebar in Zen mode */
+    .zen header,
+    .zen aside,
+    .zen .sticky {
+        backdrop-filter: blur(var(--glass-blur, 16px)) !important;
+        -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) !important;
+        background: hsla(var(--background), 0.85) !important;
+        @apply border-b border-border;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ZEN MODE — Hardcoded Color Remapping
+   Uses [class*="..."] attribute selectors to avoid PostCSS circular
+   dependency errors with Tailwind arbitrary value classes.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── ZEN DARK MODE — Remap Vivid Dark Hex to Warm Neutrals ─── */
+
+/* Background primary: #0B0D10 → #12100D */
+.zen.dark [class*="bg-[#0B0D10]"] {
+    background-color: #12100D !important;
+}
+
+/* Surface / card: #12161C → #1C1915 */
+.zen.dark [class*="bg-[#12161C]"] {
+    background-color: #1C1915 !important;
+}
+
+/* Popover / dropdown: #171C22 → #25221E */
+.zen.dark [class*="bg-[#171C22]"] {
+    background-color: #25221E !important;
+}
+
+/* Border / divider: #1F2630 → #3A3530 */
+.zen.dark [class*="border-[#1F2630]"] {
+    border-color: #3A3530 !important;
+}
+
+/* Hover bg: #1F2630 → #3A3530 */
+.zen.dark [class*="hover:bg-[#1F2630]"]:hover {
+    background-color: #3A3530 !important;
+}
+
+/* Surface bg: #1F2630 → #3A3530 */
+.zen.dark [class*="bg-[#1F2630]"] {
+    background-color: #3A3530 !important;
+}
+
+/* Primary text: #E6E8EB → #F2EDE6 */
+.zen.dark [class*="text-[#E6E8EB]"] {
+    color: #F2EDE6 !important;
+}
+
+/* Secondary text: #A9AFB8 → #A8A39A */
+.zen.dark [class*="text-[#A9AFB8]"] {
+    color: #A8A39A !important;
+}
+
+/* Muted text: #7D8590 → #A8A39A */
+.zen.dark [class*="text-[#7D8590]"] {
+    color: #A8A39A !important;
+}
+
+/* Alt muted: #9CA3AF → #A8A39A */
+.zen.dark [class*="text-[#9CA3AF]"] {
+    color: #A8A39A !important;
+}
+
+/* Accent text: #5FA8D3 → #D4A89A */
+.zen.dark [class*="text-[#5FA8D3]"] {
+    color: #D4A89A !important;
+}
+
+/* Accent bg: #5FA8D3 → #D4A89A */
+.zen.dark [class*="bg-[#5FA8D3]"] {
+    background-color: #D4A89A !important;
+}
+
+/* Ring accent */
+.zen.dark [class*="ring-[#5FA8D3]"] {
+    --tw-ring-color: #D4A89A !important;
+}
+
+/* Ring offset */
+.zen.dark [class*="ring-offset-[#12161C]"] {
+    --tw-ring-offset-color: #1C1915 !important;
+}
+
+/* Scrollbar thumb */
+.zen.dark [class*="scrollbar-thumb-[#1F2630]"]::-webkit-scrollbar-thumb {
+    background-color: #3A3530 !important;
+}
+
+
+/* ─── ZEN LIGHT MODE — Remap Vivid Light Hex to Warm Neutrals ─── */
+
+/* Background primary: #F6F7F9 → #FDFAF5 */
+.zen:not(.dark) [class*="bg-[#F6F7F9]"] {
+    background-color: #FDFAF5 !important;
+}
+
+/* Background secondary: #ECEFF3 → #F2EDE6 */
+.zen:not(.dark) [class*="bg-[#ECEFF3]"] {
+    background-color: #F2EDE6 !important;
+}
+
+/* Hover bg: #F6F7F9 → #FDFAF5 */
+.zen:not(.dark) [class*="hover:bg-[#F6F7F9]"]:hover {
+    background-color: #FDFAF5 !important;
+}
+
+/* Border: #D9DEE5 → #E8E2D9 */
+.zen:not(.dark) [class*="border-[#D9DEE5]"] {
+    border-color: #E8E2D9 !important;
+}
+
+/* Primary text: #0E1116 → #2F2A25 */
+.zen:not(.dark) [class*="text-[#0E1116]"] {
+    color: #2F2A25 !important;
+}
+
+/* Secondary text: #4B5563 / #4A5568 → #7A746A */
+.zen:not(.dark) [class*="text-[#4B5563]"],
+.zen:not(.dark) [class*="text-[#4A5568]"] {
+    color: #7A746A !important;
+}
+
+/* Muted text: #6B7280 / #718096 → #7A746A */
+.zen:not(.dark) [class*="text-[#6B7280]"],
+.zen:not(.dark) [class*="text-[#718096]"] {
+    color: #7A746A !important;
+}
+
+/* Accent text: #5FA8D3 → #C68A7A */
+.zen:not(.dark) [class*="text-[#5FA8D3]"] {
+    color: #C68A7A !important;
+}
+
+/* Accent bg: #5FA8D3 → #C68A7A */
+.zen:not(.dark) [class*="bg-[#5FA8D3]"] {
+    background-color: #C68A7A !important;
+}
+
+
+/* ─── ZEN MODE — Gradient & Glow Neutralization ─── */
+
+/* Sidebar active item: purple/blue gradients → warm rose */
+.zen [class*="from-purple-500/10"][class*="to-blue-500/10"] {
+    background: rgba(198, 138, 122, 0.10) !important;
+}
+
+/* Gradient from: purple → terracotta */
+.zen [class*="from-purple-600"],
+.zen [class*="from-purple-500"] {
+    --tw-gradient-from: #C68A7A !important;
+}
+
+/* Gradient to: blue → champagne */
+.zen [class*="to-blue-600"],
+.zen [class*="to-blue-500"] {
+    --tw-gradient-to: #D4BFA8 !important;
+}
+
+/* Active item text: purple → warm accent */
+.zen [class*="text-purple-700"] {
+    color: #A56B5C !important;
+}
+
+.zen.dark [class*="text-purple-400"] {
+    color: #D4A89A !important;
+}
+
+/* Active border: purple → warm accent */
+.zen [class*="border-purple-500"] {
+    border-color: rgba(198, 138, 122, 0.25) !important;
+}
+
+/* Purple shadow → warm rose glow */
+.zen [class*="shadow-purple"] {
+    --tw-shadow-color: rgba(198, 138, 122, 0.2) !important;
+    --tw-shadow: 0 0 15px rgba(198, 138, 122, 0.1) !important;
+}
+
+.zen [class*="shadow-[0_0_15px_rgba(168,85,247"] {
+    box-shadow: 0 0 15px rgba(198, 138, 122, 0.1) !important;
+}
+
+/* Hover gradients: purple/pink → warm */
+.zen [class*="hover:from-purple"]:hover {
+    --tw-gradient-from: rgba(198, 138, 122, 0.1) !important;
+}
+
+.zen [class*="hover:to-pink"]:hover {
+    --tw-gradient-to: rgba(212, 191, 168, 0.1) !important;
+}
+
+.zen [class*="hover:border-purple"]:hover {
+    border-color: rgba(198, 138, 122, 0.4) !important;
+}
+
+/* Text gradients: purple/pink/blue → warm tones */
+.zen [class*="from-purple-400"] {
+    --tw-gradient-from: #C68A7A !important;
+}
+
+.zen [class*="via-pink-400"],
+.zen [class*="via-pink-600"] {
+    --tw-gradient-via: #D4A89A !important;
+}
+
+.zen [class*="to-blue-400"] {
+    --tw-gradient-to: #D4BFA8 !important;
+}
+
+/* Neon pulse → warm rose glow */
+.zen [class*="neonPulse"],
+.zen [style*="neonPulse"] {
+    animation: none !important;
+    box-shadow: inset 0 0 2px 0 rgba(198, 138, 122, 0.3),
+        0 0 10px 1px rgba(198, 138, 122, 0.15) !important;
+    border-color: rgba(198, 138, 122, 0.25) !important;
+}
+
+/* Ring: #5FA8D3 → warm */
+.zen [class*="ring-[#5FA8D3]"] {
+    --tw-ring-color: #C68A7A !important;
+}
+
+/* Focus glow → warm rose */
+.zen .rs-focus-glow:focus {
+    box-shadow: 0 0 0 3px rgba(198, 138, 122, 0.15) !important;
+}
+
+/* Tailwind named gray remaps for light Zen */
+.zen:not(.dark) .bg-gray-100 {
+    background-color: #F2EDE6 !important;
+}
+
+.zen:not(.dark) .bg-gray-200 {
+    background-color: #E8E2D9 !important;
+}
+
+.zen:not(.dark) .border-gray-200 {
+    border-color: #E8E2D9 !important;
+}
+
+.zen:not(.dark) .text-gray-900 {
+    color: #2F2A25 !important;
+}
+
+.zen:not(.dark) .text-gray-700 {
+    color: #7A746A !important;
+}
+
+.zen:not(.dark) .text-gray-500,
+.zen:not(.dark) .text-gray-600 {
+    color: #7A746A !important;
+}
+
+/* Vorta button: warm gradient */
+.zen [class*="from-purple-600"][class*="to-blue-600"],
+.zen [class*="from-purple-500"][class*="to-blue-500"] {
+    background: linear-gradient(to right, #C68A7A, #D4BFA8) !important;
+}
+
+/* Purple/Pink CTA gradient buttons → warm rose gradient */
+.zen [class*="from-purple-500"][class*="to-pink-500"] {
+    background: linear-gradient(to right, #C68A7A, #D4A89A) !important;
+}
+
+.zen [class*="from-purple-600"][class*="to-pink-600"] {
+    background: linear-gradient(to right, #B57A6A, #C4988A) !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ZEN MODE — Vibrant Color Muting
+   Mutes all saturated Tailwind colors to warm, desaturated equivalents
+   for the "quiet luxury" Zen aesthetic.
+
+   Palette Philosophy:
+     Green  → Sage (#8B9E7E / #A3B596)
+     Red    → Dusty Terra (#B8887E / #C49A90)
+     Yellow → Warm Honey (#C4A86E / #D4B87E)
+     Amber  → Golden Sand (#B89860 / #C8A870)
+     Blue   → Muted Slate (#8899A8 / #98A9B8)
+     Orange → Warm Clay (#C49878 / #B48868)
+     Cyan   → Muted Sea (#7EA8A0 / #8EB8B0)
+     Emerald/Teal → Sage (#7E9E88 / #8EAE98)
+     Indigo → Muted Plum (#8E8EA8 / #9E9EB8)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── GREEN → SAGE ─── */
+.zen .text-green-400 {
+    color: #A3B596 !important;
+}
+
+.zen .text-green-500 {
+    color: #8B9E7E !important;
+}
+
+.zen .text-green-600 {
+    color: #7A8E6E !important;
+}
+
+.zen .text-green-700 {
+    color: #6A7E5E !important;
+}
+
+.zen .text-green-300 {
+    color: #B5C5A8 !important;
+}
+
+.zen .bg-green-500 {
+    background-color: #8B9E7E !important;
+}
+
+.zen .bg-green-400 {
+    background-color: #A3B596 !important;
+}
+
+.zen .bg-green-600 {
+    background-color: #7A8E6E !important;
+}
+
+.zen .bg-green-100 {
+    background-color: rgba(139, 158, 126, 0.15) !important;
+}
+
+.zen .bg-green-50 {
+    background-color: rgba(139, 158, 126, 0.08) !important;
+}
+
+.zen .border-green-500 {
+    border-color: #8B9E7E !important;
+}
+
+.zen .border-green-300 {
+    border-color: rgba(139, 158, 126, 0.35) !important;
+}
+
+.zen .border-green-200 {
+    border-color: rgba(139, 158, 126, 0.25) !important;
+}
+
+.zen .border-green-700 {
+    border-color: #6A7E5E !important;
+}
+
+.zen .border-green-800 {
+    border-color: #5A6E4E !important;
+}
+
+.zen .fill-green-500 {
+    fill: #8B9E7E !important;
+}
+
+.zen .fill-green-400 {
+    fill: #A3B596 !important;
+}
+
+.zen [class*="bg-green-500/"] {
+    background-color: rgba(139, 158, 126, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="bg-green-900/"] {
+    background-color: rgba(106, 126, 94, var(--tw-bg-opacity, 0.2)) !important;
+}
+
+.zen [class*="border-green-500/"] {
+    border-color: rgba(139, 158, 126, var(--tw-border-opacity, 0.2)) !important;
+}
+
+.zen [class*="hover:bg-green-600"]:hover {
+    background-color: #6A7E5E !important;
+}
+
+.zen [class*="shadow-green"] {
+    --tw-shadow-color: rgba(139, 158, 126, 0.15) !important;
+}
+
+.zen [class*="shadow-[0_0_10px_rgba(34,197,94"] {
+    box-shadow: 0 0 10px rgba(139, 158, 126, 0.2) !important;
+}
+
+/* ─── RED → DUSTY TERRA ─── */
+.zen .text-red-400 {
+    color: #C49A90 !important;
+}
+
+.zen .text-red-500 {
+    color: #B8887E !important;
+}
+
+.zen .text-red-600 {
+    color: #A8786E !important;
+}
+
+.zen .text-red-700 {
+    color: #98685E !important;
+}
+
+.zen .text-red-300 {
+    color: #D4AAA0 !important;
+}
+
+.zen .bg-red-500 {
+    background-color: #B8887E !important;
+}
+
+.zen .bg-red-400 {
+    background-color: #C49A90 !important;
+}
+
+.zen .bg-red-600 {
+    background-color: #A8786E !important;
+}
+
+.zen .bg-red-100 {
+    background-color: rgba(184, 136, 126, 0.15) !important;
+}
+
+.zen .bg-red-50 {
+    background-color: rgba(184, 136, 126, 0.08) !important;
+}
+
+.zen .border-red-500 {
+    border-color: #B8887E !important;
+}
+
+.zen .border-red-400 {
+    border-color: #C49A90 !important;
+}
+
+.zen .border-red-300 {
+    border-color: rgba(184, 136, 126, 0.35) !important;
+}
+
+.zen .border-red-200 {
+    border-color: rgba(184, 136, 126, 0.25) !important;
+}
+
+.zen .border-red-800 {
+    border-color: #886858 !important;
+}
+
+.zen [class*="bg-red-500/"] {
+    background-color: rgba(184, 136, 126, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="bg-red-900/"] {
+    background-color: rgba(152, 104, 94, var(--tw-bg-opacity, 0.2)) !important;
+}
+
+.zen [class*="border-red-500/"] {
+    border-color: rgba(184, 136, 126, var(--tw-border-opacity, 0.2)) !important;
+}
+
+.zen [class*="hover:bg-red-500/"]:hover {
+    background-color: rgba(184, 136, 126, var(--tw-bg-opacity, 0.15)) !important;
+}
+
+.zen [class*="hover:bg-red-600"]:hover {
+    background-color: #A8786E !important;
+}
+
+.zen [class*="hover:bg-red-50"]:hover {
+    background-color: rgba(184, 136, 126, 0.08) !important;
+}
+
+.zen [class*="hover:text-red-500"]:hover {
+    color: #B8887E !important;
+}
+
+/* ─── YELLOW → WARM HONEY ─── */
+.zen .text-yellow-400 {
+    color: #D4B87E !important;
+}
+
+.zen .text-yellow-500 {
+    color: #C4A86E !important;
+}
+
+.zen .text-yellow-600 {
+    color: #B4985E !important;
+}
+
+.zen .text-yellow-700 {
+    color: #A4884E !important;
+}
+
+.zen .bg-yellow-500 {
+    background-color: #C4A86E !important;
+}
+
+.zen .bg-yellow-400 {
+    background-color: #D4B87E !important;
+}
+
+.zen .bg-yellow-100 {
+    background-color: rgba(196, 168, 110, 0.15) !important;
+}
+
+.zen .bg-yellow-50 {
+    background-color: rgba(196, 168, 110, 0.08) !important;
+}
+
+.zen .border-yellow-500 {
+    border-color: #C4A86E !important;
+}
+
+.zen [class*="bg-yellow-500/"] {
+    background-color: rgba(196, 168, 110, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+/* ─── AMBER → GOLDEN SAND ─── */
+.zen .text-amber-400 {
+    color: #C8A870 !important;
+}
+
+.zen .text-amber-500 {
+    color: #B89860 !important;
+}
+
+.zen .text-amber-600 {
+    color: #A88850 !important;
+}
+
+.zen .text-amber-700 {
+    color: #987840 !important;
+}
+
+.zen .text-amber-300 {
+    color: #D8B880 !important;
+}
+
+.zen [class*="text-amber-200/"] {
+    color: rgba(216, 184, 128, var(--tw-text-opacity, 0.8)) !important;
+}
+
+.zen [class*="text-amber-700/"] {
+    color: rgba(152, 120, 64, var(--tw-text-opacity, 0.8)) !important;
+}
+
+.zen .bg-amber-500 {
+    background-color: #B89860 !important;
+}
+
+.zen .bg-amber-400 {
+    background-color: #C8A870 !important;
+}
+
+.zen .bg-amber-600 {
+    background-color: #A88850 !important;
+}
+
+.zen .bg-amber-100 {
+    background-color: rgba(184, 152, 96, 0.15) !important;
+}
+
+.zen .bg-amber-50 {
+    background-color: rgba(184, 152, 96, 0.08) !important;
+}
+
+.zen .border-amber-500 {
+    border-color: #B89860 !important;
+}
+
+.zen .border-amber-800 {
+    border-color: #887840 !important;
+}
+
+.zen .fill-amber-500 {
+    fill: #B89860 !important;
+}
+
+.zen .fill-amber-400 {
+    fill: #C8A870 !important;
+}
+
+.zen [class*="bg-amber-500/"] {
+    background-color: rgba(184, 152, 96, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="bg-amber-900/"] {
+    background-color: rgba(152, 120, 64, var(--tw-bg-opacity, 0.2)) !important;
+}
+
+.zen [class*="border-amber-500/"] {
+    border-color: rgba(184, 152, 96, var(--tw-border-opacity, 0.2)) !important;
+}
+
+.zen [class*="hover:bg-amber-600"]:hover {
+    background-color: #A88850 !important;
+}
+
+.zen [class*="shadow-[0_0_10px_rgba(245,158,11"] {
+    box-shadow: 0 0 10px rgba(184, 152, 96, 0.2) !important;
+}
+
+/* ─── BLUE → MUTED SLATE ─── */
+.zen .text-blue-400 {
+    color: #98A9B8 !important;
+}
+
+.zen .text-blue-500 {
+    color: #8899A8 !important;
+}
+
+.zen .text-blue-600 {
+    color: #788998 !important;
+}
+
+.zen .text-blue-700 {
+    color: #687988 !important;
+}
+
+.zen .bg-blue-500 {
+    background-color: #8899A8 !important;
+}
+
+.zen .bg-blue-400 {
+    background-color: #98A9B8 !important;
+}
+
+.zen .bg-blue-100 {
+    background-color: rgba(136, 153, 168, 0.15) !important;
+}
+
+.zen .bg-blue-50 {
+    background-color: rgba(136, 153, 168, 0.08) !important;
+}
+
+.zen .border-blue-500 {
+    border-color: #8899A8 !important;
+}
+
+.zen [class*="bg-blue-500/"] {
+    background-color: rgba(136, 153, 168, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="bg-blue-900/"] {
+    background-color: rgba(104, 121, 136, var(--tw-bg-opacity, 0.2)) !important;
+}
+
+.zen [class*="border-blue-500/"] {
+    border-color: rgba(136, 153, 168, var(--tw-border-opacity, 0.2)) !important;
+}
+
+.zen [class*="shadow-[0_0_10px_rgba(59,130,246"] {
+    box-shadow: 0 0 10px rgba(136, 153, 168, 0.2) !important;
+}
+
+/* ─── ORANGE → WARM CLAY ─── */
+.zen .text-orange-400 {
+    color: #C49878 !important;
+}
+
+.zen .text-orange-500 {
+    color: #B48868 !important;
+}
+
+.zen .text-orange-600 {
+    color: #A47858 !important;
+}
+
+.zen .text-orange-700 {
+    color: #946848 !important;
+}
+
+.zen .bg-orange-500 {
+    background-color: #B48868 !important;
+}
+
+.zen .bg-orange-400 {
+    background-color: #C49878 !important;
+}
+
+.zen .bg-orange-600 {
+    background-color: #A47858 !important;
+}
+
+.zen .bg-orange-100 {
+    background-color: rgba(180, 136, 104, 0.15) !important;
+}
+
+.zen .bg-orange-50 {
+    background-color: rgba(180, 136, 104, 0.08) !important;
+}
+
+.zen .border-orange-500 {
+    border-color: #B48868 !important;
+}
+
+.zen .border-orange-300 {
+    border-color: rgba(180, 136, 104, 0.35) !important;
+}
+
+.zen [class*="bg-orange-500/"] {
+    background-color: rgba(180, 136, 104, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="bg-orange-900/"] {
+    background-color: rgba(148, 104, 72, var(--tw-bg-opacity, 0.2)) !important;
+}
+
+.zen [class*="hover:bg-orange-600"]:hover {
+    background-color: #A47858 !important;
+}
+
+/* ─── CYAN/TEAL → MUTED SEA ─── */
+.zen .text-cyan-400 {
+    color: #8EB8B0 !important;
+}
+
+.zen .text-cyan-500 {
+    color: #7EA8A0 !important;
+}
+
+.zen .text-cyan-600 {
+    color: #6E9890 !important;
+}
+
+.zen .text-teal-400 {
+    color: #8EB8B0 !important;
+}
+
+.zen .text-teal-500 {
+    color: #7EA8A0 !important;
+}
+
+.zen .text-teal-600 {
+    color: #6E9890 !important;
+}
+
+.zen .bg-cyan-500 {
+    background-color: #7EA8A0 !important;
+}
+
+.zen .bg-teal-500 {
+    background-color: #7EA8A0 !important;
+}
+
+.zen .bg-cyan-100 {
+    background-color: rgba(126, 168, 160, 0.15) !important;
+}
+
+.zen .bg-teal-100 {
+    background-color: rgba(126, 168, 160, 0.15) !important;
+}
+
+.zen [class*="bg-cyan-500/"] {
+    background-color: rgba(126, 168, 160, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="bg-teal-500/"] {
+    background-color: rgba(126, 168, 160, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+/* ─── EMERALD → SAGE (same as green family) ─── */
+.zen .text-emerald-400 {
+    color: #A3B596 !important;
+}
+
+.zen .text-emerald-500 {
+    color: #8B9E7E !important;
+}
+
+.zen .text-emerald-600 {
+    color: #7A8E6E !important;
+}
+
+.zen .text-emerald-700 {
+    color: #6A7E5E !important;
+}
+
+.zen .text-emerald-300 {
+    color: #B5C5A8 !important;
+}
+
+.zen .bg-emerald-500 {
+    background-color: #8B9E7E !important;
+}
+
+.zen .bg-emerald-100 {
+    background-color: rgba(139, 158, 126, 0.15) !important;
+}
+
+.zen .border-emerald-500 {
+    border-color: #8B9E7E !important;
+}
+
+.zen [class*="bg-emerald-500/"] {
+    background-color: rgba(139, 158, 126, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="bg-emerald-900/"] {
+    background-color: rgba(106, 126, 94, var(--tw-bg-opacity, 0.2)) !important;
+}
+
+.zen [class*="border-emerald-500/"] {
+    border-color: rgba(139, 158, 126, var(--tw-border-opacity, 0.2)) !important;
+}
+
+/* ─── INDIGO → MUTED PLUM ─── */
+.zen .text-indigo-400 {
+    color: #9E9EB8 !important;
+}
+
+.zen .text-indigo-500 {
+    color: #8E8EA8 !important;
+}
+
+.zen .text-indigo-600 {
+    color: #7E7E98 !important;
+}
+
+.zen .bg-indigo-500 {
+    background-color: #8E8EA8 !important;
+}
+
+.zen .bg-indigo-100 {
+    background-color: rgba(142, 142, 168, 0.15) !important;
+}
+
+.zen [class*="bg-indigo-500/"] {
+    background-color: rgba(142, 142, 168, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+/* ─── PINK → MUTED ROSE (complement the existing purple remaps) ─── */
+.zen .text-pink-400 {
+    color: #C8A090 !important;
+}
+
+.zen .text-pink-500 {
+    color: #B89080 !important;
+}
+
+.zen .text-pink-600 {
+    color: #A88070 !important;
+}
+
+.zen .bg-pink-500 {
+    background-color: #B89080 !important;
+}
+
+.zen .bg-pink-100 {
+    background-color: rgba(184, 144, 128, 0.15) !important;
+}
+
+.zen [class*="bg-pink-500/"] {
+    background-color: rgba(184, 144, 128, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+/* ─── PURPLE (extending existing remaps) ─── */
+.zen .text-purple-500 {
+    color: #C68A7A !important;
+}
+
+.zen .text-purple-600 {
+    color: #B57A6A !important;
+}
+
+.zen .text-purple-700 {
+    color: #A56B5C !important;
+}
+
+.zen .bg-purple-500 {
+    background-color: #C68A7A !important;
+}
+
+.zen .bg-purple-600 {
+    background-color: #B57A6A !important;
+}
+
+.zen .bg-purple-100 {
+    background-color: rgba(198, 138, 122, 0.15) !important;
+}
+
+.zen [class*="bg-purple-500/"] {
+    background-color: rgba(198, 138, 122, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+.zen [class*="border-purple-500/"] {
+    border-color: rgba(198, 138, 122, var(--tw-border-opacity, 0.25)) !important;
+}
+
+.zen [class*="shadow-purple-500/"] {
+    --tw-shadow-color: rgba(198, 138, 122, var(--tw-shadow-opacity, 0.2)) !important;
+}
+
+/* ─── GRAY (muted cool gray → warm gray in Zen) ─── */
+.zen .text-gray-400 {
+    color: #AEA8A0 !important;
+}
+
+.zen .bg-gray-400 {
+    background-color: #AEA8A0 !important;
+}
+
+.zen .bg-gray-500 {
+    background-color: #9E9890 !important;
+}
+
+.zen [class*="bg-gray-500/"] {
+    background-color: rgba(158, 152, 144, var(--tw-bg-opacity, 0.1)) !important;
+}
+
+/* ─── CHART COLORS — Zen warm overrides ─── */
+.zen {
+    --chart-1: 12 34% 63%;
+    /* Warm terra (was cyan) */
+    --chart-2: 30 30% 55%;
+    /* Warm sage (was green) */
+    --chart-3: 30 40% 60%;
+    /* Warm honey (was orange) */
+    --chart-4: 12 20% 65%;
+    /* Muted rose (was purple) */
+    --chart-5: 25 25% 50%;
+    /* Warm clay (was red/pink) */
+    --chart-6: 20 15% 55%;
+    /* Muted neutral (was blue) */
+}
+
+/* ─── Zen Glassmorphism hover muting ─── */
+.zen.dark .glass-panel-hover:hover {
+    background: rgba(28, 25, 21, 0.95) !important;
+    background-image: none !important;
+    border-color: rgba(198, 138, 122, 0.25) !important;
+}
+
+.zen:not(.dark) .glass-panel-hover:hover {
+    background: rgba(253, 250, 245, 0.95) !important;
+    background-image: none !important;
+    border-color: rgba(198, 138, 122, 0.2) !important;
+}
+
+/* ─── GRADIENT STOP OVERRIDES (from-*, to-*, via-*) ─── */
+/* These override Tailwind gradient stop classes used in StatCards, etc. */
+
+/* Green/Emerald gradients → Sage */
+.zen .from-green-500 {
+    --tw-gradient-from: #8B9E7E !important;
+}
+
+.zen .to-green-600 {
+    --tw-gradient-to: #6A7E5E !important;
+}
+
+.zen .from-green-400 {
+    --tw-gradient-from: #A3B596 !important;
+}
+
+.zen .from-emerald-500 {
+    --tw-gradient-from: #8B9E7E !important;
+}
+
+.zen .to-emerald-500 {
+    --tw-gradient-to: #7A8E6E !important;
+}
+
+.zen .to-emerald-600 {
+    --tw-gradient-to: #6A7E5E !important;
+}
+
+.zen .from-emerald-500\/80 {
+    --tw-gradient-from: rgba(139, 158, 126, 0.8) !important;
+}
+
+.zen .to-teal-500\/80 {
+    --tw-gradient-to: rgba(126, 168, 160, 0.8) !important;
+}
+
+.zen .from-emerald-500\/5 {
+    --tw-gradient-from: rgba(139, 158, 126, 0.05) !important;
+}
+
+.zen .to-teal-500\/5 {
+    --tw-gradient-to: rgba(126, 168, 160, 0.05) !important;
+}
+
+/* Blue/Indigo gradients → Muted Slate */
+.zen .from-blue-500 {
+    --tw-gradient-from: #8899A8 !important;
+}
+
+.zen .to-blue-500 {
+    --tw-gradient-to: #7889A0 !important;
+}
+
+.zen .to-blue-600 {
+    --tw-gradient-to: #687988 !important;
+}
+
+.zen .from-blue-600 {
+    --tw-gradient-from: #788998 !important;
+}
+
+.zen .from-indigo-500 {
+    --tw-gradient-from: #8E8EA8 !important;
+}
+
+.zen .to-indigo-500 {
+    --tw-gradient-to: #7E7E98 !important;
+}
+
+.zen .to-indigo-600 {
+    --tw-gradient-to: #6E6E88 !important;
+}
+
+.zen .from-blue-500\/80 {
+    --tw-gradient-from: rgba(136, 153, 168, 0.8) !important;
+}
+
+.zen .to-indigo-500\/80 {
+    --tw-gradient-to: rgba(142, 142, 168, 0.8) !important;
+}
+
+.zen .from-blue-500\/5 {
+    --tw-gradient-from: rgba(136, 153, 168, 0.05) !important;
+}
+
+.zen .to-cyan-500\/5 {
+    --tw-gradient-to: rgba(126, 168, 160, 0.05) !important;
+}
+
+/* Amber/Orange gradients → Golden Sand / Warm Clay */
+.zen .from-amber-500 {
+    --tw-gradient-from: #B89860 !important;
+}
+
+.zen .to-amber-500 {
+    --tw-gradient-to: #A88850 !important;
+}
+
+.zen .to-orange-500 {
+    --tw-gradient-to: #B48868 !important;
+}
+
+.zen .to-orange-600 {
+    --tw-gradient-to: #A47858 !important;
+}
+
+.zen .from-orange-500 {
+    --tw-gradient-from: #B48868 !important;
+}
+
+.zen [class*="from-amber-500/5"] {
+    --tw-gradient-from: rgba(184, 152, 96, 0.05) !important;
+}
+
+.zen [class*="to-orange-500/5"] {
+    --tw-gradient-to: rgba(180, 136, 104, 0.05) !important;
+}
+
+.zen [class*="from-amber-500/10"] {
+    --tw-gradient-from: rgba(184, 152, 96, 0.1) !important;
+}
+
+.zen [class*="to-orange-500/10"] {
+    --tw-gradient-to: rgba(180, 136, 104, 0.1) !important;
+}
+
+/* Red/Rose gradients → Dusty Terra */
+.zen .from-red-500 {
+    --tw-gradient-from: #B8887E !important;
+}
+
+.zen .to-red-500 {
+    --tw-gradient-to: #A8786E !important;
+}
+
+.zen .to-red-600 {
+    --tw-gradient-to: #98685E !important;
+}
+
+.zen .from-red-600 {
+    --tw-gradient-from: #A8786E !important;
+}
+
+.zen .to-rose-500 {
+    --tw-gradient-to: #B89080 !important;
+}
+
+.zen .to-rose-600 {
+    --tw-gradient-to: #A88070 !important;
+}
+
+.zen .from-red-500\/80 {
+    --tw-gradient-from: rgba(184, 136, 126, 0.8) !important;
+}
+
+.zen .to-rose-500\/80 {
+    --tw-gradient-to: rgba(184, 144, 128, 0.8) !important;
+}
+
+/* Purple/Pink gradients → Warm Terracotta/Rose */
+.zen .from-purple-400 {
+    --tw-gradient-from: #D4A89A !important;
+}
+
+.zen .from-purple-500 {
+    --tw-gradient-from: #C68A7A !important;
+}
+
+.zen .from-purple-600 {
+    --tw-gradient-from: #B57A6A !important;
+}
+
+.zen .to-purple-500 {
+    --tw-gradient-to: #B57A6A !important;
+}
+
+.zen .to-purple-600 {
+    --tw-gradient-to: #A56B5C !important;
+}
+
+.zen .to-pink-500 {
+    --tw-gradient-to: #D4A89A !important;
+}
+
+.zen .to-pink-600 {
+    --tw-gradient-to: #C4988A !important;
+}
+
+.zen .from-pink-400 {
+    --tw-gradient-from: #D4B0A0 !important;
+}
+
+.zen .from-pink-500 {
+    --tw-gradient-from: #B89080 !important;
+}
+
+.zen .via-pink-400 {
+    --tw-gradient-via: #D4A89A !important;
+}
+
+.zen .via-pink-600 {
+    --tw-gradient-via: #C4988A !important;
+}
+
+.zen .via-purple-600 {
+    --tw-gradient-via: #B57A6A !important;
+}
+
+.zen [class*="from-purple-500/10"] {
+    --tw-gradient-from: rgba(198, 138, 122, 0.1) !important;
+}
+
+.zen [class*="to-pink-500/10"] {
+    --tw-gradient-to: rgba(212, 168, 154, 0.1) !important;
+}
+
+.zen [class*="from-purple-500/5"] {
+    --tw-gradient-from: rgba(198, 138, 122, 0.05) !important;
+}
+
+.zen [class*="to-pink-500/5"] {
+    --tw-gradient-to: rgba(212, 168, 154, 0.05) !important;
+}
+
+.zen [class*="from-purple-500/20"] {
+    --tw-gradient-from: rgba(198, 138, 122, 0.2) !important;
+}
+
+.zen [class*="to-pink-500/20"] {
+    --tw-gradient-to: rgba(212, 168, 154, 0.2) !important;
+}
+
+/* Cyan/Teal gradients → Muted Sea */
+.zen .from-cyan-500 {
+    --tw-gradient-from: #7EA8A0 !important;
+}
+
+.zen .to-cyan-500 {
+    --tw-gradient-to: #6E9890 !important;
+}
+
+.zen .from-teal-500 {
+    --tw-gradient-from: #7EA8A0 !important;
+}
+
+.zen .to-teal-500 {
+    --tw-gradient-to: #6E9890 !important;
+}
+
+/* Yellow gradients → Warm Honey */
+.zen .from-yellow-500 {
+    --tw-gradient-from: #C4A86E !important;
+}
+
+.zen .to-yellow-500 {
+    --tw-gradient-to: #B4985E !important;
+}
+
+.zen .to-yellow-600 {
+    --tw-gradient-to: #A4884E !important;
+}
+
+/* Hover gradient variants */
+.zen [class*="hover:from-red-600"]:hover {
+    --tw-gradient-from: #A8786E !important;
+}
+
+.zen [class*="hover:to-pink-700"]:hover {
+    --tw-gradient-to: #B4887A !important;
+}
+
+
 @layer base {
     * {
         @apply border-border;

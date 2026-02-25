@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const { theme, mode } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
@@ -37,9 +39,13 @@ const Login = () => {
         <div className="bg-white/90 dark:bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-[#D9DEE5] dark:border-[#1F2630]">
           {/* Logo */}
           <div className="flex items-center justify-center mb-8">
-            <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-[#5FA8D3] shadow-lg">
-              <strong className="text-3xl text-white">Rs</strong>
-            </div>
+            {mode === 'zen' ? (
+              <img src="/logo-zen.png" alt="Logo" className="w-16 h-16 object-contain" />
+            ) : (
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-[#5FA8D3] shadow-lg">
+                <strong className="text-3xl text-white">Rs</strong>
+              </div>
+            )}
           </div>
 
           {/* Title */}

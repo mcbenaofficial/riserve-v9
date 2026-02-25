@@ -8,6 +8,7 @@ import {
     Edit3, Copy, Trash2, ChevronDown, Zap, Bot, Calendar,
     ArrowUpRight, Sparkles
 } from 'lucide-react';
+import { SiriNewIcon } from 'hugeicons-react';
 
 // Sample flow data
 const SAMPLE_FLOWS = [
@@ -92,7 +93,7 @@ const statusConfig = {
     draft: { color: 'text-gray-400', bg: 'bg-gray-500/10', icon: Edit3, label: 'Draft' }
 };
 
-const FlowCard = ({ flow, onOpen, onDuplicate, onDelete }) => {
+const FlowCard = ({ flow, onOpen, onDuplicate, onDelete, isDark }) => {
     const [showMenu, setShowMenu] = useState(false);
     const status = statusConfig[flow.status];
     const StatusIcon = status.icon;
@@ -101,7 +102,7 @@ const FlowCard = ({ flow, onOpen, onDuplicate, onDelete }) => {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#12161C] border border-[#1F2630] rounded-2xl p-5 hover:border-purple-500/30 transition-all group"
+            className={`${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl p-5 ${isDark ? 'hover:border-purple-500/30' : 'hover:border-purple-400/40'} transition-all group`}
         >
             <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -109,17 +110,17 @@ const FlowCard = ({ flow, onOpen, onDuplicate, onDelete }) => {
                         <GitBranch size={20} className="text-purple-400" />
                     </div>
                     <div>
-                        <h3 className="font-semibold text-[#E6E8EB] group-hover:text-purple-400 transition-colors">
+                        <h3 className={`font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} group-hover:text-purple-400 transition-colors`}>
                             {flow.name}
                         </h3>
-                        <p className="text-xs text-[#7D8590] mt-0.5">{flow.description}</p>
+                        <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} mt-0.5`}>{flow.description}</p>
                     </div>
                 </div>
 
                 <div className="relative">
                     <button
                         onClick={() => setShowMenu(!showMenu)}
-                        className="p-1.5 rounded-lg text-[#7D8590] hover:bg-[#1F2630] hover:text-[#E6E8EB] transition-all"
+                        className={`p-1.5 rounded-lg ${isDark ? 'text-[#7D8590] hover:bg-[#1F2630] hover:text-[#E6E8EB]' : 'text-[#6B7280] hover:bg-[#F6F7F9] hover:text-[#0E1116]'} transition-all`}
                     >
                         <MoreVertical size={16} />
                     </button>
@@ -130,17 +131,17 @@ const FlowCard = ({ flow, onOpen, onDuplicate, onDelete }) => {
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
-                                className="absolute right-0 top-8 w-40 bg-[#1F2630] border border-[#374151] rounded-xl shadow-xl z-10 overflow-hidden"
+                                className={`absolute right-0 top-8 w-40 ${isDark ? 'bg-[#1F2630] border-[#374151]' : 'bg-white border-[#D9DEE5]'} border rounded-xl shadow-xl z-10 overflow-hidden`}
                             >
                                 <button
                                     onClick={() => { onOpen(flow.id); setShowMenu(false); }}
-                                    className="w-full px-4 py-2.5 text-left text-sm text-[#E6E8EB] hover:bg-[#374151] flex items-center gap-2"
+                                    className={`w-full px-4 py-2.5 text-left text-sm ${isDark ? 'text-[#E6E8EB] hover:bg-[#374151]' : 'text-[#0E1116] hover:bg-[#F6F7F9]'} flex items-center gap-2`}
                                 >
                                     <Edit3 size={14} /> Edit
                                 </button>
                                 <button
                                     onClick={() => { onDuplicate(flow.id); setShowMenu(false); }}
-                                    className="w-full px-4 py-2.5 text-left text-sm text-[#E6E8EB] hover:bg-[#374151] flex items-center gap-2"
+                                    className={`w-full px-4 py-2.5 text-left text-sm ${isDark ? 'text-[#E6E8EB] hover:bg-[#374151]' : 'text-[#0E1116] hover:bg-[#F6F7F9]'} flex items-center gap-2`}
                                 >
                                     <Copy size={14} /> Duplicate
                                 </button>
@@ -162,23 +163,23 @@ const FlowCard = ({ flow, onOpen, onDuplicate, onDelete }) => {
                     <StatusIcon size={12} />
                     {status.label}
                 </span>
-                <span className="text-xs text-[#4B5563]">·</span>
-                <span className="text-xs text-[#7D8590]">{flow.nodeCount} nodes</span>
+                <span className={`text-xs ${isDark ? 'text-[#4B5563]' : 'text-[#9CA3AF]'}`}>·</span>
+                <span className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>{flow.nodeCount} nodes</span>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 mb-4">
-                <div className="bg-[#0B0D10] rounded-xl px-3 py-2">
-                    <p className="text-xs text-[#7D8590]">Total Runs</p>
-                    <p className="text-lg font-semibold text-[#E6E8EB]">{flow.runs.toLocaleString()}</p>
+                <div className={`${isDark ? 'bg-[#0B0D10]' : 'bg-[#F6F7F9]'} rounded-xl px-3 py-2`}>
+                    <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Total Runs</p>
+                    <p className={`text-lg font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{flow.runs.toLocaleString()}</p>
                 </div>
-                <div className="bg-[#0B0D10] rounded-xl px-3 py-2">
-                    <p className="text-xs text-[#7D8590]">Success Rate</p>
-                    <p className="text-lg font-semibold text-[#E6E8EB]">{flow.successRate}%</p>
+                <div className={`${isDark ? 'bg-[#0B0D10]' : 'bg-[#F6F7F9]'} rounded-xl px-3 py-2`}>
+                    <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Success Rate</p>
+                    <p className={`text-lg font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{flow.successRate}%</p>
                 </div>
-                <div className="bg-[#0B0D10] rounded-xl px-3 py-2">
-                    <p className="text-xs text-[#7D8590]">Last Run</p>
-                    <p className="text-sm font-medium text-[#E6E8EB]">{flow.lastRun || 'Never'}</p>
+                <div className={`${isDark ? 'bg-[#0B0D10]' : 'bg-[#F6F7F9]'} rounded-xl px-3 py-2`}>
+                    <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Last Run</p>
+                    <p className={`text-sm font-medium ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{flow.lastRun || 'Never'}</p>
                 </div>
             </div>
 
@@ -192,7 +193,7 @@ const FlowCard = ({ flow, onOpen, onDuplicate, onDelete }) => {
                     Edit Flow
                 </button>
                 {flow.status !== 'draft' && (
-                    <button className="p-2 rounded-xl bg-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB] transition-all">
+                    <button className={`p-2 rounded-xl ${isDark ? 'bg-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]' : 'bg-[#F6F7F9] text-[#6B7280] hover:text-[#0E1116]'} transition-all`}>
                         {flow.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
                     </button>
                 )}
@@ -203,6 +204,7 @@ const FlowCard = ({ flow, onOpen, onDuplicate, onDelete }) => {
 
 const FlowList = () => {
     const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const navigate = useNavigate();
     const [flows] = useState(SAMPLE_FLOWS);
     const [searchQuery, setSearchQuery] = useState('');
@@ -241,18 +243,18 @@ const FlowList = () => {
     };
 
     return (
-        <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0B0D10]' : 'bg-gray-100'}`}>
+        <div className={`min-h-screen ${isDark ? 'bg-[#0B0D10]' : 'bg-[#F6F7F9]'}`}>
             {/* Header */}
             <div className="mb-8">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-[#E6E8EB] flex items-center gap-3">
+                        <h1 className={`text-2xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} flex items-center gap-3`}>
                             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                                <GitBranch size={20} className="text-white" />
+                                <SiriNewIcon size={20} className="text-white" />
                             </div>
                             Agent Flows
                         </h1>
-                        <p className="text-[#7D8590] mt-1">Build and manage your AI agent workflows</p>
+                        <p className={`${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} mt-1`}>Build and manage your AI agent workflows</p>
                     </div>
 
                     <button
@@ -266,58 +268,58 @@ const FlowList = () => {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-5 gap-4 mb-6">
-                    <div className="bg-[#12161C] border border-[#1F2630] rounded-2xl p-4">
+                    <div className={`${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl p-4`}>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
                                 <GitBranch size={18} className="text-purple-400" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-[#E6E8EB]">{stats.total}</p>
-                                <p className="text-xs text-[#7D8590]">Total Flows</p>
+                                <p className={`text-2xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{stats.total}</p>
+                                <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Total Flows</p>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-[#12161C] border border-[#1F2630] rounded-2xl p-4">
+                    <div className={`${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl p-4`}>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
                                 <CheckCircle2 size={18} className="text-green-400" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-[#E6E8EB]">{stats.active}</p>
-                                <p className="text-xs text-[#7D8590]">Active</p>
+                                <p className={`text-2xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{stats.active}</p>
+                                <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Active</p>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-[#12161C] border border-[#1F2630] rounded-2xl p-4">
+                    <div className={`${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl p-4`}>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
                                 <Pause size={18} className="text-yellow-400" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-[#E6E8EB]">{stats.paused}</p>
-                                <p className="text-xs text-[#7D8590]">Paused</p>
+                                <p className={`text-2xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{stats.paused}</p>
+                                <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Paused</p>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-[#12161C] border border-[#1F2630] rounded-2xl p-4">
+                    <div className={`${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl p-4`}>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
                                 <XCircle size={18} className="text-red-400" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-[#E6E8EB]">{stats.error}</p>
-                                <p className="text-xs text-[#7D8590]">Errors</p>
+                                <p className={`text-2xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{stats.error}</p>
+                                <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Errors</p>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-[#12161C] border border-[#1F2630] rounded-2xl p-4">
+                    <div className={`${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl p-4`}>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
                                 <Zap size={18} className="text-blue-400" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-[#E6E8EB]">{stats.totalRuns.toLocaleString()}</p>
-                                <p className="text-xs text-[#7D8590]">Total Runs</p>
+                                <p className={`text-2xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{stats.totalRuns.toLocaleString()}</p>
+                                <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>Total Runs</p>
                             </div>
                         </div>
                     </div>
@@ -326,13 +328,13 @@ const FlowList = () => {
                 {/* Search and Filter */}
                 <div className="flex items-center gap-3">
                     <div className="flex-1 relative">
-                        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4B5563]" />
+                        <Search size={18} className={`absolute left-4 top-1/2 -translate-y-1/2 ${isDark ? 'text-[#4B5563]' : 'text-[#9CA3AF]'}`} />
                         <input
                             type="text"
                             placeholder="Search flows..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-[#12161C] border border-[#1F2630] rounded-xl pl-11 pr-4 py-3 text-[#E6E8EB] placeholder-[#4B5563] focus:outline-none focus:border-purple-500 transition-all"
+                            className={`w-full ${isDark ? 'bg-[#12161C] border-[#1F2630] text-[#E6E8EB] placeholder-[#4B5563]' : 'bg-white border-[#D9DEE5] text-[#0E1116] placeholder-[#9CA3AF]'} border rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-purple-500 transition-all`}
                         />
                     </div>
 
@@ -340,8 +342,10 @@ const FlowList = () => {
                         <button
                             onClick={() => setShowFilterMenu(!showFilterMenu)}
                             className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all ${statusFilter !== 'all'
-                                    ? 'bg-purple-500/10 border-purple-500/30 text-purple-400'
-                                    : 'bg-[#12161C] border-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]'
+                                ? 'bg-purple-500/10 border-purple-500/30 text-purple-400'
+                                : isDark
+                                    ? 'bg-[#12161C] border-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]'
+                                    : 'bg-white border-[#D9DEE5] text-[#6B7280] hover:text-[#0E1116]'
                                 }`}
                         >
                             <Filter size={16} />
@@ -355,7 +359,7 @@ const FlowList = () => {
                                     initial={{ opacity: 0, y: 8 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 8 }}
-                                    className="absolute right-0 top-14 w-44 bg-[#1F2630] border border-[#374151] rounded-xl shadow-xl z-20 overflow-hidden"
+                                    className={`absolute right-0 top-14 w-44 ${isDark ? 'bg-[#1F2630] border-[#374151]' : 'bg-white border-[#D9DEE5]'} border rounded-xl shadow-xl z-20 overflow-hidden`}
                                 >
                                     {[
                                         { value: 'all', label: 'All Status' },
@@ -368,8 +372,8 @@ const FlowList = () => {
                                             key={option.value}
                                             onClick={() => { setStatusFilter(option.value); setShowFilterMenu(false); }}
                                             className={`w-full px-4 py-2.5 text-left text-sm transition-all flex items-center gap-2 ${statusFilter === option.value
-                                                    ? 'bg-purple-500/10 text-purple-400'
-                                                    : 'text-[#E6E8EB] hover:bg-[#374151]'
+                                                ? 'bg-purple-500/10 text-purple-400'
+                                                : isDark ? 'text-[#E6E8EB] hover:bg-[#374151]' : 'text-[#0E1116] hover:bg-[#F6F7F9]'
                                                 }`}
                                         >
                                             {option.label}
@@ -397,17 +401,18 @@ const FlowList = () => {
                                 onOpen={handleOpenFlow}
                                 onDuplicate={handleDuplicate}
                                 onDelete={handleDelete}
+                                isDark={isDark}
                             />
                         </motion.div>
                     ))}
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center py-20">
-                    <div className="w-16 h-16 rounded-2xl bg-[#1F2630] flex items-center justify-center mb-4">
-                        <GitBranch size={32} className="text-[#374151]" />
+                    <div className={`w-16 h-16 rounded-2xl ${isDark ? 'bg-[#1F2630]' : 'bg-[#F6F7F9]'} flex items-center justify-center mb-4`}>
+                        <GitBranch size={32} className={isDark ? 'text-[#374151]' : 'text-[#D9DEE5]'} />
                     </div>
-                    <h3 className="text-lg font-semibold text-[#E6E8EB] mb-1">No flows found</h3>
-                    <p className="text-[#7D8590] mb-6">
+                    <h3 className={`text-lg font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} mb-1`}>No flows found</h3>
+                    <p className={`${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} mb-6`}>
                         {searchQuery || statusFilter !== 'all'
                             ? 'Try adjusting your search or filters'
                             : 'Create your first agent flow to get started'}

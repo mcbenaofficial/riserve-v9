@@ -53,8 +53,25 @@ async def get_company_settings(current_user: User = Depends(get_current_user)):
         query["company_id"] = current_user.company_id
     
     settings = await db.company_settings.find_one(query, {"_id": 0})
+    
+    # We also need the core company document to get the module flags
+    company_id = current_user.company_id if current_user.role != "SuperAdmin" else settings.get("company_id") if settings else None
+    
+    # Default flags
+    is_booking_enabled = True
+    is_retail_enabled = False
+    is_workplace_enabled = False
+    
+    if company_id:
+        from .dependencies import companies_collection
+        core_company = await companies_collection.find_one({"id": company_id}, {"_id": 0})
+        if core_company:
+            is_booking_enabled = core_company.get("is_booking_enabled", True)
+            is_retail_enabled = core_company.get("is_retail_enabled", False)
+            is_workplace_enabled = core_company.get("is_workplace_enabled", False)
+
     if not settings:
-        # Return default settings
+        # Return default settings combined with core flags
         return {
             "id": None,
             "company_name": "",
@@ -74,9 +91,16 @@ async def get_company_settings(current_user: User = Depends(get_current_user)):
             "operating_hours_end": "18:00",
             "working_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
             "logo_url": "",
-            "is_configured": False
+            "is_configured": False,
+            "is_booking_enabled": is_booking_enabled,
+            "is_retail_enabled": is_retail_enabled,
+            "is_workplace_enabled": is_workplace_enabled
         }
+    
     settings["is_configured"] = True
+    settings["is_booking_enabled"] = is_booking_enabled
+    settings["is_retail_enabled"] = is_retail_enabled
+    settings["is_workplace_enabled"] = is_workplace_enabled
     return settings
 
 

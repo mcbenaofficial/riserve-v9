@@ -418,13 +418,22 @@ const SlotConfigModal = ({ outlet, existingConfig, onClose, onSuccess }) => {
     breaks: existingConfig?.breaks || [], // [{"name": "Lunch", "start": "13:00", "end": "14:00"}]
     branding: existingConfig?.branding || {
       logo_url: '',
+      cover_image_url: '',
       primary_color: '#5FA8D3',
       secondary_color: '#FFFFFF',
       text_color: '#333333',
       background_color: '#FFFFFF',
       font_family: 'Inter',
       business_name: '',
-      tagline: ''
+      tagline: '',
+      welcome_text: '',
+      layout: 'centered', // centered, split
+      phone: '',
+      email: '',
+      website: '',
+      instagram: '',
+      facebook: '',
+      hide_powered_by: false
     },
     // Advanced Scheduling
     weekly_schedule: existingConfig?.weekly_schedule || {},
@@ -463,6 +472,22 @@ const SlotConfigModal = ({ outlet, existingConfig, onClose, onSuccess }) => {
       }
     }
   }, []);
+
+  // Dynamically load Google Font for Preview
+  useEffect(() => {
+    const font = formData.branding.font_family;
+    if (font && font !== 'Inter') {
+      const linkId = `font-link-${font.replace(/\s+/g, '-')}`;
+      // Basic check to see if link already exists
+      if (!document.getElementById(linkId)) {
+        const link = document.createElement('link');
+        link.id = linkId;
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/ /g, '+')}:wght@300;400;500;600;700&display=swap`;
+        document.head.appendChild(link);
+      }
+    }
+  }, [formData.branding.font_family]);
 
   // Get resource info from outlet (not from config)
   const resourceCount = outlet.resources?.length || outlet.capacity || 0;
@@ -515,6 +540,17 @@ const SlotConfigModal = ({ outlet, existingConfig, onClose, onSuccess }) => {
       reader.onloadend = () => {
         setLogoPreview(reader.result);
         updateBranding('logo_url', reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCoverUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateBranding('cover_image_url', reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -1017,34 +1053,68 @@ const SlotConfigModal = ({ outlet, existingConfig, onClose, onSuccess }) => {
                     White Label Customization
                   </h4>
 
-                  {/* Logo Upload */}
-                  <div>
-                    <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2">Logo</label>
-                    <div className="flex items-center gap-4">
-                      {logoPreview ? (
-                        <div className="relative">
-                          <img src={logoPreview} alt="Logo" className="w-16 h-16 rounded-xl object-cover border border-purple-700" />
-                          <button
-                            type="button"
-                            onClick={() => { setLogoPreview(''); updateBranding('logo_url', ''); }}
-                            className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full"
-                          >
-                            <X size={12} />
-                          </button>
-                        </div>
-                      ) : (
-                        <label className="w-16 h-16 rounded-xl border-2 border-dashed border-purple-400 dark:border-purple-700 flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-all">
-                          <Upload size={18} className="text-purple-500" />
-                          <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
-                        </label>
-                      )}
-                      <input
-                        type="url"
-                        value={formData.branding.logo_url}
-                        onChange={(e) => updateBranding('logo_url', e.target.value)}
-                        placeholder="Or paste logo URL"
-                        className="flex-1 px-4 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm"
-                      />
+                  {/* Logo & Cover Image Upload */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2">Logo</label>
+                      <div className="flex flex-col gap-2">
+                        {logoPreview ? (
+                          <div className="relative w-full aspect-square max-w-[120px]">
+                            <img src={logoPreview} alt="Logo" className="w-full h-full rounded-xl object-cover border border-purple-700" />
+                            <button
+                              type="button"
+                              onClick={() => { setLogoPreview(''); updateBranding('logo_url', ''); }}
+                              className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full"
+                            >
+                              <X size={12} />
+                            </button>
+                          </div>
+                        ) : (
+                          <label className="w-full aspect-square max-w-[120px] rounded-xl border-2 border-dashed border-purple-400 dark:border-purple-700 flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-all bg-white/5">
+                            <Upload size={24} className="text-purple-500 mb-2" />
+                            <span className="text-xs text-center text-[#6B7280]">Upload Logo</span>
+                            <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+                          </label>
+                        )}
+                        <input
+                          type="url"
+                          value={formData.branding.logo_url}
+                          onChange={(e) => updateBranding('logo_url', e.target.value)}
+                          placeholder="Or paste logo URL"
+                          className="w-full px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-xs"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2">Cover Image (Split Layout)</label>
+                      <div className="flex flex-col gap-2">
+                        {formData.branding.cover_image_url ? (
+                          <div className="relative w-full aspect-video">
+                            <img src={formData.branding.cover_image_url} alt="Cover" className="w-full h-full rounded-xl object-cover border border-purple-700" />
+                            <button
+                              type="button"
+                              onClick={() => updateBranding('cover_image_url', '')}
+                              className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full"
+                            >
+                              <X size={12} />
+                            </button>
+                          </div>
+                        ) : (
+                          <label className="w-full aspect-video rounded-xl border-2 border-dashed border-purple-400 dark:border-purple-700 flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-all bg-white/5">
+                            <Upload size={24} className="text-purple-500 mb-2" />
+                            <span className="text-xs text-center text-[#6B7280]">Upload Cover</span>
+                            <input type="file" accept="image/*" onChange={handleCoverUpload} className="hidden" />
+                          </label>
+                        )}
+                        <input
+                          type="url"
+                          value={formData.branding.cover_image_url || ''}
+                          onChange={(e) => updateBranding('cover_image_url', e.target.value)}
+                          placeholder="Paste cover image URL"
+                          className="w-full px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-xs"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -1087,61 +1157,127 @@ const SlotConfigModal = ({ outlet, existingConfig, onClose, onSuccess }) => {
                   </div>
 
                   {/* Colors - Expanded */}
+                  {/* Colors - Expanded with Live Preview */}
                   <div className="space-y-4">
                     <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8]">
-                      Brand Colors
+                      Brand Customization & Preview
                     </label>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Primary Color</span>
-                        <div className="flex items-center gap-2">
-                          <input type="color" value={formData.branding.primary_color} onChange={(e) => updateBranding('primary_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
-                          <input type="text" value={formData.branding.primary_color} onChange={(e) => updateBranding('primary_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Color Inputs */}
+                      <div className="space-y-3">
+                        <div>
+                          <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Brand / Button Color</span>
+                          <div className="flex items-center gap-2">
+                            <input type="color" value={formData.branding.primary_color} onChange={(e) => updateBranding('primary_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
+                            <input type="text" value={formData.branding.primary_color} onChange={(e) => updateBranding('primary_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Button Text / Accent Color</span>
+                          <div className="flex items-center gap-2">
+                            <input type="color" value={formData.branding.secondary_color || '#6B7280'} onChange={(e) => updateBranding('secondary_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
+                            <input type="text" value={formData.branding.secondary_color || '#6B7280'} onChange={(e) => updateBranding('secondary_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Page Background</span>
+                          <div className="flex items-center gap-2">
+                            <input type="color" value={formData.branding.background_color || '#FFFFFF'} onChange={(e) => updateBranding('background_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
+                            <input type="text" value={formData.branding.background_color || '#FFFFFF'} onChange={(e) => updateBranding('background_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Page Text Color</span>
+                          <div className="flex items-center gap-2">
+                            <input type="color" value={formData.branding.text_color || '#333333'} onChange={(e) => updateBranding('text_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
+                            <input type="text" value={formData.branding.text_color || '#333333'} onChange={(e) => updateBranding('text_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Secondary Color</span>
-                        <div className="flex items-center gap-2">
-                          <input type="color" value={formData.branding.secondary_color || '#6B7280'} onChange={(e) => updateBranding('secondary_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
-                          <input type="text" value={formData.branding.secondary_color || '#6B7280'} onChange={(e) => updateBranding('secondary_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
-                        </div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Background</span>
-                        <div className="flex items-center gap-2">
-                          <input type="color" value={formData.branding.background_color || '#FFFFFF'} onChange={(e) => updateBranding('background_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
-                          <input type="text" value={formData.branding.background_color || '#FFFFFF'} onChange={(e) => updateBranding('background_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
-                        </div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[#6B7280] dark:text-[#7D8590] mb-1 block">Text Color</span>
-                        <div className="flex items-center gap-2">
-                          <input type="color" value={formData.branding.text_color || '#333333'} onChange={(e) => updateBranding('text_color', e.target.value)} className="w-10 h-10 rounded-lg cursor-pointer border-0" />
-                          <input type="text" value={formData.branding.text_color || '#333333'} onChange={(e) => updateBranding('text_color', e.target.value)} className="flex-1 px-3 py-2 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm" />
+
+                      {/* Live Preview Card */}
+                      <div className="bg-[#1F2937] p-1 rounded-2xl border border-gray-700 shadow-xl">
+                        <div className="bg-black/20 text-xs text-gray-400 text-center py-1 mb-1 rounded-t-xl">Live Preview of Button & Content</div>
+                        <div
+                          className="w-full aspect-[4/3] rounded-xl flex flex-col items-center justify-center p-6 transition-colors duration-200"
+                          style={{
+                            backgroundColor: formData.branding.background_color || '#FFFFFF',
+                            fontFamily: formData.branding.font_family || 'Inter'
+                          }}
+                        >
+                          <div className="text-center mb-4">
+                            <h5 className="text-lg font-bold mb-1" style={{ color: formData.branding.text_color || '#333333' }}>Your Booking</h5>
+                            <p className="text-sm opacity-80" style={{ color: formData.branding.text_color || '#333333' }}>
+                              Select a time slot
+                            </p>
+                          </div>
+
+                          <button
+                            type="button"
+                            className={`px-6 py-3 font-semibold shadow-lg transform active:scale-95 transition-all ${formData.branding.button_style === 'pill' ? 'rounded-full' :
+                              formData.branding.button_style === 'square' ? 'rounded-md' : 'rounded-xl'
+                              }`}
+                            style={{
+                              backgroundColor: formData.branding.primary_color || '#5FA8D3',
+                              color: formData.branding.secondary_color || '#FFFFFF'
+                            }}
+                          >
+                            Confirm Booking
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Button Style */}
-                  <div>
-                    <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2">
-                      Button Style
-                    </label>
-                    <div className="grid grid-cols-3 gap-3">
-                      {['rounded', 'pill', 'square'].map((style) => (
+                  {/* Layout & Button Style */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2">
+                        Page Layout
+                      </label>
+                      <div className="flex gap-2">
                         <button
-                          key={style}
                           type="button"
-                          onClick={() => updateBranding('button_style', style)}
-                          className={`p-3 rounded-xl border-2 text-center capitalize transition-all ${formData.branding.button_style === style
+                          onClick={() => updateBranding('layout', 'centered')}
+                          className={`flex-1 p-2 rounded-xl border-2 text-center text-sm transition-all ${formData.branding.layout === 'centered' || !formData.branding.layout
                             ? 'border-purple-500 bg-purple-500/10 text-purple-600 dark:text-purple-300'
                             : 'border-[#D9DEE5] dark:border-[#1F2630] text-[#6B7280] dark:text-[#7D8590]'
                             }`}
                         >
-                          {style}
+                          Centered
                         </button>
-                      ))}
+                        <button
+                          type="button"
+                          onClick={() => updateBranding('layout', 'split')}
+                          className={`flex-1 p-2 rounded-xl border-2 text-center text-sm transition-all ${formData.branding.layout === 'split'
+                            ? 'border-purple-500 bg-purple-500/10 text-purple-600 dark:text-purple-300'
+                            : 'border-[#D9DEE5] dark:border-[#1F2630] text-[#6B7280] dark:text-[#7D8590]'
+                            }`}
+                        >
+                          Split (Recommended)
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2">
+                        Button Style
+                      </label>
+                      <div className="flex gap-2">
+                        {['rounded', 'pill', 'square'].map((style) => (
+                          <button
+                            key={style}
+                            type="button"
+                            onClick={() => updateBranding('button_style', style)}
+                            className={`flex-1 p-2 rounded-xl border-2 text-center capitalize text-sm transition-all ${formData.branding.button_style === style
+                              ? 'border-purple-500 bg-purple-500/10 text-purple-600 dark:text-purple-300'
+                              : 'border-[#D9DEE5] dark:border-[#1F2630] text-[#6B7280] dark:text-[#7D8590]'
+                              }`}
+                          >
+                            {style}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
 

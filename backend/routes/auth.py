@@ -57,7 +57,8 @@ async def register(user_input: UserCreate):
         name=user_input.name,
         role=user_input.role,
         phone=user_input.phone,
-        status="Active"
+        status="Active",
+        company_id=None # Newly registered users won't have it yet unless explicitly passed, but better to structure it uniformly
     )
     
     access_token = create_access_token({"sub": user.id})
@@ -78,7 +79,8 @@ async def login(credentials: UserLogin):
         email=user_doc["email"],
         name=user_doc.get("name", user_doc["email"].split('@')[0]),
         role=user_doc.get("role", "Admin"),
-        status=user_doc.get("status", "Active")
+        status=user_doc.get("status", "Active"),
+        company_id=user_doc.get("company_id")
     )
     
     # Update last login

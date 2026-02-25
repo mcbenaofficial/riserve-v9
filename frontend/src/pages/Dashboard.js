@@ -5,7 +5,7 @@ import { useAssistant } from '../contexts/AssistantContext';
 import {
   Store, Calendar, DollarSign, Star, TrendingUp,
   Clock, Users, Wrench, ChevronRight, ArrowUpRight, ArrowDownRight,
-  Wallet, CreditCard, BarChart3, Activity, Settings, LayoutDashboard
+  Wallet, CreditCard, BarChart3, Activity, Settings, LayoutDashboard, Package
 } from 'lucide-react';
 import { Area, AreaChart, Bar, BarChart, Line, LineChart, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
 
@@ -19,6 +19,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLe
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from '../components/ui/dialog';
 import { Switch } from '../components/ui/switch';
 import { Label } from '../components/ui/label';
+import PendingAIWidget from '../components/hitl/PendingAIWidget';
 
 const Dashboard = () => {
   const [reports, setReports] = useState(null);
@@ -125,7 +126,7 @@ const Dashboard = () => {
   for (let i = 6; i >= 0; i--) {
     const date = new Date(today); date.setDate(today.getDate() - i);
     const dateStr = date.toISOString().split('T')[0];
-    const dayBookings = bookings.filter(b => b.date === dateStr);
+    const dayBookings = bookings.filter(b => b.date && b.date.startsWith(dateStr));
     bookingTrendData.push({ date: date.toLocaleDateString('en-US', { weekday: 'short' }), bookings: dayBookings.length, revenue: dayBookings.reduce((sum, b) => sum + (b.amount || 0), 0) });
   }
 
@@ -165,11 +166,50 @@ const Dashboard = () => {
           <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-[#E6E8EB] text-gradient-pro">Dashboard</h2>
           <p className="text-gray-500 dark:text-[#9CA3AF]">Overview of your car wash business</p>
         </div>
-        <Button variant="outline" size="sm" onClick={openCustomization} className="gap-2 bg-purple-500/10 border-purple-500/20 text-purple-700 dark:text-[#E6E8EB] hover:bg-purple-500/20 hover:border-purple-500/50 hover:text-purple-900 dark:hover:text-purple-400 backdrop-blur-md">
-          <LayoutDashboard size={16} />
-          Customize
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              try {
+                await api.analyzeSchedule();
+                // We should ideally reload the pending widgets here, though it might auto-refresh via sockets or manual refresh 
+                window.location.reload();
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+            className="gap-2 bg-blue-500/10 border-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-500/20 hover:border-blue-500/50 hover:text-blue-900 dark:hover:text-blue-300 backdrop-blur-md"
+            title="Run Schedule Analysis"
+          >
+            <Activity size={16} />
+            Analyze Schedule
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              try {
+                await api.analyzeInventory();
+                window.location.reload();
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+            className="gap-2 bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 hover:text-amber-900 dark:hover:text-amber-300 backdrop-blur-md hidden md:flex"
+            title="Run Inventory Analysis"
+          >
+            <Package size={16} />
+            Analyze Inventory
+          </Button>
+          <Button variant="outline" size="sm" onClick={openCustomization} className="gap-2 bg-purple-500/10 border-purple-500/20 text-purple-700 dark:text-[#E6E8EB] hover:bg-purple-500/20 hover:border-purple-500/50 hover:text-purple-900 dark:hover:text-purple-400 backdrop-blur-md">
+            <LayoutDashboard size={16} />
+            Customize
+          </Button>
+        </div>
       </div>
+
+      <PendingAIWidget />
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

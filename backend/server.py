@@ -119,7 +119,7 @@ app.add_middleware(
 from routes import (
     auth, public, dashboard, bookings, services, outlets, 
     staff, reports, feedback, assistant, onboarding,
-    users, company, inventory, customers, slots, transactions, promotions
+    users, company, inventory, customers, slots, transactions, promotions, hitl
 )
 from routes.superadmin import router as superadmin
 
@@ -143,6 +143,7 @@ app.include_router(slots.router, prefix="/api")
 app.include_router(transactions.router, prefix="/api")
 app.include_router(promotions.promotions_bp, prefix="/api")
 app.include_router(onboarding.router, prefix="/api")
+app.include_router(hitl.router, prefix="/api")
 
 
 # Additional route for resource-bookings

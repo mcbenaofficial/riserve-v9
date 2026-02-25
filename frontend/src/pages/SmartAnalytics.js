@@ -8,6 +8,7 @@ import {
 import { useAnalytics } from '../contexts/AnalyticsContext';
 import { api } from '../services/api';
 import { DynamicChart } from '../components/analytics/AnalyticsCharts';
+import PendingAIRecommendations from '../components/hitl/PendingAIRecommendations';
 
 // --- Widget Configuration ---
 const DEFAULT_WIDGETS = [
@@ -78,8 +79,8 @@ const ChartTypeSelector = ({ currentType, onSelect, isOpen, onClose }) => {
                         key={chart.type}
                         onClick={() => { onSelect(chart.type); onClose(); }}
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${currentType === chart.type
-                                ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20'
-                                : 'hover:bg-gray-100 dark:hover:bg-[#2A323E] text-[#4B5563] dark:text-[#E6E8EB]'
+                            ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20'
+                            : 'hover:bg-gray-100 dark:hover:bg-[#2A323E] text-[#4B5563] dark:text-[#E6E8EB]'
                             }`}
                     >
                         <chart.icon size={16} />
@@ -239,8 +240,13 @@ const SmartAnalytics = () => {
                     />
                 </div>
 
+                {/* --- HITL Recommendations --- */}
+                <div className="w-full">
+                    <PendingAIRecommendations />
+                </div>
+
                 {/* --- Main Dashboard Grid --- */}
-                <div className="grid grid-cols-12 gap-6">
+                <div className="grid grid-cols-12 gap-6 mt-8">
 
                     {/* 1. Dynamic AI Widgets */}
                     <AnimatePresence>
@@ -313,7 +319,7 @@ const SmartAnalytics = () => {
                                 className={`${getColSpan('trends')} glass-panel p-6 rounded-3xl relative group min-h-[400px] border-0`}
                                 onClick={(e) => { e.stopPropagation(); setActiveSelector(activeSelector === 'trends' ? null : 'trends'); }}
                             >
-                                <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl group-hover:bg-purple-500/10 transition-colors" />
+                                <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl opacity-30 group-hover:bg-purple-500/10 group-hover:opacity-100 transition-all duration-500" />
 
                                 <div className="flex items-center justify-between mb-6 relative z-10">
                                     <div className="flex items-center gap-3">

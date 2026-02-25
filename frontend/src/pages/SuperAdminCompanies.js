@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
+import {
   Building2, Search, Plus, Crown, Eye, Edit2, Power,
   CheckCircle, XCircle, AlertCircle, Filter, X, Save,
   Mail, Phone, MapPin, Briefcase, Calendar, Shield, Package, Sparkles, BarChart3, Globe, Code
@@ -13,17 +13,17 @@ const SuperAdminCompanies = ({ theme }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPlan, setFilterPlan] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
-  
+
   // Edit modal state
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingCompany, setEditingCompany] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
-  
+
   // Deactivate modal state
   const [showDeactivateModal, setShowDeactivateModal] = useState(false);
   const [deactivatingCompany, setDeactivatingCompany] = useState(null);
-  
+
   // Add Company modal state
   const [showAddModal, setShowAddModal] = useState(false);
   const [addForm, setAddForm] = useState({
@@ -35,7 +35,10 @@ const SuperAdminCompanies = ({ theme }) => {
     plan: 'trial',
     admin_name: '',
     admin_email: '',
-    admin_password: ''
+    admin_password: '',
+    is_booking_enabled: true,
+    is_retail_enabled: false,
+    is_workplace_enabled: false
   });
 
   const fetchData = useCallback(async () => {
@@ -59,7 +62,7 @@ const SuperAdminCompanies = ({ theme }) => {
   }, [fetchData]);
 
   const filteredCompanies = companies.filter(company => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       company.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesPlan = !filterPlan || company.plan === filterPlan;
@@ -101,7 +104,10 @@ const SuperAdminCompanies = ({ theme }) => {
       phone: company.phone || '',
       address: company.address || '',
       plan: company.plan,
-      enabled_features: company.enabled_features || []
+      enabled_features: company.enabled_features || [],
+      is_booking_enabled: company.is_booking_enabled !== undefined ? company.is_booking_enabled : true,
+      is_retail_enabled: company.is_retail_enabled || false,
+      is_workplace_enabled: company.is_workplace_enabled || false
     });
     setShowEditModal(true);
   };
@@ -128,7 +134,7 @@ const SuperAdminCompanies = ({ theme }) => {
   const handleSaveEdit = async () => {
     try {
       setSaving(true);
-      
+
       // Update company details including features
       await api.updateCompany(editingCompany.id, {
         name: editForm.name,
@@ -136,14 +142,17 @@ const SuperAdminCompanies = ({ theme }) => {
         email: editForm.email,
         phone: editForm.phone,
         address: editForm.address,
-        enabled_features: editForm.enabled_features
+        enabled_features: editForm.enabled_features,
+        is_booking_enabled: editForm.is_booking_enabled,
+        is_retail_enabled: editForm.is_retail_enabled,
+        is_workplace_enabled: editForm.is_workplace_enabled
       });
-      
+
       // Update plan if changed
       if (editForm.plan !== editingCompany.plan) {
         await api.changeCompanyPlan(editingCompany.id, editForm.plan);
       }
-      
+
       await fetchData();
       setShowEditModal(false);
       setEditingCompany(null);
@@ -194,7 +203,10 @@ const SuperAdminCompanies = ({ theme }) => {
         plan: 'trial',
         admin_name: '',
         admin_email: '',
-        admin_password: ''
+        admin_password: '',
+        is_booking_enabled: true,
+        is_retail_enabled: false,
+        is_workplace_enabled: false
       });
     } catch (error) {
       console.error('Error creating company:', error);
@@ -232,7 +244,7 @@ const SuperAdminCompanies = ({ theme }) => {
             </p>
           </div>
         </div>
-        <button 
+        <button
           className="flex items-center gap-2 px-4 py-2 bg-[#5FA8D3] hover:bg-[#4A95C0] text-white rounded-xl transition-colors"
           onClick={() => setShowAddModal(true)}
         >
@@ -253,7 +265,7 @@ const SuperAdminCompanies = ({ theme }) => {
         </div>
 
         {Object.entries(planDistribution).map(([plan, count]) => (
-          <div 
+          <div
             key={plan}
             className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-[#171C22]' : 'bg-white'} shadow-sm`}
           >
@@ -396,21 +408,21 @@ const SuperAdminCompanies = ({ theme }) => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1">
-                      <button 
+                      <button
                         className={`p-2 rounded-lg hover:bg-[#5FA8D3]/10 transition-colors`}
                         title="View Details"
                         onClick={() => window.location.href = `/super-admin/companies/${company.id}`}
                       >
                         <Eye size={16} className="text-[#5FA8D3]" />
                       </button>
-                      <button 
+                      <button
                         className={`p-2 rounded-lg hover:bg-[#5FA8D3]/10 transition-colors`}
                         title="Edit Company"
                         onClick={() => handleEditClick(company)}
                       >
                         <Edit2 size={16} className="text-purple-500" />
                       </button>
-                      <button 
+                      <button
                         className={`p-2 rounded-lg hover:bg-[#5FA8D3]/10 transition-colors`}
                         title={company.status === 'active' ? 'Deactivate' : 'Activate'}
                         onClick={() => handleDeactivateClick(company)}
@@ -535,11 +547,10 @@ const SuperAdminCompanies = ({ theme }) => {
                     <button
                       key={plan}
                       onClick={() => setEditForm({ ...editForm, plan })}
-                      className={`p-3 rounded-xl text-sm font-medium transition-all ${
-                        editForm.plan === plan
-                          ? 'bg-[#5FA8D3] text-white'
-                          : theme === 'dark' ? 'bg-[#1F2630] text-[#E6E8EB] hover:bg-[#1F2630]/80' : 'bg-[#F6F7F9] text-[#0E1116] hover:bg-[#ECEFF3]'
-                      }`}
+                      className={`p-3 rounded-xl text-sm font-medium transition-all ${editForm.plan === plan
+                        ? 'bg-[#5FA8D3] text-white'
+                        : theme === 'dark' ? 'bg-[#1F2630] text-[#E6E8EB] hover:bg-[#1F2630]/80' : 'bg-[#F6F7F9] text-[#0E1116] hover:bg-[#ECEFF3]'
+                        }`}
                     >
                       {plan === 'pro' && <Crown size={12} className="inline mr-1" />}
                       {plan.charAt(0).toUpperCase() + plan.slice(1)}
@@ -553,11 +564,95 @@ const SuperAdminCompanies = ({ theme }) => {
                 )}
               </div>
 
+              {/* Business Modules (Tenant Flags) */}
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                  <Briefcase size={14} className="inline mr-2" />
+                  Business Modules
+                </label>
+                <div className="space-y-2">
+                  <div
+                    onClick={() => setEditForm({ ...editForm, is_booking_enabled: !editForm.is_booking_enabled })}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${editForm.is_booking_enabled
+                      ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
+                      : theme === 'dark' ? 'bg-[#1F2630] hover:bg-[#1F2630]/80' : 'bg-[#F6F7F9] hover:bg-[#ECEFF3]'
+                      }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${editForm.is_booking_enabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
+                      }`}>
+                      <Calendar size={16} className={editForm.is_booking_enabled ? 'text-white' : theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                    </div>
+                    <div className="flex-1">
+                      <div className={`text-sm font-medium ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                        Booking Platform
+                      </div>
+                      <div className={`text-xs ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
+                        Enable services, calendar, and appointments
+                      </div>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${editForm.is_booking_enabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
+                      }`}>
+                      {editForm.is_booking_enabled && <CheckCircle size={12} className="text-white" />}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setEditForm({ ...editForm, is_retail_enabled: !editForm.is_retail_enabled })}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${editForm.is_retail_enabled
+                      ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
+                      : theme === 'dark' ? 'bg-[#1F2630] hover:bg-[#1F2630]/80' : 'bg-[#F6F7F9] hover:bg-[#ECEFF3]'
+                      }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${editForm.is_retail_enabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
+                      }`}>
+                      <Store size={16} className={editForm.is_retail_enabled ? 'text-white' : theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                    </div>
+                    <div className="flex-1">
+                      <div className={`text-sm font-medium ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                        Retail Operations
+                      </div>
+                      <div className={`text-xs ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
+                        Enable POS, product inventory, and billing
+                      </div>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${editForm.is_retail_enabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
+                      }`}>
+                      {editForm.is_retail_enabled && <CheckCircle size={12} className="text-white" />}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setEditForm({ ...editForm, is_workplace_enabled: !editForm.is_workplace_enabled })}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${editForm.is_workplace_enabled
+                      ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
+                      : theme === 'dark' ? 'bg-[#1F2630] hover:bg-[#1F2630]/80' : 'bg-[#F6F7F9] hover:bg-[#ECEFF3]'
+                      }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${editForm.is_workplace_enabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
+                      }`}>
+                      <Briefcase size={16} className={editForm.is_workplace_enabled ? 'text-white' : theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                    </div>
+                    <div className="flex-1">
+                      <div className={`text-sm font-medium ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                        Workplace Management
+                      </div>
+                      <div className={`text-xs ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
+                        Enable shift scheduling and staff tracking
+                      </div>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${editForm.is_workplace_enabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
+                      }`}>
+                      {editForm.is_workplace_enabled && <CheckCircle size={12} className="text-white" />}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Enabled Features */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
                   <Package size={14} className="inline mr-2" />
-                  Enabled Features
+                  Additional Add-ons
                 </label>
                 <div className="space-y-2">
                   {availableFeatures.map((feature) => {
@@ -567,15 +662,13 @@ const SuperAdminCompanies = ({ theme }) => {
                       <div
                         key={feature.id}
                         onClick={() => handleFeatureToggle(feature.id)}
-                        className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${
-                          isEnabled
-                            ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
-                            : theme === 'dark' ? 'bg-[#1F2630] hover:bg-[#1F2630]/80' : 'bg-[#F6F7F9] hover:bg-[#ECEFF3]'
-                        }`}
+                        className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${isEnabled
+                          ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
+                          : theme === 'dark' ? 'bg-[#1F2630] hover:bg-[#1F2630]/80' : 'bg-[#F6F7F9] hover:bg-[#ECEFF3]'
+                          }`}
                       >
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                          isEnabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
-                        }`}>
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isEnabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
+                          }`}>
                           <IconComponent size={16} className={isEnabled ? 'text-white' : theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
                         </div>
                         <div className="flex-1">
@@ -586,9 +679,8 @@ const SuperAdminCompanies = ({ theme }) => {
                             {feature.description}
                           </div>
                         </div>
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                          isEnabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
-                        }`}>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isEnabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
+                          }`}>
                           {isEnabled && <CheckCircle size={12} className="text-white" />}
                         </div>
                       </div>
@@ -623,18 +715,17 @@ const SuperAdminCompanies = ({ theme }) => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className={`w-full max-w-md rounded-2xl ${theme === 'dark' ? 'bg-[#171C22]' : 'bg-white'} shadow-xl`}>
             <div className="p-6">
-              <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                deactivatingCompany.status === 'active' 
-                  ? 'bg-orange-100 dark:bg-orange-900/30' 
-                  : 'bg-green-100 dark:bg-green-900/30'
-              }`}>
+              <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${deactivatingCompany.status === 'active'
+                ? 'bg-orange-100 dark:bg-orange-900/30'
+                : 'bg-green-100 dark:bg-green-900/30'
+                }`}>
                 <Power size={32} className={deactivatingCompany.status === 'active' ? 'text-orange-500' : 'text-green-500'} />
               </div>
-              
+
               <h3 className={`text-xl font-bold text-center mb-2 ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
                 {deactivatingCompany.status === 'active' ? 'Deactivate Company?' : 'Reactivate Company?'}
               </h3>
-              
+
               <p className={`text-center mb-4 ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
                 <strong>{deactivatingCompany.name}</strong>
               </p>
@@ -679,11 +770,10 @@ const SuperAdminCompanies = ({ theme }) => {
                 <button
                   onClick={handleConfirmDeactivate}
                   disabled={saving}
-                  className={`flex-1 px-4 py-3 rounded-xl text-white transition-colors disabled:opacity-50 ${
-                    deactivatingCompany.status === 'active'
-                      ? 'bg-orange-500 hover:bg-orange-600'
-                      : 'bg-green-500 hover:bg-green-600'
-                  }`}
+                  className={`flex-1 px-4 py-3 rounded-xl text-white transition-colors disabled:opacity-50 ${deactivatingCompany.status === 'active'
+                    ? 'bg-orange-500 hover:bg-orange-600'
+                    : 'bg-green-500 hover:bg-green-600'
+                    }`}
                 >
                   {saving ? 'Processing...' : deactivatingCompany.status === 'active' ? 'Deactivate' : 'Reactivate'}
                 </button>
@@ -796,15 +886,97 @@ const SuperAdminCompanies = ({ theme }) => {
                     <button
                       key={plan}
                       onClick={() => setAddForm({ ...addForm, plan })}
-                      className={`p-3 rounded-xl text-sm font-medium transition-all ${
-                        addForm.plan === plan
-                          ? 'bg-[#5FA8D3] text-white'
-                          : theme === 'dark' ? 'bg-[#0B0D10] text-[#E6E8EB] hover:bg-[#1F2630]' : 'bg-white text-[#0E1116] hover:bg-[#ECEFF3]'
-                      }`}
+                      className={`p-3 rounded-xl text-sm font-medium transition-all ${addForm.plan === plan
+                        ? 'bg-[#5FA8D3] text-white'
+                        : theme === 'dark' ? 'bg-[#0B0D10] text-[#E6E8EB] hover:bg-[#1F2630]' : 'bg-white text-[#0E1116] hover:bg-[#ECEFF3]'
+                        }`}
                     >
                       {plan.charAt(0).toUpperCase() + plan.slice(1)}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Business Modules (Tenant Flags) */}
+              <div className={`p-4 rounded-xl mb-4 ${theme === 'dark' ? 'bg-[#1F2630]/50' : 'bg-[#F6F7F9]'}`}>
+                <h4 className={`text-sm font-semibold mb-4 ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                  Business Modules
+                </h4>
+                <div className="space-y-2">
+                  <div
+                    onClick={() => setAddForm({ ...addForm, is_booking_enabled: !addForm.is_booking_enabled })}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${addForm.is_booking_enabled
+                        ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
+                        : theme === 'dark' ? 'bg-[#0B0D10] hover:bg-[#1F2630]' : 'bg-white hover:bg-[#ECEFF3]'
+                      }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${addForm.is_booking_enabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
+                      }`}>
+                      <Calendar size={16} className={addForm.is_booking_enabled ? 'text-white' : theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                    </div>
+                    <div className="flex-1">
+                      <div className={`text-sm font-medium ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                        Booking Platform
+                      </div>
+                      <div className={`text-xs ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
+                        Enable services, calendar, and appointments
+                      </div>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${addForm.is_booking_enabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
+                      }`}>
+                      {addForm.is_booking_enabled && <CheckCircle size={12} className="text-white" />}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setAddForm({ ...addForm, is_retail_enabled: !addForm.is_retail_enabled })}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${addForm.is_retail_enabled
+                        ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
+                        : theme === 'dark' ? 'bg-[#0B0D10] hover:bg-[#1F2630]' : 'bg-white hover:bg-[#ECEFF3]'
+                      }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${addForm.is_retail_enabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
+                      }`}>
+                      <Store size={16} className={addForm.is_retail_enabled ? 'text-white' : theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                    </div>
+                    <div className="flex-1">
+                      <div className={`text-sm font-medium ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                        Retail Operations
+                      </div>
+                      <div className={`text-xs ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
+                        Enable POS, product inventory, and billing
+                      </div>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${addForm.is_retail_enabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
+                      }`}>
+                      {addForm.is_retail_enabled && <CheckCircle size={12} className="text-white" />}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setAddForm({ ...addForm, is_workplace_enabled: !addForm.is_workplace_enabled })}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${addForm.is_workplace_enabled
+                        ? 'bg-[#5FA8D3]/20 border border-[#5FA8D3]/40'
+                        : theme === 'dark' ? 'bg-[#0B0D10] hover:bg-[#1F2630]' : 'bg-white hover:bg-[#ECEFF3]'
+                      }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${addForm.is_workplace_enabled ? 'bg-[#5FA8D3]' : theme === 'dark' ? 'bg-[#2A313C]' : 'bg-[#D9DEE5]'
+                      }`}>
+                      <Briefcase size={16} className={addForm.is_workplace_enabled ? 'text-white' : theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                    </div>
+                    <div className="flex-1">
+                      <div className={`text-sm font-medium ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+                        Workplace Management
+                      </div>
+                      <div className={`text-xs ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
+                        Enable shift scheduling and staff tracking
+                      </div>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${addForm.is_workplace_enabled ? 'bg-[#5FA8D3] border-[#5FA8D3]' : theme === 'dark' ? 'border-[#7D8590]' : 'border-[#6B7280]'
+                      }`}>
+                      {addForm.is_workplace_enabled && <CheckCircle size={12} className="text-white" />}
+                    </div>
+                  </div>
                 </div>
               </div>
 

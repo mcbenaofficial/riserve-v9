@@ -49,6 +49,9 @@ class InventoryCheckSchema(BaseModel):
     product_name: Optional[str] = Field(None, description="Name of the product to check")
     low_stock_only: bool = Field(False, description="If true, only return low stock items")
 
+class InventoryReorderSchema(BaseModel):
+    pass
+
 class RecentBookingsSchema(BaseModel):
     limit: int = Field(5, description="Number of records to return")
 
@@ -216,5 +219,39 @@ async def check_inventory_tool(product_name: Optional[str] = None, low_stock_onl
         
     return result
 
+@tool(args_schema=InventoryReorderSchema)
+async def trigger_inventory_reorder(user_context: Dict[str, Any] = None) -> str:
+    """
+    Analyzes low stock inventory and generates a Human-in-the-Loop report to reorder items.
+    Call this when the user wants to replenish stock or automatically reorder items.
+    """
+    from routes.dependencies import products_collection
+    from routes.hitl import analyze_inventory
+    from pydantic import BaseModel
+    
+    # Mocking a User object for the inner function call
+    class MockUser(BaseModel):
+        company_id: Optional[str] = None
+        id: str = "system_agent"
+    
+    if not user_context:
+        return "Error: No user context provided."
+        
+    company_id = user_context.get("company_id")
+    current_user = MockUser(company_id=company_id)
+    
+    # Needs db, we can import get_db
+    from routes.dependencies import get_db
+    
+    db = get_db()
+    
+    try:
+        res = await analyze_inventory(current_user=current_user, db=db)
+        if res.get("status") == "success" and res.get("report_generated"):
+            return f"Successfully generated an inventory reorder report for {res.get('items_count')} items. The operations team can review and approve it on the dashboard."
+        return f"Inventory analysis complete: {res.get('reason', 'No action needed')}."
+    except Exception as e:
+        return f"Error triggering inventory reorder: {str(e)}"
+
 # List of all available tools
-all_tools = [get_recent_bookings, create_booking_tool, get_revenue_stats, check_inventory_tool]
+all_tools = [get_recent_bookings, create_booking_tool, get_revenue_stats, check_inventory_tool, trigger_inventory_reorder]

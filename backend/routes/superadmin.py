@@ -26,6 +26,9 @@ class CompanyCreate(BaseModel):
     admin_name: str
     admin_email: EmailStr
     admin_password: str
+    is_booking_enabled: bool = True
+    is_retail_enabled: bool = False
+    is_workplace_enabled: bool = False
 
 
 class CompanyUpdate(BaseModel):
@@ -37,6 +40,9 @@ class CompanyUpdate(BaseModel):
     plan: Optional[str] = None
     status: Optional[str] = None
     enabled_features: Optional[List[str]] = None
+    is_booking_enabled: Optional[bool] = None
+    is_retail_enabled: Optional[bool] = None
+    is_workplace_enabled: Optional[bool] = None
 
 
 class PlanChange(BaseModel):
@@ -197,6 +203,9 @@ async def create_company(
         "trial_end": trial_end.isoformat() if trial_end else None,
         "status": "active",
         "enabled_features": [],  # Features that can be enabled: ["inventory", "ai_assistant", etc.]
+        "is_booking_enabled": company_data.is_booking_enabled,
+        "is_retail_enabled": company_data.is_retail_enabled,
+        "is_workplace_enabled": company_data.is_workplace_enabled,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "created_by": current_user.id
     }

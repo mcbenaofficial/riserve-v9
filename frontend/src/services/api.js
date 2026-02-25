@@ -29,6 +29,7 @@ export const api = {
   // Transactions
   getTransactions: () => axios.get(`${API}/transactions`, { headers: getHeaders() }),
   getTransactionByBooking: (bookingId) => axios.get(`${API}/transactions/booking/${bookingId}`, { headers: getHeaders() }),
+  processPOSCheckout: (data) => axios.post(`${API}/transactions/pos`, data, { headers: getHeaders() }),
 
   // Users
   getUsers: () => axios.get(`${API}/users`, { headers: getHeaders() }),
@@ -212,5 +213,12 @@ export const api = {
   getOnboardingProgress: () => axios.get(`${API}/onboarding/progress`, { headers: getHeaders() }),
   skipOnboarding: () => axios.post(`${API}/onboarding/skip`, {}, { headers: getHeaders() }),
   onboardingChat: (message, conversationId, stream = true) => axios.post(`${API}/onboarding/chat`, { message, conversation_id: conversationId, stream }, { headers: getHeaders() }),
-};
 
+  // Human-in-the-Loop (HITL)
+  generateHITLReport: (data) => axios.post(`${API}/hitl/generate-report`, data, { headers: getHeaders() }),
+  getPendingHITLReports: () => axios.get(`${API}/hitl/pending`, { headers: getHeaders() }),
+  confirmHITLReport: (data) => axios.post(`${API}/hitl/confirm`, data, { headers: getHeaders() }),
+  getHITLPreferences: () => axios.get(`${API}/hitl/preferences`, { headers: getHeaders() }),
+  analyzeSchedule: (data) => axios.post(`${API}/hitl/analyze-schedule`, data || {}, { headers: getHeaders() }),
+  analyzeInventory: () => axios.post(`${API}/hitl/analyze-inventory`, {}, { headers: getHeaders() }),
+};

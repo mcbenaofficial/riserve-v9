@@ -79,6 +79,9 @@ class Company(BaseModel):
     trial_start: Optional[datetime] = None
     trial_end: Optional[datetime] = None
     status: str = "active"  # active, suspended, cancelled
+    is_booking_enabled: bool = True
+    is_retail_enabled: bool = False
+    is_workplace_enabled: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     created_by: Optional[str] = None  # Super admin who created it, or 'self-signup'
     

@@ -2,10 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
     Send, Sparkles, X, ChevronRight, ChevronLeft,
-    BarChart2, Zap, MoreHorizontal, Maximize2, Minimize2, TrendingUp, PieChart, Activity
+    BarChart2, Zap, MoreHorizontal, Maximize2, Minimize2, TrendingUp, PieChart, Activity, Atom
 } from 'lucide-react';
+import { AtomicPowerIcon } from 'hugeicons-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { api } from '../../services/api';
 import ThinkingProcess from '../ThinkingProcess';
 
@@ -19,8 +21,11 @@ const CHART_SUGGESTIONS = [
 
 const AgentSidebar = ({ isOpen, toggleSidebar }) => {
     const { addWidget, analyticsData, getMonthlyTrends } = useAnalytics();
+    const { theme, mode } = useTheme();
+    const isDark = theme === 'dark';
+    const isZen = mode === 'zen';
     const [messages, setMessages] = useState([
-        { id: 1, role: 'assistant', content: 'Hello! I am Ri\'Serve Flow. How can I assist you with your analytics today?' }
+        { id: 1, role: 'assistant', content: 'Hello! I am Kyntra. How can I assist you with your analytics today?' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -108,27 +113,27 @@ const AgentSidebar = ({ isOpen, toggleSidebar }) => {
             initial={{ width: 0, opacity: 0 }}
             animate={{ width: isOpen ? (isExpanded ? 600 : 320) : 0, opacity: isOpen ? 1 : 0 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="h-full bg-[#12161C]/50 backdrop-blur-xl border-l border-[#1F2630] flex flex-col overflow-hidden"
+            className={`h-full backdrop-blur-xl border-l flex flex-col overflow-hidden ${isDark ? 'bg-[#12161C]/50 border-[#1F2630]' : 'bg-white/70 border-[#D9DEE5]'}`}
         >
             {/* Header */}
-            <div className="p-4 border-b border-[#1F2630] flex items-center justify-between">
+            <div className={`p-4 border-b flex items-center justify-between ${isDark ? 'border-[#1F2630]' : 'border-[#D9DEE5]'}`}>
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                        <Sparkles size={16} className="text-white" />
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isZen ? 'bg-[#687988]' : 'bg-gradient-to-br from-purple-500 to-pink-500'}`}>
+                        <AtomicPowerIcon size={16} className="text-white" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-semibold text-[#E6E8EB]">Ri'Serve Flow</h3>
+                        <h3 className={`text-sm font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>Vorta</h3>
                     </div>
                 </div>
                 <div className="flex items-center gap-1">
                     <button
                         onClick={() => setIsExpanded(!isExpanded)}
-                        className="p-1 hover:bg-[#1F2630] rounded-md text-[#7D8590] transition-colors"
+                        className={`p-1 rounded-md transition-colors ${isDark ? 'hover:bg-[#1F2630] text-[#7D8590]' : 'hover:bg-[#ECEFF3] text-[#6B7280]'}`}
                         title={isExpanded ? "Collapse width" : "Expand width"}
                     >
                         {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
                     </button>
-                    <button onClick={toggleSidebar} className="p-1 hover:bg-[#1F2630] rounded-md text-[#7D8590] transition-colors">
+                    <button onClick={toggleSidebar} className={`p-1 rounded-md transition-colors ${isDark ? 'hover:bg-[#1F2630] text-[#7D8590]' : 'hover:bg-[#ECEFF3] text-[#6B7280]'}`}>
                         <X size={16} />
                     </button>
                 </div>
@@ -139,18 +144,18 @@ const AgentSidebar = ({ isOpen, toggleSidebar }) => {
                 {messages.map((msg) => (
                     <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[85%] rounded-2xl p-3 text-sm ${msg.role === 'user'
-                            ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                            : 'bg-[#1F2630] text-[#E6E8EB] border border-[#374151]'
+                            ? isZen ? 'bg-[#687988] text-white shadow-lg shadow-[#687988]/20' : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/20'
+                            : isDark ? 'bg-[#1F2630] text-[#E6E8EB] border border-[#374151]' : 'bg-[#ECEFF3] text-[#0E1116] border border-[#D9DEE5]'
                             }`}>
                             {msg.thinking_process && msg.thinking_process.length > 0 && (
-                                <ThinkingProcess steps={msg.thinking_process} isDark={true} />
+                                <ThinkingProcess steps={msg.thinking_process} isDark={isDark} />
                             )}
                             {msg.content}
                             {msg.uiBlock && msg.suggestion && (
-                                <div className="mt-3 bg-[#111827] rounded-xl p-3 border border-[#374151]">
+                                <div className={`mt-3 rounded-xl p-3 border ${isDark ? 'bg-[#111827] border-[#374151]' : 'bg-white border-[#D9DEE5]'}`}>
                                     <div className="flex items-center gap-2 mb-2">
                                         <msg.suggestion.icon size={14} style={{ color: msg.suggestion.color }} />
-                                        <span className="text-xs font-semibold text-gray-300">{msg.suggestion.label}</span>
+                                        <span className={`text-xs font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{msg.suggestion.label}</span>
                                     </div>
                                     {/* Mini preview with real data */}
                                     <div className="h-16 bg-[#1F2937]/50 rounded-lg flex items-center justify-center mb-2 overflow-hidden">
@@ -179,7 +184,7 @@ const AgentSidebar = ({ isOpen, toggleSidebar }) => {
                                     </div>
                                     <button
                                         onClick={() => handleUseChart(msg.suggestion)}
-                                        className="w-full py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 rounded-lg text-xs font-medium text-white transition-all"
+                                        className={`w-full py-1.5 rounded-lg text-xs font-medium text-white transition-all shadow-md ${isZen ? 'bg-[#687988] shadow-[#687988]/20 hover:bg-[#586978]' : 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-purple-500/20 hover:opacity-90'}`}
                                     >
                                         Use this Chart
                                     </button>
@@ -190,10 +195,10 @@ const AgentSidebar = ({ isOpen, toggleSidebar }) => {
                 ))}
                 {isTyping && (
                     <div className="flex justify-start">
-                        <div className="bg-[#1F2630] text-[#E6E8EB] border border-[#374151] rounded-2xl p-3 flex gap-1 items-center">
-                            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <div className={`rounded-2xl p-3 flex gap-1 items-center border ${isDark ? 'bg-[#1F2630] text-[#E6E8EB] border-[#374151]' : 'bg-[#ECEFF3] text-[#0E1116] border-[#D9DEE5]'}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${isZen ? 'bg-stone-400' : 'bg-gray-400'}`} style={{ animationDelay: '0ms' }} />
+                            <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${isZen ? 'bg-stone-400' : 'bg-gray-400'}`} style={{ animationDelay: '150ms' }} />
+                            <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${isZen ? 'bg-stone-400' : 'bg-gray-400'}`} style={{ animationDelay: '300ms' }} />
                         </div>
                     </div>
                 )}
@@ -201,7 +206,7 @@ const AgentSidebar = ({ isOpen, toggleSidebar }) => {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 border-t border-[#1F2630] bg-[#12161C]/80">
+            <div className={`p-4 border-t ${isDark ? 'border-[#1F2630] bg-[#12161C]/80' : 'border-[#D9DEE5] bg-white'}`}>
                 <div className="relative">
                     <input
                         type="text"
@@ -209,12 +214,12 @@ const AgentSidebar = ({ isOpen, toggleSidebar }) => {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         placeholder="Ask about revenue, bookings, outlets..."
-                        className="w-full bg-[#1F2630] border border-[#374151] text-[#E6E8EB] text-sm rounded-full pl-4 pr-10 py-2.5 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all placeholder:text-gray-500"
+                        className={`w-full text-sm rounded-full pl-4 pr-10 py-2.5 focus:outline-none transition-all placeholder:text-gray-500 border ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB] focus:border-purple-500 focus:ring-1 focus:ring-purple-500' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116] focus:border-[#5FA8D3] focus:ring-1 focus:ring-[#5FA8D3]'}`}
                     />
                     <button
                         onClick={handleSend}
                         disabled={!input.trim()}
-                        className="absolute right-1.5 top-1.5 p-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white hover:opacity-90 disabled:opacity-50 transition-all"
+                        className={`absolute right-1.5 top-1.5 p-1.5 rounded-full text-white transition-all shadow-md ${isZen ? 'bg-[#687988] shadow-[#687988]/20 hover:bg-[#586978]' : 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-purple-500/20 hover:opacity-90'} disabled:opacity-50`}
                     >
                         <Send size={14} />
                     </button>

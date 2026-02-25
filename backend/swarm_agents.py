@@ -23,6 +23,7 @@ from agent_tools import (
     create_booking_tool,
     get_revenue_stats,
     check_inventory_tool,
+    trigger_inventory_reorder,
 )
 
 logger = logging.getLogger(__name__)
@@ -100,7 +101,7 @@ def get_swarm_app(user_context: Dict[str, Any]):
         [get_revenue_stats], user_context
     )
     inventory_tools = _bind_user_context(
-        [check_inventory_tool], user_context
+        [check_inventory_tool, trigger_inventory_reorder], user_context
     )
 
     # ── Handoff Tools ──
@@ -196,7 +197,7 @@ def get_swarm_app(user_context: Dict[str, Any]):
         Your capabilities:
         - Check inventory levels using check_inventory_tool
         - Identify low-stock items
-        - Search for specific products
+        - Generate a reorder report to replenish stock using trigger_inventory_reorder
         
         If the user asks about bookings, transfer to BookingsAgent.
         If the user asks about revenue, transfer to RevenueAgent.

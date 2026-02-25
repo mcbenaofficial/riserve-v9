@@ -3,11 +3,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import NotificationsPanel from './NotificationsPanel';
-import { User, Settings, LogOut, ChevronDown, Sparkles } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, Zap, Coffee } from 'lucide-react';
+import { AtomicPowerIcon } from 'hugeicons-react';
 
 const Topbar = ({ onToggleAgent }) => {
   const { user, logout } = useAuth();
-  const { theme } = useTheme();
+  const { theme, mode, toggleMode } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -64,12 +65,12 @@ const Topbar = ({ onToggleAgent }) => {
         <button
           onClick={onToggleAgent}
           className={`p-2 rounded-full transition-all ${theme === 'dark'
-            ? 'bg-purple-500/10 text-purple-400 hover:bg-purple-500/20'
-            : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
+            ? mode === 'zen' ? 'bg-[#687988]/10 text-[#687988] hover:bg-[#687988]/20' : 'bg-purple-500/10 text-purple-400 hover:bg-purple-500/20'
+            : mode === 'zen' ? 'bg-[#687988]/10 text-[#687988] hover:bg-[#687988]/20' : 'bg-purple-50 text-purple-600 hover:bg-purple-100'
             }`}
           title="Open AI Chat"
         >
-          <Sparkles size={20} />
+          <AtomicPowerIcon size={20} />
         </button>
 
         {/* Notifications */}
@@ -128,6 +129,24 @@ const Topbar = ({ onToggleAgent }) => {
                 >
                   <Settings size={18} className={theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
                   Profile Settings
+                </button>
+
+                <button
+                  onClick={() => {
+                    toggleMode();
+                    setShowDropdown(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all ${theme === 'dark'
+                    ? 'text-[#E6E8EB] hover:bg-[#1F2630]'
+                    : 'text-[#0E1116] hover:bg-[#F6F7F9]'
+                    }`}
+                >
+                  {mode === 'zen' ? (
+                    <Zap size={18} className={theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                  ) : (
+                    <Coffee size={18} className={theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+                  )}
+                  {mode === 'zen' ? 'Switch to Vivid Mode' : 'Switch to Zen Mode'}
                 </button>
 
                 <div className={`mx-3 border-t ${theme === 'dark' ? 'border-[#1F2630]' : 'border-[#D9DEE5]'}`} />

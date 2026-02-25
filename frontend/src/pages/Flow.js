@@ -74,10 +74,13 @@ const TEMPLATES = [
 const CustomNode = ({ data, selected }) => {
     const nodeType = NODE_TYPES.find(t => t.type === data.nodeType) || NODE_TYPES[0];
     const IconComponent = nodeType.icon;
+    const isDark = data.isDark !== false; // default to dark if not set
 
     return (
         <div
-            className={`bg-[#1F2630] border-2 rounded-xl p-4 min-w-[180px] transition-all ${selected ? 'border-purple-500 shadow-lg shadow-purple-500/20' : 'border-[#374151] hover:border-[#4B5563]'
+            className={`${isDark ? 'bg-[#1F2630]' : 'bg-white'} border-2 rounded-xl p-4 min-w-[180px] transition-all ${selected
+                ? 'border-purple-500 shadow-lg shadow-purple-500/20'
+                : isDark ? 'border-[#374151] hover:border-[#4B5563]' : 'border-[#D9DEE5] hover:border-[#9CA3AF]'
                 }`}
         >
             {/* Input Handle */}
@@ -85,7 +88,7 @@ const CustomNode = ({ data, selected }) => {
                 <Handle
                     type="target"
                     position={Position.Left}
-                    className="!w-4 !h-4 !bg-[#374151] !border-2 !border-[#4B5563] hover:!border-purple-500 transition-colors"
+                    className={`!w-4 !h-4 ${isDark ? '!bg-[#374151] !border-[#4B5563]' : '!bg-[#D9DEE5] !border-[#9CA3AF]'} !border-2 hover:!border-purple-500 transition-colors`}
                 />
             )}
 
@@ -97,8 +100,8 @@ const CustomNode = ({ data, selected }) => {
                     <IconComponent size={16} style={{ color: nodeType.color }} />
                 </div>
                 <div className="flex-1">
-                    <h4 className="text-sm font-semibold text-[#E6E8EB]">{data.label || nodeType.label}</h4>
-                    <p className="text-xs text-[#7D8590]">{nodeType.description}</p>
+                    <h4 className={`text-sm font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{data.label || nodeType.label}</h4>
+                    <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>{nodeType.description}</p>
                 </div>
             </div>
 
@@ -107,7 +110,7 @@ const CustomNode = ({ data, selected }) => {
                 <Handle
                     type="source"
                     position={Position.Right}
-                    className="!w-4 !h-4 !bg-[#374151] !border-2 !border-[#4B5563] hover:!border-purple-500 transition-colors"
+                    className={`!w-4 !h-4 ${isDark ? '!bg-[#374151] !border-[#4B5563]' : '!bg-[#D9DEE5] !border-[#9CA3AF]'} !border-2 hover:!border-purple-500 transition-colors`}
                 />
             )}
 
@@ -141,6 +144,7 @@ const nodeTypes = {
 
 const Flow = () => {
     const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const navigate = useNavigate();
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -182,13 +186,14 @@ const Flow = () => {
             data: {
                 label: nodeType?.label || 'Node',
                 nodeType: type,
-                config: {}
+                config: {},
+                isDark: theme === 'dark'
             }
         };
         setNodes(prev => [...prev, newNode]);
         setSelectedNode(newNode.id);
         setShowTemplates(false);
-    }, [setNodes]);
+    }, [setNodes, theme]);
 
     const deleteNode = useCallback((nodeId) => {
         setNodes(prev => prev.filter(n => n.id !== nodeId));
@@ -220,15 +225,24 @@ const Flow = () => {
         event.dataTransfer.dropEffect = 'move';
     }, []);
 
+    // Update isDark on all nodes when theme changes
+    React.useEffect(() => {
+        setNodes(prev => prev.map(n => ({
+            ...n,
+            data: { ...n.data, isDark: theme === 'dark' }
+        })));
+    }, [theme, setNodes]);
+
     const loadTemplate = (templateId) => {
+        const isDarkNow = theme === 'dark';
         const templateConfigs = {
             'rag': {
                 nodes: [
-                    { id: 'n1', type: 'custom', position: { x: 50, y: 150 }, data: { label: 'User Query', nodeType: 'input', config: {} } },
-                    { id: 'n2', type: 'custom', position: { x: 280, y: 80 }, data: { label: 'Vector Store', nodeType: 'retriever', config: {} } },
-                    { id: 'n3', type: 'custom', position: { x: 280, y: 220 }, data: { label: 'RAG Prompt', nodeType: 'prompt', config: {} } },
-                    { id: 'n4', type: 'custom', position: { x: 520, y: 150 }, data: { label: 'GPT-4', nodeType: 'llm', config: {} } },
-                    { id: 'n5', type: 'custom', position: { x: 760, y: 150 }, data: { label: 'Response', nodeType: 'output', config: {} } },
+                    { id: 'n1', type: 'custom', position: { x: 50, y: 150 }, data: { label: 'User Query', nodeType: 'input', config: {}, isDark: isDarkNow } },
+                    { id: 'n2', type: 'custom', position: { x: 280, y: 80 }, data: { label: 'Vector Store', nodeType: 'retriever', config: {}, isDark: isDarkNow } },
+                    { id: 'n3', type: 'custom', position: { x: 280, y: 220 }, data: { label: 'RAG Prompt', nodeType: 'prompt', config: {}, isDark: isDarkNow } },
+                    { id: 'n4', type: 'custom', position: { x: 520, y: 150 }, data: { label: 'GPT-4', nodeType: 'llm', config: {}, isDark: isDarkNow } },
+                    { id: 'n5', type: 'custom', position: { x: 760, y: 150 }, data: { label: 'Response', nodeType: 'output', config: {}, isDark: isDarkNow } },
                 ],
                 edges: [
                     { id: 'e1-2', source: 'n1', target: 'n2', animated: true, style: { stroke: '#8b5cf6', strokeWidth: 2 }, type: 'smoothstep' },
@@ -240,11 +254,11 @@ const Flow = () => {
             },
             'chat': {
                 nodes: [
-                    { id: 'n1', type: 'custom', position: { x: 50, y: 150 }, data: { label: 'User Input', nodeType: 'input', config: {} } },
-                    { id: 'n2', type: 'custom', position: { x: 280, y: 80 }, data: { label: 'Chat Memory', nodeType: 'memory', config: {} } },
-                    { id: 'n3', type: 'custom', position: { x: 280, y: 220 }, data: { label: 'Chat Prompt', nodeType: 'prompt', config: {} } },
-                    { id: 'n4', type: 'custom', position: { x: 520, y: 150 }, data: { label: 'GPT-4', nodeType: 'llm', config: {} } },
-                    { id: 'n5', type: 'custom', position: { x: 760, y: 150 }, data: { label: 'Response', nodeType: 'output', config: {} } },
+                    { id: 'n1', type: 'custom', position: { x: 50, y: 150 }, data: { label: 'User Input', nodeType: 'input', config: {}, isDark: isDarkNow } },
+                    { id: 'n2', type: 'custom', position: { x: 280, y: 80 }, data: { label: 'Chat Memory', nodeType: 'memory', config: {}, isDark: isDarkNow } },
+                    { id: 'n3', type: 'custom', position: { x: 280, y: 220 }, data: { label: 'Chat Prompt', nodeType: 'prompt', config: {}, isDark: isDarkNow } },
+                    { id: 'n4', type: 'custom', position: { x: 520, y: 150 }, data: { label: 'GPT-4', nodeType: 'llm', config: {}, isDark: isDarkNow } },
+                    { id: 'n5', type: 'custom', position: { x: 760, y: 150 }, data: { label: 'Response', nodeType: 'output', config: {}, isDark: isDarkNow } },
                 ],
                 edges: [
                     { id: 'e1-2', source: 'n1', target: 'n2', animated: true, style: { stroke: '#8b5cf6', strokeWidth: 2 }, type: 'smoothstep' },
@@ -256,12 +270,12 @@ const Flow = () => {
             },
             'tool': {
                 nodes: [
-                    { id: 'n1', type: 'custom', position: { x: 50, y: 180 }, data: { label: 'User Query', nodeType: 'input', config: {} } },
-                    { id: 'n2', type: 'custom', position: { x: 280, y: 180 }, data: { label: 'Agent', nodeType: 'agent', config: {} } },
-                    { id: 'n3', type: 'custom', position: { x: 500, y: 80 }, data: { label: 'Search API', nodeType: 'tool', config: {} } },
-                    { id: 'n4', type: 'custom', position: { x: 500, y: 180 }, data: { label: 'Calculator', nodeType: 'tool', config: {} } },
-                    { id: 'n5', type: 'custom', position: { x: 500, y: 280 }, data: { label: 'Weather API', nodeType: 'http', config: {} } },
-                    { id: 'n6', type: 'custom', position: { x: 740, y: 180 }, data: { label: 'Response', nodeType: 'output', config: {} } },
+                    { id: 'n1', type: 'custom', position: { x: 50, y: 180 }, data: { label: 'User Query', nodeType: 'input', config: {}, isDark: isDarkNow } },
+                    { id: 'n2', type: 'custom', position: { x: 280, y: 180 }, data: { label: 'Agent', nodeType: 'agent', config: {}, isDark: isDarkNow } },
+                    { id: 'n3', type: 'custom', position: { x: 500, y: 80 }, data: { label: 'Search API', nodeType: 'tool', config: {}, isDark: isDarkNow } },
+                    { id: 'n4', type: 'custom', position: { x: 500, y: 180 }, data: { label: 'Calculator', nodeType: 'tool', config: {}, isDark: isDarkNow } },
+                    { id: 'n5', type: 'custom', position: { x: 500, y: 280 }, data: { label: 'Weather API', nodeType: 'http', config: {}, isDark: isDarkNow } },
+                    { id: 'n6', type: 'custom', position: { x: 740, y: 180 }, data: { label: 'Response', nodeType: 'output', config: {}, isDark: isDarkNow } },
                 ],
                 edges: [
                     { id: 'e1-2', source: 'n1', target: 'n2', animated: true, style: { stroke: '#8b5cf6', strokeWidth: 2 }, type: 'smoothstep' },
@@ -357,7 +371,7 @@ const Flow = () => {
     }, [nodes, selectedNode]);
 
     return (
-        <div className={`flex h-screen ${theme === 'dark' ? 'bg-[#0B0D10]' : 'bg-gray-100'} text-[#E6E8EB] overflow-hidden`}>
+        <div className={`flex h-screen ${isDark ? 'bg-[#0B0D10]' : 'bg-[#F6F7F9]'} ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} overflow-hidden`}>
 
             {/* Left Sidebar - Node Palette */}
             <AnimatePresence>
@@ -366,14 +380,14 @@ const Flow = () => {
                         initial={{ width: 0, opacity: 0 }}
                         animate={{ width: 280, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
-                        className="h-full bg-[#12161C] border-r border-[#1F2630] flex flex-col overflow-hidden"
+                        className={`h-full ${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border-r flex flex-col overflow-hidden`}
                     >
-                        <div className="p-4 border-b border-[#1F2630]">
-                            <h2 className="text-lg font-semibold text-[#E6E8EB] flex items-center gap-2">
+                        <div className={`p-4 border-b ${isDark ? 'border-[#1F2630]' : 'border-[#D9DEE5]'}`}>
+                            <h2 className={`text-lg font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} flex items-center gap-2`}>
                                 <GitBranch size={20} className="text-purple-400" />
                                 Flow Builder
                             </h2>
-                            <p className="text-xs text-[#7D8590] mt-1">Drag nodes to the canvas</p>
+                            <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} mt-1`}>Drag nodes to the canvas</p>
                         </div>
 
                         <div className="flex-1 p-4 overflow-y-auto">
@@ -381,7 +395,7 @@ const Flow = () => {
                                 <div key={category.id} className="mb-4">
                                     <button
                                         onClick={() => toggleCategory(category.id)}
-                                        className="flex items-center gap-2 w-full text-left text-xs font-semibold text-[#7D8590] uppercase tracking-wider mb-2 hover:text-[#E6E8EB] transition-colors"
+                                        className={`flex items-center gap-2 w-full text-left text-xs font-semibold ${isDark ? 'text-[#7D8590] hover:text-[#E6E8EB]' : 'text-[#6B7280] hover:text-[#0E1116]'} uppercase tracking-wider mb-2 transition-colors`}
                                     >
                                         {expandedCategories.includes(category.id) ? (
                                             <ChevronDown size={14} />
@@ -404,7 +418,7 @@ const Flow = () => {
                                                         key={nodeType.type}
                                                         draggable
                                                         onDragStart={(e) => handleDragStart(e, nodeType.type)}
-                                                        className="flex items-center gap-3 p-3 rounded-xl bg-[#1F2630] border border-[#374151] cursor-grab hover:border-purple-500/50 transition-all group active:cursor-grabbing"
+                                                        className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? 'bg-[#1F2630] border-[#374151]' : 'bg-[#F6F7F9] border-[#D9DEE5]'} border cursor-grab hover:border-purple-500/50 transition-all group active:cursor-grabbing`}
                                                     >
                                                         <div
                                                             className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -413,10 +427,10 @@ const Flow = () => {
                                                             <nodeType.icon size={16} style={{ color: nodeType.color }} />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <h4 className="text-sm font-medium text-[#E6E8EB]">{nodeType.label}</h4>
-                                                            <p className="text-xs text-[#7D8590] truncate">{nodeType.description}</p>
+                                                            <h4 className={`text-sm font-medium ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{nodeType.label}</h4>
+                                                            <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} truncate`}>{nodeType.description}</p>
                                                         </div>
-                                                        <GripVertical size={14} className="text-[#4B5563] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                                                        <GripVertical size={14} className={`${isDark ? 'text-[#4B5563]' : 'text-[#9CA3AF]'} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} />
                                                     </div>
                                                 ))}
                                             </motion.div>
@@ -432,35 +446,38 @@ const Flow = () => {
             {/* Main Canvas Area */}
             <div className="flex-1 flex flex-col">
                 {/* Toolbar */}
-                <div className="px-6 py-4 border-b border-[#1F2630] bg-[#12161C]/80 backdrop-blur-sm flex items-center gap-4">
+                <div className={`px-6 py-4 border-b ${isDark ? 'border-[#1F2630] bg-[#12161C]/80' : 'border-[#D9DEE5] bg-white/80'} backdrop-blur-sm flex items-center gap-4`}>
                     <button
                         onClick={() => setShowNodePalette(!showNodePalette)}
-                        className={`p-2 rounded-lg transition-all ${showNodePalette ? 'bg-purple-500/20 text-purple-400' : 'bg-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]'}`}
+                        className={`p-2 rounded-lg transition-all ${showNodePalette
+                            ? 'bg-purple-500/20 text-purple-400'
+                            : isDark ? 'bg-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]' : 'bg-[#F6F7F9] text-[#6B7280] hover:text-[#0E1116]'
+                            }`}
                     >
                         <GitBranch size={18} />
                     </button>
 
-                    <div className="h-6 w-px bg-[#374151]" />
+                    <div className={`h-6 w-px ${isDark ? 'bg-[#374151]' : 'bg-[#D9DEE5]'}`} />
 
                     <input
                         type="text"
                         value={flowName}
                         onChange={(e) => setFlowName(e.target.value)}
-                        className="bg-transparent border-none text-lg font-semibold text-[#E6E8EB] focus:outline-none"
+                        className={`bg-transparent border-none text-lg font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} focus:outline-none`}
                     />
 
                     <div className="flex-1" />
 
-                    <div className="flex items-center gap-2 text-xs text-[#7D8590]">
+                    <div className={`flex items-center gap-2 text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
                         <CircleDot size={14} className="text-green-400" />
                         {nodes.length} nodes · {edges.length} connections
                     </div>
 
-                    <div className="h-6 w-px bg-[#374151]" />
+                    <div className={`h-6 w-px ${isDark ? 'bg-[#374151]' : 'bg-[#D9DEE5]'}`} />
 
                     <button
                         onClick={() => setShowTemplateModal(true)}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1F2630] text-[#A9AFB8] hover:text-[#E6E8EB] transition-all text-sm"
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${isDark ? 'bg-[#1F2630] text-[#A9AFB8] hover:text-[#E6E8EB]' : 'bg-[#F6F7F9] text-[#4B5563] hover:text-[#0E1116]'} transition-all text-sm`}
                     >
                         <Copy size={14} />
                         Templates
@@ -471,7 +488,7 @@ const Flow = () => {
                         disabled={isSaving}
                         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-sm ${saveSuccess
                             ? 'bg-green-500/20 text-green-400'
-                            : 'bg-[#1F2630] text-[#A9AFB8] hover:text-[#E6E8EB]'
+                            : isDark ? 'bg-[#1F2630] text-[#A9AFB8] hover:text-[#E6E8EB]' : 'bg-[#F6F7F9] text-[#4B5563] hover:text-[#0E1116]'
                             }`}
                     >
                         {isSaving ? <Loader2 size={14} className="animate-spin" /> : saveSuccess ? <CheckCircle2 size={14} /> : <Save size={14} />}
@@ -518,20 +535,20 @@ const Flow = () => {
                             type: 'smoothstep',
                             style: { stroke: '#8b5cf6', strokeWidth: 2 }
                         }}
-                        style={{ background: '#0B0D10' }}
+                        style={{ background: isDark ? '#0B0D10' : '#F6F7F9' }}
                     >
-                        <Background color="#374151" gap={24} size={1} />
+                        <Background color={isDark ? '#374151' : '#D9DEE5'} gap={24} size={1} />
                         <Controls
-                            className="!bg-[#1F2630] !border-[#374151] !rounded-xl !shadow-lg"
-                            style={{ button: { backgroundColor: '#1F2630', borderColor: '#374151' } }}
+                            className={`${isDark ? '!bg-[#1F2630] !border-[#374151]' : '!bg-white !border-[#D9DEE5]'} !rounded-xl !shadow-lg`}
+                            style={{ button: { backgroundColor: isDark ? '#1F2630' : '#ffffff', borderColor: isDark ? '#374151' : '#D9DEE5' } }}
                         />
                         <MiniMap
                             nodeColor={(n) => {
                                 const nodeType = NODE_TYPES.find(t => t.type === n.data?.nodeType);
                                 return nodeType?.color || '#8b5cf6';
                             }}
-                            maskColor="rgba(11, 13, 16, 0.8)"
-                            className="!bg-[#1F2630] !border-[#374151] !rounded-xl"
+                            maskColor={isDark ? 'rgba(11, 13, 16, 0.8)' : 'rgba(246, 247, 249, 0.8)'}
+                            className={`${isDark ? '!bg-[#1F2630] !border-[#374151]' : '!bg-white !border-[#D9DEE5]'} !rounded-xl`}
                         />
                     </ReactFlow>
 
@@ -542,29 +559,29 @@ const Flow = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute inset-0 flex items-center justify-center bg-[#0B0D10]/80 backdrop-blur-sm z-20"
+                                className={`absolute inset-0 flex items-center justify-center ${isDark ? 'bg-[#0B0D10]/80' : 'bg-[#F6F7F9]/80'} backdrop-blur-sm z-20`}
                             >
                                 <div className="text-center max-w-2xl px-8">
-                                    <h2 className="text-2xl font-bold text-[#E6E8EB] mb-2">Create Your Agent Flow</h2>
-                                    <p className="text-[#7D8590] mb-8">Choose a template to get started or create a custom flow</p>
+                                    <h2 className={`text-2xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} mb-2`}>Create Your Agent Flow</h2>
+                                    <p className={`${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} mb-8`}>Choose a template to get started or create a custom flow</p>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         {TEMPLATES.map((template) => (
                                             <button
                                                 key={template.id}
                                                 onClick={() => loadTemplate(template.id)}
-                                                className="p-6 rounded-2xl bg-[#1F2630] border border-[#374151] hover:border-purple-500/50 transition-all text-left group"
+                                                className={`p-6 rounded-2xl ${isDark ? 'bg-[#1F2630] border-[#374151]' : 'bg-white border-[#D9DEE5]'} border hover:border-purple-500/50 transition-all text-left group`}
                                             >
-                                                <h3 className="text-lg font-semibold text-[#E6E8EB] group-hover:text-purple-400 transition-colors">{template.name}</h3>
-                                                <p className="text-sm text-[#7D8590] mt-1">{template.description}</p>
-                                                <p className="text-xs text-[#4B5563] mt-2">{template.nodes} nodes</p>
+                                                <h3 className={`text-lg font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} group-hover:text-purple-400 transition-colors`}>{template.name}</h3>
+                                                <p className={`text-sm ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} mt-1`}>{template.description}</p>
+                                                <p className={`text-xs ${isDark ? 'text-[#4B5563]' : 'text-[#9CA3AF]'} mt-2`}>{template.nodes} nodes</p>
                                             </button>
                                         ))}
                                     </div>
 
                                     <button
                                         onClick={() => setShowTemplates(false)}
-                                        className="mt-6 text-sm text-[#7D8590] hover:text-[#E6E8EB] transition-colors"
+                                        className={`mt-6 text-sm ${isDark ? 'text-[#7D8590] hover:text-[#E6E8EB]' : 'text-[#6B7280] hover:text-[#0E1116]'} transition-colors`}
                                     >
                                         Skip and start from scratch
                                     </button>
@@ -577,8 +594,8 @@ const Flow = () => {
                     {nodes.length === 0 && !showTemplates && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                             <div className="text-center">
-                                <GitBranch size={48} className="text-[#374151] mx-auto mb-4" />
-                                <p className="text-[#7D8590]">Drag nodes from the left panel to build your flow</p>
+                                <GitBranch size={48} className={`${isDark ? 'text-[#374151]' : 'text-[#D9DEE5]'} mx-auto mb-4`} />
+                                <p className={isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}>Drag nodes from the left panel to build your flow</p>
                             </div>
                         </div>
                     )}
@@ -592,13 +609,13 @@ const Flow = () => {
                         initial={{ width: 0, opacity: 0 }}
                         animate={{ width: 320, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
-                        className="h-full bg-[#12161C] border-l border-[#1F2630] flex flex-col overflow-hidden"
+                        className={`h-full ${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border-l flex flex-col overflow-hidden`}
                     >
-                        <div className="p-4 border-b border-[#1F2630] flex items-center justify-between">
-                            <h3 className="text-sm font-semibold text-[#E6E8EB]">Node Configuration</h3>
+                        <div className={`p-4 border-b ${isDark ? 'border-[#1F2630]' : 'border-[#D9DEE5]'} flex items-center justify-between`}>
+                            <h3 className={`text-sm font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>Node Configuration</h3>
                             <button
                                 onClick={() => setSelectedNode(null)}
-                                className="p-1 hover:bg-[#1F2630] rounded text-[#7D8590] hover:text-[#E6E8EB] transition-all"
+                                className={`p-1 ${isDark ? 'hover:bg-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]' : 'hover:bg-[#F6F7F9] text-[#6B7280] hover:text-[#0E1116]'} rounded transition-all`}
                             >
                                 <X size={16} />
                             </button>
@@ -611,30 +628,30 @@ const Flow = () => {
                                 return (
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="text-xs text-[#7D8590] block mb-1">Node Name</label>
+                                            <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Node Name</label>
                                             <input
                                                 type="text"
                                                 value={selectedNodeData.data?.label || ''}
                                                 onChange={(e) => setNodes(prev => prev.map(n =>
                                                     n.id === selectedNode ? { ...n, data: { ...n.data, label: e.target.value } } : n
                                                 ))}
-                                                className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500"
+                                                className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}
                                             />
                                         </div>
 
                                         <div>
-                                            <label className="text-xs text-[#7D8590] block mb-1">Type</label>
-                                            <div className="flex items-center gap-2 px-3 py-2 bg-[#1F2630] rounded-lg border border-[#374151]">
+                                            <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Type</label>
+                                            <div className={`flex items-center gap-2 px-3 py-2 ${isDark ? 'bg-[#1F2630] border-[#374151]' : 'bg-[#F6F7F9] border-[#D9DEE5]'} rounded-lg border`}>
                                                 {nodeType && <nodeType.icon size={16} style={{ color: nodeType.color }} />}
-                                                <span className="text-sm text-[#E6E8EB]">{nodeType?.label}</span>
+                                                <span className={`text-sm ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>{nodeType?.label}</span>
                                             </div>
                                         </div>
 
                                         {selectedNodeData.data?.nodeType === 'llm' && (
                                             <>
                                                 <div>
-                                                    <label className="text-xs text-[#7D8590] block mb-1">Model</label>
-                                                    <select className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500">
+                                                    <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Model</label>
+                                                    <select className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}>
                                                         <option>gpt-4-turbo</option>
                                                         <option>gpt-4</option>
                                                         <option>gpt-3.5-turbo</option>
@@ -644,7 +661,7 @@ const Flow = () => {
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="text-xs text-[#7D8590] block mb-1">Temperature</label>
+                                                    <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Temperature</label>
                                                     <input
                                                         type="range"
                                                         min="0"
@@ -659,18 +676,18 @@ const Flow = () => {
 
                                         {selectedNodeData.data?.nodeType === 'prompt' && (
                                             <div>
-                                                <label className="text-xs text-[#7D8590] block mb-1">Prompt Template</label>
+                                                <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Prompt Template</label>
                                                 <textarea
                                                     placeholder="Enter your prompt template..."
-                                                    className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500 h-32 resize-none"
+                                                    className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 h-32 resize-none`}
                                                 />
                                             </div>
                                         )}
 
                                         {selectedNodeData.data?.nodeType === 'memory' && (
                                             <div>
-                                                <label className="text-xs text-[#7D8590] block mb-1">Memory Type</label>
-                                                <select className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500">
+                                                <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Memory Type</label>
+                                                <select className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}>
                                                     <option>Buffer Memory</option>
                                                     <option>Summary Memory</option>
                                                     <option>Vector Store Memory</option>
@@ -681,8 +698,8 @@ const Flow = () => {
 
                                         {selectedNodeData.data?.nodeType === 'tool' && (
                                             <div>
-                                                <label className="text-xs text-[#7D8590] block mb-1">Tool Type</label>
-                                                <select className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500">
+                                                <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Tool Type</label>
+                                                <select className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}>
                                                     <option>Web Search</option>
                                                     <option>Calculator</option>
                                                     <option>Weather API</option>
@@ -695,8 +712,8 @@ const Flow = () => {
                                         {selectedNodeData.data?.nodeType === 'http' && (
                                             <>
                                                 <div>
-                                                    <label className="text-xs text-[#7D8590] block mb-1">Method</label>
-                                                    <select className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500">
+                                                    <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Method</label>
+                                                    <select className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}>
                                                         <option>GET</option>
                                                         <option>POST</option>
                                                         <option>PUT</option>
@@ -704,11 +721,11 @@ const Flow = () => {
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="text-xs text-[#7D8590] block mb-1">URL</label>
+                                                    <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>URL</label>
                                                     <input
                                                         type="text"
                                                         placeholder="https://api.example.com/endpoint"
-                                                        className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500"
+                                                        className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}
                                                     />
                                                 </div>
                                             </>
@@ -716,23 +733,23 @@ const Flow = () => {
 
                                         {selectedNodeData.data?.nodeType === 'code' && (
                                             <div>
-                                                <label className="text-xs text-[#7D8590] block mb-1">Custom Code</label>
+                                                <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Custom Code</label>
                                                 <textarea
                                                     placeholder="// Write your custom code here..."
-                                                    className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500 h-40 resize-none font-mono"
+                                                    className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 h-40 resize-none font-mono`}
                                                 />
                                             </div>
                                         )}
 
                                         {selectedNodeData.data?.nodeType === 'condition' && (
                                             <div>
-                                                <label className="text-xs text-[#7D8590] block mb-1">Condition Expression</label>
+                                                <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Condition Expression</label>
                                                 <input
                                                     type="text"
                                                     placeholder="e.g., input.length > 100"
-                                                    className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500"
+                                                    className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}
                                                 />
-                                                <p className="text-xs text-[#4B5563] mt-2">
+                                                <p className={`text-xs ${isDark ? 'text-[#4B5563]' : 'text-[#9CA3AF]'} mt-2`}>
                                                     Green output = true, Red output = false
                                                 </p>
                                             </div>
@@ -741,8 +758,8 @@ const Flow = () => {
                                         {selectedNodeData.data?.nodeType === 'retriever' && (
                                             <>
                                                 <div>
-                                                    <label className="text-xs text-[#7D8590] block mb-1">Vector Store</label>
-                                                    <select className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500">
+                                                    <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Vector Store</label>
+                                                    <select className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}>
                                                         <option>Pinecone</option>
                                                         <option>Chroma</option>
                                                         <option>Weaviate</option>
@@ -751,13 +768,13 @@ const Flow = () => {
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="text-xs text-[#7D8590] block mb-1">Top K Results</label>
+                                                    <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Top K Results</label>
                                                     <input
                                                         type="number"
                                                         defaultValue={4}
                                                         min={1}
                                                         max={20}
-                                                        className="w-full bg-[#1F2630] border border-[#374151] rounded-lg px-3 py-2 text-sm text-[#E6E8EB] focus:outline-none focus:border-purple-500"
+                                                        className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}
                                                     />
                                                 </div>
                                             </>
@@ -784,14 +801,14 @@ const Flow = () => {
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
-                            className="bg-[#12161C] border border-[#1F2630] rounded-2xl p-6 max-w-2xl w-full mx-4 shadow-2xl"
+                            className={`${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl p-6 max-w-2xl w-full mx-4 shadow-2xl`}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-xl font-bold text-[#E6E8EB]">Choose a Template</h2>
+                                <h2 className={`text-xl font-bold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>Choose a Template</h2>
                                 <button
                                     onClick={() => setShowTemplateModal(false)}
-                                    className="p-2 hover:bg-[#1F2630] rounded-lg text-[#7D8590] hover:text-[#E6E8EB] transition-all"
+                                    className={`p-2 ${isDark ? 'hover:bg-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]' : 'hover:bg-[#F6F7F9] text-[#6B7280] hover:text-[#0E1116]'} rounded-lg transition-all`}
                                 >
                                     <X size={18} />
                                 </button>
@@ -802,18 +819,18 @@ const Flow = () => {
                                     <button
                                         key={template.id}
                                         onClick={() => { loadTemplate(template.id); setShowTemplateModal(false); }}
-                                        className="p-5 rounded-xl bg-[#1F2630] border border-[#374151] hover:border-purple-500/50 transition-all text-left group"
+                                        className={`p-5 rounded-xl ${isDark ? 'bg-[#1F2630] border-[#374151]' : 'bg-[#F6F7F9] border-[#D9DEE5]'} border hover:border-purple-500/50 transition-all text-left group`}
                                     >
                                         <div className="flex items-center gap-3 mb-2">
                                             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
                                                 <GitBranch size={18} className="text-purple-400" />
                                             </div>
                                             <div>
-                                                <h3 className="font-semibold text-[#E6E8EB] group-hover:text-purple-400 transition-colors">{template.name}</h3>
-                                                <p className="text-xs text-[#7D8590]">{template.nodes} nodes</p>
+                                                <h3 className={`font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'} group-hover:text-purple-400 transition-colors`}>{template.name}</h3>
+                                                <p className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>{template.nodes} nodes</p>
                                             </div>
                                         </div>
-                                        <p className="text-sm text-[#7D8590]">{template.description}</p>
+                                        <p className={`text-sm ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>{template.description}</p>
                                     </button>
                                 ))}
                             </div>
@@ -829,20 +846,20 @@ const Flow = () => {
                         initial={{ y: 100, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: 100, opacity: 0 }}
-                        className="fixed bottom-6 right-6 w-80 bg-[#12161C] border border-[#1F2630] rounded-2xl shadow-2xl overflow-hidden z-40"
+                        className={`fixed bottom-6 right-6 w-80 ${isDark ? 'bg-[#12161C] border-[#1F2630]' : 'bg-white border-[#D9DEE5]'} border rounded-2xl shadow-2xl overflow-hidden z-40`}
                     >
-                        <div className="p-4 border-b border-[#1F2630] flex items-center justify-between">
+                        <div className={`p-4 border-b ${isDark ? 'border-[#1F2630]' : 'border-[#D9DEE5]'} flex items-center justify-between`}>
                             <div className="flex items-center gap-2">
                                 {runStatus === 'running' && <Loader2 size={16} className="text-purple-400 animate-spin" />}
                                 {runStatus === 'success' && <CheckCircle2 size={16} className="text-green-400" />}
                                 {runStatus === 'error' && <AlertCircle size={16} className="text-red-400" />}
-                                <span className="font-medium text-[#E6E8EB]">
+                                <span className={`font-medium ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
                                     {runStatus === 'running' ? 'Running Flow...' : runStatus === 'success' ? 'Flow Completed' : 'Flow Error'}
                                 </span>
                             </div>
                             <button
                                 onClick={() => { setRunStatus(null); setRunLog([]); }}
-                                className="p-1 hover:bg-[#1F2630] rounded text-[#7D8590] hover:text-[#E6E8EB]"
+                                className={`p-1 ${isDark ? 'hover:bg-[#1F2630] text-[#7D8590] hover:text-[#E6E8EB]' : 'hover:bg-[#F6F7F9] text-[#6B7280] hover:text-[#0E1116]'} rounded`}
                             >
                                 <X size={14} />
                             </button>
@@ -850,7 +867,7 @@ const Flow = () => {
 
                         {runStatus === 'running' && (
                             <div className="px-4 py-2">
-                                <div className="h-2 bg-[#1F2630] rounded-full overflow-hidden">
+                                <div className={`h-2 ${isDark ? 'bg-[#1F2630]' : 'bg-[#F6F7F9]'} rounded-full overflow-hidden`}>
                                     <motion.div
                                         className="h-full bg-gradient-to-r from-purple-500 to-pink-500"
                                         initial={{ width: 0 }}
@@ -862,7 +879,7 @@ const Flow = () => {
 
                         <div className="p-4 max-h-48 overflow-y-auto">
                             {runLog.map((log, i) => (
-                                <p key={i} className="text-xs text-[#7D8590] py-1 font-mono">{log}</p>
+                                <p key={i} className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} py-1 font-mono`}>{log}</p>
                             ))}
                         </div>
                     </motion.div>

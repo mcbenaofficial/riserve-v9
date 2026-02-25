@@ -63,9 +63,9 @@ const Finance = () => {
 
   const totals = filteredTransactions.reduce(
     (acc, t) => ({
-      gross: acc.gross + t.gross,
-      commission: acc.commission + t.commission,
-      partner_share: acc.partner_share + t.partner_share
+      gross: acc.gross + (t.gross || 0),
+      commission: acc.commission + (t.commission || 0),
+      partner_share: acc.partner_share + (t.partner_share || 0)
     }),
     { gross: 0, commission: 0, partner_share: 0 }
   );
@@ -82,9 +82,9 @@ const Finance = () => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <SummaryCard title="Total Gross" value={`₹${totals.gross.toLocaleString()}`} icon={DollarSign} color="from-green-500 to-green-600" />
-        <SummaryCard title="Total Commission" value={`₹${totals.commission.toLocaleString()}`} icon={Percent} color="from-red-500 to-red-600" />
-        <SummaryCard title="Partner Share" value={`₹${totals.partner_share.toLocaleString()}`} icon={TrendingUp} color="from-yellow-500 to-yellow-600" />
+        <SummaryCard title="Total Gross" value={`₹${(totals.gross || 0).toLocaleString()}`} icon={DollarSign} color="from-green-500 to-green-600" />
+        <SummaryCard title="Total Commission" value={`₹${(totals.commission || 0).toLocaleString()}`} icon={Percent} color="from-red-500 to-red-600" />
+        <SummaryCard title="Partner Share" value={`₹${(totals.partner_share || 0).toLocaleString()}`} icon={TrendingUp} color="from-yellow-500 to-yellow-600" />
       </div>
 
       {/* Transactions Table */}
@@ -168,21 +168,20 @@ const Finance = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="text-sm font-bold text-[#0E1116] dark:text-[#E6E8EB]">₹{t.gross.toLocaleString()}</div>
+                    <div className="text-sm font-bold text-[#0E1116] dark:text-[#E6E8EB]">₹{(t.gross || 0).toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="text-sm font-bold text-red-600 dark:text-red-400">₹{t.commission.toLocaleString()}</div>
+                    <div className="text-sm font-bold text-red-600 dark:text-red-400">₹{(t.commission || 0).toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="text-sm font-bold text-green-600 dark:text-green-400">₹{t.partner_share.toLocaleString()}</div>
+                    <div className="text-sm font-bold text-green-600 dark:text-green-400">₹{(t.partner_share || 0).toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${
-                        t.status === 'Settled'
-                          ? 'bg-green-500/20 border-green-500/30 text-green-700 dark:text-green-400'
-                          : 'bg-yellow-500/20 border-yellow-500/30 text-yellow-700 dark:text-yellow-400'
-                      }`}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${t.status === 'Settled'
+                        ? 'bg-green-500/20 border-green-500/30 text-green-700 dark:text-green-400'
+                        : 'bg-yellow-500/20 border-yellow-500/30 text-yellow-700 dark:text-yellow-400'
+                        }`}
                     >
                       {t.status}
                     </span>
@@ -226,25 +225,36 @@ const Finance = () => {
   );
 };
 
-const SummaryCard = ({ title, value, icon: Icon, color }) => (
-  <div
-    className="relative overflow-hidden rounded-3xl p-6 shadow-lg"
-    style={{
-      background: `linear-gradient(135deg, ${getGradientColors(color)})`,
-    }}
-  >
-    <div className="relative z-10">
-      <div className={`w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-xl mb-4`}>
-        <Icon size={28} className="text-white" strokeWidth={2} />
+const SummaryCard = ({ title, value, icon: Icon, color }) => {
+  const isZen = document.documentElement.classList.contains('zen');
+  return (
+    <div
+      className="relative overflow-hidden rounded-3xl p-6 shadow-lg"
+      style={{
+        background: `linear-gradient(135deg, ${getGradientColors(color, isZen)})`,
+      }}
+    >
+      <div className="relative z-10">
+        <div className={`w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-xl mb-4`}>
+          <Icon size={28} className="text-white" strokeWidth={2} />
+        </div>
+        <div className="text-sm text-[#A9AFB8] mb-1 font-medium">{title}</div>
+        <div className="text-3xl font-bold text-white drop-shadow-lg">{value}</div>
       </div>
-      <div className="text-sm text-[#A9AFB8] mb-1 font-medium">{title}</div>
-      <div className="text-3xl font-bold text-white drop-shadow-lg">{value}</div>
+      <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
     </div>
-    <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-  </div>
-);
+  );
+};
 
-const getGradientColors = (color) => {
+const getGradientColors = (color, isZen = false) => {
+  if (isZen) {
+    const zenGradients = {
+      'from-green-500 to-green-600': '#8B9E7E 0%, #A3B596 100%',
+      'from-red-500 to-red-600': '#B8887E 0%, #C49A90 100%',
+      'from-yellow-500 to-yellow-600': '#B89860 0%, #C8A870 100%',
+    };
+    return zenGradients[color] || '#C68A7A 0%, #D4A89A 100%';
+  }
   const gradients = {
     'from-green-500 to-green-600': '#11998e 0%, #38ef7d 100%',
     'from-red-500 to-red-600': '#f093fb 0%, #f5576c 100%',

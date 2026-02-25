@@ -36,8 +36,8 @@ const ChartTypeSelector = ({ currentType, onSelect, isOpen, onClose }) => {
                         key={chart.type}
                         onClick={() => { onSelect(chart.type); onClose(); }}
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${currentType === chart.type
-                                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                                : 'hover:bg-[#2A323E] text-[#E6E8EB]'
+                            ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                            : 'hover:bg-[#2A323E] text-[#E6E8EB]'
                             }`}
                     >
                         <chart.icon size={16} />
@@ -95,7 +95,7 @@ const AIAnalytics = () => {
                             AI Analytics
                         </h1>
                         <p className="text-[#9CA3AF] mt-1 text-sm">
-                            Real-time insights powered by Ri'Serve Flow • Click any widget to change chart type
+                            Real-time insights powered by Kyntra • Click any widget to change chart type
                             {dynamicWidgets.length > 0 && (
                                 <span className="ml-2 px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded-full text-xs">
                                     +{dynamicWidgets.length} from AI

@@ -6,11 +6,19 @@ import {
   Send, Paperclip, Atom, User, FileText, Lightbulb, Calendar,
   ArrowUp, X, Trash2, Plus, ChevronLeft, Image
 } from 'lucide-react';
+import { AtomicPowerIcon } from 'hugeicons-react';
 import { useNavigate } from 'react-router-dom';
 import ThinkingProcess from '../components/ThinkingProcess';
 
 // Animated Neon Border/Glow Component for the Agent Container
-const ContainerEffects = ({ state, isDark }) => {
+const ContainerEffects = ({ state, isDark, mode }) => {
+  const isZen = mode === 'zen';
+
+  // Custom colors for Zen mode
+  const zenIdleColor = 'rgba(120, 113, 108, 0.4)'; // Warm Gray/Stone
+  const zenThinkingColor = 'rgba(168, 162, 158, 0.6)';
+  const zenAnsweringColor = 'rgba(134, 146, 128, 0.5)'; // Muted Sage
+
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl" style={{ zIndex: 1 }}>
 
@@ -21,14 +29,17 @@ const ContainerEffects = ({ state, isDark }) => {
         className={`absolute inset-0 rounded-3xl transition-opacity duration-700 ${state === 'idle' ? 'opacity-100' : 'opacity-0'
           }`}
         style={{
-          boxShadow: state === 'idle' ? [
+          boxShadow: state === 'idle' ? (isZen ? [
+            `inset 0 0 2px 0 ${zenIdleColor}`,
+            `0 0 12px 1px ${zenIdleColor}`,
+          ].join(', ') : [
             'inset 0 0 2px 0 rgba(168, 85, 247, 0.6)',
             '0 0 12px 1px rgba(168, 85, 247, 0.3)',
             '0 0 30px 2px rgba(139, 92, 246, 0.15)',
             '0 0 50px 4px rgba(124, 58, 237, 0.08)',
-          ].join(', ') : 'none',
+          ].join(', ')) : 'none',
           animation: state === 'idle' ? 'neonPulse 3s ease-in-out infinite' : 'none',
-          border: '1.5px solid rgba(168, 85, 247, 0.4)',
+          border: isZen ? `1.5px solid ${zenIdleColor}` : '1.5px solid rgba(168, 85, 247, 0.4)',
         }}
       />
 
@@ -49,7 +60,20 @@ const ContainerEffects = ({ state, isDark }) => {
         <div
           className="absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2"
           style={{
-            background: `conic-gradient(
+            background: isZen ? `conic-gradient(
+              from 0deg,
+              transparent 0%,
+              transparent 20%,
+              #a8a29e 25%,
+              #d6d3d1 30%,
+              #f5f5f4 35%,
+              #ffffff 42%,
+              #f5f5f4 48%,
+              #d6d3d1 55%,
+              #a8a29e 60%,
+              transparent 65%,
+              transparent 100%
+            )` : `conic-gradient(
               from 0deg,
               transparent 0%,
               transparent 10%,
@@ -75,12 +99,16 @@ const ContainerEffects = ({ state, isDark }) => {
         className={`absolute -inset-1 rounded-[1.75rem] transition-all duration-500 ${state === 'thinking' ? 'opacity-100' : 'opacity-0'
           }`}
         style={{
-          boxShadow: state === 'thinking' ? [
+          boxShadow: state === 'thinking' ? (isZen ? [
+            `0 0 20px 3px ${zenThinkingColor}`,
+            `0 0 50px 8px rgba(168, 162, 158, 0.2)`,
+            `inset 0 0 40px 0 rgba(168, 162, 158, 0.06)`,
+          ].join(', ') : [
             '0 0 20px 3px rgba(168, 85, 247, 0.4)',
             '0 0 50px 8px rgba(139, 92, 246, 0.2)',
             '0 0 100px 16px rgba(124, 58, 237, 0.1)',
             'inset 0 0 40px 0 rgba(168, 85, 247, 0.06)',
-          ].join(', ') : 'none',
+          ].join(', ')) : 'none',
           animation: state === 'thinking' ? 'neonBreath 2s ease-in-out infinite' : 'none',
         }}
       />
@@ -90,13 +118,16 @@ const ContainerEffects = ({ state, isDark }) => {
         className={`absolute inset-0 rounded-3xl transition-all duration-1000 ${state === 'answering' ? 'opacity-100' : 'opacity-0'
           }`}
         style={{
-          border: '1.5px solid rgba(45, 212, 191, 0.45)',
-          boxShadow: state === 'answering' ? [
+          border: isZen ? `1.5px solid ${zenAnsweringColor}` : '1.5px solid rgba(45, 212, 191, 0.45)',
+          boxShadow: state === 'answering' ? (isZen ? [
+            `inset 0 0 3px 0 ${zenAnsweringColor}`,
+            `0 0 15px 2px ${zenAnsweringColor}`,
+          ].join(', ') : [
             'inset 0 0 3px 0 rgba(45, 212, 191, 0.4)',
             '0 0 15px 2px rgba(45, 212, 191, 0.3)',
             '0 0 40px 4px rgba(20, 184, 166, 0.15)',
             '0 0 80px 8px rgba(16, 185, 129, 0.08)',
-          ].join(', ') : 'none',
+          ].join(', ')) : 'none',
           animation: state === 'answering' ? 'neonFadeCalm 2s ease-out forwards' : 'none',
         }}
       />
@@ -106,7 +137,7 @@ const ContainerEffects = ({ state, isDark }) => {
 
 const AIAgent = () => {
   const { user } = useAuth();
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const navigate = useNavigate();
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
@@ -356,19 +387,19 @@ const AIAgent = () => {
       icon: FileText,
       label: 'Business Insights',
       description: 'Analyze my revenue, bookings & performance',
-      color: 'bg-[#5FA8D3]/20 text-[#5FA8D3] border-[#5FA8D3]/30'
+      color: mode === 'zen' ? 'bg-[#687988]/20 text-[#687988] border-[#687988]/30' : 'bg-[#5FA8D3]/20 text-[#5FA8D3] border-[#5FA8D3]/30'
     },
     {
       icon: Lightbulb,
       label: 'Suggestions',
       description: 'Get ideas to grow my business',
-      color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+      color: mode === 'zen' ? 'bg-[#6E9890]/20 text-[#6E9890] border-[#6E9890]/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
     },
     {
       icon: Calendar,
       label: 'Schedule Help',
       description: 'Review bookings & scheduling conflicts',
-      color: 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+      color: mode === 'zen' ? 'bg-[#A4884E]/20 text-[#A4884E] border-[#A4884E]/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
     }
   ];
 
@@ -388,8 +419,8 @@ const AIAgent = () => {
         <div className={`p-4 border-b ${isDark ? 'border-[#1F2630]' : 'border-[#D9DEE5]'}`}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
-                <Atom size={16} className="text-white" />
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${mode === 'zen' ? 'bg-[#687988]' : 'bg-gradient-to-br from-purple-500 to-blue-500'}`}>
+                <AtomicPowerIcon size={16} className="text-white" />
               </div>
               <span className={`font-semibold ${isDark ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>Vorta</span>
             </div>
@@ -402,7 +433,10 @@ const AIAgent = () => {
           </div>
           <button
             onClick={startNewConversation}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-medium hover:opacity-90 transition-all shadow-lg shadow-purple-500/20"
+            className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 text-white rounded-xl font-medium transition-all shadow-lg ${mode === 'zen'
+              ? 'bg-[#687988] shadow-[#687988]/20 hover:bg-[#586978]'
+              : 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-500/20 hover:opacity-90'
+              }`}
           >
             <Plus size={18} />
             New Chat
@@ -412,7 +446,7 @@ const AIAgent = () => {
         <div className="flex-1 overflow-y-auto p-3 space-y-1">
           {conversations.length === 0 ? (
             <div className={`text-center py-8 ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
-              <Atom size={32} className="mx-auto mb-2 opacity-50" />
+              <AtomicPowerIcon size={32} className="mx-auto mb-2 opacity-50" />
               <p className="text-sm">No conversations yet</p>
             </div>
           ) : (
@@ -421,13 +455,15 @@ const AIAgent = () => {
                 key={conv.id}
                 onClick={() => loadConversation(conv)}
                 className={`group flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all ${activeConversation?.id === conv.id
-                  ? 'bg-purple-500/10 text-purple-500 border border-purple-500/20'
+                  ? mode === 'zen'
+                    ? 'bg-[#687988]/10 text-[#687988] border border-[#687988]/20'
+                    : 'bg-purple-500/10 text-purple-500 border border-purple-500/20'
                   : isDark
                     ? 'hover:bg-[#1F2630] text-[#A9AFB8]'
                     : 'hover:bg-[#ECEFF3] text-[#4B5563]'
                   }`}
               >
-                <Atom size={14} className="flex-shrink-0" />
+                <AtomicPowerIcon size={14} className="flex-shrink-0" />
                 <span className="flex-1 text-sm truncate">{conv.title}</span>
                 <button
                   onClick={(e) => deleteConversation(conv.id, e)}
@@ -445,7 +481,7 @@ const AIAgent = () => {
       <div className={`flex-1 flex flex-col relative z-10 min-w-0 transition-all duration-500 rounded-3xl overflow-hidden ml-4 my-2 mr-2 ${isDark ? 'bg-[#12161C]' : 'bg-white'
         }`}>
         {/* Container Effects Overlay */}
-        <ContainerEffects state={agentState} isDark={isDark} />
+        <ContainerEffects state={agentState} isDark={isDark} mode={mode} />
 
         {/* Top Bar */}
         <div className={`flex items-center justify-between px-6 py-4 relative z-20 ${isDark ? 'border-b border-[#1F2630]/50' : 'border-b border-[#D9DEE5]/50'}`}>
@@ -454,7 +490,7 @@ const AIAgent = () => {
               onClick={() => setShowSidebar(!showSidebar)}
               className={`md:hidden p-2 rounded-lg transition-all ${isDark ? 'hover:bg-[#1F2630]' : 'hover:bg-[#ECEFF3]'}`}
             >
-              <Atom size={20} className={isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
+              <AtomicPowerIcon size={20} className={isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} />
             </button>
           </div>
           <div className="flex items-center gap-3">
@@ -485,8 +521,8 @@ const AIAgent = () => {
                       key={idx}
                       onClick={() => setInputMessage(action.description)}
                       className={`group relative flex flex-col items-start p-5 rounded-2xl border transition-all w-64 ${isDark
-                        ? 'bg-[#12161C]/60 border-[#1F2630] hover:border-purple-500/40 hover:bg-[#1F2630]/80 backdrop-blur-sm'
-                        : 'bg-white/60 border-[#D9DEE5] hover:border-purple-500/40 hover:bg-[#F6F7F9] backdrop-blur-sm'
+                        ? `bg-[#12161C]/60 border-[#1F2630] ${mode === 'zen' ? 'hover:border-[#687988]/40 hover:bg-[#1F2630]/80' : 'hover:border-purple-500/40 hover:bg-[#1F2630]/80'} backdrop-blur-sm`
+                        : `bg-white/60 border-[#D9DEE5] ${mode === 'zen' ? 'hover:border-[#687988]/40 hover:bg-[#F6F7F9]' : 'hover:border-purple-500/40 hover:bg-[#F6F7F9]'} backdrop-blur-sm`
                         }`}
                       data-testid={`quick-action-${action.label.toLowerCase().replace(/\s/g, '-')}`}
                     >
@@ -507,8 +543,8 @@ const AIAgent = () => {
                   ? 'bg-[#12161C]/80 border-[#1F2630]'
                   : 'bg-white/80 border-[#D9DEE5]'
                   }`}>
-                  <div className="flex items-center gap-2 text-purple-500 mb-3">
-                    <Atom size={18} />
+                  <div className={`flex items-center gap-2 mb-3 ${mode === 'zen' ? 'text-[#687988]' : 'text-purple-500'}`}>
+                    <AtomicPowerIcon size={18} />
                   </div>
                   <textarea
                     ref={inputRef}
@@ -527,8 +563,8 @@ const AIAgent = () => {
                     <button
                       onClick={() => fileInputRef.current?.click()}
                       className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${isDark
-                        ? 'bg-purple-500/10 text-purple-500 hover:bg-purple-500/20'
-                        : 'bg-purple-500/10 text-purple-600 hover:bg-purple-500/20'
+                        ? mode === 'zen' ? 'bg-[#687988]/10 text-[#687988] hover:bg-[#687988]/20' : 'bg-purple-500/10 text-purple-500 hover:bg-purple-500/20'
+                        : mode === 'zen' ? 'bg-[#687988]/10 text-[#687988] hover:bg-[#687988]/20' : 'bg-purple-500/10 text-purple-600 hover:bg-purple-500/20'
                         }`}
                     >
                       <Paperclip size={16} />
@@ -543,7 +579,10 @@ const AIAgent = () => {
                     <button
                       onClick={sendMessage}
                       disabled={!inputMessage.trim() || isLoading}
-                      className="w-11 h-11 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center text-white hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/20"
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg ${mode === 'zen'
+                        ? 'bg-[#687988] shadow-[#687988]/20 hover:bg-[#586978]'
+                        : 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-500/20 hover:opacity-90'
+                        }`}
                       data-testid="ai-send-btn"
                     >
                       <ArrowUp size={20} />
@@ -559,8 +598,8 @@ const AIAgent = () => {
               ))}
               {(isLoading || isGeneratingImage) && (
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center flex-shrink-0 animate-pulse">
-                    <Atom size={18} className="text-white" />
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse ${mode === 'zen' ? 'bg-[#687988]' : 'bg-gradient-to-br from-purple-500 to-blue-500'}`}>
+                    <AtomicPowerIcon size={18} className="text-white" />
                   </div>
                   <div className={`rounded-2xl px-5 py-4 border ${isDark ? 'bg-[#171C22] border-[#1F2630]' : 'bg-[#ECEFF3] border-[#D9DEE5]'
                     }`}>
@@ -569,9 +608,9 @@ const AIAgent = () => {
                         Super Agent is thinking
                       </span>
                       <div className="flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${mode === 'zen' ? 'bg-[#687988]' : 'bg-purple-500'}`} style={{ animationDelay: '0ms' }} />
+                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${mode === 'zen' ? 'bg-[#687988]' : 'bg-purple-500'}`} style={{ animationDelay: '150ms' }} />
+                        <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${mode === 'zen' ? 'bg-[#687988]' : 'bg-purple-500'}`} style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
@@ -615,7 +654,10 @@ const AIAgent = () => {
                 <button
                   onClick={sendMessage}
                   disabled={!inputMessage.trim() || isLoading}
-                  className="p-2.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-white hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-purple-500/20"
+                  className={`p-2.5 rounded-xl text-white transition-all disabled:opacity-50 shadow-lg ${mode === 'zen'
+                    ? 'bg-[#687988] shadow-[#687988]/20 hover:bg-[#586978]'
+                    : 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-500/20 hover:opacity-90'
+                    }`}
                 >
                   <Send size={18} />
                 </button>
@@ -670,22 +712,26 @@ const AIAgent = () => {
 
 const MessageBubble = ({ message, isDark }) => {
   const isUser = message.role === 'user';
+  const { mode } = useTheme();
+  const isZen = mode === 'zen';
 
   return (
     <div className={`flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}`}>
       <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${isUser
         ? isDark ? 'bg-[#1F2630]' : 'bg-[#ECEFF3]'
-        : 'bg-gradient-to-br from-purple-500 to-blue-500'
+        : isZen ? 'bg-[#687988]' : 'bg-gradient-to-br from-purple-500 to-blue-500'
         }`}>
         {isUser ? (
           <User size={18} className={isDark ? 'text-[#A9AFB8]' : 'text-[#4B5563]'} />
         ) : (
-          <Atom size={18} className="text-white" />
+          <AtomicPowerIcon size={18} className="text-white" />
         )}
       </div>
       <div className={`max-w-[75%] ${isUser ? 'text-right' : ''}`}>
         <div className={`rounded-2xl px-5 py-3 ${isUser
-          ? 'bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-md shadow-purple-500/10'
+          ? isZen
+            ? 'bg-[#687988] text-white shadow-md shadow-[#687988]/10'
+            : 'bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-md shadow-purple-500/10'
           : isDark
             ? 'bg-[#171C22] border border-[#1F2630] text-[#E6E8EB]'
             : 'bg-[#ECEFF3] border border-[#D9DEE5] text-[#0E1116]'
@@ -705,7 +751,7 @@ const MessageBubble = ({ message, isDark }) => {
                 <ThinkingProcess steps={message.thinking_process || []} isDark={isDark} isStreaming={message._isStreaming} />
               )}
               {message.content ? (
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}{message._isStreaming && <span className="inline-block w-1.5 h-4 bg-purple-400 ml-0.5 animate-pulse rounded-sm" />}</p>
+                <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}{message._isStreaming && <span className={`inline-block w-1.5 h-4 ml-0.5 animate-pulse rounded-sm ${isZen ? 'bg-stone-400' : 'bg-purple-400'}`} />}</p>
               ) : message._isStreaming ? null : (
                 <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
               )}

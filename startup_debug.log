@@ -1,0 +1,366 @@
+Starting MongoDB...
+Service `mongodb-community` already started, use `brew services restart mongodb-community` to restart.
+Starting Backend...
+Starting Frontend...
+Services started. Press Ctrl+C to stop.
+INFO:     Will watch for changes in these directories: ['/Users/joshua.lawrence/Documents/Riserve-v8-main/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [49619] using WatchFiles
+
+> frontend@0.1.0 start
+> craco start
+
+INFO:     Started server process [49632]
+INFO:     Waiting for application startup.
+2026-02-20 05:06:37,279 - server - INFO - Starting Ri'Serve API...
+(node:49674) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:49674) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+2026-02-20 05:06:37,664 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-02-20 05:06:37,665 - server - INFO - No expired trials found
+Starting the development server...
+
+Compiled successfully!
+
+You can now view frontend in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.88.4:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+INFO:     127.0.0.1:64726 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64728 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64730 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64726 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64728 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64730 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64728 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64730 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64728 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64726 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "OPTIONS /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64726 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64726 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64726 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64726 - "OPTIONS /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64749 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64749 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64730 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64749 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64730 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64728 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64730 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64728 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64749 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64730 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64772 - "HEAD /api/auth/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64838 - "OPTIONS /api/onboarding/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64836 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64836 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64838 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64857 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64859 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64861 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64863 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64865 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64867 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64857 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64859 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64861 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64863 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64865 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64867 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64857 - "GET /api/reports HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64859 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64861 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64863 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64867 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64857 - "GET /api/reports HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64859 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64861 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64863 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64870 - "GET /api/services HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64867 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64863 - "GET /api/services HTTP/1.1" 401 Unauthorized
+2026-02-20 05:07:13,109 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:  WatchFiles detected changes in 'emulate_onboarding.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-02-20 05:08:53,962 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [49632]
+INFO:     Started server process [51227]
+INFO:     Waiting for application startup.
+2026-02-20 05:08:56,008 - server - INFO - Starting Ri'Serve API...
+2026-02-20 05:08:56,026 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-02-20 05:08:56,027 - server - INFO - No expired trials found
+INFO:     127.0.0.1:65413 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65413 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65412 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65410 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65413 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65412 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65408 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65407 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65412 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65408 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65405 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65408 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65462 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+2026-02-20 05:10:48,190 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     127.0.0.1:65462 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65462 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65478 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65474 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65470 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65476 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65478 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65462 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65470 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65474 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65476 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65462 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65472 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65470 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65478 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65476 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65472 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65462 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65474 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65470 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65462 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65525 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65524 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65525 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65520 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65518 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65524 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65525 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65515 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65524 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65518 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65521 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65520 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65525 - "GET /api/reports HTTP/1.1" 200 OK
+2026-02-20 05:11:02,279 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49169 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:11:16,946 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49225 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49223 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49221 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49225 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49220 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49217 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49223 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49221 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49215 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49225 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49220 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49221 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49221 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49225 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49220 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:11:31,241 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49278 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:11:49,108 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49360 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49362 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49365 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49367 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49368 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49360 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49362 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49365 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49367 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49370 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49396 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49396 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49412 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49404 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49410 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49409 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49396 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49410 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49412 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49404 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49409 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49396 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49406 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49410 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49409 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49412 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49396 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49404 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49406 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49404 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49410 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49474 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49470 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49474 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49473 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49468 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49466 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49470 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49473 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49474 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49473 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49464 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49466 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49470 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49468 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49473 - "GET /api/reports HTTP/1.1" 200 OK
+2026-02-20 05:12:45,587 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49508 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:13:06,861 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49555 - "OPTIONS /api/onboarding/skip HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49555 - "POST /api/onboarding/skip HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49555 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49563 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49571 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49570 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49568 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49563 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49555 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49570 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49571 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49568 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49565 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49555 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49563 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49570 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49568 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49571 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49555 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49565 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49570 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49563 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49590 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49590 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49588 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:13:32,744 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49678 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49677 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49678 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49670 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49677 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49668 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49678 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "OPTIONS /api/super-admin/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49668 - "OPTIONS /api/super-admin/companies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49677 - "OPTIONS /api/super-admin/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49670 - "OPTIONS /api/super-admin/companies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49678 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49682 - "GET /api/super-admin/companies HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49680 - "GET /api/super-admin/dashboard HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49670 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49678 - "GET /api/super-admin/companies HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49682 - "GET /api/super-admin/dashboard HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49674 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49674 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49717 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49716 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49717 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49709 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49711 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49716 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49713 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49707 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49709 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49717 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49713 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49711 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49709 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49716 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49707 - "GET /api/reports HTTP/1.1" 200 OK
+2026-02-20 05:14:05,486 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49744 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:14:16,725 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49884 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49887 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49888 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49890 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49892 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49884 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49887 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49888 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49890 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49894 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:49965 - "OPTIONS /api/auth/register HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "POST /api/auth/register HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49980 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49978 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49976 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49981 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49965 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49980 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49978 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49976 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49981 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49974 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49976 - "GET /api/reports HTTP/1.1" 200 OK
+2026-02-20 05:15:37,137 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 05:15:37,807 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:49976 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:15:58,070 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 05:15:58,668 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:50044 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:16:12,424 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 05:16:13,544 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:50068 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 05:16:26,077 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 05:16:26,652 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:50098 - "POST /api/onboarding/chat HTTP/1.1" 200 OK
+2026-02-20 06:08:56,082 - server - INFO - No expired trials found

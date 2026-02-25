@@ -29,6 +29,7 @@ import AdminConsole from './pages/AdminConsole';
 import PublicBooking from './pages/PublicBooking';
 import AIAgent from './pages/AIAgent';
 import Inventory from './pages/Inventory';
+import POS from './pages/POS';
 import CustomerFeedback from './pages/CustomerFeedback';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import SuperAdminCompanies from './pages/SuperAdminCompanies';
@@ -74,9 +75,9 @@ function App() {
 }
 
 function SignupWrapper() {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const { login } = useAuth();
-  return <Signup theme={theme} onLogin={login} />;
+  return <Signup theme={theme} mode={mode} onLogin={login} />;
 }
 
 function MainLayout() {
@@ -152,6 +153,7 @@ function MainLayout() {
               <Route path="/my-workspace" element={<ProtectedRoute><MyWorkspace /></ProtectedRoute>} />
               <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalytics /></ProtectedRoute>} />
               <Route path="/slots" element={<SlotManagement />} />
+              <Route path="/pos" element={<POS />} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/outlets" element={<Outlets />} />
               <Route path="/services" element={<Services />} />

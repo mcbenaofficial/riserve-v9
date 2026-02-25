@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import SmartAnalyticsIcon from './icons/SmartAnalyticsIcon';
-import FlowIcon from './icons/FlowIcon';
 import { useNavigate, useLocation } from 'react-router-dom';
 import OnboardingResumeWidget from './OnboardingResumeWidget';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useAssistant } from '../contexts/AssistantContext';
 import { api } from '../services/api';
+import { AtomicPowerIcon, SiriNewIcon } from 'hugeicons-react';
 import {
   LayoutDashboard,
   Calendar,
@@ -28,18 +28,20 @@ import {
   MessageSquare,
   Package,
   Atom,
+  ShoppingCart,
   GitBranch,
   Briefcase
 } from 'lucide-react';
 
 const Sidebar = () => {
-  const { theme, toggle } = useTheme();
+  const { theme, toggle, mode } = useTheme();
   const { user } = useAuth();
   const { openAssistant } = useAssistant();
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [enabledFeatures, setEnabledFeatures] = useState([]);
+  const [companySettings, setCompanySettings] = useState(null);
   const [lowStockCount, setLowStockCount] = useState(0);
 
   // Check if Super Admin
@@ -60,22 +62,27 @@ const Sidebar = () => {
 
   // Fetch enabled features for company
   useEffect(() => {
-    const fetchFeatures = async () => {
+    const fetchCompanyData = async () => {
       if (isSuperAdmin) return;
       try {
-        const res = await api.getCompanyFeatures();
-        setEnabledFeatures(res.data.features || []);
+        const [featuresRes, settingsRes] = await Promise.all([
+          api.getCompanyFeatures(),
+          api.getCompanySettings()
+        ]);
+        setEnabledFeatures(featuresRes.data.features || []);
+        setCompanySettings(settingsRes.data || null);
       } catch (error) {
-        console.error('Failed to fetch company features:', error);
+        console.error('Failed to fetch company data:', error);
       }
     };
-    fetchFeatures();
+    fetchCompanyData();
   }, [isSuperAdmin]);
 
   // Fetch low stock count if inventory is enabled
   useEffect(() => {
     const fetchLowStock = async () => {
-      if (!enabledFeatures.includes('inventory')) return;
+      // Check if general inventory is enabled AND the retail module is enabled
+      if (!enabledFeatures.includes('inventory') && !companySettings?.is_retail_enabled) return;
       try {
         const res = await api.getLowStockProducts();
         setLowStockCount(res.data?.length || 0);
@@ -88,7 +95,7 @@ const Sidebar = () => {
     // Refresh every 5 minutes
     const interval = setInterval(fetchLowStock, 300000);
     return () => clearInterval(interval);
-  }, [enabledFeatures]);
+  }, [enabledFeatures, companySettings]);
 
   // Different navigation for Super Admin vs regular users
   const superAdminNav = [
@@ -99,24 +106,53 @@ const Sidebar = () => {
     { key: 'support', label: 'Support', icon: HelpCircle, path: '/support' }
   ];
 
+  // Feature flag helpers (default to true if settings haven't loaded yet to avoid flickering)
+  const isBookingActive = companySettings ? companySettings.is_booking_enabled : true;
+  const isRetailActive = companySettings ? companySettings.is_retail_enabled : true;
+  const isWorkplaceActive = companySettings ? companySettings.is_workplace_enabled : true;
+
   // Navigation Configuration
   const allNavItems = [
     { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/' },
-    { key: 'bookings', label: 'Bookings', icon: Calendar, path: '/bookings' },
-    { key: 'slots', label: 'Slot Manager', icon: Clock, path: '/slots' },
+    {
+      key: 'pos',
+      label: 'Point of Sale',
+      icon: ShoppingCart,
+      path: '/pos',
+      condition: () => isRetailActive
+    },
+    {
+      key: 'bookings',
+      label: 'Bookings',
+      icon: Calendar,
+      path: '/bookings',
+      condition: () => isBookingActive
+    },
     {
       key: 'inventory',
       label: 'Inventory',
       icon: Package,
       path: '/inventory',
-      condition: (features) => features.includes('inventory'),
+      condition: (features) => features.includes('inventory') || isRetailActive,
       badge: lowStockCount > 0 ? lowStockCount : null
     },
-    { key: 'finance', label: 'Finance', icon: DollarSign, path: '/finance', roles: ['SuperAdmin', 'Admin'] },
+    {
+      key: 'finance',
+      label: 'Finance',
+      icon: DollarSign,
+      path: '/finance',
+      roles: ['SuperAdmin', 'Admin']
+    },
     { key: 'customers', label: 'Customers', icon: Users, path: '/customers' },
     { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics' },
-    { key: 'flow', label: 'Flow', icon: FlowIcon, path: '/flow' },
-    { key: 'my-workspace', label: 'My Workspace', icon: Briefcase, path: '/my-workspace' },
+    { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow' },
+    {
+      key: 'my-workspace',
+      label: 'My Workspace',
+      icon: Briefcase,
+      path: '/my-workspace',
+      condition: () => isWorkplaceActive
+    },
     { key: 'admin', label: 'Admin Console', icon: Shield, path: '/admin', roles: ['SuperAdmin', 'Admin'] },
     { key: 'support', label: 'Support', icon: HelpCircle, path: '/support', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] }
   ];
@@ -141,14 +177,14 @@ const Sidebar = () => {
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden">
               <img
-                src={theme === 'dark' ? '/logo-dark.png' : '/logo-light.png'}
+                src={mode === 'zen' ? '/logo-zen.png' : (theme === 'dark' ? '/logo-dark.png' : '/logo-light.png')}
                 alt="Ri'Serve Logo"
                 className="w-full h-full object-contain"
               />
             </div>
             <div className="h-8 flex items-center">
               <img
-                src={theme === 'dark' ? '/riserve-text-dark.png' : '/riserve-text-light.png'}
+                src={mode === 'zen' ? '/riserve-text-zen.png' : (theme === 'dark' ? '/riserve-text-dark.png' : '/riserve-text-light.png')}
                 alt="RI'SERVE"
                 className="h-full object-contain"
               />
@@ -159,7 +195,7 @@ const Sidebar = () => {
         {collapsed && (
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden mx-auto">
             <img
-              src={theme === 'dark' ? '/logo-dark.png' : '/logo-light.png'}
+              src={mode === 'zen' ? '/logo-zen.png' : (theme === 'dark' ? '/logo-dark.png' : '/logo-light.png')}
               alt="Ri'Serve Logo"
               className="w-full h-full object-contain"
             />
