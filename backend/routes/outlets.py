@@ -9,7 +9,7 @@ from sqlalchemy import select, update, delete, func
 import models_pg
 
 from .dependencies import (
-    get_db, get_current_user, User, 
+    get_db, get_current_user, require_admin, User, 
     check_plan_limit, SUBSCRIPTION_PLANS
 )
 
@@ -61,7 +61,7 @@ async def get_outlets(
 @router.post("")
 async def create_outlet(
     outlet_input: OutletCreate, 
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
     db_session: AsyncSession = Depends(get_db)
 ):
     # Check plan limits for outlet creation
@@ -115,7 +115,7 @@ async def create_outlet(
 async def update_outlet(
     outlet_id: str, 
     outlet_input: OutletCreate, 
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
     db_session: AsyncSession = Depends(get_db)
 ):
     stmt = (
@@ -127,6 +127,9 @@ async def update_outlet(
             capacity=outlet_input.capacity
         )
     )
+    if current_user.role != "SuperAdmin":
+        stmt = stmt.where(models_pg.Outlet.company_id == current_user.company_id)
+
     res = await db_session.execute(stmt)
     if res.rowcount == 0:
         raise HTTPException(status_code=404, detail="Outlet not found")
@@ -149,10 +152,13 @@ async def update_outlet(
 @router.delete("/{outlet_id}")
 async def delete_outlet(
     outlet_id: str, 
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
     db_session: AsyncSession = Depends(get_db)
 ):
     stmt = delete(models_pg.Outlet).where(models_pg.Outlet.id == outlet_id)
+    if current_user.role != "SuperAdmin":
+        stmt = stmt.where(models_pg.Outlet.company_id == current_user.company_id)
+
     res = await db_session.execute(stmt)
     
     if res.rowcount == 0:

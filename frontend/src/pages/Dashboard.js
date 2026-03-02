@@ -104,9 +104,10 @@ const Dashboard = () => {
   };
 
   const isVisible = (subtypeOrTitle) => {
-    if (!config) return true; // Default to visible if no config loaded yet
+    if (!config || !config.widgets) return true; // Default to visible if no config loaded yet
     const widget = config.widgets.find(w => w.subtype === subtypeOrTitle || w.title === subtypeOrTitle);
-    return widget && !widget.hidden;
+    if (!widget) return true; // Not in config = visible by default
+    return !widget.hidden;
   };
 
   const today = new Date();

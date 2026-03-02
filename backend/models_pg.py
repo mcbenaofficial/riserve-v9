@@ -64,6 +64,7 @@ class Company(Base):
     feedback_configs = relationship("FeedbackConfig", back_populates="company")
     feedback = relationship("Feedback", back_populates="company")
     settings = relationship("CompanySetting", back_populates="company", uselist=False)
+    products = relationship("Product", back_populates="company")
 
 class User(Base):
     __tablename__ = "users"
@@ -175,6 +176,8 @@ class Service(Base):
     name = Column(String(255), nullable=False)
     price = Column(Numeric(10, 2), default=0)
     duration = Column(Integer, default=30) # minutes
+    description = Column(Text)
+    active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
@@ -294,6 +297,9 @@ class Product(Base):
     active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    company = relationship("Company", back_populates="products")
 
 class InventoryLog(Base):
     __tablename__ = "inventory_logs"

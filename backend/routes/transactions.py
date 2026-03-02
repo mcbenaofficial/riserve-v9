@@ -98,7 +98,7 @@ async def process_pos_checkout(
     db_session: AsyncSession = Depends(get_db)
 ):
     """Process a PoS checkout, deduct stock, and create a transaction"""
-    if current_user.role not in ["Admin", "SuperAdmin", "Manager", "Cashier"]:
+    if current_user.role not in ["Admin", "SuperAdmin", "Manager"]:
         raise HTTPException(status_code=403, detail="Not authorized")
         
     company_id = current_user.company_id

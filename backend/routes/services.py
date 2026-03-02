@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
 import models_pg
 
-from .dependencies import get_db, get_current_user, User
+from .dependencies import get_db, get_current_user, require_admin, User
 
 router = APIRouter(prefix="/services", tags=["Services"])
 
@@ -41,7 +41,7 @@ async def get_services(
             "id": s.id,
             "company_id": s.company_id,
             "name": s.name,
-            "duration_min": s.duration_min,
+            "duration_min": s.duration,
             "price": s.price,
             "description": s.description,
             "active": s.active,
@@ -53,7 +53,7 @@ async def get_services(
 @router.post("")
 async def create_service(
     service_input: ServiceCreate, 
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
     db_session: AsyncSession = Depends(get_db)
 ):
     service_id = str(uuid.uuid4())
@@ -63,7 +63,7 @@ async def create_service(
         id=service_id,
         company_id=current_user.company_id,
         name=service_input.name,
-        duration_min=service_input.duration_min,
+        duration=service_input.duration_min,
         price=service_input.price,
         description=service_input.description,
         active=True,
@@ -88,7 +88,7 @@ async def create_service(
 async def update_service(
     service_id: str, 
     service_input: ServiceCreate, 
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
     db_session: AsyncSession = Depends(get_db)
 ):
     stmt = (
@@ -96,7 +96,7 @@ async def update_service(
         .where(models_pg.Service.id == service_id)
         .values(
             name=service_input.name,
-            duration_min=service_input.duration_min,
+            duration=service_input.duration_min,
             price=service_input.price,
             description=service_input.description
         )
@@ -119,7 +119,7 @@ async def update_service(
         "id": svc.id,
         "company_id": svc.company_id,
         "name": svc.name,
-        "duration_min": svc.duration_min,
+        "duration_min": svc.duration,
         "price": svc.price,
         "description": svc.description,
         "active": svc.active,
@@ -130,7 +130,7 @@ async def update_service(
 @router.delete("/{service_id}")
 async def delete_service(
     service_id: str, 
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
     db_session: AsyncSession = Depends(get_db)
 ):
     stmt = delete(models_pg.Service).where(models_pg.Service.id == service_id)

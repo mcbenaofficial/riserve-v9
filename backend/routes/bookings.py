@@ -260,6 +260,8 @@ async def update_booking(
     db_session: AsyncSession = Depends(get_db)
 ):
     stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    if current_user.role != "SuperAdmin":
+        stmt = stmt.where(models_pg.Booking.company_id == current_user.company_id)
     booking = (await db_session.execute(stmt)).scalar_one_or_none()
     
     if not booking:
@@ -289,6 +291,18 @@ async def reschedule_booking(
     current_user: User = Depends(get_current_user),
     db_session: AsyncSession = Depends(get_db)
 ):
+    # Verify the booking belongs to the user's company
+    verify_stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    if current_user.role != "SuperAdmin":
+        verify_stmt = verify_stmt.where(models_pg.Booking.company_id == current_user.company_id)
+    booking_check = (await db_session.execute(verify_stmt)).scalar_one_or_none()
+    
+    if not booking_check:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    
+    if current_user.role in ["Manager", "User"]:
+        enforce_outlet_access(current_user, booking_check.outlet_id)
+
     update_fields = {"time": reschedule.time}
     if reschedule.date:
         from datetime import datetime as dt
@@ -297,11 +311,7 @@ async def reschedule_booking(
         update_fields["resource_id"] = reschedule.resource_id
         
     stmt = update(models_pg.Booking).where(models_pg.Booking.id == booking_id).values(**update_fields)
-    res = await db_session.execute(stmt)
-    
-    if res.rowcount == 0:
-        raise HTTPException(status_code=404, detail="Booking not found")
-        
+    await db_session.execute(stmt)
     await db_session.commit()
     
     # fetch updated
@@ -382,6 +392,8 @@ async def get_booking(
 ):
     """Get a single booking by ID"""
     stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    if current_user.role != "SuperAdmin":
+        stmt = stmt.where(models_pg.Booking.company_id == current_user.company_id)
     booking = (await db_session.execute(stmt)).scalar_one_or_none()
     
     if not booking:
@@ -423,6 +435,8 @@ async def add_items_to_booking(
     
     # Get the booking
     b_stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    if current_user.role != "SuperAdmin":
+        b_stmt = b_stmt.where(models_pg.Booking.company_id == current_user.company_id)
     booking = (await db_session.execute(b_stmt)).scalar_one_or_none()
     
     if not booking:
@@ -574,6 +588,8 @@ async def remove_item_from_booking(
 
     # Get the booking
     b_stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    if current_user.role != "SuperAdmin":
+        b_stmt = b_stmt.where(models_pg.Booking.company_id == current_user.company_id)
     booking = (await db_session.execute(b_stmt)).scalar_one_or_none()
     
     if not booking:

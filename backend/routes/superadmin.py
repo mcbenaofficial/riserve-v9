@@ -178,11 +178,11 @@ async def get_company(
     
     # Get additional stats
     users_count = (await db.execute(select(func.count(models_pg.User.id)).where(models_pg.User.company_id == company_id))).scalar() or 0
-    outlets_count = (await db_session.execute(select(func.count(models_pg.Outlet.id)).where(models_pg.Outlet.company_id == company_id))).scalar() or 0
-    bookings_count = (await db_session.execute(select(func.count(models_pg.Booking.id)).where(models_pg.Booking.company_id == company_id))).scalar() or 0
+    outlets_count = (await db.execute(select(func.count(models_pg.Outlet.id)).where(models_pg.Outlet.company_id == company_id))).scalar() or 0
+    bookings_count = (await db.execute(select(func.count(models_pg.Booking.id)).where(models_pg.Booking.company_id == company_id))).scalar() or 0
     
     month_start = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    month_bookings = (await db_session.execute(
+    month_bookings = (await db.execute(
         select(func.count(models_pg.Booking.id)).where(
             models_pg.Booking.company_id == company_id,
             models_pg.Booking.created_at >= month_start
