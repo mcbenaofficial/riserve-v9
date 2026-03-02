@@ -3,8 +3,10 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any
 from datetime import datetime, timezone
 import uuid
-
-from .dependencies import dashboard_configs_collection, get_current_user, User
+import models_pg
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update, delete
+from .dependencies import get_current_user, get_db, User
 
 router = APIRouter(prefix="/dashboard-configs", tags=["Dashboard"])
 
@@ -36,15 +38,21 @@ DEFAULT_WIDGETS = [
 ]
 
 
-class DashboardConfigCreate(BaseModel):
+class DashboardConfigSchema(BaseModel):
     name: str = "Main Dashboard"
     is_default: bool = False
     widgets: List[dict] = []
 
 
 @router.get("")
-async def get_dashboard_configs(current_user: User = Depends(get_current_user)):
-    configs = await dashboard_configs_collection.find({"user_id": current_user.id}, {"_id": 0}).to_list(100)
+async def get_dashboard_configs(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.DashboardConfig).where(models_pg.DashboardConfig.user_id == current_user.id)
+    result = await db.execute(stmt)
+    configs = result.scalars().all()
+    
     if not configs:
         return [{
             "id": str(uuid.uuid4()),
@@ -54,44 +62,97 @@ async def get_dashboard_configs(current_user: User = Depends(get_current_user)):
             "widgets": DEFAULT_WIDGETS,
             "created_at": datetime.now(timezone.utc).isoformat()
         }]
-    return configs
+        
+    return [
+        {
+            "id": c.id,
+            "user_id": c.user_id,
+            "company_id": c.company_id,
+            "name": c.name,
+            "is_default": c.is_default,
+            "widgets": c.widgets,
+            "created_at": c.created_at.isoformat() if c.created_at else None
+        } for c in configs
+    ]
 
 
 @router.post("")
-async def create_dashboard_config(config_input: DashboardConfigCreate, current_user: User = Depends(get_current_user)):
-    config_doc = {
-        "id": str(uuid.uuid4()),
+async def create_dashboard_config(
+    config_input: DashboardConfigSchema, 
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    config_id = str(uuid.uuid4())
+    new_config = models_pg.DashboardConfig(
+        id=config_id,
+        user_id=current_user.id,
+        company_id=current_user.company_id,
+        name=config_input.name,
+        is_default=config_input.is_default,
+        widgets=config_input.widgets if config_input.widgets else DEFAULT_WIDGETS
+    )
+    db.add(new_config)
+    await db.commit()
+    
+    return {
+        "id": config_id,
         "user_id": current_user.id,
         "name": config_input.name,
         "is_default": config_input.is_default,
-        "widgets": config_input.widgets if config_input.widgets else DEFAULT_WIDGETS,
+        "widgets": new_config.widgets,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
-    await dashboard_configs_collection.insert_one(config_doc)
-    config_doc.pop("_id", None)
-    return config_doc
 
 
 @router.put("/{config_id}")
-async def update_dashboard_config(config_id: str, config_input: DashboardConfigCreate, current_user: User = Depends(get_current_user)):
-    result = await dashboard_configs_collection.update_one(
-        {"id": config_id, "user_id": current_user.id},
-        {"$set": {
-            "name": config_input.name,
-            "is_default": config_input.is_default,
-            "widgets": config_input.widgets
-        }}
+async def update_dashboard_config(
+    config_id: str, 
+    config_input: DashboardConfigSchema, 
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.DashboardConfig).where(
+        models_pg.DashboardConfig.id == config_id, 
+        models_pg.DashboardConfig.user_id == current_user.id
     )
-    if result.matched_count == 0:
+    result = await db.execute(stmt)
+    config = result.scalar_one_or_none()
+    
+    if not config:
         raise HTTPException(status_code=404, detail="Dashboard configuration not found")
     
-    config = await dashboard_configs_collection.find_one({"id": config_id}, {"_id": 0})
-    return config
+    config.name = config_input.name
+    config.is_default = config_input.is_default
+    config.widgets = config_input.widgets
+    
+    await db.commit()
+    
+    return {
+        "id": config.id,
+        "user_id": config.user_id,
+        "name": config.name,
+        "is_default": config.is_default,
+        "widgets": config.widgets
+    }
 
 
 @router.delete("/{config_id}")
-async def delete_dashboard_config(config_id: str, current_user: User = Depends(get_current_user)):
-    result = await dashboard_configs_collection.delete_one({"id": config_id, "user_id": current_user.id})
-    if result.deleted_count == 0:
+async def delete_dashboard_config(
+    config_id: str, 
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.DashboardConfig).where(
+        models_pg.DashboardConfig.id == config_id, 
+        models_pg.DashboardConfig.user_id == current_user.id
+    )
+    result = await db.execute(stmt)
+    config = result.scalar_one_or_none()
+    
+    if not config:
         raise HTTPException(status_code=404, detail="Dashboard configuration not found")
+        
+    await db.delete(config)
+    await db.commit()
+    
     return {"message": "Dashboard configuration deleted"}

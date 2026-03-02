@@ -3,37 +3,37 @@ import { Zap, Plus, ToggleLeft, ToggleRight, Pencil, Trash2, Play, Clock, ArrowR
 
 const AdminAutomations = () => {
   const [automations, setAutomations] = useState([
-    { 
-      id: 1, 
-      name: 'Auto-assign bookings', 
+    {
+      id: 1,
+      name: 'Auto-assign bookings',
       trigger: 'When booking is created',
       action: 'Assign to nearest available outlet',
-      active: true, 
-      runsToday: 45 
+      active: true,
+      runsToday: 45
     },
-    { 
-      id: 2, 
-      name: 'Send reminder', 
+    {
+      id: 2,
+      name: 'Send reminder',
       trigger: '1 hour before appointment',
       action: 'Send SMS and Email reminder',
-      active: true, 
-      runsToday: 23 
+      active: true,
+      runsToday: 23
     },
-    { 
-      id: 3, 
-      name: 'Follow-up survey', 
+    {
+      id: 3,
+      name: 'Follow-up survey',
       trigger: '24 hours after service completion',
       action: 'Send feedback survey email',
-      active: false, 
-      runsToday: 0 
+      active: false,
+      runsToday: 0
     },
-    { 
-      id: 4, 
-      name: 'VIP customer alert', 
+    {
+      id: 4,
+      name: 'VIP customer alert',
       trigger: 'When VIP customer books',
       action: 'Notify outlet manager via SMS',
-      active: true, 
-      runsToday: 5 
+      active: true,
+      runsToday: 5
     },
   ]);
 
@@ -84,9 +84,8 @@ const AdminAutomations = () => {
             <div key={automation.id} className="p-4 hover:bg-[#5FA8D3]/5 dark:hover:bg-[#5FA8D3]/10 transition-colors">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    automation.active ? 'bg-yellow-100 dark:bg-yellow-900/30' : 'bg-gray-100 dark:bg-white/5'
-                  }`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${automation.active ? 'bg-yellow-100 dark:bg-yellow-900/30' : 'bg-gray-100 dark:bg-white/5'
+                    }`}>
                     <Zap size={20} className={automation.active ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-400'} />
                   </div>
                   <div>
@@ -97,11 +96,10 @@ const AdminAutomations = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => toggleAutomation(automation.id)}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-                      automation.active
-                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${automation.active
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                      }`}
                   >
                     {automation.active ? 'Active' : 'Inactive'}
                   </button>

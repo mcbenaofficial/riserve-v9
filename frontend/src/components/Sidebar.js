@@ -119,14 +119,16 @@ const Sidebar = () => {
       label: 'Point of Sale',
       icon: ShoppingCart,
       path: '/pos',
-      condition: () => isRetailActive
+      condition: () => isRetailActive,
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User']
     },
     {
       key: 'bookings',
       label: 'Bookings',
       icon: Calendar,
       path: '/bookings',
-      condition: () => isBookingActive
+      condition: () => isBookingActive,
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User']
     },
     {
       key: 'inventory',
@@ -134,6 +136,7 @@ const Sidebar = () => {
       icon: Package,
       path: '/inventory',
       condition: (features) => features.includes('inventory') || isRetailActive,
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
       badge: lowStockCount > 0 ? lowStockCount : null
     },
     {
@@ -141,18 +144,20 @@ const Sidebar = () => {
       label: 'Finance',
       icon: DollarSign,
       path: '/finance',
-      roles: ['SuperAdmin', 'Admin']
+      roles: ['SuperAdmin', 'Admin', 'Manager']
     },
-    { key: 'customers', label: 'Customers', icon: Users, path: '/customers' },
-    { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics' },
-    { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow' },
+    { key: 'customers', label: 'Customers', icon: Users, path: '/customers', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] },
+    { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics', roles: ['SuperAdmin', 'Admin', 'Manager'] },
+    { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', roles: ['SuperAdmin', 'Admin'] },
     {
       key: 'my-workspace',
       label: 'My Workspace',
       icon: Briefcase,
       path: '/my-workspace',
-      condition: () => isWorkplaceActive
+      condition: () => isWorkplaceActive,
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User']
     },
+    { key: 'users', label: 'Team', icon: Users, path: '/users', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] },
     { key: 'admin', label: 'Admin Console', icon: Shield, path: '/admin', roles: ['SuperAdmin', 'Admin'] },
     { key: 'support', label: 'Support', icon: HelpCircle, path: '/support', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] }
   ];

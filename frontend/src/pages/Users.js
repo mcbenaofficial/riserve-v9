@@ -9,6 +9,7 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -43,9 +44,18 @@ const Users = () => {
     }
   };
 
-  const handleAddUser = async (userData) => {
-    await api.createUser(userData);
+  const handleSubmitUser = async (userData, userId) => {
+    if (userId) {
+      await api.updateUser(userId, userData);
+    } else {
+      await api.createUser(userData);
+    }
     await fetchUsers();
+  };
+
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setShowAddModal(true);
   };
 
   if (loading) {
@@ -70,7 +80,10 @@ const Users = () => {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={() => setShowAddModal(true)}
+              onClick={() => {
+                setEditingUser(null);
+                setShowAddModal(true);
+              }}
               data-testid="add-user-btn"
               className="px-4 py-2 rounded-xl font-semibold text-[#222] transition-all hover:scale-[1.02] flex items-center gap-2 shadow-lg"
               style={{ background: 'linear-gradient(135deg, #5FA8D3 0%, #4A95C0 100%)' }}
@@ -142,17 +155,19 @@ const Users = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        u.status === 'Active'
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${u.status === 'Active'
                           ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                           : 'bg-[#ECEFF3] dark:bg-[#171C22] text-[#4B5563] dark:text-[#7D8590]'
-                      }`}
+                        }`}
                     >
                       {u.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <button className="px-4 py-2 rounded-lg text-sm font-medium text-[#4B5563] dark:text-[#E6E8EB] hover:bg-[#ECEFF3] dark:hover:bg-[#1F2630] transition-all">
+                    <button
+                      onClick={() => handleEditUser(u)}
+                      className="px-4 py-2 rounded-lg text-sm font-medium text-[#4B5563] dark:text-[#E6E8EB] hover:bg-[#ECEFF3] dark:hover:bg-[#1F2630] transition-all"
+                    >
                       Edit
                     </button>
                   </td>
@@ -166,8 +181,12 @@ const Users = () => {
       {/* Add User Modal */}
       <AddUserModal
         isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onSubmit={handleAddUser}
+        onClose={() => {
+          setShowAddModal(false);
+          setEditingUser(null);
+        }}
+        onSubmit={handleSubmitUser}
+        editingUser={editingUser}
       />
     </div>
   );

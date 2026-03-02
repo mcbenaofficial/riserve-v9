@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Store, MapPin, Plus, Trash2, Users, Layers, Scissors, Coffee, Dumbbell, Car, Building2, Sparkles, Briefcase, Camera, Package } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Store, MapPin, Plus, Trash2, Users, Layers, Scissors, Coffee, Dumbbell, Car, Building2, Sparkles, Briefcase, Camera, Package, User } from 'lucide-react';
 import { api } from '../services/api';
 
 // Business type presets with Lucide icons
@@ -29,10 +29,25 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [availableUsers, setAvailableUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await api.getUsers();
+        setAvailableUsers(response.data);
+      } catch (err) {
+        console.error('Failed to fetch users for resource assignment', err);
+      }
+    };
+    if (isOpen) {
+      fetchUsers();
+    }
+  }, [isOpen]);
 
   const handleResourceTypeChange = (type) => {
     const preset = BUSINESS_PRESETS[type] || BUSINESS_PRESETS.custom;
-    
+
     const updatedResources = formData.resources.map((r, i) => ({
       ...r,
       name: type === 'custom' ? r.name : `${preset.resourceLabel} ${i + 1}`
@@ -50,7 +65,7 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
 
   const addResource = () => {
     const newIndex = formData.resources.length + 1;
-    
+
     setFormData({
       ...formData,
       resources: [
@@ -59,7 +74,8 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
           id: `resource-${Date.now()}`,
           name: `${formData.resource_label} ${newIndex}`,
           capacity: formData.default_capacity,
-          active: true
+          active: true,
+          user_id: null
         }
       ]
     });
@@ -81,9 +97,10 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
       id: `resource-${Date.now()}-${i}`,
       name: `${formData.resource_label} ${formData.resources.length + i + 1}`,
       capacity: formData.default_capacity,
-      active: true
+      active: true,
+      user_id: null
     }));
-    
+
     setFormData({
       ...formData,
       resources: [...formData.resources, ...newResources]
@@ -92,12 +109,12 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim() || !formData.city.trim() || !formData.address.trim()) {
       setError('Name, city, and address are required');
       return;
     }
-    
+
     if (formData.resources.length === 0) {
       setError('At least one resource is required');
       return;
@@ -118,7 +135,7 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
         default_capacity: formData.default_capacity,
         capacity: formData.resources.length
       };
-      
+
       await api.createOutlet(submitData);
       onSuccess();
       onClose();
@@ -226,7 +243,7 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
               <Layers size={14} />
               Resource Configuration
             </h4>
-            
+
             <p className="text-xs text-[#7D8590]">
               Select your business type to get smart defaults, or customize your own resource names.
             </p>
@@ -244,11 +261,10 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
                       key={key}
                       type="button"
                       onClick={() => handleResourceTypeChange(key)}
-                      className={`p-3 rounded-xl border text-center transition-all ${
-                        formData.resource_type === key
+                      className={`p-3 rounded-xl border text-center transition-all ${formData.resource_type === key
                           ? 'bg-[#5FA8D3]/20 border-[#5FA8D3] text-[#5FA8D3]'
                           : 'bg-[#0B0D10] border-[#1F2630] text-[#7D8590] hover:border-[#5FA8D3]/50 hover:text-[#A9AFB8]'
-                      }`}
+                        }`}
                     >
                       <IconComponent size={20} className="mx-auto mb-1" />
                       <span className="text-xs font-medium">{preset.resourceLabel}</span>
@@ -264,11 +280,10 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
                       key={key}
                       type="button"
                       onClick={() => handleResourceTypeChange(key)}
-                      className={`p-3 rounded-xl border text-center transition-all ${
-                        formData.resource_type === key
+                      className={`p-3 rounded-xl border text-center transition-all ${formData.resource_type === key
                           ? 'bg-[#5FA8D3]/20 border-[#5FA8D3] text-[#5FA8D3]'
                           : 'bg-[#0B0D10] border-[#1F2630] text-[#7D8590] hover:border-[#5FA8D3]/50 hover:text-[#A9AFB8]'
-                      }`}
+                        }`}
                     >
                       <IconComponent size={20} className="mx-auto mb-1" />
                       <span className="text-xs font-medium">{preset.resourceLabel}</span>
@@ -363,6 +378,23 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
                           placeholder={`${formData.resource_label} name`}
                         />
                       </div>
+                      <div className="w-1/3 min-w-[140px]">
+                        <div className="flex items-center gap-1">
+                          <User size={14} className="text-[#7D8590]" />
+                          <select
+                            value={resource.user_id || ''}
+                            onChange={(e) => updateResource(index, 'user_id', e.target.value || null)}
+                            className="w-full px-2 py-2 bg-[#12161C] border border-[#1F2630] rounded-lg text-sm text-[#E6E8EB] focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent"
+                          >
+                            <option value="">Unassigned</option>
+                            {availableUsers.map((u) => (
+                              <option key={u.id} value={u.id}>
+                                {u.name} ({u.role})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                       <div className="w-24">
                         <div className="flex items-center gap-1">
                           <Users size={14} className="text-[#7D8590]" />
@@ -387,7 +419,7 @@ const AddOutletModal = ({ isOpen, onClose, onSuccess }) => {
                   ))
                 )}
               </div>
-              
+
               {formData.resources.length > 0 && (
                 <p className="text-xs text-[#4B5563] mt-2">
                   Capacity = simultaneous bookings per {formData.resource_label.toLowerCase()}

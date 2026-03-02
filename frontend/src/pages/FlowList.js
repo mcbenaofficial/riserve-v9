@@ -10,81 +10,7 @@ import {
 } from 'lucide-react';
 import { SiriNewIcon } from 'hugeicons-react';
 
-// Sample flow data
-const SAMPLE_FLOWS = [
-    {
-        id: 'flow-1',
-        name: 'Customer Support Agent',
-        description: 'Handles customer inquiries with RAG and tool calls',
-        status: 'active',
-        lastRun: '2 mins ago',
-        runs: 1247,
-        successRate: 98.5,
-        createdAt: '2026-01-15',
-        nodeCount: 8,
-        template: 'rag'
-    },
-    {
-        id: 'flow-2',
-        name: 'Lead Qualification Bot',
-        description: 'Qualifies leads based on conversation analysis',
-        status: 'active',
-        lastRun: '15 mins ago',
-        runs: 856,
-        successRate: 94.2,
-        createdAt: '2026-01-20',
-        nodeCount: 6,
-        template: 'chat'
-    },
-    {
-        id: 'flow-3',
-        name: 'Document Processor',
-        description: 'Extracts and processes document data automatically',
-        status: 'paused',
-        lastRun: '2 hours ago',
-        runs: 432,
-        successRate: 99.1,
-        createdAt: '2026-01-25',
-        nodeCount: 12,
-        template: 'tool'
-    },
-    {
-        id: 'flow-4',
-        name: 'Booking Assistant',
-        description: 'Assists with booking management and scheduling',
-        status: 'active',
-        lastRun: '5 mins ago',
-        runs: 2103,
-        successRate: 97.8,
-        createdAt: '2026-02-01',
-        nodeCount: 7,
-        template: 'chat'
-    },
-    {
-        id: 'flow-5',
-        name: 'Analytics Reporter',
-        description: 'Generates automated analytics reports',
-        status: 'error',
-        lastRun: '1 hour ago',
-        runs: 156,
-        successRate: 85.3,
-        createdAt: '2026-02-05',
-        nodeCount: 5,
-        template: 'tool'
-    },
-    {
-        id: 'flow-6',
-        name: 'Inventory Monitor',
-        description: 'Monitors inventory levels and sends alerts',
-        status: 'draft',
-        lastRun: null,
-        runs: 0,
-        successRate: 0,
-        createdAt: '2026-02-08',
-        nodeCount: 4,
-        template: 'custom'
-    }
-];
+import { MOCK_FLOWS } from '../data/mockFlows';
 
 const statusConfig = {
     active: { color: 'text-green-400', bg: 'bg-green-500/10', icon: CheckCircle2, label: 'Active' },
@@ -206,7 +132,7 @@ const FlowList = () => {
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const navigate = useNavigate();
-    const [flows] = useState(SAMPLE_FLOWS);
+    const [flows] = useState(MOCK_FLOWS);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [showFilterMenu, setShowFilterMenu] = useState(false);

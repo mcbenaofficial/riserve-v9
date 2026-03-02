@@ -3,8 +3,11 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone
 import uuid
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func, desc, update
 
-from .dependencies import db, get_current_user, User
+import models_pg
+from .dependencies import get_current_user, User, get_db
 
 router = APIRouter(prefix="/feedback", tags=["Customer Feedback"])
 
@@ -30,13 +33,16 @@ class FeedbackConfigUpdate(BaseModel):
 
 # Get feedback configuration
 @router.get("/config")
-async def get_feedback_config(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
+async def get_feedback_config(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.FeedbackConfig)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.FeedbackConfig.company_id == current_user.company_id)
     
-    config = await db.feedback_config.find_one(query, {"_id": 0})
+    config = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not config:
         return {
             "id": None,
@@ -51,18 +57,10 @@ async def get_feedback_config(current_user: User = Depends(get_current_user)):
             "feedback_link_base": f"/feedback/",
             "is_configured": False
         }
-    config["is_configured"] = True
-    return config
-
-
-# Update feedback configuration
-@router.put("/config")
-async def update_feedback_config(config: FeedbackConfigUpdate, current_user: User = Depends(get_current_user)):
-    if current_user.role not in ["Admin", "SuperAdmin"]:
-        raise HTTPException(status_code=403, detail="Only admins can update feedback config")
     
-    config_doc = {
-        "company_id": current_user.company_id,  # Associate with company
+    return {
+        "id": config.id,
+        "company_id": config.company_id,
         "enabled": config.enabled,
         "auto_send_after_completion": config.auto_send_after_completion,
         "send_via_email": config.send_via_email,
@@ -71,99 +69,174 @@ async def update_feedback_config(config: FeedbackConfigUpdate, current_user: Use
         "email_message": config.email_message,
         "sms_message": config.sms_message,
         "thank_you_message": config.thank_you_message,
-        "updated_at": datetime.now(timezone.utc).isoformat()
+        "updated_at": config.updated_at.isoformat() if config.updated_at else None,
+        "is_configured": True
     }
+
+
+# Update feedback configuration
+@router.put("/config")
+async def update_feedback_config(
+    config_input: FeedbackConfigUpdate, 
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    if current_user.role not in ["Admin", "SuperAdmin"]:
+        raise HTTPException(status_code=403, detail="Only admins can update feedback config")
     
-    query = {}
-    if current_user.company_id:
-        query["company_id"] = current_user.company_id
+    stmt = select(models_pg.FeedbackConfig).where(models_pg.FeedbackConfig.company_id == current_user.company_id)
+    config = (await db.execute(stmt)).scalar_one_or_none()
     
-    existing = await db.feedback_config.find_one(query)
-    if existing:
-        await db.feedback_config.update_one(query, {"$set": config_doc})
-        config_doc["id"] = existing.get("id")
+    if config:
+        config.enabled = config_input.enabled
+        config.auto_send_after_completion = config_input.auto_send_after_completion
+        config.send_via_email = config_input.send_via_email
+        config.send_via_sms = config_input.send_via_sms
+        config.email_subject = config_input.email_subject
+        config.email_message = config_input.email_message
+        config.sms_message = config_input.sms_message
+        config.thank_you_message = config_input.thank_you_message
+        config.updated_at = datetime.now(timezone.utc)
     else:
-        config_doc["id"] = str(uuid.uuid4())
-        config_doc["created_at"] = datetime.now(timezone.utc).isoformat()
-        await db.feedback_config.insert_one(config_doc)
+        config = models_pg.FeedbackConfig(
+            id=str(uuid.uuid4()),
+            company_id=current_user.company_id,
+            enabled=config_input.enabled,
+            auto_send_after_completion=config_input.auto_send_after_completion,
+            send_via_email=config_input.send_via_email,
+            send_via_sms=config_input.send_via_sms,
+            email_subject=config_input.email_subject,
+            email_message=config_input.email_message,
+            sms_message=config_input.sms_message,
+            thank_you_message=config_input.thank_you_message
+        )
+        db.add(config)
     
-    config_doc.pop("_id", None)
-    config_doc["is_configured"] = True
-    return config_doc
+    await db.commit()
+    
+    return {
+        "id": config.id,
+        "company_id": config.company_id,
+        "enabled": config.enabled,
+        "is_configured": True
+    }
 
 
 # Submit feedback (public - no auth required)
 @router.post("/submit/{booking_id}")
-async def submit_feedback(booking_id: str, feedback: FeedbackCreate):
+async def submit_feedback(
+    booking_id: str, 
+    feedback_input: FeedbackCreate,
+    db: AsyncSession = Depends(get_db)
+):
     # Verify booking exists
-    booking = await db.bookings.find_one({"id": booking_id}, {"_id": 0})
+    stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    booking = (await db.execute(stmt)).scalar_one_or_none()
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
     
     # Check if feedback already exists
-    existing = await db.feedback.find_one({"booking_id": booking_id})
+    existing_stmt = select(models_pg.Feedback).where(models_pg.Feedback.booking_id == booking_id)
+    existing = (await db.execute(existing_stmt)).scalar_one_or_none()
     if existing:
         raise HTTPException(status_code=400, detail="Feedback already submitted for this booking")
     
     # Validate rating
-    if feedback.rating < 1 or feedback.rating > 5:
+    if feedback_input.rating < 1 or feedback_input.rating > 5:
         raise HTTPException(status_code=400, detail="Rating must be between 1 and 5")
     
-    feedback_doc = {
-        "id": str(uuid.uuid4()),
-        "booking_id": booking_id,
-        "company_id": booking.get("company_id"),  # Associate with booking's company
-        "outlet_id": booking.get("outlet_id"),
-        "service_id": booking.get("service_id"),
-        "rating": feedback.rating,
-        "comment": feedback.comment,
-        "customer_name": feedback.customer_name or booking.get("customer") or booking.get("customer_name"),
-        "customer_email": feedback.customer_email or booking.get("customer_email"),
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
+    new_feedback = models_pg.Feedback(
+        id=str(uuid.uuid4()),
+        booking_id=booking_id,
+        company_id=booking.company_id,
+        outlet_id=booking.outlet_id,
+        # service_id logic: Booking often has many services now
+        # We'll just take the first one if it exists or leave NULL
+        rating=feedback_input.rating,
+        comment=feedback_input.comment,
+        customer_name=feedback_input.customer_name or booking.customer_name,
+        customer_email=feedback_input.customer_email or booking.customer_email
+    )
     
-    await db.feedback.insert_one(feedback_doc)
-    feedback_doc.pop("_id", None)
+    db.add(new_feedback)
+    await db.commit()
     
-    return {"message": "Thank you for your feedback!", "feedback_id": feedback_doc["id"]}
+    return {"message": "Thank you for your feedback!", "feedback_id": new_feedback.id}
 
 
 # Get feedback for a booking (public)
 @router.get("/booking/{booking_id}")
-async def get_feedback_for_booking(booking_id: str):
-    feedback = await db.feedback.find_one({"booking_id": booking_id}, {"_id": 0})
+async def get_feedback_for_booking(
+    booking_id: str,
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Feedback).where(models_pg.Feedback.booking_id == booking_id)
+    feedback = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not feedback:
         # Check if booking exists
-        booking = await db.bookings.find_one({"id": booking_id}, {"_id": 0})
+        booking_stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+        booking = (await db.execute(booking_stmt)).scalar_one_or_none()
         if not booking:
             raise HTTPException(status_code=404, detail="Booking not found")
-        return {"exists": False, "booking": booking}
-    return {"exists": True, "feedback": feedback}
+        return {
+            "exists": False, 
+            "booking": {
+                "id": booking.id,
+                "customer_name": booking.customer_name,
+                "status": booking.status
+            }
+        }
+    
+    return {
+        "exists": True, 
+        "feedback": {
+            "id": feedback.id,
+            "rating": feedback.rating,
+            "comment": feedback.comment,
+            "created_at": feedback.created_at.isoformat() if feedback.created_at else None
+        }
+    }
 
 
 # Get all feedback (authenticated)
 @router.get("")
-async def get_all_feedback(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
+async def get_all_feedback(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Feedback)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Feedback.company_id == current_user.company_id)
     
-    feedback_list = await db.feedback.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
-    return feedback_list
+    stmt = stmt.order_by(desc(models_pg.Feedback.created_at))
+    feedback_res = (await db.execute(stmt)).scalars().all()
+    
+    return [
+        {
+            "id": f.id,
+            "booking_id": f.booking_id,
+            "rating": f.rating,
+            "comment": f.comment,
+            "customer_name": f.customer_name,
+            "created_at": f.created_at.isoformat() if f.created_at else None
+        } for f in feedback_res
+    ]
 
 
 # Get feedback statistics (authenticated)
 @router.get("/stats")
-async def get_feedback_stats(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
+async def get_feedback_stats(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Feedback)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Feedback.company_id == current_user.company_id)
     
-    all_feedback = await db.feedback.find(query, {"_id": 0}).to_list(1000)
+    feedback_res = (await db.execute(stmt)).scalars().all()
     
-    if not all_feedback:
+    if not feedback_res:
         return {
             "total_responses": 0,
             "average_rating": 0,
@@ -172,12 +245,12 @@ async def get_feedback_stats(current_user: User = Depends(get_current_user)):
             "satisfaction_score": 0
         }
     
-    total = len(all_feedback)
-    avg_rating = sum(f["rating"] for f in all_feedback) / total
+    total = len(feedback_res)
+    avg_rating = sum(f.rating for f in feedback_res) / total
     
     distribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
-    for f in all_feedback:
-        distribution[f["rating"]] = distribution.get(f["rating"], 0) + 1
+    for f in feedback_res:
+        distribution[f.rating] = distribution.get(f.rating, 0) + 1
     
     # Satisfaction score = (4 & 5 star ratings) / total * 100
     satisfied = distribution.get(4, 0) + distribution.get(5, 0)
@@ -187,25 +260,30 @@ async def get_feedback_stats(current_user: User = Depends(get_current_user)):
         "total_responses": total,
         "average_rating": round(avg_rating, 2),
         "rating_distribution": distribution,
-        "recent_feedback": all_feedback[:10],
+        "recent_feedback": [
+            {"id": f.id, "rating": f.rating, "comment": f.comment} for f in feedback_res[:10]
+        ],
         "satisfaction_score": round(satisfaction_score, 1)
     }
 
 
 # Generate feedback link for a booking
 @router.get("/link/{booking_id}")
-async def get_feedback_link(booking_id: str, current_user: User = Depends(get_current_user)):
-    # Verify booking belongs to user's company
-    query = {"id": booking_id}
+async def get_feedback_link(
+    booking_id: str, 
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Booking.company_id == current_user.company_id)
     
-    booking = await db.bookings.find_one(query, {"_id": 0})
+    booking = (await db.execute(stmt)).scalar_one_or_none()
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
     
     return {
         "booking_id": booking_id,
         "feedback_link": f"/rate/{booking_id}",
-        "customer": booking.get("customer") or booking.get("customer_name")
+        "customer": booking.customer_name
     }

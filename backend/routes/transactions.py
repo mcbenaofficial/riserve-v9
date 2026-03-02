@@ -4,31 +4,81 @@ from typing import List, Optional
 from datetime import datetime, timezone
 import uuid
 
-from .dependencies import transactions_collection, get_current_user, User, get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update, desc
+import models_pg
+
+from .dependencies import get_current_user, User, get_db
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
 
 @router.get("")
-async def get_transactions(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
+async def get_transactions(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Transaction)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Transaction.company_id == current_user.company_id)
+        
+    stmt = stmt.order_by(models_pg.Transaction.date.desc())
+    res = await db_session.execute(stmt)
+    transactions = res.scalars().all()
     
-    transactions = await transactions_collection.find(query, {"_id": 0}).sort("date", -1).to_list(1000)
-    return transactions
+    return [
+        {
+            "id": t.id,
+            "booking_id": t.booking_id,
+            "outlet_id": t.outlet_id,
+            "company_id": t.company_id,
+            "gross": t.gross,
+            "commission": t.commission,
+            "partner_share": t.partner_share,
+            "status": t.status,
+            "type": t.type,
+            "date": t.date.isoformat() if t.date else None,
+            "payment_method": t.payment_method,
+            "items": t.items,
+            "customer_id": t.customer_id,
+            "created_by": t.created_by,
+            "created_at": t.created_at.isoformat() if t.created_at else None
+        } for t in transactions
+    ]
 
 
 @router.get("/booking/{booking_id}")
-async def get_transaction_by_booking(booking_id: str, current_user: User = Depends(get_current_user)):
-    query = {"booking_id": booking_id}
+async def get_transaction_by_booking(
+    booking_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Transaction).where(models_pg.Transaction.booking_id == booking_id)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Transaction.company_id == current_user.company_id)
         
-    transaction = await transactions_collection.find_one(query, {"_id": 0})
-    # Return null if not found (not 404, as some bookings might not have transactions)
-    return transaction
+    t = (await db_session.execute(stmt)).scalar_one_or_none()
+    
+    if not t:
+        return None
+        
+    return {
+        "id": t.id,
+        "booking_id": t.booking_id,
+        "outlet_id": t.outlet_id,
+        "company_id": t.company_id,
+        "gross": t.gross,
+        "commission": t.commission,
+        "partner_share": t.partner_share,
+        "status": t.status,
+        "type": t.type,
+        "date": t.date.isoformat() if t.date else None,
+        "payment_method": t.payment_method,
+        "items": t.items,
+        "customer_id": t.customer_id,
+        "created_by": t.created_by,
+        "created_at": t.created_at.isoformat() if t.created_at else None
+    }
 
 class POSCartItem(BaseModel):
     product_id: str
@@ -45,7 +95,7 @@ class POSCheckoutRequest(BaseModel):
 async def process_pos_checkout(
     request: POSCheckoutRequest,
     current_user: User = Depends(get_current_user),
-    db = Depends(get_db)
+    db_session: AsyncSession = Depends(get_db)
 ):
     """Process a PoS checkout, deduct stock, and create a transaction"""
     if current_user.role not in ["Admin", "SuperAdmin", "Manager", "Cashier"]:
@@ -59,15 +109,20 @@ async def process_pos_checkout(
     
     # First pass: verification and total calculation
     for item in request.items:
-        product = await db.products.find_one({"id": item.product_id, "company_id": company_id})
+        p_stmt = select(models_pg.Product).where(
+            models_pg.Product.id == item.product_id,
+            models_pg.Product.company_id == company_id
+        )
+        product = (await db_session.execute(p_stmt)).scalar_one_or_none()
+        
         if not product:
             raise HTTPException(status_code=404, detail=f"Product not found: {item.product_id}")
             
-        current_stock = product.get("stock_quantity", 0)
+        current_stock = product.stock_quantity or 0
         if current_stock < item.quantity:
             raise HTTPException(
                 status_code=400, 
-                detail=f"Insufficient stock for {product.get('name')}. Available: {current_stock}"
+                detail=f"Insufficient stock for {product.name}. Available: {current_stock}"
             )
             
         total_amount += (item.price * item.quantity)
@@ -75,73 +130,76 @@ async def process_pos_checkout(
         
     # Second pass: execute deductions
     for product, qty in products_to_update:
-        new_quantity = product.get("stock_quantity", 0) - qty
-        await db.products.update_one(
-            {"id": product["id"]},
-            {
-                "$set": {
-                    "stock_quantity": new_quantity,
-                    "updated_at": datetime.now(timezone.utc).isoformat()
-                }
-            }
-        )
+        new_quantity = (product.stock_quantity or 0) - qty
+        product.stock_quantity = new_quantity
         
         # Log inventory action
-        log_entry = {
-            "id": str(uuid.uuid4()),
-            "product_id": product["id"],
-            "action": "sale",
-            "quantity": -qty,
-            "new_quantity": new_quantity,
-            "reason": "pos_checkout",
-            "user_id": current_user.id,
-            "company_id": company_id,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        }
-        await db.inventory_log.insert_one(log_entry)
+        log_entry = models_pg.InventoryLog(
+            id=str(uuid.uuid4()),
+            product_id=product.id,
+            action="sale",
+            quantity=-qty,
+            new_quantity=new_quantity,
+            reason="pos_checkout",
+            user_id=current_user.id,
+            company_id=company_id,
+            created_at=datetime.now(timezone.utc)
+        )
+        db_session.add(log_entry)
         
         # Check low stock alerting
-        if new_quantity <= product.get("reorder_level", 10):
-            existing_alert = await db.inventory_alerts.find_one({
-                "product_id": product["id"],
-                "resolved": False
-            })
+        if new_quantity <= (product.reorder_level or 10):
+            al_stmt = select(models_pg.InventoryAlert).where(
+                models_pg.InventoryAlert.product_id == product.id,
+                models_pg.InventoryAlert.resolved == False
+            )
+            existing_alert = (await db_session.execute(al_stmt)).scalar_one_or_none()
+            
             if not existing_alert:
-                alert = {
-                    "id": str(uuid.uuid4()),
-                    "type": "low_stock",
-                    "product_id": product["id"],
-                    "product_name": product["name"],
-                    "current_quantity": new_quantity,
-                    "reorder_level": product.get("reorder_level", 10),
-                    "outlet_id": product.get("outlet_id"),
-                    "company_id": company_id,
-                    "resolved": False,
-                    "created_at": datetime.now(timezone.utc).isoformat()
-                }
-                await db.inventory_alerts.insert_one(alert)
+                alert = models_pg.InventoryAlert(
+                    id=str(uuid.uuid4()),
+                    type="low_stock",
+                    product_id=product.id,
+                    product_name=product.name,
+                    current_quantity=new_quantity,
+                    reorder_level=product.reorder_level or 10,
+                    outlet_id=product.outlet_id,
+                    company_id=company_id,
+                    resolved=False,
+                    created_at=datetime.now(timezone.utc)
+                )
+                db_session.add(alert)
 
     # Create master transaction record
     transaction_id = str(uuid.uuid4())
-    transaction = {
-        "id": transaction_id,
-        "type": "pos_sale",
-        "total_amount": total_amount,
-        "gross": total_amount,
-        "commission": 0,
-        "partner_share": total_amount,
-        "payment_method": request.payment_method,
-        "items": [item.dict() for item in request.items],
-        "outlet_id": request.outlet_id,
-        "customer_id": request.customer_id,
-        "status": "Completed",  # Assume successful for Cash/Card terminals initially
-        "company_id": company_id,
-        "created_by": current_user.id,
-        "date": datetime.now(timezone.utc).isoformat(),
-        "created_at": datetime.now(timezone.utc).isoformat()
+    transaction = models_pg.Transaction(
+        id=transaction_id,
+        type="pos_sale",
+        total_amount=float(total_amount),
+        gross=float(total_amount),
+        commission=0.0,
+        partner_share=float(total_amount),
+        payment_method=request.payment_method,
+        items=[item.dict() for item in request.items],
+        outlet_id=request.outlet_id,
+        customer_id=request.customer_id,
+        status="Completed",  # Assume successful for Cash/Card terminals initially
+        company_id=company_id,
+        created_by=current_user.id,
+        date=datetime.now(timezone.utc),
+        created_at=datetime.now(timezone.utc)
+    )
+    
+    db_session.add(transaction)
+    await db_session.commit()
+    
+    return {
+        "message": "Checkout successful", 
+        "transaction": {
+            "id": transaction.id,
+            "type": transaction.type,
+            "gross": transaction.gross,
+            "total_amount": transaction.total_amount,
+            "status": transaction.status
+        }
     }
-    
-    await db.transactions.insert_one(transaction)
-    transaction.pop("_id", None)
-    
-    return {"message": "Checkout successful", "transaction": transaction}

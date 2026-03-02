@@ -1,14 +1,18 @@
 import asyncio
+import os
+import sys
 import uuid
 from datetime import datetime, timezone
-import httpx
-from pymongo import MongoClient
-import motor.motor_asyncio
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, delete
 from passlib.context import CryptContext
+from dotenv import load_dotenv
 
-# Use the exact MongoDB connection from the backend
-client = MongoClient("mongodb://127.0.0.1:27017")
-db = client.riserve_db
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv()
+
+import models_pg
+from database_pg import engine
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -16,79 +20,79 @@ def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
 async def seed_retail():
-    print("Seeding Retail Outlet via direct Python Motor...")
+    print("Seeding Retail Outlet via SQLAlchemy/PostgreSQL...")
 
-    # Clear old data to prevent collisions
-    db.users.delete_many({"email": "admin@urbanstyle.com"})
-    db.companies.delete_many({"email": "hello@urbanstyle.com"})
-    db.outlets.delete_many({"email": "downtown@urbanstyle.com"})
-    
-    # 1. Inject Company manually
-    company_id = str(uuid.uuid4())
-    
-    company = {
-        "id": company_id,
-        "name": "Urban Style Apparel",
-        "business_type": "Retail Clothing Outlet",
-        "email": "hello@urbanstyle.com",
-        "phone": "+1 (555) 123-4567",
-        "address": "123 Fashion Blvd, NY",
-        "plan": "pro",
-        "plan_limits": {},
-        "status": "active",
-        "is_booking_enabled": False,
-        "is_retail_enabled": True,
-        "is_workplace_enabled": True,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "created_by": "seed_script"
-    }
-    db.companies.insert_one(company)
-    print(f"✅ Created Retail Company (ID: {company_id})")
-    
-    # 2. Create Settings explicitly for this company_id
-    settings = {
-        "company_id": company_id,
-        "currency": "USD",
-        "timezone": "America/New_York",
-        "updated_at": datetime.now(timezone.utc).isoformat()
-    }
-    db.company_settings.delete_many({"company_id": company_id}) # clean up
-    db.company_settings.insert_one(settings)
-    print("✅ Created Company Settings")
+    async with AsyncSession(engine) as session:
+        # Clear old data to prevent collisions
+        del_user_stmt = delete(models_pg.User).where(models_pg.User.email == "admin@urbanstyle.com")
+        await session.execute(del_user_stmt)
+        
+        del_company_stmt = delete(models_pg.Company).where(models_pg.Company.email == "hello@urbanstyle.com")
+        await session.execute(del_company_stmt)
+        
+        # 1. Inject Company
+        company_id = str(uuid.uuid4())
+        
+        company = models_pg.Company(
+            id=company_id,
+            name="Urban Style Apparel",
+            business_type="Retail Clothing Outlet",
+            email="hello@urbanstyle.com",
+            phone="+1 (555) 123-4567",
+            address="123 Fashion Blvd, NY",
+            plan="pro",
+            status="active"
+        )
+        session.add(company)
+        await session.flush()
+        print(f"✅ Created Retail Company (ID: {company_id})")
+        
+        # 2. Create Settings explicitly for this company_id
+        settings = models_pg.CompanySetting(
+            id=str(uuid.uuid4()),
+            company_id=company_id,
+            general_settings={
+                "company_name": "Urban Style Apparel",
+                "business_type": "Retail Clothing Outlet",
+                "currency": "USD",
+                "timezone": "America/New_York",
+                "email": "hello@urbanstyle.com",
+                "phone": "+1 (555) 123-4567",
+                "address": "123 Fashion Blvd, NY"
+            }
+        )
+        session.add(settings)
+        print("✅ Created Company Settings")
 
-    user_id = str(uuid.uuid4())
-    
-    # 3. Create User explicitly via PyMongo matching exact FastAPI structure
-    admin_user = {
-        "id": user_id,
-        "email": "admin@urbanstyle.com",
-        "name": "Alex Admin",
-        "password_hash": hash_password("admin123"),
-        "role": "Admin",
-        "phone": "+1 (555) 123-4567",
-        "status": "Active",
-        "outlets": [],
-        "company_id": company_id,
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    
-    db.users.insert_one(admin_user)
-    print(f"✅ Linked Admin to Company (User ID: {user_id})")
+        user_id = str(uuid.uuid4())
+        
+        # 3. Create User
+        admin_user = models_pg.User(
+            id=user_id,
+            email="admin@urbanstyle.com",
+            name="Alex Admin",
+            password_hash=hash_password("admin123"),
+            role="Admin",
+            phone="+1 (555) 123-4567",
+            status="Active",
+            company_id=company_id
+        )
+        session.add(admin_user)
+        print(f"✅ Linked Admin to Company (User ID: {user_id})")
 
-    # 4. Inject Outlet
-    outlet_id = str(uuid.uuid4())
-    outlet = {
-        "id": outlet_id,
-        "company_id": company_id,
-        "name": "Downtown Store",
-        "email": "downtown@urbanstyle.com",
-        "phone": "+1 (555) 987-6543",
-        "address": "123 Fashion Blvd, New York, NY 10001",
-        "status": "active",
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    db.outlets.insert_one(outlet)
-    print("✅ Created Retail Outlet")
+        # 4. Inject Outlet
+        outlet_id = str(uuid.uuid4())
+        outlet = models_pg.Outlet(
+            id=outlet_id,
+            company_id=company_id,
+            name="Downtown Store",
+            status="active",
+            location="123 Fashion Blvd, New York, NY 10001"
+        )
+        session.add(outlet)
+        print("✅ Created Retail Outlet")
+
+        await session.commit()
 
     print("\n-----------------------------------------")
     print("🎉 Retail Seed Complete!")

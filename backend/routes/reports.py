@@ -1,75 +1,95 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func, desc, cast, Float
 
 from .dependencies import (
-    outlets_collection, bookings_collection, db,
-    get_current_user, User
+    get_current_user, User, get_db
 )
+import models_pg
 
 router = APIRouter(prefix="/reports", tags=["Reports"])
 
 
 @router.get("")
-async def get_reports(current_user: User = Depends(get_current_user)):
+async def get_reports(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     # Filter by company_id for data isolation
-    query = {}
+    outlets_stmt = select(func.count()).select_from(models_pg.Outlet)
+    bookings_stmt = select(func.count()).select_from(models_pg.Booking)
+    revenue_stmt = select(func.sum(models_pg.Booking.amount))
+    rating_stmt = select(func.avg(models_pg.Feedback.rating))
+    
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        outlets_stmt = outlets_stmt.where(models_pg.Outlet.company_id == current_user.company_id)
+        bookings_stmt = bookings_stmt.where(models_pg.Booking.company_id == current_user.company_id)
+        revenue_stmt = revenue_stmt.where(models_pg.Booking.company_id == current_user.company_id)
+        rating_stmt = rating_stmt.where(models_pg.Feedback.company_id == current_user.company_id)
     
-    outlets_count = await outlets_collection.count_documents(query)
-    bookings_count = await bookings_collection.count_documents(query)
-    
-    # Calculate total revenue for this company
-    revenue_pipeline = [
-        {"$match": query} if query else {"$match": {}},
-        {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
-    ]
-    revenue_result = await bookings_collection.aggregate(revenue_pipeline).to_list(1)
-    total_revenue = revenue_result[0]["total"] if revenue_result else 0
-    
-    # Calculate average rating from feedback for this company
-    feedback_query = query.copy() if query else {}
-    rating_pipeline = [
-        {"$match": feedback_query} if feedback_query else {"$match": {}},
-        {"$group": {"_id": None, "avg": {"$avg": "$rating"}}}
-    ]
-    rating_result = await db.feedback.aggregate(rating_pipeline).to_list(1)
-    avg_rating = round(rating_result[0]["avg"], 2) if rating_result and rating_result[0].get("avg") else 0
+    outlets_count = (await db_session.execute(outlets_stmt)).scalar() or 0
+    bookings_count = (await db_session.execute(bookings_stmt)).scalar() or 0
+    total_revenue = (await db_session.execute(revenue_stmt)).scalar() or 0
+    avg_rating = (await db_session.execute(rating_stmt)).scalar() or 0
     
     return {
         "totalOutlets": outlets_count,
         "totalBookings": bookings_count,
         "totalRevenue": int(total_revenue),
-        "avgRating": avg_rating
+        "avgRating": round(float(avg_rating), 1) if avg_rating else 0
     }
 
 
 @router.get("/detailed")
-async def get_detailed_reports(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
-    if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
+async def get_detailed_reports(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     # Bookings by status
-    status_pipeline = [
-        {"$match": query} if query else {"$match": {}},
-        {"$group": {"_id": "$status", "count": {"$sum": 1}}}
-    ]
-    status_result = await bookings_collection.aggregate(status_pipeline).to_list(100)
-    bookings_by_status = {item["_id"]: item["count"] for item in status_result if item["_id"]}
+    status_stmt = select(
+        models_pg.Booking.status, 
+        func.count(models_pg.Booking.id).label("count")
+    ).group_by(models_pg.Booking.status)
     
-    # Recent bookings
-    recent_bookings = await bookings_collection.find(query, {"_id": 0}).sort("created_at", -1).to_list(10)
+    recent_stmt = select(models_pg.Booking).order_by(desc(models_pg.Booking.created_at)).limit(10)
     
-    # Top services
-    services_pipeline = [
-        {"$match": query} if query else {"$match": {}},
-        {"$unwind": "$service_ids"},
-        {"$group": {"_id": "$service_ids", "count": {"$sum": 1}}},
-        {"$sort": {"count": -1}},
-        {"$limit": 5}
+    # Top services (since services is a many-to-many relationship now)
+    services_stmt = select(
+        models_pg.booking_services.c.service_id, 
+        func.count(models_pg.booking_services.c.booking_id).label("count")
+    ).group_by(models_pg.booking_services.c.service_id).order_by(desc("count")).limit(5)
+    
+    if current_user.role != "SuperAdmin":
+        status_stmt = status_stmt.where(models_pg.Booking.company_id == current_user.company_id)
+        recent_stmt = recent_stmt.where(models_pg.Booking.company_id == current_user.company_id)
+        
+        # for services stmt, we join booking to filter by company_id
+        services_stmt = select(
+            models_pg.booking_services.c.service_id, 
+            func.count(models_pg.booking_services.c.booking_id).label("count")
+        ).join(
+            models_pg.Booking, models_pg.Booking.id == models_pg.booking_services.c.booking_id
+        ).where(
+            models_pg.Booking.company_id == current_user.company_id
+        ).group_by(models_pg.booking_services.c.service_id).order_by(desc("count")).limit(5)
+        
+    status_result = (await db_session.execute(status_stmt)).all()
+    bookings_by_status = {row.status: row.count for row in status_result if row.status}
+    
+    recent_result = (await db_session.execute(recent_stmt)).scalars().all()
+    recent_bookings = [
+        {
+            "id": r.id,
+            "company_id": r.company_id,
+            "status": r.status,
+            "created_at": r.created_at.isoformat() if r.created_at else None,
+            "customer_name": r.customer_name,
+            "amount": float(r.amount or 0)
+        } for r in recent_result
     ]
-    top_services = await bookings_collection.aggregate(services_pipeline).to_list(5)
+    
+    services_result = (await db_session.execute(services_stmt)).all()
+    top_services = [{"_id": row.service_id, "count": row.count} for row in services_result]
     
     return {
         "bookings_by_status": bookings_by_status,

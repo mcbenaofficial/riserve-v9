@@ -1,16 +1,15 @@
-"""
-Onboarding Tools — Specialized LangChain tools for the conversational onboarding swarm.
-
-These tools create MongoDB documents for companies, outlets, services, slot configs,
-and track onboarding progress. Each tool enforces company_id isolation.
-"""
-
-import logging
-import uuid
-from datetime import datetime, timezone
-from typing import Dict, Any, Optional, List
-from pydantic import BaseModel, Field
 from langchain_core.tools import tool
+from typing import Dict, Any, Optional, List
+from datetime import datetime, timezone
+import uuid
+import logging
+import json
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update
+from pydantic import BaseModel
+
+import models_pg
+from database_pg import engine
 
 logger = logging.getLogger(__name__)
 
@@ -273,49 +272,50 @@ async def update_company_profile(
     Call this after collecting company details like timezone, currency,
     operating hours, working days, and address from the user.
     """
-    from routes.dependencies import db, companies_collection
-    
     company_id = user_context.get("company_id") if user_context else None
     if not company_id:
         return "Error: No company_id found for this user."
     
-    # Get company name for settings
-    company = await companies_collection.find_one({"id": company_id}, {"_id": 0})
-    if not company:
-        return "Error: Company not found."
-    
     working_days_list = [d.strip() for d in working_days.split(",")]
     
-    settings_doc = {
-        "company_id": company_id,
-        "company_name": company.get("name", ""),
-        "business_type": company.get("business_type", ""),
-        "timezone": timezone_str,
-        "currency": currency,
-        "operating_hours_start": operating_hours_start,
-        "operating_hours_end": operating_hours_end,
-        "working_days": working_days_list,
-        "address": address,
-        "city": city,
-        "state": state,
-        "country": country,
-        "phone": phone or company.get("phone", ""),
-        "email": company.get("email", ""),
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-    }
-    
-    existing = await db.company_settings.find_one({"company_id": company_id})
-    if existing:
-        await db.company_settings.update_one(
-            {"company_id": company_id}, {"$set": settings_doc}
-        )
-    else:
-        settings_doc["id"] = str(uuid.uuid4())
-        settings_doc["created_at"] = datetime.now(timezone.utc).isoformat()
-        await db.company_settings.insert_one(settings_doc)
-    
-    # Mark step complete
-    await _mark_step_complete(company_id, "company_profile")
+    async with AsyncSession(engine) as session:
+        # Get company name for settings
+        stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+        company = (await session.execute(stmt)).scalar_one_or_none()
+        
+        if not company:
+            return "Error: Company not found."
+        
+        # Check for existing settings
+        settings_stmt = select(models_pg.CompanySetting).where(models_pg.CompanySetting.company_id == company_id)
+        settings = (await session.execute(settings_stmt)).scalar_one_or_none()
+        
+        if not settings:
+            settings = models_pg.CompanySetting(
+                id=str(uuid.uuid4()),
+                company_id=company_id
+            )
+            session.add(settings)
+            
+        settings.company_name = company.name
+        settings.business_type = company.business_type
+        settings.timezone = timezone_str
+        settings.currency = currency
+        settings.operating_hours_start = operating_hours_start
+        settings.operating_hours_end = operating_hours_end
+        settings.working_days = working_days_list
+        settings.address = address
+        settings.city = city
+        settings.state = state
+        settings.country = country
+        settings.phone = phone or company.phone
+        settings.email = company.email
+        settings.updated_at = datetime.now(timezone.utc)
+        
+        await session.commit()
+        
+        # Mark step complete
+        await _mark_step_complete(company_id, "company_profile")
     
     return (
         f"Company profile updated successfully!\n"
@@ -342,69 +342,63 @@ async def create_outlet(
     configuration with resources if resource_names are provided.
     resource_names should be comma-separated (e.g. "Bay 1,Bay 2,Bay 3").
     """
-    from routes.dependencies import (
-        outlets_collection, slot_configs_collection
-    )
-    
     company_id = user_context.get("company_id") if user_context else None
     if not company_id:
         return "Error: No company_id found."
     
-    outlet_id = str(uuid.uuid4())
-    outlet_doc = {
-        "id": outlet_id,
-        "name": name,
-        "city": city,
-        "address": address,
-        "capacity": 0,
-        "status": "Active",
-        "services_offered": [],
-        "company_id": company_id,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    }
-    await outlets_collection.insert_one(outlet_doc)
-    
-    # Create resources from comma-separated names
-    resources = []
-    if resource_names.strip():
-        for rname in resource_names.split(","):
-            rname = rname.strip()
-            if rname:
-                resources.append({
-                    "id": str(uuid.uuid4()),
-                    "name": rname,
-                    "active": True,
-                })
-    
-    # Create slot config
-    slot_config = {
-        "id": str(uuid.uuid4()),
-        "outlet_id": outlet_id,
-        "company_id": company_id,
-        "slot_duration_min": slot_duration_min,
-        "operating_hours_start": operating_hours_start,
-        "operating_hours_end": operating_hours_end,
-        "resources": resources,
-        "allow_online_booking": True,
-        "booking_advance_days": 7,
-        "embed_token": str(uuid.uuid4()),
-        "customer_fields": [
-            {"field_name": "name", "label": "Full Name", "required": True, "enabled": True},
-            {"field_name": "phone", "label": "Phone Number", "required": True, "enabled": True},
-            {"field_name": "email", "label": "Email Address", "required": False, "enabled": True},
-            {"field_name": "notes", "label": "Additional Notes", "required": False, "enabled": True},
-        ],
-        "allow_multiple_services": True,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    }
-    await slot_configs_collection.insert_one(slot_config)
-    
-    # Update outlet capacity
-    await outlets_collection.update_one(
-        {"id": outlet_id}, {"$set": {"capacity": len(resources) or 1}}
-    )
-    
-    await _mark_step_complete(company_id, "first_outlet")
+    async with AsyncSession(engine) as session:
+        outlet_id = str(uuid.uuid4())
+        new_outlet = models_pg.Outlet(
+            id=outlet_id,
+            name=name,
+            city=city,
+            address=address,
+            capacity=0,
+            status="Active",
+            company_id=company_id
+        )
+        session.add(new_outlet)
+        
+        # Create resources from comma-separated names
+        resources = []
+        if resource_names.strip():
+            for rname in resource_names.split(","):
+                rname = rname.strip()
+                if rname:
+                    resources.append({
+                        "id": str(uuid.uuid4()),
+                        "name": rname,
+                        "active": True,
+                    })
+        
+        # Create slot config
+        slot_config = models_pg.SlotConfig(
+            id=str(uuid.uuid4()),
+            outlet_id=outlet_id,
+            company_id=company_id,
+            slot_duration_min=slot_duration_min,
+            operating_hours_start=operating_hours_start,
+            operating_hours_end=operating_hours_end,
+            resources=resources,
+            allow_online_booking=True,
+            booking_advance_days=7,
+            embed_token=str(uuid.uuid4()),
+            customer_fields=[
+                {"field_name": "name", "label": "Full Name", "required": True, "enabled": True},
+                {"field_name": "phone", "label": "Phone Number", "required": True, "enabled": True},
+                {"field_name": "email", "label": "Email Address", "required": False, "enabled": True},
+                {"field_name": "notes", "label": "Additional Notes", "required": False, "enabled": True},
+            ],
+            allow_multiple_services=True
+        )
+        session.add(slot_config)
+        
+        # Update outlet capacity
+        new_outlet.capacity = len(resources) or 1
+        
+        await session.commit()
+        
+        await _mark_step_complete(company_id, "first_outlet")
     
     resource_summary = (
         f" with {len(resources)} resources: {', '.join(r['name'] for r in resources)}"
@@ -430,9 +424,6 @@ async def create_services_batch(
     where each item has: name, price, duration_min, type.
     Example: [{"name":"Haircut","price":500,"duration_min":30,"type":"styling"}]
     """
-    import json
-    from routes.dependencies import services_collection
-    
     company_id = user_context.get("company_id") if user_context else None
     if not company_id:
         return "Error: No company_id found."
@@ -445,22 +436,23 @@ async def create_services_batch(
     if not isinstance(services_list, list) or len(services_list) == 0:
         return "Error: Please provide at least one service."
     
-    created = []
-    for svc in services_list:
-        service_doc = {
-            "id": str(uuid.uuid4()),
-            "name": svc.get("name", "Service"),
-            "price": svc.get("price", 0),
-            "duration_min": svc.get("duration_min", 30),
-            "type": svc.get("type", "general"),
-            "active": True,
-            "company_id": company_id,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        }
-        await services_collection.insert_one(service_doc)
-        created.append(service_doc["name"])
-    
-    await _mark_step_complete(company_id, "services")
+    async with AsyncSession(engine) as session:
+        created = []
+        for svc in services_list:
+            service_doc = models_pg.Service(
+                id=str(uuid.uuid4()),
+                name=svc.get("name", "Service"),
+                price=svc.get("price", 0),
+                duration_min=svc.get("duration_min", 30),
+                type=svc.get("type", "general"),
+                active=True,
+                company_id=company_id
+            )
+            session.add(service_doc)
+            created.append(service_doc.name)
+        
+        await session.commit()
+        await _mark_step_complete(company_id, "services")
     
     return (
         f"Created {len(created)} services successfully!\n"
@@ -501,51 +493,89 @@ ALL_STEPS = ["company_profile", "first_outlet", "services"]
 
 async def _get_progress(company_id: str) -> dict:
     """Get or create the onboarding progress document."""
-    from routes.dependencies import db
-    
-    progress = await db.onboarding_progress.find_one(
-        {"company_id": company_id}, {"_id": 0}
-    )
-    if not progress:
-        progress = {
-            "id": str(uuid.uuid4()),
-            "company_id": company_id,
-            "percentage": 0,
-            "completed_steps": [],
-            "pending_steps": list(ALL_STEPS),
-            "conversation_id": None,
-            "skipped": False,
-            "completed_at": None,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        }
-        await db.onboarding_progress.insert_one(progress)
-    return progress
+    async with AsyncSession(engine) as session:
+        stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+        progress = (await session.execute(stmt)).scalar_one_or_none()
+        
+        if not progress:
+            progress = models_pg.OnboardingProgress(
+                id=str(uuid.uuid4()),
+                company_id=company_id,
+                percentage=0,
+                completed_steps=[],
+                pending_steps=list(ALL_STEPS),
+                skipped=False
+            )
+            session.add(progress)
+            await session.commit()
+            # Return result as dict for compatibility with existing logic
+            return {
+                "id": progress.id,
+                "company_id": progress.company_id,
+                "percentage": progress.percentage,
+                "completed_steps": progress.completed_steps,
+                "pending_steps": progress.pending_steps,
+                "skipped": progress.skipped,
+                "completed_at": progress.completed_at
+            }
+        
+    return {
+        "id": progress.id,
+        "company_id": progress.company_id,
+        "percentage": progress.percentage,
+        "completed_steps": progress.completed_steps,
+        "pending_steps": progress.pending_steps,
+        "skipped": progress.skipped,
+        "completed_at": progress.completed_at
+    }
 
 
 async def _mark_step_complete(company_id: str, step: str):
     """Mark an onboarding step as complete and update percentage."""
-    from routes.dependencies import db
-    
-    progress = await _get_progress(company_id)
-    completed = progress.get("completed_steps", [])
-    
-    if step not in completed:
-        completed.append(step)
-    
-    pending = [s for s in ALL_STEPS if s not in completed]
-    percentage = int((len(completed) / len(ALL_STEPS)) * 100)
-    completed_at = datetime.now(timezone.utc).isoformat() if percentage >= 100 else None
-    
-    await db.onboarding_progress.update_one(
-        {"company_id": company_id},
-        {"$set": {
-            "completed_steps": completed,
-            "pending_steps": pending,
-            "percentage": percentage,
-            "completed_at": completed_at,
-            "updated_at": datetime.now(timezone.utc).isoformat(),
-        }},
-    )
+    async with AsyncSession(engine) as session:
+        stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+        progress = (await session.execute(stmt)).scalar_one_or_none()
+        
+        if not progress:
+            # Should not happen as it's created in _get_progress or at start
+            progress = models_pg.OnboardingProgress(
+                id=str(uuid.uuid4()),
+                company_id=company_id,
+                percentage=0,
+                completed_steps=[],
+                pending_steps=list(ALL_STEPS),
+                skipped=False
+            )
+            session.add(progress)
+            await session.flush()
+        
+        completed = list(progress.completed_steps or [])
+        if step not in completed:
+            completed.append(step)
+        
+        pending = [s for s in ALL_STEPS if s not in completed]
+        percentage = int((len(completed) / len(ALL_STEPS)) * 100)
+        completed_at = datetime.now(timezone.utc) if percentage >= 100 else None
+        
+        # We need to re-assign for SQLAlchemy to detect changes on JSON/List fields usually
+        import copy
+        progress.completed_steps = copy.deepcopy(completed)
+        progress.pending_steps = copy.deepcopy(pending)
+        progress.percentage = percentage
+        progress.completed_at = completed_at
+        progress.updated_at = datetime.now(timezone.utc)
+        
+        await session.commit()
+
+
+# All onboarding tools for the swarm
+all_onboarding_tools = [
+    get_industry_suggestions,
+    update_company_profile,
+    create_outlet,
+    create_services_batch,
+    get_onboarding_progress,
+]
 
 
 # All onboarding tools for the swarm

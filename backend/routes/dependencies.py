@@ -1,6 +1,7 @@
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from motor.motor_asyncio import AsyncIOMotorClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List, Dict, Any
@@ -8,35 +9,8 @@ from datetime import datetime, timezone, timedelta
 import jwt
 import os
 import uuid
-
-# MongoDB connection
-MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-DB_NAME = os.environ.get('DB_NAME', 'ridn_db')
-
-client = AsyncIOMotorClient(MONGO_URL)
-db = client[DB_NAME]
-
-# Collections
-users_collection = db.users
-outlets_collection = db.outlets
-services_collection = db.services
-bookings_collection = db.bookings
-transactions_collection = db.transactions
-slot_configs_collection = db.slot_configs
-dashboard_configs_collection = db.dashboard_configs
-ai_conversations_collection = db.ai_conversations
-ai_conversations_collection = db.ai_conversations
-products_collection = db.products
-customers_collection = db.customers
-promotions_collection = db.promotions
-coupons_collection = db.coupons
-
-# New Multi-Tenant Collections
-companies_collection = db.companies
-audit_logs_collection = db.audit_logs
-subscription_plans_collection = db.subscription_plans
-onboarding_progress_collection = db.onboarding_progress
-onboarding_conversations_collection = db.onboarding_conversations
+import models_pg
+from database_pg import get_db
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -164,8 +138,7 @@ USER_ROLES = {
 }
 
 
-def get_db():
-    return db
+# get_db is imported directly from database_pg now
 
 
 def hash_password(password: str) -> str:
@@ -184,7 +157,10 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> User:
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db_session: AsyncSession = Depends(get_db)
+) -> User:
     try:
         token = credentials.credentials
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -196,11 +172,30 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     except (jwt.InvalidTokenError, jwt.DecodeError, Exception) as e:
         raise HTTPException(status_code=401, detail="Could not validate credentials")
     
-    user_doc = await users_collection.find_one({"id": user_id}, {"_id": 0})
-    if user_doc is None:
-        raise HTTPException(status_code=401, detail="User not found")
+    # Query Postgres for User
+    stmt = select(models_pg.User).where(models_pg.User.id == user_id)
+    result = await db_session.execute(stmt)
+    user_db = result.scalar_one_or_none()
     
-    return User(**user_doc)
+    if user_db is None:
+        raise HTTPException(status_code=401, detail="User not found")
+        
+    # Query for associated outlets using the many-to-many relationship table (user_outlets)
+    outlets_stmt = select(models_pg.user_outlets.c.outlet_id).where(models_pg.user_outlets.c.user_id == user_id)
+    outlets_res = await db_session.execute(outlets_stmt)
+    outlets_list = [row[0] for row in outlets_res.all()]
+    
+    return User(
+        id=user_db.id,
+        email=user_db.email,
+        name=user_db.name,
+        role=user_db.role,
+        phone=user_db.phone,
+        status=user_db.status,
+        company_id=user_db.company_id,
+        outlets=outlets_list,
+        created_at=user_db.created_at
+    )
 
 
 # Super Admin check
@@ -209,15 +204,58 @@ async def get_super_admin(current_user: User = Depends(get_current_user)) -> Use
         raise HTTPException(status_code=403, detail="Super Admin access required")
     return current_user
 
+# Admin check (Admin or SuperAdmin)
+async def require_admin(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role not in ["Admin", "SuperAdmin"]:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return current_user
+
+# Manager or Admin check
+async def require_manager_or_admin(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role not in ["Manager", "Admin", "SuperAdmin"]:
+        raise HTTPException(status_code=403, detail="Manager or Admin access required")
+    return current_user
+
+# Outlet access check
+def enforce_outlet_access(user: User, outlet_id: str):
+    """
+    Check if the user has access to a given outlet.
+    Admins/SuperAdmins have access to all outlets.
+    Managers/Users only have access if it's in their `outlets` list.
+    """
+    if user.role in ["Admin", "SuperAdmin"]:
+        return True
+    
+    # If the user has access to this outlet
+    if outlet_id in user.outlets:
+        return True
+        
+    raise HTTPException(status_code=403, detail=f"Access denied to outlet {outlet_id}")
+
 
 # Get company for current user
-async def get_current_company(current_user: User = Depends(get_current_user)) -> Optional[Dict]:
+async def get_current_company(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+) -> Optional[Dict]:
     if current_user.role == "SuperAdmin":
         return None  # Super admins aren't tied to a company
     if not current_user.company_id:
         return None
-    company = await companies_collection.find_one({"id": current_user.company_id}, {"_id": 0})
-    return company
+        
+    stmt = select(models_pg.Company).where(models_pg.Company.id == current_user.company_id)
+    res = await db_session.execute(stmt)
+    company = res.scalar_one_or_none()
+    
+    if not company:
+        return None
+        
+    return {
+        "id": company.id,
+        "name": company.name,
+        "plan": company.plan,
+        "status": company.status
+    }
 
 
 # Audit logging helper
@@ -227,34 +265,37 @@ async def log_audit(
     entity_id: str,
     user_id: str,
     user_email: str,
+    db_session: AsyncSession,
     company_id: Optional[str] = None,
     details: Optional[Dict] = None,
     ip_address: Optional[str] = None
 ):
-    log_entry = {
-        "id": str(uuid.uuid4()),
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "action": action,  # create, update, delete, login, logout, impersonate, etc.
-        "entity_type": entity_type,  # user, company, booking, outlet, etc.
-        "entity_id": entity_id,
-        "user_id": user_id,
-        "user_email": user_email,
-        "company_id": company_id,
-        "details": details or {},
-        "ip_address": ip_address
-    }
-    await audit_logs_collection.insert_one(log_entry)
-    return log_entry
+    """Log an action to the audit_logs table"""
+    new_log = models_pg.AuditLog(
+        action=action,
+        entity_type=entity_type,
+        entity_id=entity_id,
+        user_id=user_id,
+        user_email=user_email,
+        company_id=company_id,
+        details=details or {},
+        ip_address=ip_address
+    )
+    db_session.add(new_log)
+    await db_session.commit()
+    return new_log
 
 
 # Check plan limits
-async def check_plan_limit(company_id: str, limit_type: str, current_count: int = 0) -> bool:
+async def check_plan_limit(company_id: str, limit_type: str, db_session: AsyncSession, current_count: int = 0) -> bool:
     """Check if company is within their plan limits"""
-    company = await companies_collection.find_one({"id": company_id}, {"_id": 0})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db_session.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         return False
     
-    plan = company.get("plan", "free")
+    plan = company.plan or "free"
     plan_config = SUBSCRIPTION_PLANS.get(plan, SUBSCRIPTION_PLANS["free"])
     limit = plan_config["limits"].get(limit_type, 0)
     
@@ -266,29 +307,28 @@ async def check_plan_limit(company_id: str, limit_type: str, current_count: int 
 
 
 # Check if trial has expired
-async def check_trial_status(company_id: str) -> Dict:
+async def check_trial_status(company_id: str, db_session: AsyncSession) -> Dict:
     """Check trial status and auto-downgrade if expired"""
-    company = await companies_collection.find_one({"id": company_id}, {"_id": 0})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db_session.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         return {"valid": False, "reason": "Company not found"}
     
-    if company.get("plan") != "trial":
-        return {"valid": True, "plan": company.get("plan")}
+    if company.plan != "trial":
+        return {"valid": True, "plan": company.plan}
     
-    trial_end = company.get("trial_end")
+    trial_end = company.trial_end
     if trial_end:
-        if isinstance(trial_end, str):
-            trial_end = datetime.fromisoformat(trial_end.replace('Z', '+00:00'))
-        
+        # DB returns offset-naive or offset-aware datetime
+        if not trial_end.tzinfo:
+            trial_end = trial_end.replace(tzinfo=timezone.utc)
+            
         if datetime.now(timezone.utc) > trial_end:
             # Auto-downgrade to free
-            await companies_collection.update_one(
-                {"id": company_id},
-                {"$set": {
-                    "plan": "free",
-                    "plan_limits": SUBSCRIPTION_PLANS["free"]["limits"]
-                }}
-            )
+            company.plan = "free"
+            company.plan_limits = SUBSCRIPTION_PLANS["free"]["limits"]
+            await db_session.commit()
             return {"valid": True, "plan": "free", "downgraded": True}
     
     return {"valid": True, "plan": "trial"}

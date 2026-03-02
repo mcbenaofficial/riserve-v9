@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, User, Mail, Phone, Shield, Eye, EyeOff } from 'lucide-react';
 
-const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
+const AddUserModal = ({ isOpen, onClose, onSubmit, editingUser }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,6 +13,22 @@ const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (isOpen && editingUser) {
+      setFormData({
+        name: editingUser.name || '',
+        email: editingUser.email || '',
+        phone: editingUser.phone || '',
+        role: editingUser.role || 'Staff',
+        password: ''
+      });
+      setError('');
+    } else if (isOpen) {
+      setFormData({ name: '', email: '', phone: '', role: 'Staff', password: '' });
+      setError('');
+    }
+  }, [isOpen, editingUser]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
@@ -20,17 +36,16 @@ const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.password) {
-      setError('Name, Email, and Password are required');
+    if (!formData.name || !formData.email || (!editingUser && !formData.password)) {
+      setError(`Name, Email${!editingUser ? ', and Password' : ''} are required`);
       return;
     }
     setLoading(true);
     try {
-      await onSubmit(formData);
-      setFormData({ name: '', email: '', phone: '', role: 'Staff', password: '' });
+      await onSubmit(formData, editingUser?.id);
       onClose();
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create user');
+      setError(err.response?.data?.detail || `Failed to ${editingUser ? 'update' : 'create'} user`);
     } finally {
       setLoading(false);
     }
@@ -49,7 +64,9 @@ const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
           <X size={20} />
         </button>
 
-        <h2 className="text-2xl font-bold text-[#0E1116] dark:text-[#E6E8EB] mb-6">Add New User</h2>
+        <h2 className="text-2xl font-bold text-[#0E1116] dark:text-[#E6E8EB] mb-6">
+          {editingUser ? 'Edit User' : 'Add New User'}
+        </h2>
 
         {error && (
           <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 text-sm">
@@ -123,7 +140,7 @@ const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
 
           <div>
             <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2">
-              Password *
+              {editingUser ? 'New Password (Optional)' : 'Password *'}
             </label>
             <div className="relative">
               <input
@@ -149,7 +166,9 @@ const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
             disabled={loading}
             className="cosmic-btn w-full py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg mt-6"
           >
-            {loading ? 'Creating...' : 'Create User'}
+            {editingUser
+              ? (loading ? 'Saving...' : 'Save Changes')
+              : (loading ? 'Creating...' : 'Create User')}
           </button>
         </form>
       </div>

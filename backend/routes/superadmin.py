@@ -1,14 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, EmailStr
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone, timedelta
 import uuid
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func, desc, or_, update, delete
+from sqlalchemy.orm import selectinload
 
+import models_pg
 from .dependencies import (
-    companies_collection, users_collection, bookings_collection,
-    outlets_collection, audit_logs_collection,
     get_super_admin, User, hash_password, create_access_token,
-    log_audit, SUBSCRIPTION_PLANS, Company
+    log_audit, SUBSCRIPTION_PLANS, get_db
 )
 
 router = APIRouter(prefix="/super-admin", tags=["Super Admin"])
@@ -53,33 +55,50 @@ class PlanChange(BaseModel):
 # ============ Dashboard ============
 
 @router.get("/dashboard")
-async def get_super_admin_dashboard(current_user: User = Depends(get_super_admin)):
+async def get_super_admin_dashboard(
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
+):
     """Get overview statistics for super admin dashboard"""
     
     # Get counts
-    total_companies = await companies_collection.count_documents({})
-    active_companies = await companies_collection.count_documents({"status": "active"})
-    trial_companies = await companies_collection.count_documents({"plan": "trial"})
+    total_companies = (await db.execute(select(func.count(models_pg.Company.id)))).scalar() or 0
+    active_companies = (await db.execute(select(func.count(models_pg.Company.id)).where(models_pg.Company.status == "active"))).scalar() or 0
+    trial_companies = (await db.execute(select(func.count(models_pg.Company.id)).where(models_pg.Company.plan == "trial"))).scalar() or 0
     
-    total_users = await users_collection.count_documents({"role": {"$ne": "SuperAdmin"}})
-    total_bookings = await bookings_collection.count_documents({})
+    total_users = (await db.execute(select(func.count(models_pg.User.id)).where(models_pg.User.role != "SuperAdmin"))).scalar() or 0
+    total_bookings = (await db.execute(select(func.count(models_pg.Booking.id)))).scalar() or 0
     
     # Get companies by plan
     plan_distribution = {}
     for plan in SUBSCRIPTION_PLANS.keys():
-        count = await companies_collection.count_documents({"plan": plan})
+        count = (await db.execute(select(func.count(models_pg.Company.id)).where(models_pg.Company.plan == plan))).scalar() or 0
         plan_distribution[plan] = count
     
     # Recent signups (last 30 days)
     thirty_days_ago = datetime.now(timezone.utc) - timedelta(days=30)
-    recent_signups = await companies_collection.count_documents({
-        "created_at": {"$gte": thirty_days_ago.isoformat()}
-    })
+    recent_signups = (await db.execute(
+        select(func.count(models_pg.Company.id)).where(models_pg.Company.created_at >= thirty_days_ago)
+    )).scalar() or 0
     
     # Recent activity
-    recent_logs = await audit_logs_collection.find(
-        {}, {"_id": 0}
-    ).sort("timestamp", -1).limit(10).to_list(10)
+    recent_logs_stmt = select(models_pg.AuditLog).order_by(desc(models_pg.AuditLog.timestamp)).limit(10)
+    recent_logs_res = (await db.execute(recent_logs_stmt)).scalars().all()
+    
+    recent_logs = [
+        {
+            "id": log.id,
+            "timestamp": log.timestamp.isoformat() if log.timestamp else None,
+            "action": log.action,
+            "entity_type": log.entity_type,
+            "entity_id": log.entity_id,
+            "user_id": log.user_id,
+            "user_email": log.user_email,
+            "company_id": log.company_id,
+            "details": log.details,
+            "ip_address": log.ip_address
+        } for log in recent_logs_res
+    ]
     
     return {
         "companies": {
@@ -106,75 +125,120 @@ async def list_companies(
     status: Optional[str] = None,
     plan: Optional[str] = None,
     search: Optional[str] = None,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """List all companies with optional filters"""
-    query = {}
+    stmt = select(models_pg.Company)
     
     if status:
-        query["status"] = status
+        stmt = stmt.where(models_pg.Company.status == status)
     if plan:
-        query["plan"] = plan
+        stmt = stmt.where(models_pg.Company.plan == plan)
     if search:
-        query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"email": {"$regex": search, "$options": "i"}}
-        ]
+        stmt = stmt.where(or_(
+            models_pg.Company.name.ilike(f"%{search}%"),
+            models_pg.Company.email.ilike(f"%{search}%")
+        ))
     
-    companies = await companies_collection.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    stmt = stmt.order_by(desc(models_pg.Company.created_at))
+    companies_res = (await db.execute(stmt)).scalars().all()
     
-    # Add user count and booking count for each company
-    for company in companies:
-        company["user_count"] = await users_collection.count_documents({"company_id": company["id"]})
-        company["booking_count"] = await bookings_collection.count_documents({"company_id": company["id"]})
+    result = []
+    for company in companies_res:
+        user_count = (await db.execute(select(func.count(models_pg.User.id)).where(models_pg.User.company_id == company.id))).scalar() or 0
+        booking_count = (await db.execute(select(func.count(models_pg.Booking.id)).where(models_pg.Booking.company_id == company.id))).scalar() or 0
+        
+        result.append({
+            "id": company.id,
+            "name": company.name,
+            "email": company.email,
+            "plan": company.plan,
+            "status": company.status,
+            "created_at": company.created_at.isoformat() if company.created_at else None,
+            "user_count": user_count,
+            "booking_count": booking_count
+        })
     
-    return companies
+    return result
 
 
 @router.get("/companies/{company_id}")
-async def get_company(company_id: str, current_user: User = Depends(get_super_admin)):
+async def get_company(
+    company_id: str, 
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
+):
     """Get detailed company information"""
-    company = await companies_collection.find_one({"id": company_id}, {"_id": 0})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     
     # Get additional stats
-    company["stats"] = {
-        "users": await users_collection.count_documents({"company_id": company_id}),
-        "outlets": await outlets_collection.count_documents({"company_id": company_id}),
-        "bookings": await bookings_collection.count_documents({"company_id": company_id}),
-        "bookings_this_month": await bookings_collection.count_documents({
-            "company_id": company_id,
-            "created_at": {"$gte": datetime.now(timezone.utc).replace(day=1).isoformat()}
-        })
-    }
+    users_count = (await db.execute(select(func.count(models_pg.User.id)).where(models_pg.User.company_id == company_id))).scalar() or 0
+    outlets_count = (await db_session.execute(select(func.count(models_pg.Outlet.id)).where(models_pg.Outlet.company_id == company_id))).scalar() or 0
+    bookings_count = (await db_session.execute(select(func.count(models_pg.Booking.id)).where(models_pg.Booking.company_id == company_id))).scalar() or 0
     
-    # Get plan info
-    company["plan_info"] = SUBSCRIPTION_PLANS.get(company.get("plan", "free"), SUBSCRIPTION_PLANS["free"])
+    month_start = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    month_bookings = (await db_session.execute(
+        select(func.count(models_pg.Booking.id)).where(
+            models_pg.Booking.company_id == company_id,
+            models_pg.Booking.created_at >= month_start
+        )
+    )).scalar() or 0
     
     # Get users
-    company["users"] = await users_collection.find(
-        {"company_id": company_id}, {"_id": 0, "hashed_password": 0}
-    ).to_list(100)
+    users_stmt = select(models_pg.User).where(models_pg.User.company_id == company_id)
+    users_res = (await db.execute(users_stmt)).scalars().all()
     
-    return company
+    return {
+        "id": company.id,
+        "name": company.name,
+        "business_type": company.business_type,
+        "email": company.email,
+        "phone": company.phone,
+        "address": company.address,
+        "plan": company.plan,
+        "status": company.status,
+        "created_at": company.created_at.isoformat() if company.created_at else None,
+        "stats": {
+            "users": users_count,
+            "outlets": outlets_count,
+            "bookings": bookings_count,
+            "bookings_this_month": month_bookings
+        },
+        "plan_info": SUBSCRIPTION_PLANS.get(company.plan or "free", SUBSCRIPTION_PLANS["free"]),
+        "users": [
+            {
+                "id": u.id,
+                "email": u.email,
+                "name": u.name,
+                "role": u.role,
+                "status": u.status,
+                "created_at": u.created_at.isoformat() if u.created_at else None
+            } for u in users_res
+        ]
+    }
 
 
 @router.post("/companies")
 async def create_company(
     company_data: CompanyCreate,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """Create a new company with admin user"""
     
     # Check if company email already exists
-    existing = await companies_collection.find_one({"email": company_data.email})
-    if existing:
+    existing_company = (await db.execute(select(models_pg.Company).where(models_pg.Company.email == company_data.email))).scalar_one_or_none()
+    if existing_company:
         raise HTTPException(status_code=400, detail="Company with this email already exists")
     
     # Check if admin email already exists
-    existing_user = await users_collection.find_one({"email": company_data.admin_email})
+    existing_user = (await db.execute(select(models_pg.User).where(models_pg.User.email == company_data.admin_email))).scalar_one_or_none()
     if existing_user:
         raise HTTPException(status_code=400, detail="User with this email already exists")
     
@@ -183,49 +247,44 @@ async def create_company(
     plan_config = SUBSCRIPTION_PLANS.get(plan, SUBSCRIPTION_PLANS["trial"])
     
     # Calculate trial end if applicable
-    trial_end = None
     trial_start = None
+    trial_end = None
     if plan == "trial":
         trial_start = datetime.now(timezone.utc)
-        trial_end = trial_start + timedelta(days=plan_config["duration_days"])
+        trial_end = trial_start + timedelta(days=plan_config.get("duration_days", 30))
     
-    # Create company with default enabled features
-    company = {
-        "id": company_id,
-        "name": company_data.name,
-        "business_type": company_data.business_type,
-        "email": company_data.email,
-        "phone": company_data.phone,
-        "address": company_data.address,
-        "plan": plan,
-        "plan_limits": plan_config["limits"],
-        "trial_start": trial_start.isoformat() if trial_start else None,
-        "trial_end": trial_end.isoformat() if trial_end else None,
-        "status": "active",
-        "enabled_features": [],  # Features that can be enabled: ["inventory", "ai_assistant", etc.]
-        "is_booking_enabled": company_data.is_booking_enabled,
-        "is_retail_enabled": company_data.is_retail_enabled,
-        "is_workplace_enabled": company_data.is_workplace_enabled,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "created_by": current_user.id
-    }
-    
-    await companies_collection.insert_one(company)
+    new_company = models_pg.Company(
+        id=company_id,
+        name=company_data.name,
+        business_type=company_data.business_type,
+        email=company_data.email,
+        phone=company_data.phone,
+        address=company_data.address,
+        plan=plan,
+        plan_limits=plan_config.get("limits", {}),
+        trial_start=trial_start,
+        trial_end=trial_end,
+        status="active",
+        is_booking_enabled=company_data.is_booking_enabled,
+        is_retail_enabled=company_data.is_retail_enabled,
+        is_workplace_enabled=company_data.is_workplace_enabled,
+        created_by=current_user.id
+    )
+    db.add(new_company)
     
     # Create admin user for this company
-    admin_user = {
-        "id": str(uuid.uuid4()),
-        "email": company_data.admin_email,
-        "name": company_data.admin_name,
-        "password_hash": hash_password(company_data.admin_password),
-        "role": "Admin",
-        "company_id": company_id,
-        "status": "Active",
-        "outlets": [],
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
+    admin_user = models_pg.User(
+        id=str(uuid.uuid4()),
+        email=company_data.admin_email,
+        name=company_data.admin_name,
+        password_hash=hash_password(company_data.admin_password),
+        role="Admin",
+        company_id=company_id,
+        status="Active"
+    )
+    db.add(admin_user)
     
-    await users_collection.insert_one(admin_user)
+    await db.commit()
     
     # Log audit
     await log_audit(
@@ -234,6 +293,7 @@ async def create_company(
         entity_id=company_id,
         user_id=current_user.id,
         user_email=current_user.email,
+        db_session=db,
         details={"company_name": company_data.name, "plan": plan},
         ip_address=request.client.host if request.client else None
     )
@@ -250,20 +310,23 @@ async def update_company(
     company_id: str,
     update_data: CompanyUpdate,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """Update company details"""
-    company = await companies_collection.find_one({"id": company_id})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     
     update_fields = {k: v for k, v in update_data.dict().items() if v is not None}
     
     if update_fields:
-        await companies_collection.update_one(
-            {"id": company_id},
-            {"$set": update_fields}
-        )
+        for key, value in update_fields.items():
+            setattr(company, key, value)
+        
+        await db.commit()
         
         await log_audit(
             action="update",
@@ -271,6 +334,7 @@ async def update_company(
             entity_id=company_id,
             user_id=current_user.id,
             user_email=current_user.email,
+            db_session=db,
             details=update_fields,
             ip_address=request.client.host if request.client else None
         )
@@ -283,10 +347,13 @@ async def change_company_plan(
     company_id: str,
     plan_data: PlanChange,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """Change company subscription plan"""
-    company = await companies_collection.find_one({"id": company_id})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     
@@ -296,20 +363,16 @@ async def change_company_plan(
     plan_config = SUBSCRIPTION_PLANS[plan_data.plan]
     limits = plan_data.custom_limits or plan_config["limits"]
     
-    update_fields = {
-        "plan": plan_data.plan,
-        "plan_limits": limits
-    }
+    old_plan = company.plan
+    company.plan = plan_data.plan
+    company.plan_limits = limits
     
     # If changing to trial, set trial dates
     if plan_data.plan == "trial":
-        update_fields["trial_start"] = datetime.now(timezone.utc).isoformat()
-        update_fields["trial_end"] = (datetime.now(timezone.utc) + timedelta(days=30)).isoformat()
+        company.trial_start = datetime.now(timezone.utc)
+        company.trial_end = datetime.now(timezone.utc) + timedelta(days=30)
     
-    await companies_collection.update_one(
-        {"id": company_id},
-        {"$set": update_fields}
-    )
+    await db.commit()
     
     await log_audit(
         action="plan_change",
@@ -317,7 +380,8 @@ async def change_company_plan(
         entity_id=company_id,
         user_id=current_user.id,
         user_email=current_user.email,
-        details={"old_plan": company.get("plan"), "new_plan": plan_data.plan},
+        db_session=db,
+        details={"old_plan": old_plan, "new_plan": plan_data.plan},
         ip_address=request.client.host if request.client else None
     )
     
@@ -328,16 +392,18 @@ async def change_company_plan(
 async def suspend_company(
     company_id: str,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """Suspend a company account"""
-    result = await companies_collection.update_one(
-        {"id": company_id},
-        {"$set": {"status": "suspended"}}
-    )
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
     
-    if result.matched_count == 0:
+    if not company:
         raise HTTPException(status_code=404, detail="Company not found")
+    
+    company.status = "suspended"
+    await db.commit()
     
     await log_audit(
         action="suspend",
@@ -345,6 +411,7 @@ async def suspend_company(
         entity_id=company_id,
         user_id=current_user.id,
         user_email=current_user.email,
+        db_session=db,
         ip_address=request.client.host if request.client else None
     )
     
@@ -355,16 +422,18 @@ async def suspend_company(
 async def activate_company(
     company_id: str,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """Reactivate a suspended company"""
-    result = await companies_collection.update_one(
-        {"id": company_id},
-        {"$set": {"status": "active"}}
-    )
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
     
-    if result.matched_count == 0:
+    if not company:
         raise HTTPException(status_code=404, detail="Company not found")
+    
+    company.status = "active"
+    await db.commit()
     
     await log_audit(
         action="activate",
@@ -372,6 +441,7 @@ async def activate_company(
         entity_id=company_id,
         user_id=current_user.id,
         user_email=current_user.email,
+        db_session=db,
         ip_address=request.client.host if request.client else None
     )
     
@@ -387,40 +457,38 @@ async def deactivate_company(
     company_id: str,
     reason_data: DeactivateReason,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """
     Deactivate a company account with 60-day data retention.
     After 60 days, the company data will be permanently deleted.
     """
-    company = await companies_collection.find_one({"id": company_id})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     
-    if company.get("status") == "deactivated":
+    if company.status == "deactivated":
         raise HTTPException(status_code=400, detail="Company is already deactivated")
     
-    # Set deactivation date and scheduled deletion date (60 days from now)
     deactivated_at = datetime.now(timezone.utc)
     scheduled_deletion = deactivated_at + timedelta(days=60)
     
-    update_fields = {
-        "status": "deactivated",
-        "deactivated_at": deactivated_at.isoformat(),
-        "scheduled_deletion_date": scheduled_deletion.isoformat(),
-        "deactivation_reason": reason_data.reason
-    }
-    
-    await companies_collection.update_one(
-        {"id": company_id},
-        {"$set": update_fields}
-    )
+    company.status = "deactivated"
+    company.deactivated_at = deactivated_at
+    company.scheduled_deletion_date = scheduled_deletion
+    company.deactivation_reason = reason_data.reason
     
     # Also deactivate all users in this company
-    await users_collection.update_many(
-        {"company_id": company_id},
-        {"$set": {"status": "Inactive"}}
+    await db.execute(
+        update(models_pg.User)
+        .where(models_pg.User.company_id == company_id)
+        .values(status="Inactive")
     )
+    
+    await db.commit()
     
     await log_audit(
         action="deactivate",
@@ -428,6 +496,7 @@ async def deactivate_company(
         entity_id=company_id,
         user_id=current_user.id,
         user_email=current_user.email,
+        db_session=db,
         details={
             "reason": reason_data.reason,
             "scheduled_deletion": scheduled_deletion.isoformat()
@@ -447,47 +516,44 @@ async def deactivate_company(
 async def reactivate_company(
     company_id: str,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """
     Reactivate a deactivated company (within 60-day retention period).
     This cancels the scheduled deletion.
     """
-    company = await companies_collection.find_one({"id": company_id})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     
-    if company.get("status") != "deactivated":
+    if company.status != "deactivated":
         raise HTTPException(status_code=400, detail="Company is not deactivated")
     
     # Check if still within retention period
-    scheduled_deletion = company.get("scheduled_deletion_date")
-    if scheduled_deletion:
-        deletion_date = datetime.fromisoformat(scheduled_deletion.replace('Z', '+00:00'))
-        if datetime.now(timezone.utc) > deletion_date:
+    if company.scheduled_deletion_date:
+        if datetime.now(timezone.utc) > company.scheduled_deletion_date:
             raise HTTPException(
                 status_code=400, 
                 detail="Retention period expired. Company data may have been deleted."
             )
     
     # Reactivate company
-    await companies_collection.update_one(
-        {"id": company_id},
-        {
-            "$set": {"status": "active"},
-            "$unset": {
-                "deactivated_at": "",
-                "scheduled_deletion_date": "",
-                "deactivation_reason": ""
-            }
-        }
-    )
+    company.status = "active"
+    company.deactivated_at = None
+    company.scheduled_deletion_date = None
+    company.deactivation_reason = None
     
     # Reactivate all users
-    await users_collection.update_many(
-        {"company_id": company_id},
-        {"$set": {"status": "Active"}}
+    await db.execute(
+        update(models_pg.User)
+        .where(models_pg.User.company_id == company_id)
+        .values(status="Active")
     )
+    
+    await db.commit()
     
     await log_audit(
         action="reactivate",
@@ -495,6 +561,7 @@ async def reactivate_company(
         entity_id=company_id,
         user_id=current_user.id,
         user_email=current_user.email,
+        db_session=db,
         ip_address=request.client.host if request.client else None
     )
     
@@ -507,25 +574,26 @@ async def reactivate_company(
 async def impersonate_company(
     company_id: str,
     request: Request,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """Get a token to access a company as their admin (for support)"""
-    company = await companies_collection.find_one({"id": company_id}, {"_id": 0})
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db.execute(stmt)).scalar_one_or_none()
+    
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     
     # Find the company's admin user
-    admin_user = await users_collection.find_one(
-        {"company_id": company_id, "role": "Admin"},
-        {"_id": 0}
-    )
+    admin_stmt = select(models_pg.User).where(models_pg.User.company_id == company_id, models_pg.User.role == "Admin")
+    admin_user = (await db.execute(admin_stmt)).scalar_one_or_none()
     
     if not admin_user:
         raise HTTPException(status_code=404, detail="No admin user found for this company")
     
     # Create impersonation token with metadata
     token = create_access_token({
-        "sub": admin_user["id"],
+        "sub": admin_user.id,
         "impersonated_by": current_user.id,
         "impersonation": True
     })
@@ -536,17 +604,22 @@ async def impersonate_company(
         entity_id=company_id,
         user_id=current_user.id,
         user_email=current_user.email,
-        details={"impersonated_user": admin_user["email"]},
+        db_session=db,
+        details={"impersonated_user": admin_user.email},
         ip_address=request.client.host if request.client else None
     )
     
     return {
         "token": token,
-        "company": company,
+        "company": {
+            "id": company.id,
+            "name": company.name,
+            "status": company.status
+        },
         "user": {
-            "id": admin_user["id"],
-            "email": admin_user["email"],
-            "name": admin_user["name"]
+            "id": admin_user.id,
+            "email": admin_user.email,
+            "name": admin_user.name
         }
     }
 
@@ -561,24 +634,43 @@ async def get_audit_logs(
     entity_type: Optional[str] = None,
     limit: int = 100,
     offset: int = 0,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """Get audit logs with filters"""
-    query = {}
+    stmt = select(models_pg.AuditLog)
     
     if company_id:
-        query["company_id"] = company_id
+        stmt = stmt.where(models_pg.AuditLog.company_id == company_id)
     if user_id:
-        query["user_id"] = user_id
+        stmt = stmt.where(models_pg.AuditLog.user_id == user_id)
     if action:
-        query["action"] = action
+        stmt = stmt.where(models_pg.AuditLog.action == action)
     if entity_type:
-        query["entity_type"] = entity_type
+        stmt = stmt.where(models_pg.AuditLog.entity_type == entity_type)
     
-    total = await audit_logs_collection.count_documents(query)
-    logs = await audit_logs_collection.find(
-        query, {"_id": 0}
-    ).sort("timestamp", -1).skip(offset).limit(limit).to_list(limit)
+    # Get total count
+    count_stmt = select(func.count()).select_from(stmt.subquery())
+    total = (await db.execute(count_stmt)).scalar() or 0
+    
+    # Get paginated logs
+    stmt = stmt.order_by(desc(models_pg.AuditLog.timestamp)).offset(offset).limit(limit)
+    logs_res = (await db.execute(stmt)).scalars().all()
+    
+    logs = [
+        {
+            "id": log.id,
+            "timestamp": log.timestamp.isoformat() if log.timestamp else None,
+            "action": log.action,
+            "entity_type": log.entity_type,
+            "entity_id": log.entity_id,
+            "user_id": log.user_id,
+            "user_email": log.user_email,
+            "company_id": log.company_id,
+            "details": log.details,
+            "ip_address": log.ip_address
+        } for log in logs_res
+    ]
     
     return {
         "total": total,
@@ -595,32 +687,38 @@ async def list_all_users(
     company_id: Optional[str] = None,
     role: Optional[str] = None,
     search: Optional[str] = None,
-    current_user: User = Depends(get_super_admin)
+    current_user: User = Depends(get_super_admin),
+    db: AsyncSession = Depends(get_db)
 ):
     """List all users across companies"""
-    query = {"role": {"$ne": "SuperAdmin"}}
+    stmt = select(models_pg.User).where(models_pg.User.role != "SuperAdmin")
     
     if company_id:
-        query["company_id"] = company_id
+        stmt = stmt.where(models_pg.User.company_id == company_id)
     if role:
-        query["role"] = role
+        stmt = stmt.where(models_pg.User.role == role)
     if search:
-        query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"email": {"$regex": search, "$options": "i"}}
-        ]
+        stmt = stmt.where(or_(
+            models_pg.User.name.ilike(f"%{search}%"),
+            models_pg.User.email.ilike(f"%{search}%")
+        ))
     
-    users = await users_collection.find(
-        query, {"_id": 0, "hashed_password": 0}
-    ).sort("created_at", -1).to_list(1000)
+    # Eager load company for each user
+    stmt = stmt.options(selectinload(models_pg.User.company)).order_by(desc(models_pg.User.created_at))
+    users_res = (await db.execute(stmt)).scalars().all()
     
-    # Add company name to each user
-    for user in users:
-        if user.get("company_id"):
-            company = await companies_collection.find_one(
-                {"id": user["company_id"]}, {"name": 1}
-            )
-            user["company_name"] = company.get("name") if company else "Unknown"
+    users = [
+        {
+            "id": u.id,
+            "email": u.email,
+            "name": u.name,
+            "role": u.role,
+            "status": u.status,
+            "company_id": u.company_id,
+            "company_name": u.company.name if u.company else "Unknown",
+            "created_at": u.created_at.isoformat() if u.created_at else None
+        } for u in users_res
+    ]
     
     return users
 

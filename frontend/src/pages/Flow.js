@@ -20,7 +20,8 @@ import {
     ArrowDownCircle, Brain, GitFork, Repeat, Wand2,
     Globe, Route, User, CircleDot, CheckCircle2, AlertCircle, Loader2
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { MOCK_FLOWS } from '../data/mockFlows';
 
 // Expanded Node types for the agent builder
 const NODE_TYPES = [
@@ -51,6 +52,9 @@ const NODE_TYPES = [
 
     // Human Nodes
     { type: 'human', label: 'Human', icon: User, color: '#06b6d4', description: 'Human-in-the-Loop', category: 'human' },
+
+    // Special Nodes
+    { type: 'note', label: 'Sticky Note', icon: FileText, color: '#fef08a', description: 'Instructional Note', category: 'core' },
 ];
 
 const CATEGORIES = [
@@ -137,21 +141,56 @@ const CustomNode = ({ data, selected }) => {
     );
 };
 
+// Sticky Note Component
+const StickyNoteNode = ({ data, selected }) => {
+    return (
+        <div
+            className={`min-w-[220px] max-w-[300px] p-4 rounded-md shadow-md transition-all ${selected ? 'ring-2 ring-yellow-400 ring-offset-2' : ''
+                }`}
+            style={{
+                backgroundColor: '#fef3c7', // Warm yellow
+                borderLeft: '4px solid #f59e0b', // Amber edge
+                color: '#1c1917', // Dark gray text
+                fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif"
+            }}
+        >
+            <div className="flex items-center gap-2 mb-2 pb-2 border-b border-amber-200/50">
+                <FileText size={16} className="text-amber-600" />
+                <h4 className="font-bold text-sm tracking-wide text-amber-900 uppercase">{data.label || 'Note'}</h4>
+            </div>
+            <p className="text-sm leading-snug whitespace-pre-wrap">
+                {data.config?.text || 'Write your instructions here...'}
+            </p>
+        </div>
+    );
+};
+
 // Define nodeTypes outside component to prevent re-renders
 const nodeTypes = {
     custom: CustomNode,
+    note: StickyNoteNode,
 };
 
 const Flow = () => {
+    const { id } = useParams();
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const navigate = useNavigate();
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+    // Check if we're loading a specific flow
+    const initialFlow = useMemo(() => {
+        if (id) {
+            return MOCK_FLOWS.find(f => f.id === id);
+        }
+        return null;
+    }, [id]);
+
+    const [nodes, setNodes, onNodesChange] = useNodesState(initialFlow?.nodes || []);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(initialFlow?.edges || []);
     const [selectedNode, setSelectedNode] = useState(null);
-    const [showTemplates, setShowTemplates] = useState(true);
+    const [showTemplates, setShowTemplates] = useState(!initialFlow);
     const [showNodePalette, setShowNodePalette] = useState(true);
-    const [flowName, setFlowName] = useState('Untitled Flow');
+    const [flowName, setFlowName] = useState(initialFlow?.name || 'Untitled Flow');
     const [isRunning, setIsRunning] = useState(false);
     const [expandedCategories, setExpandedCategories] = useState(['core', 'ai']);
 
@@ -737,6 +776,20 @@ const Flow = () => {
                                                 <textarea
                                                     placeholder="// Write your custom code here..."
                                                     className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 h-40 resize-none font-mono`}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {selectedNodeData.data?.nodeType === 'note' && (
+                                            <div>
+                                                <label className={`text-xs ${isDark ? 'text-[#7D8590]' : 'text-[#6B7280]'} block mb-1`}>Note Text</label>
+                                                <textarea
+                                                    value={selectedNodeData.data?.config?.text || ''}
+                                                    onChange={(e) => setNodes(prev => prev.map(n =>
+                                                        n.id === selectedNode ? { ...n, data: { ...n.data, config: { ...n.data.config, text: e.target.value } } } : n
+                                                    ))}
+                                                    placeholder="Enter sticky note instructions..."
+                                                    className={`w-full ${isDark ? 'bg-[#1F2630] border-[#374151] text-[#E6E8EB]' : 'bg-[#F6F7F9] border-[#D9DEE5] text-[#0E1116]'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 h-32 resize-none`}
                                                 />
                                             </div>
                                         )}

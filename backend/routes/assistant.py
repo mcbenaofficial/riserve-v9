@@ -14,10 +14,11 @@ from langchain_core.tools import StructuredTool
 import functools
 
 from .dependencies import (
-    ai_conversations_collection, outlets_collection,
-    bookings_collection, services_collection,
-    get_current_user, User
+    get_current_user, User, get_db
 )
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc
+import models_pg
 from agent_tools import all_tools
 from swarm_agents import get_swarm_app
 
@@ -83,66 +84,110 @@ def get_agent_executor(tools: List[Any]):
 # --- Routes ---
 
 @router.get("/conversations")
-async def get_conversations(current_user: User = Depends(get_current_user)):
-    conversations = await ai_conversations_collection.find(
-        {"user_id": current_user.id}, {"_id": 0}
-    ).sort("updated_at", -1).limit(50).to_list(50)
-    return conversations
+async def get_conversations(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.AIConversation).where(
+        models_pg.AIConversation.user_id == current_user.id
+    ).order_by(desc(models_pg.AIConversation.updated_at)).limit(50)
+    
+    res = await db_session.execute(stmt)
+    conversations = res.scalars().all()
+    
+    return [
+        {
+            "id": c.id,
+            "title": c.title,
+            "created_at": c.created_at.isoformat() if c.created_at else None,
+            "updated_at": c.updated_at.isoformat() if c.updated_at else None,
+            "messages": c.messages
+        } for c in conversations
+    ]
 
 
 @router.get("/conversations/{conversation_id}")
-async def get_conversation(conversation_id: str, current_user: User = Depends(get_current_user)):
-    conversation = await ai_conversations_collection.find_one(
-        {"id": conversation_id, "user_id": current_user.id}, {"_id": 0}
+async def get_conversation(
+    conversation_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.AIConversation).where(
+        models_pg.AIConversation.id == conversation_id,
+        models_pg.AIConversation.user_id == current_user.id
     )
+    conversation = (await db_session.execute(stmt)).scalar_one_or_none()
+    
     if not conversation:
         raise HTTPException(status_code=404, detail="Conversation not found")
-    return conversation
+        
+    return {
+        "id": conversation.id,
+        "title": conversation.title,
+        "messages": conversation.messages,
+        "created_at": conversation.created_at.isoformat() if conversation.created_at else None,
+        "updated_at": conversation.updated_at.isoformat() if conversation.updated_at else None
+    }
 
 
 @router.delete("/conversations/{conversation_id}")
-async def delete_conversation(conversation_id: str, current_user: User = Depends(get_current_user)):
-    result = await ai_conversations_collection.delete_one(
-        {"id": conversation_id, "user_id": current_user.id}
+async def delete_conversation(
+    conversation_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.AIConversation).where(
+        models_pg.AIConversation.id == conversation_id,
+        models_pg.AIConversation.user_id == current_user.id
     )
-    if result.deleted_count == 0:
+    conversation = (await db_session.execute(stmt)).scalar_one_or_none()
+    
+    if not conversation:
         raise HTTPException(status_code=404, detail="Conversation not found")
+        
+    await db_session.delete(conversation)
+    await db_session.commit()
+    
     return {"message": "Conversation deleted"}
 
 
 @router.post("/chat")
-async def chat_with_assistant(request: ChatRequest, current_user: User = Depends(get_current_user)):
+async def chat_with_assistant(
+    request: ChatRequest, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     try:
         # 1. Get or Create Conversation
         conversation_id = request.conversation_id
         conversation = None
         
         if conversation_id:
-            conversation = await ai_conversations_collection.find_one(
-                {"id": conversation_id, "user_id": current_user.id}, {"_id": 0}
+            stmt = select(models_pg.AIConversation).where(
+                models_pg.AIConversation.id == conversation_id,
+                models_pg.AIConversation.user_id == current_user.id
             )
+            conversation = (await db_session.execute(stmt)).scalar_one_or_none()
         
         if not conversation:
             conversation_id = str(uuid.uuid4())
-            conversation = {
-                "id": conversation_id,
-                "user_id": current_user.id,
-                "title": request.message[:50] + "..." if len(request.message) > 50 else request.message,
-                "messages": [],
-                "created_at": datetime.now(timezone.utc).isoformat(),
-                "updated_at": datetime.now(timezone.utc).isoformat()
-            }
-            await ai_conversations_collection.insert_one(conversation)
+            conversation = models_pg.AIConversation(
+                id=conversation_id,
+                user_id=current_user.id,
+                title=request.message[:50] + "..." if len(request.message) > 50 else request.message,
+                messages=[]
+            )
+            db_session.add(conversation)
             
         # 2. Prepare Chat History for LangChain
         chat_history = []
-        if conversation.get("messages"):
+        if conversation and conversation.messages:
             # Load last 10 messages for context
-            for msg in conversation["messages"][-10:]:
-                if msg["role"] == "user":
-                    chat_history.append(HumanMessage(content=msg["content"]))
-                elif msg["role"] == "assistant":
-                    chat_history.append(AIMessage(content=msg["content"]))
+            for msg in conversation.messages[-10:]:
+                if msg.get("role") == "user":
+                    chat_history.append(HumanMessage(content=msg.get("content", "")))
+                elif msg.get("role") == "assistant":
+                    chat_history.append(AIMessage(content=msg.get("content", "")))
 
         # 3. Build Swarm with User Context
         user_context = {
@@ -224,13 +269,14 @@ async def chat_with_assistant(request: ChatRequest, current_user: User = Depends
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
         
-        await ai_conversations_collection.update_one(
-            {"id": conversation_id},
-            {
-                "$push": {"messages": {"$each": [user_msg_doc, assistant_msg_doc]}},
-                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
-            }
-        )
+        if conversation:
+            current_msgs = conversation.messages or []
+            current_msgs.extend([user_msg_doc, assistant_msg_doc])
+            
+            import copy
+            conversation.messages = copy.deepcopy(current_msgs)
+            conversation.updated_at = datetime.now(timezone.utc)
+            await db_session.commit()
         
         return {
             "conversation_id": conversation_id,
@@ -263,45 +309,55 @@ async def generate_image(request: ImageGenerationRequest, current_user: User = D
 
 
 @router.post("/chat/stream")
-async def chat_with_assistant_stream(request: ChatRequest, current_user: User = Depends(get_current_user)):
+async def chat_with_assistant_stream(
+    request: ChatRequest, 
+    current_user: User = Depends(get_current_user)
+):
     """SSE streaming endpoint - sends thinking steps in real-time as the agent works."""
     from fastapi.responses import StreamingResponse
     import asyncio
+    from database_pg import async_session_maker
 
     async def event_generator():
         try:
             # 1. Get or Create Conversation
             conversation_id = request.conversation_id
-            conversation = None
             
-            if conversation_id:
-                conversation = await ai_conversations_collection.find_one(
-                    {"id": conversation_id, "user_id": current_user.id}, {"_id": 0}
-                )
-            
-            if not conversation:
-                conversation_id = str(uuid.uuid4())
-                conversation = {
-                    "id": conversation_id,
-                    "user_id": current_user.id,
-                    "title": request.message[:50] + "..." if len(request.message) > 50 else request.message,
-                    "messages": [],
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "updated_at": datetime.now(timezone.utc).isoformat()
-                }
-                await ai_conversations_collection.insert_one(conversation)
-            
+            async with async_session_maker() as sub_db_session:
+                conversation = None
+                
+                if conversation_id:
+                    stmt = select(models_pg.AIConversation).where(
+                        models_pg.AIConversation.id == conversation_id,
+                        models_pg.AIConversation.user_id == current_user.id
+                    )
+                    conversation = (await sub_db_session.execute(stmt)).scalar_one_or_none()
+                
+                if not conversation:
+                    conversation_id = str(uuid.uuid4())
+                    conversation = models_pg.AIConversation(
+                        id=conversation_id,
+                        user_id=current_user.id,
+                        title=request.message[:50] + "..." if len(request.message) > 50 else request.message,
+                        messages=[]
+                    )
+                    sub_db_session.add(conversation)
+                    await sub_db_session.commit()
+                
+                # We fetch here because detached models without session can't lazy load JSON sometimes depending on setup
+                chat_history = []
+                msgs = conversation.messages or []
+                
             # Send conversation_id immediately
             yield f"data: {json.dumps({'type': 'conversation_id', 'conversation_id': conversation_id})}\n\n"
             
             # 2. Prepare Chat History
-            chat_history = []
-            if conversation.get("messages"):
-                for msg in conversation["messages"][-10:]:
-                    if msg["role"] == "user":
-                        chat_history.append(HumanMessage(content=msg["content"]))
-                    elif msg["role"] == "assistant":
-                        chat_history.append(AIMessage(content=msg["content"]))
+            if msgs:
+                for msg in msgs[-10:]:
+                    if msg.get("role") == "user":
+                        chat_history.append(HumanMessage(content=msg.get("content", "")))
+                    elif msg.get("role") == "assistant":
+                        chat_history.append(AIMessage(content=msg.get("content", "")))
             
             # 3. Build Swarm with User Context
             user_context = {
@@ -411,13 +467,19 @@ async def chat_with_assistant_stream(request: ChatRequest, current_user: User = 
                 "timestamp": datetime.now(timezone.utc).isoformat()
             }
             
-            await ai_conversations_collection.update_one(
-                {"id": conversation_id},
-                {
-                    "$push": {"messages": {"$each": [user_msg_doc, assistant_msg_doc]}},
-                    "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
-                }
-            )
+            async with async_session_maker() as sub_db_session:
+                stmt = select(models_pg.AIConversation).where(
+                    models_pg.AIConversation.id == conversation_id,
+                    models_pg.AIConversation.user_id == current_user.id
+                )
+                conversation_rec = (await sub_db_session.execute(stmt)).scalar_one_or_none()
+                if conversation_rec:
+                    current_msgs = conversation_rec.messages or []
+                    current_msgs.extend([user_msg_doc, assistant_msg_doc])
+                    import copy
+                    conversation_rec.messages = copy.deepcopy(current_msgs)
+                    conversation_rec.updated_at = datetime.now(timezone.utc)
+                    await sub_db_session.commit()
             
             # Send final done event with full message
             yield f"data: {json.dumps({'type': 'done', 'message': assistant_msg_doc})}\n\n"

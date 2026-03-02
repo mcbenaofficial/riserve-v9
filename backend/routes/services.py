@@ -4,7 +4,11 @@ from typing import Optional
 from datetime import datetime, timezone
 import uuid
 
-from .dependencies import services_collection, get_current_user, User
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update, delete
+import models_pg
+
+from .dependencies import get_db, get_current_user, User
 
 router = APIRouter(prefix="/services", tags=["Services"])
 
@@ -21,64 +25,121 @@ class ServiceCreate(ServiceBase):
 
 
 @router.get("")
-async def get_services(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
+async def get_services(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Service)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Service.company_id == current_user.company_id)
     
-    services = await services_collection.find(query, {"_id": 0}).to_list(1000)
-    return services
+    res = await db_session.execute(stmt)
+    services = res.scalars().all()
+    
+    return [
+        {
+            "id": s.id,
+            "company_id": s.company_id,
+            "name": s.name,
+            "duration_min": s.duration_min,
+            "price": s.price,
+            "description": s.description,
+            "active": s.active,
+            "created_at": s.created_at.isoformat() if s.created_at else None
+        } for s in services
+    ]
 
 
 @router.post("")
-async def create_service(service_input: ServiceCreate, current_user: User = Depends(get_current_user)):
-    service_doc = {
-        "id": str(uuid.uuid4()),
-        "company_id": current_user.company_id,  # Associate with company
+async def create_service(
+    service_input: ServiceCreate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    service_id = str(uuid.uuid4())
+    now = datetime.now(timezone.utc)
+    
+    new_service = models_pg.Service(
+        id=service_id,
+        company_id=current_user.company_id,
+        name=service_input.name,
+        duration_min=service_input.duration_min,
+        price=service_input.price,
+        description=service_input.description,
+        active=True,
+        created_at=now
+    )
+    db_session.add(new_service)
+    await db_session.commit()
+    
+    return {
+        "id": service_id,
+        "company_id": current_user.company_id,
         "name": service_input.name,
         "duration_min": service_input.duration_min,
         "price": service_input.price,
         "description": service_input.description,
         "active": True,
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "created_at": now.isoformat()
     }
-    await services_collection.insert_one(service_doc)
-    service_doc.pop("_id", None)
-    return service_doc
 
 
 @router.put("/{service_id}")
-async def update_service(service_id: str, service_input: ServiceCreate, current_user: User = Depends(get_current_user)):
-    # Ensure user can only update their own company's services
-    query = {"id": service_id}
-    if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
-    result = await services_collection.update_one(
-        query,
-        {"$set": {
-            "name": service_input.name,
-            "duration_min": service_input.duration_min,
-            "price": service_input.price,
-            "description": service_input.description
-        }}
+async def update_service(
+    service_id: str, 
+    service_input: ServiceCreate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = (
+        update(models_pg.Service)
+        .where(models_pg.Service.id == service_id)
+        .values(
+            name=service_input.name,
+            duration_min=service_input.duration_min,
+            price=service_input.price,
+            description=service_input.description
+        )
     )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Service not found")
     
-    service = await services_collection.find_one({"id": service_id}, {"_id": 0})
-    return service
+    if current_user.role != "SuperAdmin":
+        stmt = stmt.where(models_pg.Service.company_id == current_user.company_id)
+        
+    res = await db_session.execute(stmt)
+    if res.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Service not found")
+        
+    await db_session.commit()
+    
+    # Fetch updated
+    sel_stmt = select(models_pg.Service).where(models_pg.Service.id == service_id)
+    svc = (await db_session.execute(sel_stmt)).scalar_one()
+    
+    return {
+        "id": svc.id,
+        "company_id": svc.company_id,
+        "name": svc.name,
+        "duration_min": svc.duration_min,
+        "price": svc.price,
+        "description": svc.description,
+        "active": svc.active,
+        "created_at": svc.created_at.isoformat() if svc.created_at else None
+    }
 
 
 @router.delete("/{service_id}")
-async def delete_service(service_id: str, current_user: User = Depends(get_current_user)):
-    # Ensure user can only delete their own company's services
-    query = {"id": service_id}
+async def delete_service(
+    service_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = delete(models_pg.Service).where(models_pg.Service.id == service_id)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
-    result = await services_collection.delete_one(query)
-    if result.deleted_count == 0:
+        stmt = stmt.where(models_pg.Service.company_id == current_user.company_id)
+        
+    res = await db_session.execute(stmt)
+    if res.rowcount == 0:
         raise HTTPException(status_code=404, detail="Service not found")
+        
+    await db_session.commit()
     return {"message": "Service deleted"}

@@ -14,9 +14,11 @@ import logging
 from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 
 from .dependencies import (
-    get_current_user, User,
-    companies_collection, users_collection, db
+    get_current_user, User, get_db
 )
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update
+import models_pg
 
 router = APIRouter(prefix="/onboarding", tags=["Onboarding"])
 logger = logging.getLogger(__name__)
@@ -33,7 +35,10 @@ class OnboardingChatRequest(BaseModel):
 # ─── Routes ─────────────────────────────────────────────────────
 
 @router.get("/progress")
-async def get_progress(current_user: User = Depends(get_current_user)):
+async def get_progress(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     """Get onboarding progress for current user's company."""
     company_id = current_user.company_id
     if not company_id:
@@ -45,11 +50,17 @@ async def get_progress(current_user: User = Depends(get_current_user)):
             "completed_at": None,
         }
     
-    progress = await db.onboarding_progress.find_one(
-        {"company_id": company_id}, {"_id": 0}
-    )
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    company = (await db_session.execute(stmt)).scalar_one_or_none()
     
-    if not progress:
+    # We will store progress directly on the company model's onboarding_state JSONB field
+    # Assuming we add onboarding_state to Company later; but since we didn't, let's add `onboarding_progress` to Company model or use custom_fields. 
+    # Let's assume we can map this to a separate table `OnboardingProgress` we will add in `models_pg`
+    
+    stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+    progress_rec = (await db_session.execute(stmt)).scalar_one_or_none()
+    
+    if not progress_rec:
         return {
             "percentage": 0,
             "completed_steps": [],
@@ -59,33 +70,40 @@ async def get_progress(current_user: User = Depends(get_current_user)):
         }
     
     return {
-        "percentage": progress.get("percentage", 0),
-        "completed_steps": progress.get("completed_steps", []),
-        "pending_steps": progress.get("pending_steps", []),
-        "skipped": progress.get("skipped", False),
-        "completed_at": progress.get("completed_at"),
-        "conversation_id": progress.get("conversation_id"),
+        "percentage": progress_rec.percentage,
+        "completed_steps": progress_rec.completed_steps,
+        "pending_steps": progress_rec.pending_steps,
+        "skipped": progress_rec.skipped,
+        "completed_at": progress_rec.completed_at.isoformat() if progress_rec.completed_at else None,
+        "conversation_id": progress_rec.conversation_id,
     }
 
 
 @router.post("/skip")
-async def skip_onboarding(current_user: User = Depends(get_current_user)):
+async def skip_onboarding(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     """Mark onboarding as skipped — user can resume later."""
     company_id = current_user.company_id
     if not company_id:
         raise HTTPException(status_code=400, detail="No company found.")
     
-    await db.onboarding_progress.update_one(
-        {"company_id": company_id},
-        {
-            "$set": {
-                "skipped": True,
-                "updated_at": datetime.now(timezone.utc).isoformat(),
-            }
-        },
-        upsert=True,
-    )
+    stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+    progress_rec = (await db_session.execute(stmt)).scalar_one_or_none()
     
+    if progress_rec:
+        progress_rec.skipped = True
+        progress_rec.updated_at = datetime.now(timezone.utc)
+    else:
+        new_prog = models_pg.OnboardingProgress(
+            id=str(uuid.uuid4()),
+            company_id=company_id,
+            skipped=True
+        )
+        db_session.add(new_prog)
+        
+    await db_session.commit()
     return {"message": "Onboarding skipped. You can resume anytime."}
 
 
@@ -93,6 +111,7 @@ async def skip_onboarding(current_user: User = Depends(get_current_user)):
 async def onboarding_chat(
     request: OnboardingChatRequest,
     current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
 ):
     """SSE streaming chat endpoint for onboarding conversation."""
     
@@ -101,12 +120,11 @@ async def onboarding_chat(
 
     company = None
     if company_id:
-        company = await companies_collection.find_one(
-            {"id": company_id}, {"_id": 0}
-        )
+        stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+        company = (await db_session.execute(stmt)).scalar_one_or_none()
     
-    company_name = company.get("name", "") if company else ""
-    business_type = company.get("business_type", "") if company else ""
+    company_name = company.name if company else ""
+    business_type = company.business_type if company else ""
     user_name = current_user.name or ""
     
     # Get or create conversation
@@ -114,59 +132,71 @@ async def onboarding_chat(
     conversation = None
     
     if conversation_id:
-        conversation = await db.onboarding_conversations.find_one(
-            {"id": conversation_id, "user_id": current_user.id}, {"_id": 0}
+        stmt = select(models_pg.OnboardingConversation).where(
+            models_pg.OnboardingConversation.id == conversation_id,
+            models_pg.OnboardingConversation.user_id == current_user.id
         )
+        conversation = (await db_session.execute(stmt)).scalar_one_or_none()
     
     if not conversation:
         conversation_id = str(uuid.uuid4())
-        conversation = {
-            "id": conversation_id,
-            "user_id": current_user.id,
-            "company_id": company_id,
-            "messages": [],
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "updated_at": datetime.now(timezone.utc).isoformat(),
-        }
-        await db.onboarding_conversations.insert_one(conversation)
+        conversation = models_pg.OnboardingConversation(
+            id=conversation_id,
+            user_id=current_user.id,
+            company_id=company_id,
+            messages=[]
+        )
+        db_session.add(conversation)
         
         # Link conversation to progress
-        await db.onboarding_progress.update_one(
-            {"company_id": company_id},
-            {
-                "$set": {"conversation_id": conversation_id},
-                "$setOnInsert": {
-                    "percentage": 0,
-                    "completed_steps": [],
-                    "pending_steps": ["company_profile", "first_outlet", "services"],
-                    "skipped": False,
-                    "completed_at": None,
-                }
-            },
-            upsert=True,
-        )
+        prog_stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+        prog_rec = (await db_session.execute(prog_stmt)).scalar_one_or_none()
+        
+        if prog_rec:
+            prog_rec.conversation_id = conversation_id
+        else:
+            new_prog = models_pg.OnboardingProgress(
+                id=str(uuid.uuid4()),
+                company_id=company_id,
+                conversation_id=conversation_id,
+                percentage=0,
+                completed_steps=[],
+                pending_steps=["company_profile", "first_outlet", "services"],
+                skipped=False
+            )
+            db_session.add(new_prog)
+            
+        await db_session.commit()
     
     # Build chat history
     chat_history = []
-    if conversation.get("messages"):
-        for msg in conversation["messages"][-10:]:
-            if msg["role"] == "user":
-                chat_history.append(HumanMessage(content=msg["content"]))
-            elif msg["role"] == "assistant":
-                chat_history.append(AIMessage(content=msg["content"]))
+    if conversation and conversation.messages:
+        for msg in conversation.messages[-10:]:
+            if msg.get("role") == "user":
+                chat_history.append(HumanMessage(content=msg.get("content", "")))
+            elif msg.get("role") == "assistant":
+                chat_history.append(AIMessage(content=msg.get("content", "")))
     
     # Send current progress (fetch early for state injection)
-    progress = await db.onboarding_progress.find_one(
-        {"company_id": company_id}, {"_id": 0}
-    )
+    prog_stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+    progress_rec = (await db_session.execute(prog_stmt)).scalar_one_or_none()
     
-    if not progress:
-        progress = {
+    if not progress_rec:
+        progress_dict = {
             "percentage": 0,
             "completed_steps": [],
             "pending_steps": ["company_profile", "first_outlet", "services"],
             "skipped": False,
             "completed_at": None,
+        }
+    else:
+        progress_dict = {
+            "percentage": progress_rec.percentage,
+            "completed_steps": progress_rec.completed_steps,
+            "pending_steps": progress_rec.pending_steps,
+            "skipped": progress_rec.skipped,
+            "completed_at": progress_rec.completed_at.isoformat() if progress_rec.completed_at else None,
+            "conversation_id": progress_rec.conversation_id,
         }
 
     # ─── NON-STREAMING MODE ─────────────────────────────────────────
@@ -184,7 +214,7 @@ async def onboarding_chat(
             company_name=company_name,
             business_type=business_type,
             user_name=user_name,
-            current_progress=progress if progress else {}
+            current_progress=progress_dict
         )
 
         if not agent_app:
@@ -213,13 +243,15 @@ async def onboarding_chat(
             "message_type": "text"
         }
         
-        await db.onboarding_conversations.update_one(
-            {"id": conversation_id},
-            {
-                "$push": {"messages": {"$each": [user_msg_doc, assistant_msg_doc]}},
-                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()},
-            },
-        )
+        if conversation:
+            current_msgs = conversation.messages or []
+            current_msgs.extend([user_msg_doc, assistant_msg_doc])
+            
+            # sqlalchemy needs this variable reassigned to trigger array update properly
+            import copy
+            conversation.messages = copy.deepcopy(current_msgs)
+            conversation.updated_at = datetime.now(timezone.utc)
+            await db_session.commit()
 
         # Return JSON
         from fastapi.responses import JSONResponse
@@ -235,7 +267,7 @@ async def onboarding_chat(
             yield f"data: {json.dumps({'type': 'conversation_id', 'conversation_id': conversation_id})}\n\n"
             
             # Send current progress
-            yield f"data: {json.dumps({'type': 'progress', 'progress': {'percentage': progress.get('percentage', 0), 'completed_steps': progress.get('completed_steps', []), 'pending_steps': progress.get('pending_steps', [])}})}\n\n"
+            yield f"data: {json.dumps({'type': 'progress', 'progress': {'percentage': progress_dict.get('percentage', 0), 'completed_steps': progress_dict.get('completed_steps', []), 'pending_steps': progress_dict.get('pending_steps', [])}})}\n\n"
 
             # Build onboarding swarm
             user_context = {
@@ -250,7 +282,7 @@ async def onboarding_chat(
                 company_name=company_name,
                 business_type=business_type,
                 user_name=user_name,
-                current_progress=progress if progress else {}
+                current_progress=progress_dict
             )
             
             if not agent_app:
@@ -320,11 +352,14 @@ async def onboarding_chat(
                     
                     # If a milestone tool completed, send updated progress
                     if tool_name in ["update_company_profile", "create_outlet", "create_services_batch"]:
-                        updated_progress = await db.onboarding_progress.find_one(
-                            {"company_id": company_id}, {"_id": 0}
-                        )
-                        if updated_progress:
-                            yield f"data: {json.dumps({'type': 'progress', 'progress': {'percentage': updated_progress.get('percentage', 0), 'completed_steps': updated_progress.get('completed_steps', []), 'pending_steps': updated_progress.get('pending_steps', [])}})}\n\n"
+                        from database_pg import async_session_maker
+                        # create an ad-hoc session to read the updated progress from DB
+                        async with async_session_maker() as sub_db_session:
+                            sub_stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+                            updated_progress_rec = (await sub_db_session.execute(sub_stmt)).scalar_one_or_none()
+                            
+                            if updated_progress_rec:
+                                yield f"data: {json.dumps({'type': 'progress', 'progress': {'percentage': updated_progress_rec.percentage, 'completed_steps': updated_progress_rec.completed_steps, 'pending_steps': updated_progress_rec.pending_steps}})}\n\n"
                 
                 # Stream response tokens
                 elif kind == "on_chat_model_stream":
@@ -358,20 +393,24 @@ async def onboarding_chat(
                 "timestamp": datetime.now(timezone.utc).isoformat(),
             }
             
-            await db.onboarding_conversations.update_one(
-                {"id": conversation_id},
-                {
-                    "$push": {"messages": {"$each": [user_msg_doc, assistant_msg_doc]}},
-                    "$set": {"updated_at": datetime.now(timezone.utc).isoformat()},
-                },
-            )
+            from database_pg import async_session_maker
+            async with async_session_maker() as sub_db_session:
+                sub_stmt = select(models_pg.OnboardingConversation).where(models_pg.OnboardingConversation.id == conversation_id)
+                conversation_rec = (await sub_db_session.execute(sub_stmt)).scalar_one_or_none()
+                if conversation_rec:
+                    current_msgs = conversation_rec.messages or []
+                    current_msgs.extend([user_msg_doc, assistant_msg_doc])
+                    import copy
+                    conversation_rec.messages = copy.deepcopy(current_msgs)
+                    conversation_rec.updated_at = datetime.now(timezone.utc)
+                    await sub_db_session.commit()
             
             # Send final progress and done event
-            final_progress = await db.onboarding_progress.find_one(
-                {"company_id": company_id}, {"_id": 0}
-            )
+            async with async_session_maker() as sub_db_session:
+                sub_stmt = select(models_pg.OnboardingProgress).where(models_pg.OnboardingProgress.company_id == company_id)
+                final_progress = (await sub_db_session.execute(sub_stmt)).scalar_one_or_none()
             
-            yield f"data: {json.dumps({'type': 'done', 'message': assistant_msg_doc, 'progress': {'percentage': final_progress.get('percentage', 0) if final_progress else 0, 'completed_steps': final_progress.get('completed_steps', []) if final_progress else [], 'pending_steps': final_progress.get('pending_steps', []) if final_progress else []}})}\n\n"
+                yield f"data: {json.dumps({'type': 'done', 'message': assistant_msg_doc, 'progress': {'percentage': final_progress.percentage if final_progress else 0, 'completed_steps': final_progress.completed_steps if final_progress else [], 'pending_steps': final_progress.pending_steps if final_progress else []}})}\n\n"
         
         except Exception as e:
             logger.error(f"Onboarding stream error: {str(e)}")

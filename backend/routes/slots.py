@@ -5,9 +5,11 @@ from datetime import datetime, timezone
 import uuid
 
 from .dependencies import (
-    slot_configs_collection, bookings_collection, outlets_collection,
-    get_current_user, User
+    get_current_user, User, get_db
 )
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, delete
+import models_pg
 
 router = APIRouter(prefix="/slot-configs", tags=["Slot Configuration"])
 
@@ -34,49 +36,62 @@ class SlotConfigCreate(BaseModel):
 
 
 @router.get("")
-async def get_slot_configs(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
-    if current_user.role != "SuperAdmin":
-        # Get outlets belonging to this company first
-        company_outlets = await outlets_collection.find(
-            {"company_id": current_user.company_id}, {"id": 1}
-        ).to_list(1000)
-        outlet_ids = [o["id"] for o in company_outlets]
-        query["outlet_id"] = {"$in": outlet_ids}
+async def get_slot_configs(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.SlotConfig)
     
-    configs = await slot_configs_collection.find(query, {"_id": 0}).to_list(1000)
-    return configs
+    if current_user.role != "SuperAdmin":
+        stmt = stmt.where(models_pg.SlotConfig.company_id == current_user.company_id)
+        
+    res = await db_session.execute(stmt)
+    configs = res.scalars().all()
+    
+    return [c.configuration for c in configs if c.configuration]
 
 
 @router.get("/{outlet_id}")
-async def get_slot_config_by_outlet(outlet_id: str, current_user: User = Depends(get_current_user)):
-    # Verify outlet belongs to user's company
+async def get_slot_config_by_outlet(
+    outlet_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.SlotConfig).where(models_pg.SlotConfig.outlet_id == outlet_id)
     if current_user.role != "SuperAdmin":
-        outlet = await outlets_collection.find_one({
-            "id": outlet_id, 
-            "company_id": current_user.company_id
-        })
-        if not outlet:
-            raise HTTPException(status_code=404, detail="Outlet not found")
+        stmt = stmt.where(models_pg.SlotConfig.company_id == current_user.company_id)
+        
+    res = await db_session.execute(stmt)
+    config = res.scalar_one_or_none()
     
-    config = await slot_configs_collection.find_one({"outlet_id": outlet_id}, {"_id": 0})
-    return config
+    if not config and current_user.role != "SuperAdmin":
+        # Additional check to see if outlet exists and belongs to user
+        out_stmt = select(models_pg.Outlet).where(
+            models_pg.Outlet.id == outlet_id,
+            models_pg.Outlet.company_id == current_user.company_id
+        )
+        if not (await db_session.execute(out_stmt)).scalar_one_or_none():
+            raise HTTPException(status_code=404, detail="Outlet not found")
+            
+    return config.configuration if config else None
 
 
 @router.post("")
-async def create_slot_config(config_input: SlotConfigCreate, current_user: User = Depends(get_current_user)):
-    # Verify outlet belongs to user's company
+async def create_slot_config(
+    config_input: SlotConfigCreate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     if current_user.role != "SuperAdmin":
-        outlet = await outlets_collection.find_one({
-            "id": config_input.outlet_id,
-            "company_id": current_user.company_id
-        })
-        if not outlet:
+        out_stmt = select(models_pg.Outlet).where(
+            models_pg.Outlet.id == config_input.outlet_id,
+            models_pg.Outlet.company_id == current_user.company_id
+        )
+        if not (await db_session.execute(out_stmt)).scalar_one_or_none():
             raise HTTPException(status_code=404, detail="Outlet not found or access denied")
-    
-    existing = await slot_configs_collection.find_one({"outlet_id": config_input.outlet_id})
-    if existing:
+            
+    existing_stmt = select(models_pg.SlotConfig).where(models_pg.SlotConfig.outlet_id == config_input.outlet_id)
+    if (await db_session.execute(existing_stmt)).scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Slot configuration already exists for this outlet")
     
     # Prepare resources with IDs
@@ -86,7 +101,7 @@ async def create_slot_config(config_input: SlotConfigCreate, current_user: User 
             r['id'] = str(uuid.uuid4())
         resources.append(r)
     
-    # Prepare customer fields with defaults (generic service fields)
+    # Prepare customer fields with defaults
     customer_fields = config_input.customer_fields or [
         {"field_name": "name", "label": "Full Name", "field_type": "text", "required": True, "enabled": True, "order": 1},
         {"field_name": "phone", "label": "Phone Number", "field_type": "phone", "required": True, "enabled": True, "order": 2},
@@ -94,10 +109,11 @@ async def create_slot_config(config_input: SlotConfigCreate, current_user: User 
         {"field_name": "notes", "label": "Additional Notes", "field_type": "textarea", "required": False, "enabled": True, "order": 4}
     ]
     
+    config_id = str(uuid.uuid4())
     config_doc = {
-        "id": str(uuid.uuid4()),
+        "id": config_id,
         "outlet_id": config_input.outlet_id,
-        "company_id": current_user.company_id,  # Associate with company
+        "company_id": current_user.company_id,
         "business_type": config_input.business_type,
         "slot_duration_min": config_input.slot_duration_min,
         "operating_hours_start": config_input.operating_hours_start,
@@ -111,73 +127,91 @@ async def create_slot_config(config_input: SlotConfigCreate, current_user: User 
         "branding": config_input.branding or {},
         "allow_multiple_services": config_input.allow_multiple_services,
         "breaks": config_input.breaks or [],
-        # New advanced scheduling fields
         "weekly_schedule": config_input.weekly_schedule or {},
         "exceptions": config_input.exceptions or [],
         "capacity_type": config_input.capacity_type,
         "max_capacity": config_input.max_capacity,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
-    await slot_configs_collection.insert_one(config_doc)
-    config_doc.pop("_id", None)
+    
+    new_config = models_pg.SlotConfig(
+        id=config_id,
+        company_id=current_user.company_id,
+        outlet_id=config_input.outlet_id,
+        configuration=config_doc
+    )
+    
+    db_session.add(new_config)
+    await db_session.commit()
     return config_doc
 
 
 @router.put("/{config_id}")
-async def update_slot_config(config_id: str, config_input: SlotConfigCreate, current_user: User = Depends(get_current_user)):
-    # Verify config belongs to user's company
-    query = {"id": config_id}
+async def update_slot_config(
+    config_id: str, 
+    config_input: SlotConfigCreate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.SlotConfig).where(models_pg.SlotConfig.id == config_id)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
-    existing = await slot_configs_collection.find_one(query)
-    if not existing:
+        stmt = stmt.where(models_pg.SlotConfig.company_id == current_user.company_id)
+        
+    config_rec = (await db_session.execute(stmt)).scalar_one_or_none()
+    if not config_rec:
         raise HTTPException(status_code=404, detail="Slot configuration not found")
-    
+        
     # Prepare resources with IDs
     resources = []
     for r in config_input.resources:
         if 'id' not in r:
             r['id'] = str(uuid.uuid4())
         resources.append(r)
+        
+    current_conf = config_rec.configuration or {}
     
-    result = await slot_configs_collection.update_one(
-        query,
-        {"$set": {
-            "business_type": config_input.business_type,
-            "slot_duration_min": config_input.slot_duration_min,
-            "operating_hours_start": config_input.operating_hours_start,
-            "operating_hours_end": config_input.operating_hours_end,
-            "resources": resources,
-            "allow_online_booking": config_input.allow_online_booking,
-            "booking_advance_days": config_input.booking_advance_days,
-            "customer_fields": config_input.customer_fields,
-            "plan": config_input.plan,
-            "branding": config_input.branding,
-            "allow_multiple_services": config_input.allow_multiple_services,
-            "breaks": config_input.breaks,
-            # New advanced scheduling fields
-            "weekly_schedule": config_input.weekly_schedule,
-            "exceptions": config_input.exceptions,
-            "capacity_type": config_input.capacity_type,
-            "max_capacity": config_input.max_capacity
-        }}
-    )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Slot configuration not found")
+    # Update dict manually within configuration JSONB
+    current_conf.update({
+        "business_type": config_input.business_type,
+        "slot_duration_min": config_input.slot_duration_min,
+        "operating_hours_start": config_input.operating_hours_start,
+        "operating_hours_end": config_input.operating_hours_end,
+        "resources": resources,
+        "allow_online_booking": config_input.allow_online_booking,
+        "booking_advance_days": config_input.booking_advance_days,
+        "customer_fields": config_input.customer_fields,
+        "plan": config_input.plan,
+        "branding": config_input.branding,
+        "allow_multiple_services": config_input.allow_multiple_services,
+        "breaks": config_input.breaks,
+        "weekly_schedule": config_input.weekly_schedule,
+        "exceptions": config_input.exceptions,
+        "capacity_type": config_input.capacity_type,
+        "max_capacity": config_input.max_capacity
+    })
     
-    config = await slot_configs_collection.find_one({"id": config_id}, {"_id": 0})
-    return config
+    import copy
+    config_rec.configuration = copy.deepcopy(current_conf)
+    await db_session.commit()
+    
+    return current_conf
 
 
 @router.delete("/{config_id}")
-async def delete_slot_config(config_id: str, current_user: User = Depends(get_current_user)):
-    # Verify config belongs to user's company
-    query = {"id": config_id}
+async def delete_slot_config(
+    config_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.SlotConfig).where(models_pg.SlotConfig.id == config_id)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
-    result = await slot_configs_collection.delete_one(query)
-    if result.deleted_count == 0:
+        stmt = stmt.where(models_pg.SlotConfig.company_id == current_user.company_id)
+        
+    config_rec = (await db_session.execute(stmt)).scalar_one_or_none()
+    if not config_rec:
         raise HTTPException(status_code=404, detail="Slot configuration not found")
+        
+    await db_session.delete(config_rec)
+    await db_session.commit()
+    
     return {"message": "Slot configuration deleted"}

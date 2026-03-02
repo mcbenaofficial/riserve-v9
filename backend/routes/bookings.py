@@ -4,10 +4,14 @@ from typing import Optional, List
 from datetime import datetime, timezone, date
 import uuid
 
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update, delete, func, or_
+import models_pg
+
 from .dependencies import (
-    bookings_collection, transactions_collection, 
-    get_current_user, User, companies_collection, SUBSCRIPTION_PLANS,
-    customers_collection
+    get_db,
+    get_current_user, User, SUBSCRIPTION_PLANS,
+    enforce_outlet_access
 )
 
 router = APIRouter(prefix="/bookings", tags=["Bookings"])
@@ -37,23 +41,72 @@ class BookingReschedule(BaseModel):
 
 
 @router.get("")
-async def get_bookings(current_user: User = Depends(get_current_user)):
+async def get_bookings(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Booking)
+    
     # Filter by company_id for non-SuperAdmin users
-    query = {}
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Booking.company_id == current_user.company_id)
         
-    bookings = await bookings_collection.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
-    return bookings
+    if current_user.role in ["Manager", "User"]:
+        if current_user.outlets:
+            stmt = stmt.where(models_pg.Booking.outlet_id.in_(current_user.outlets))
+        else:
+            return [] # No outlets assigned, can't see bookings
+            
+    stmt = stmt.order_by(models_pg.Booking.created_at.desc())
+        
+    res = await db_session.execute(stmt)
+    bookings = res.scalars().all()
+    
+    # Load relationships conceptually or just return raw dictionary formats
+    return_data = []
+    for b in bookings:
+        # Reconstruct "service_ids" optionally if needed by pulling from the association
+        # But for list view we usually just need basic data
+        return_data.append({
+            "id": b.id,
+            "customer_id": b.customer_id,
+            "customer": b.customer_name,
+            "customer_name": b.customer_name,
+            "customer_phone": b.customer_phone,
+            "customer_email": b.customer_email,
+            "time": b.time,
+            "date": b.date.isoformat(),
+            "outlet_id": b.outlet_id,
+            "resource_id": b.resource_id,
+            "duration": b.duration,
+            "notes": b.notes,
+            "custom_fields": b.custom_fields,
+            "amount": b.amount,
+            "status": b.status,
+            "source": b.source,
+            "company_id": b.company_id,
+            "created_at": b.created_at.isoformat() if b.created_at else None
+        })
+        
+    return return_data
 
 
 @router.post("")
-async def create_booking(booking_input: BookingCreate, current_user: User = Depends(get_current_user)):
+async def create_booking(
+    booking_input: BookingCreate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    if current_user.role in ["Manager", "User"]:
+        enforce_outlet_access(current_user, booking_input.outlet_id)
+        
     # Check plan limits for booking creation (monthly limit)
     if current_user.company_id:
-        company = await companies_collection.find_one({"id": current_user.company_id}, {"_id": 0})
+        company_stmt = select(models_pg.Company).where(models_pg.Company.id == current_user.company_id)
+        company = (await db_session.execute(company_stmt)).scalar_one_or_none()
+        
         if company:
-            plan = company.get("plan", "free")
+            plan = company.plan or "free"
             plan_config = SUBSCRIPTION_PLANS.get(plan, SUBSCRIPTION_PLANS["free"])
             booking_limit = plan_config["limits"].get("bookings_per_month", 50)
             
@@ -61,10 +114,13 @@ async def create_booking(booking_input: BookingCreate, current_user: User = Depe
             if booking_limit != -1:
                 # Count bookings this month
                 first_of_month = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-                current_month_bookings = await bookings_collection.count_documents({
-                    "company_id": current_user.company_id,
-                    "created_at": {"$gte": first_of_month.isoformat()}
-                })
+                
+                count_stmt = select(func.count(models_pg.Booking.id)).where(
+                    models_pg.Booking.company_id == current_user.company_id,
+                    models_pg.Booking.created_at >= first_of_month
+                )
+                current_month_bookings = (await db_session.execute(count_stmt)).scalar() or 0
+                
                 if current_month_bookings >= booking_limit:
                     raise HTTPException(
                         status_code=403, 
@@ -74,124 +130,190 @@ async def create_booking(booking_input: BookingCreate, current_user: User = Depe
     booking_id = str(uuid.uuid4())
     
     # Use today's date if not provided
-    booking_date = booking_input.date or datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    from datetime import datetime as dt
+    booking_date = dt.fromisoformat(booking_input.date).date() if booking_input.date and len(booking_input.date) > 10 else (
+        dt.strptime(booking_input.date, "%Y-%m-%d").date() if booking_input.date else datetime.now(timezone.utc).date()
+    )
     
     # Handle service_ids array
     service_ids = booking_input.service_ids or ([booking_input.service_id] if booking_input.service_id else [])
     
     # Handle Customer Logic
     customer_id = booking_input.customer_id
+    from sqlalchemy.dialects.postgresql import JSONB
     
-    # If no customer_id but details provided, try to find or create
-    if not customer_id and (booking_input.customer or booking_input.customer_phone or booking_input.customer_email):
-        # Build query to find existing customer
-        query = {"company_id": current_user.company_id}
+    # If no customer_id but we have at least a customer name
+    if not customer_id and booking_input.customer:
+        customer_stmt = select(models_pg.Customer).where(models_pg.Customer.company_id == current_user.company_id)
+        
         or_conditions = []
         if booking_input.customer_email:
-            or_conditions.append({"email": booking_input.customer_email})
+            or_conditions.append(models_pg.Customer.email == booking_input.customer_email)
         if booking_input.customer_phone:
-            or_conditions.append({"phone": booking_input.customer_phone})
-        # If we only have name, we can't reliably dedup, so we skip unless email/phone is there
+            or_conditions.append(models_pg.Customer.phone == booking_input.customer_phone)
             
+        existing_customer = None
         if or_conditions:
-            query["$or"] = or_conditions
-            existing_customer = await customers_collection.find_one(query)
-            if existing_customer:
-                customer_id = existing_customer["id"]
-            else:
-                # Create new customer
-                customer_id = str(uuid.uuid4())
-                new_customer = {
-                    "id": customer_id,
-                    "name": booking_input.customer,
-                    "email": booking_input.customer_email,
-                    "phone": booking_input.customer_phone,
-                    "notes": "",
-                    "custom_fields": {},
-                    "company_id": current_user.company_id,
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "updated_at": datetime.now(timezone.utc).isoformat(),
-                    "total_revenue": 0,
-                    "total_bookings": 0,
-                    "last_visit": None
-                }
-                await customers_collection.insert_one(new_customer)
+            customer_stmt = customer_stmt.where(or_(*or_conditions))
+            existing_customer = (await db_session.execute(customer_stmt)).scalars().first()
+            
+        if existing_customer:
+            customer_id = existing_customer.id
+        else:
+            # Create new customer. Name is guaranteed as it's required in BookingCreate.
+            customer_id = str(uuid.uuid4())
+            new_customer = models_pg.Customer(
+                id=customer_id,
+                name=booking_input.customer,
+                email=booking_input.customer_email,
+                phone=booking_input.customer_phone,
+                notes="",
+                custom_fields={},
+                company_id=current_user.company_id,
+                total_revenue=0.0,
+                total_bookings=0
+            )
+            db_session.add(new_customer)
+            await db_session.flush()
 
-    booking_doc = {
-        "id": booking_id,
-        "customer_id": customer_id,
-        "customer": booking_input.customer,
-        "customer_name": booking_input.customer,  # For compatibility with slot manager
-        "customer_phone": booking_input.customer_phone,
-        "customer_email": booking_input.customer_email,
-        "time": booking_input.time,
-        "date": booking_date,
-        "service_id": service_ids[0] if service_ids else None,
-        "service_ids": service_ids,
-        "outlet_id": booking_input.outlet_id,
-        "resource_id": booking_input.resource_id,
-        "duration": booking_input.duration,
-        "notes": booking_input.notes,
-        "custom_fields": booking_input.custom_fields or {},
-        "amount": booking_input.amount,
-        "status": "Pending",
-        "source": "app",
-        "company_id": current_user.company_id,
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    await bookings_collection.insert_one(booking_doc)
+    new_booking = models_pg.Booking(
+        id=booking_id,
+        customer_id=customer_id,
+        customer_name=booking_input.customer,
+        customer_phone=booking_input.customer_phone,
+        customer_email=booking_input.customer_email,
+        time=booking_input.time,
+        date=booking_date,
+        outlet_id=booking_input.outlet_id,
+        resource_id=booking_input.resource_id,
+        duration=booking_input.duration,
+        notes=booking_input.notes,
+        custom_fields=booking_input.custom_fields or {},
+        amount=float(booking_input.amount),
+        status="Pending",
+        source="app",
+        company_id=current_user.company_id,
+        created_at=datetime.now(timezone.utc)
+    )
+    db_session.add(new_booking)
+    
+    # Associate services
+    if service_ids:
+        # simple association inserting (requires native executing text or building objects if mapped)
+        # assuming basic association object mappings or direct inserts
+        # Since we just used simple Table mappings for Many-to-Many
+        for s_id in service_ids:
+            # You might need to add to the booking.services collection if mapped properly
+            svc = (await db_session.execute(select(models_pg.Service).where(models_pg.Service.id == s_id))).scalar_one_or_none()
+            if svc:
+                new_booking.services.append(svc)
     
     # Create transaction if amount > 0
     if booking_input.amount > 0:
-        commission = int(booking_input.amount * 0.15)
-        partner_share = booking_input.amount - commission
-        transaction_doc = {
-            "id": str(uuid.uuid4()),
-            "booking_id": booking_id,
-            "outlet_id": booking_input.outlet_id,
-            "gross": booking_input.amount,
-            "commission": commission,
-            "partner_share": partner_share,
-            "company_id": current_user.company_id,
-            "status": "Settled",
-            "date": datetime.now(timezone.utc).isoformat()
-        }
-        await transactions_collection.insert_one(transaction_doc)
+        commission = float(booking_input.amount * 0.15)
+        partner_share = float(booking_input.amount) - commission
+        
+        new_transaction = models_pg.Transaction(
+            id=str(uuid.uuid4()),
+            booking_id=booking_id,
+            outlet_id=booking_input.outlet_id,
+            company_id=current_user.company_id,
+            gross=float(booking_input.amount),
+            commission=commission,
+            partner_share=partner_share,
+            status="Settled",
+            type="sale",
+            date=datetime.now(timezone.utc)
+        )
+        db_session.add(new_transaction)
+        
+    await db_session.commit()
     
-    booking_doc.pop("_id", None)
-    return booking_doc
+    return {
+        "id": new_booking.id,
+        "customer_id": new_booking.customer_id,
+        "customer": new_booking.customer_name,
+        "customer_name": new_booking.customer_name,
+        "customer_phone": new_booking.customer_phone,
+        "customer_email": new_booking.customer_email,
+        "time": new_booking.time,
+        "date": new_booking.date.isoformat(),
+        "service_ids": service_ids,
+        "outlet_id": new_booking.outlet_id,
+        "resource_id": new_booking.resource_id,
+        "duration": new_booking.duration,
+        "notes": new_booking.notes,
+        "custom_fields": new_booking.custom_fields,
+        "amount": new_booking.amount,
+        "status": new_booking.status,
+        "source": new_booking.source,
+        "company_id": new_booking.company_id,
+        "created_at": new_booking.created_at.isoformat() if new_booking.created_at else None
+    }
 
 
 @router.put("/{booking_id}")
-async def update_booking(booking_id: str, status: str, current_user: User = Depends(get_current_user)):
-    result = await bookings_collection.update_one(
-        {"id": booking_id},
-        {"$set": {"status": status}}
-    )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Booking not found")
+async def update_booking(
+    booking_id: str, 
+    status: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    booking = (await db_session.execute(stmt)).scalar_one_or_none()
     
-    booking = await bookings_collection.find_one({"id": booking_id}, {"_id": 0})
-    return booking
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+        
+    # Security Check
+    if current_user.role in ["Manager", "User"]:
+        enforce_outlet_access(current_user, booking.outlet_id)
+        
+    booking.status = status
+    await db_session.commit()
+    
+    return {
+        "id": booking.id,
+        "status": booking.status,
+        "customer_name": booking.customer_name,
+        "time": booking.time,
+        "date": booking.date.isoformat(),
+        "outlet_id": booking.outlet_id
+    }
 
 
 @router.put("/{booking_id}/reschedule")
-async def reschedule_booking(booking_id: str, reschedule: BookingReschedule, current_user: User = Depends(get_current_user)):
+async def reschedule_booking(
+    booking_id: str, 
+    reschedule: BookingReschedule, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     update_fields = {"time": reschedule.time}
     if reschedule.date:
-        update_fields["date"] = reschedule.date
+        from datetime import datetime as dt
+        update_fields["date"] = dt.strptime(reschedule.date, "%Y-%m-%d").date()
     if reschedule.resource_id:
         update_fields["resource_id"] = reschedule.resource_id
         
-    result = await bookings_collection.update_one(
-        {"id": booking_id},
-        {"$set": update_fields}
-    )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Booking not found")
+    stmt = update(models_pg.Booking).where(models_pg.Booking.id == booking_id).values(**update_fields)
+    res = await db_session.execute(stmt)
     
-    booking = await bookings_collection.find_one({"id": booking_id}, {"_id": 0})
-    return booking
+    if res.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Booking not found")
+        
+    await db_session.commit()
+    
+    # fetch updated
+    sel_stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    booking = (await db_session.execute(sel_stmt)).scalar_one()
+    
+    return {
+        "id": booking.id,
+        "time": booking.time,
+        "date": booking.date.isoformat(),
+        "resource_id": booking.resource_id
+    }
 
 
 @router.get("/resource-bookings/{outlet_id}")
@@ -200,22 +322,47 @@ async def get_resource_bookings(
     date: str = None, 
     start_date: str = None,
     end_date: str = None,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
 ):
     """Get bookings for a specific outlet, optionally filtered by date or date range.
     Used by the Slot Manager calendar view."""
-    query = {"outlet_id": outlet_id}
     
+    if current_user.role in ["Manager", "User"]:
+        enforce_outlet_access(current_user, outlet_id)
+        
+    stmt = select(models_pg.Booking).where(models_pg.Booking.outlet_id == outlet_id)
+    
+    from datetime import datetime as dt
     if date:
         # Single date filter (Day View)
-        query["date"] = date
+        date_obj = dt.strptime(date, "%Y-%m-%d").date()
+        stmt = stmt.where(models_pg.Booking.date == date_obj)
     elif start_date and end_date:
         # Date range filter (Week/Month View)
-        query["date"] = {"$gte": start_date, "$lte": end_date}
+        s_date_obj = dt.strptime(start_date, "%Y-%m-%d").date()
+        e_date_obj = dt.strptime(end_date, "%Y-%m-%d").date()
+        stmt = stmt.where(models_pg.Booking.date >= s_date_obj, models_pg.Booking.date <= e_date_obj)
     
     # Sort by date and then time
-    bookings = await bookings_collection.find(query, {"_id": 0}).sort([("date", 1), ("time", 1)]).to_list(1000)
-    return bookings
+    stmt = stmt.order_by(models_pg.Booking.date, models_pg.Booking.time)
+    
+    res = await db_session.execute(stmt)
+    bookings = res.scalars().all()
+    
+    return [
+        {
+            "id": b.id,
+            "customer": b.customer_name,
+            "customer_name": b.customer_name,
+            "time": b.time,
+            "date": b.date.isoformat(),
+            "outlet_id": b.outlet_id,
+            "resource_id": b.resource_id,
+            "duration": b.duration,
+            "status": b.status
+        } for b in bookings
+    ]
 
 
 class BookingItemAdd(BaseModel):
@@ -228,177 +375,215 @@ class BookingItemsUpdate(BaseModel):
 
 
 @router.get("/{booking_id}")
-async def get_booking(booking_id: str, current_user: User = Depends(get_current_user)):
+async def get_booking(
+    booking_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     """Get a single booking by ID"""
-    booking = await bookings_collection.find_one({"id": booking_id}, {"_id": 0})
+    stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    booking = (await db_session.execute(stmt)).scalar_one_or_none()
+    
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
-    return booking
+        
+    return {
+        "id": booking.id,
+        "customer_id": booking.customer_id,
+        "customer": booking.customer_name,
+        "customer_name": booking.customer_name,
+        "customer_phone": booking.customer_phone,
+        "customer_email": booking.customer_email,
+        "time": booking.time,
+        "date": booking.date.isoformat(),
+        "outlet_id": booking.outlet_id,
+        "resource_id": booking.resource_id,
+        "duration": booking.duration,
+        "notes": booking.notes,
+        "custom_fields": booking.custom_fields,
+        "amount": booking.amount,
+        "status": booking.status,
+        "company_id": booking.company_id,
+        "created_at": booking.created_at.isoformat() if booking.created_at else None,
+        "items": booking.items,
+        "items_total": booking.items_total,
+        "service_amount": booking.service_amount,
+        "total_amount": booking.total_amount
+    }
 
 
 @router.post("/{booking_id}/items")
 async def add_items_to_booking(
     booking_id: str, 
     items_data: BookingItemsUpdate,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
 ):
     """Add products/inventory items to a booking"""
-    from motor.motor_asyncio import AsyncIOMotorClient
-    import os
-    
-    MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-    DB_NAME = os.environ.get('DB_NAME', 'ridn_db')
-    client = AsyncIOMotorClient(MONGO_URL)
-    db = client[DB_NAME]
     
     # Get the booking
-    booking = await bookings_collection.find_one({"id": booking_id}, {"_id": 0})
+    b_stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    booking = (await db_session.execute(b_stmt)).scalar_one_or_none()
+    
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
     
     # Get existing items or empty list
-    existing_items = booking.get("items", [])
+    existing_items = booking.items or []
     
     # Process new items
     new_items = []
-    items_total = 0
+    items_total = 0.0
     
     for item in items_data.items:
         # Get product details
-        product = await db.products.find_one(
-            {"id": item.product_id, "company_id": current_user.company_id},
-            {"_id": 0}
+        p_stmt = select(models_pg.Product).where(
+            models_pg.Product.id == item.product_id,
+            models_pg.Product.company_id == current_user.company_id
         )
+        product = (await db_session.execute(p_stmt)).scalar_one_or_none()
+        
         if not product:
             raise HTTPException(status_code=404, detail=f"Product {item.product_id} not found")
         
         # Check stock
-        if product.get("stock_quantity", 0) < item.quantity:
+        if (product.stock_quantity or 0) < item.quantity:
             raise HTTPException(
                 status_code=400, 
-                detail=f"Insufficient stock for {product['name']}. Available: {product.get('stock_quantity', 0)}"
+                detail=f"Insufficient stock for {product.name}. Available: {product.stock_quantity or 0}"
             )
         
-        subtotal = product["price"] * item.quantity
+        subtotal = float(product.price) * item.quantity
         new_items.append({
             "product_id": item.product_id,
-            "name": product["name"],
-            "sku": product.get("sku", ""),
+            "name": product.name,
+            "sku": product.sku or "",
             "quantity": item.quantity,
-            "price": product["price"],
-            "cost": product.get("cost", 0),
+            "price": float(product.price),
+            "cost": float(product.cost or 0),
             "subtotal": subtotal
         })
         items_total += subtotal
         
         # Deduct stock
-        new_quantity = product.get("stock_quantity", 0) - item.quantity
-        await db.products.update_one(
-            {"id": item.product_id},
-            {"$set": {"stock_quantity": new_quantity, "updated_at": datetime.now(timezone.utc).isoformat()}}
-        )
+        new_quantity = (product.stock_quantity or 0) - item.quantity
+        product.stock_quantity = new_quantity
         
         # Log inventory action
-        await db.inventory_log.insert_one({
-            "id": str(uuid.uuid4()),
-            "product_id": item.product_id,
-            "action": "sale",
-            "quantity": -item.quantity,
-            "new_quantity": new_quantity,
-            "reason": "booking",
-            "booking_id": booking_id,
-            "user_id": current_user.id,
-            "company_id": current_user.company_id,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
+        inv_log = models_pg.InventoryLog(
+            id=str(uuid.uuid4()),
+            product_id=item.product_id,
+            action="sale",
+            quantity=-item.quantity,
+            new_quantity=new_quantity,
+            reason="booking",
+            reference_id=booking_id,
+            user_id=current_user.id,
+            company_id=current_user.company_id,
+            created_at=datetime.now(timezone.utc)
+        )
+        db_session.add(inv_log)
         
         # Check for low stock alert
-        if new_quantity <= product.get("reorder_level", 10):
-            existing_alert = await db.inventory_alerts.find_one({
-                "product_id": item.product_id,
-                "resolved": False
-            })
+        if new_quantity <= (product.reorder_level or 10):
+            al_stmt = select(models_pg.InventoryAlert).where(
+                models_pg.InventoryAlert.product_id == item.product_id,
+                models_pg.InventoryAlert.resolved == False
+            )
+            existing_alert = (await db_session.execute(al_stmt)).scalar_one_or_none()
+            
             if not existing_alert:
-                await db.inventory_alerts.insert_one({
-                    "id": str(uuid.uuid4()),
-                    "type": "low_stock",
-                    "product_id": item.product_id,
-                    "product_name": product["name"],
-                    "current_quantity": new_quantity,
-                    "reorder_level": product.get("reorder_level", 10),
-                    "outlet_id": product.get("outlet_id"),
-                    "company_id": current_user.company_id,
-                    "resolved": False,
-                    "created_at": datetime.now(timezone.utc).isoformat()
-                })
+                new_alert = models_pg.InventoryAlert(
+                    id=str(uuid.uuid4()),
+                    type="low_stock",
+                    product_id=item.product_id,
+                    product_name=product.name,
+                    current_quantity=new_quantity,
+                    reorder_level=product.reorder_level or 10,
+                    outlet_id=product.outlet_id,
+                    company_id=current_user.company_id,
+                    resolved=False,
+                    created_at=datetime.now(timezone.utc)
+                )
+                db_session.add(new_alert)
     
     # Merge with existing items
     all_items = existing_items + new_items
-    all_items_total = sum(item["subtotal"] for item in all_items)
+    all_items_total = float(sum(item["subtotal"] for item in all_items))
     
     # Calculate new totals
-    service_amount = booking.get("amount", 0)
+    service_amount = float(booking.service_amount or booking.amount or 0)
     total_amount = service_amount + all_items_total
     
     # Update booking
-    await bookings_collection.update_one(
-        {"id": booking_id},
-        {
-            "$set": {
-                "items": all_items,
-                "items_total": all_items_total,
-                "service_amount": service_amount,
-                "total_amount": total_amount,
-                "updated_at": datetime.now(timezone.utc).isoformat()
-            }
-        }
-    )
+    booking.items = all_items
+    booking.items_total = all_items_total
+    booking.service_amount = service_amount
+    booking.total_amount = total_amount
     
     # Update transaction
-    product_cost = sum(item["cost"] * item["quantity"] for item in all_items)
-    await transactions_collection.update_one(
-        {"booking_id": booking_id},
-        {
-            "$set": {
-                "gross": total_amount,
-                "service_revenue": service_amount,
-                "product_revenue": all_items_total,
-                "product_cost": product_cost,
-                "total_amount": total_amount,
-                "updated_at": datetime.now(timezone.utc).isoformat()
-            }
-        }
-    )
+    product_cost = sum(item.get("cost", 0) * item["quantity"] for item in all_items)
     
-    updated_booking = await bookings_collection.find_one({"id": booking_id}, {"_id": 0})
-    return updated_booking
+    t_stmt = select(models_pg.Transaction).where(models_pg.Transaction.booking_id == booking_id)
+    transaction = (await db_session.execute(t_stmt)).scalar_one_or_none()
+    
+    if transaction:
+        transaction.gross = float(total_amount)
+        transaction.product_revenue = float(all_items_total)
+        transaction.product_cost = float(product_cost)
+        transaction.service_revenue = float(service_amount)
+    
+    await db_session.commit()
+    
+    # return fresh mapping
+    await db_session.refresh(booking)
+    
+    return {
+        "id": booking.id,
+        "customer_id": booking.customer_id,
+        "customer": booking.customer_name,
+        "customer_name": booking.customer_name,
+        "customer_phone": booking.customer_phone,
+        "customer_email": booking.customer_email,
+        "time": booking.time,
+        "date": booking.date.isoformat(),
+        "outlet_id": booking.outlet_id,
+        "resource_id": booking.resource_id,
+        "duration": booking.duration,
+        "notes": booking.notes,
+        "custom_fields": booking.custom_fields,
+        "amount": booking.amount,
+        "status": booking.status,
+        "company_id": booking.company_id,
+        "created_at": booking.created_at.isoformat() if booking.created_at else None,
+        "items": booking.items,
+        "items_total": booking.items_total,
+        "service_amount": booking.service_amount,
+        "total_amount": booking.total_amount
+    }
 
 
 @router.delete("/{booking_id}/items/{product_id}")
 async def remove_item_from_booking(
     booking_id: str,
     product_id: str,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
 ):
     """Remove a product from a booking and restore stock"""
-    from motor.motor_asyncio import AsyncIOMotorClient
-    import os
-    
-    MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-    DB_NAME = os.environ.get('DB_NAME', 'ridn_db')
-    client = AsyncIOMotorClient(MONGO_URL)
-    db = client[DB_NAME]
-    
+
     # Get the booking
-    booking = await bookings_collection.find_one({"id": booking_id}, {"_id": 0})
+    b_stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    booking = (await db_session.execute(b_stmt)).scalar_one_or_none()
+    
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
     
-    items = booking.get("items", [])
+    items = booking.items or []
     item_to_remove = None
     
     for item in items:
-        if item["product_id"] == product_id:
+        if item.get("product_id") == product_id:
             item_to_remove = item
             break
     
@@ -406,60 +591,56 @@ async def remove_item_from_booking(
         raise HTTPException(status_code=404, detail="Item not found in booking")
     
     # Restore stock
-    product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    p_stmt = select(models_pg.Product).where(models_pg.Product.id == product_id)
+    product = (await db_session.execute(p_stmt)).scalar_one_or_none()
+    
     if product:
-        new_quantity = product.get("stock_quantity", 0) + item_to_remove["quantity"]
-        await db.products.update_one(
-            {"id": product_id},
-            {"$set": {"stock_quantity": new_quantity, "updated_at": datetime.now(timezone.utc).isoformat()}}
-        )
+        new_quantity = (product.stock_quantity or 0) + item_to_remove["quantity"]
+        product.stock_quantity = new_quantity
         
         # Log inventory action
-        await db.inventory_log.insert_one({
-            "id": str(uuid.uuid4()),
-            "product_id": product_id,
-            "action": "return",
-            "quantity": item_to_remove["quantity"],
-            "new_quantity": new_quantity,
-            "reason": "booking_item_removed",
-            "booking_id": booking_id,
-            "user_id": current_user.id,
-            "company_id": current_user.company_id,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
+        inv_log = models_pg.InventoryLog(
+            id=str(uuid.uuid4()),
+            product_id=product_id,
+            action="return",
+            quantity=item_to_remove["quantity"],
+            new_quantity=new_quantity,
+            reason="booking_item_removed",
+            reference_id=booking_id,
+            user_id=current_user.id,
+            company_id=current_user.company_id,
+            created_at=datetime.now(timezone.utc)
+        )
+        db_session.add(inv_log)
     
     # Remove item from booking
-    new_items = [i for i in items if i["product_id"] != product_id]
-    items_total = sum(item["subtotal"] for item in new_items)
-    service_amount = booking.get("service_amount", booking.get("amount", 0))
+    new_items = [i for i in items if i.get("product_id") != product_id]
+    items_total = float(sum(item.get("subtotal", 0) for item in new_items))
+    service_amount = float(booking.service_amount or booking.amount or 0)
     total_amount = service_amount + items_total
     
-    await bookings_collection.update_one(
-        {"id": booking_id},
-        {
-            "$set": {
-                "items": new_items,
-                "items_total": items_total,
-                "total_amount": total_amount,
-                "updated_at": datetime.now(timezone.utc).isoformat()
-            }
-        }
-    )
+    booking.items = new_items
+    booking.items_total = items_total
+    booking.total_amount = total_amount
     
     # Update transaction
-    product_cost = sum(item.get("cost", 0) * item["quantity"] for item in new_items)
-    await transactions_collection.update_one(
-        {"booking_id": booking_id},
-        {
-            "$set": {
-                "gross": total_amount,
-                "product_revenue": items_total,
-                "product_cost": product_cost,
-                "total_amount": total_amount,
-                "updated_at": datetime.now(timezone.utc).isoformat()
-            }
-        }
-    )
+    product_cost = sum(item.get("cost", 0) * item.get("quantity", 0) for item in new_items)
     
-    updated_booking = await bookings_collection.find_one({"id": booking_id}, {"_id": 0})
-    return updated_booking
+    t_stmt = select(models_pg.Transaction).where(models_pg.Transaction.booking_id == booking_id)
+    transaction = (await db_session.execute(t_stmt)).scalar_one_or_none()
+    
+    if transaction:
+        transaction.gross = float(total_amount)
+        transaction.product_revenue = float(items_total)
+        transaction.product_cost = float(product_cost)
+        
+    await db_session.commit()
+    await db_session.refresh(booking)
+    
+    return {
+        "id": booking.id,
+        "items": booking.items,
+        "items_total": booking.items_total,
+        "service_amount": booking.service_amount,
+        "total_amount": booking.total_amount
+    }

@@ -4,9 +4,13 @@ from typing import List, Optional
 from datetime import datetime, timezone
 import uuid
 
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update, delete, func
+import models_pg
+
 from .dependencies import (
-    outlets_collection, get_current_user, User, 
-    companies_collection, check_plan_limit, SUBSCRIPTION_PLANS
+    get_db, get_current_user, User, 
+    check_plan_limit, SUBSCRIPTION_PLANS
 )
 
 router = APIRouter(prefix="/outlets", tags=["Outlets"])
@@ -29,81 +33,130 @@ class OutletCreate(OutletBase):
 
 
 @router.get("")
-async def get_outlets(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for non-SuperAdmin users
-    query = {}
+async def get_outlets(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Outlet)
     if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+        stmt = stmt.where(models_pg.Outlet.company_id == current_user.company_id)
+        
+    res = await db_session.execute(stmt)
+    outlets = res.scalars().all()
     
-    outlets = await outlets_collection.find(query, {"_id": 0}).to_list(1000)
-    return outlets
+    return [
+        {
+            "id": o.id,
+            "company_id": o.company_id,
+            "name": o.name,
+            "city": o.location.split(", ")[0] if o.location else "",
+            "address": o.location,
+            "capacity": o.capacity,
+            "status": o.status,
+            "created_at": o.created_at
+        } for o in outlets
+    ]
 
 
 @router.post("")
-async def create_outlet(outlet_input: OutletCreate, current_user: User = Depends(get_current_user)):
+async def create_outlet(
+    outlet_input: OutletCreate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     # Check plan limits for outlet creation
     if current_user.company_id:
-        company = await companies_collection.find_one({"id": current_user.company_id}, {"_id": 0})
+        company_stmt = select(models_pg.Company).where(models_pg.Company.id == current_user.company_id)
+        res = await db_session.execute(company_stmt)
+        company = res.scalar_one_or_none()
+        
         if company:
-            plan = company.get("plan", "free")
+            plan = company.plan or "free"
             plan_config = SUBSCRIPTION_PLANS.get(plan, SUBSCRIPTION_PLANS["free"])
             outlet_limit = plan_config["limits"].get("outlets", 1)
             
             # -1 means unlimited
             if outlet_limit != -1:
-                current_outlet_count = await outlets_collection.count_documents({"company_id": current_user.company_id})
+                count_stmt = select(func.count(models_pg.Outlet.id)).where(models_pg.Outlet.company_id == current_user.company_id)
+                count_res = await db_session.execute(count_stmt)
+                current_outlet_count = count_res.scalar_one()
+                
                 if current_outlet_count >= outlet_limit:
                     raise HTTPException(
                         status_code=403, 
                         detail=f"Outlet limit reached. Your {plan.capitalize()} plan allows {outlet_limit} outlet(s). Please upgrade your plan."
                     )
     
-    outlet_doc = {
-        "id": str(uuid.uuid4()),
-        "name": outlet_input.name,
+    new_outlet = models_pg.Outlet(
+        id=str(uuid.uuid4()),
+        name=outlet_input.name,
+        company_id=current_user.company_id,
+        location=f"{outlet_input.city}, {outlet_input.address}",
+        capacity=outlet_input.capacity,
+        status="active"
+    )
+    db_session.add(new_outlet)
+    await db_session.commit()
+    await db_session.refresh(new_outlet)
+    
+    return {
+        "id": new_outlet.id,
+        "name": new_outlet.name,
         "city": outlet_input.city,
         "address": outlet_input.address,
-        "capacity": outlet_input.capacity,
-        "machines": outlet_input.machines,
-        "rating": outlet_input.rating,
-        "solar": outlet_input.solar,
-        "water_recycle": outlet_input.water_recycle,
-        "status": "Active",
-        "services_offered": outlet_input.services_offered,
-        "company_id": current_user.company_id,
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "capacity": new_outlet.capacity,
+        "status": new_outlet.status,
+        "company_id": new_outlet.company_id,
+        "created_at": new_outlet.created_at
     }
-    await outlets_collection.insert_one(outlet_doc)
-    outlet_doc.pop("_id", None)
-    return outlet_doc
 
 
 @router.put("/{outlet_id}")
-async def update_outlet(outlet_id: str, outlet_input: OutletCreate, current_user: User = Depends(get_current_user)):
-    result = await outlets_collection.update_one(
-        {"id": outlet_id},
-        {"$set": {
-            "name": outlet_input.name,
-            "city": outlet_input.city,
-            "address": outlet_input.address,
-            "capacity": outlet_input.capacity,
-            "machines": outlet_input.machines,
-            "rating": outlet_input.rating,
-            "solar": outlet_input.solar,
-            "water_recycle": outlet_input.water_recycle,
-            "services_offered": outlet_input.services_offered
-        }}
+async def update_outlet(
+    outlet_id: str, 
+    outlet_input: OutletCreate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = (
+        update(models_pg.Outlet)
+        .where(models_pg.Outlet.id == outlet_id)
+        .values(
+            name=outlet_input.name,
+            location=f"{outlet_input.city}, {outlet_input.address}",
+            capacity=outlet_input.capacity
+        )
     )
-    if result.matched_count == 0:
+    res = await db_session.execute(stmt)
+    if res.rowcount == 0:
         raise HTTPException(status_code=404, detail="Outlet not found")
+        
+    await db_session.commit()
     
-    outlet = await outlets_collection.find_one({"id": outlet_id}, {"_id": 0})
-    return outlet
+    get_stmt = select(models_pg.Outlet).where(models_pg.Outlet.id == outlet_id)
+    get_res = await db_session.execute(get_stmt)
+    outlet = get_res.scalar_one()
+    
+    return {
+        "id": outlet.id,
+        "name": outlet.name,
+        "location": outlet.location,
+        "capacity": outlet.capacity,
+        "status": outlet.status
+    }
 
 
 @router.delete("/{outlet_id}")
-async def delete_outlet(outlet_id: str, current_user: User = Depends(get_current_user)):
-    result = await outlets_collection.delete_one({"id": outlet_id})
-    if result.deleted_count == 0:
+async def delete_outlet(
+    outlet_id: str, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = delete(models_pg.Outlet).where(models_pg.Outlet.id == outlet_id)
+    res = await db_session.execute(stmt)
+    
+    if res.rowcount == 0:
         raise HTTPException(status_code=404, detail="Outlet not found")
+        
+    await db_session.commit()
     return {"message": "Outlet deleted"}

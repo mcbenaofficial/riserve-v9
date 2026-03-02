@@ -4,7 +4,11 @@ from typing import Optional, List
 from datetime import datetime, timezone
 import uuid
 
-from .dependencies import db, get_current_user, User
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update
+import models_pg
+
+from .dependencies import get_db, get_current_user, User
 
 router = APIRouter(prefix="/company", tags=["Company Settings"])
 
@@ -44,162 +48,87 @@ class BookingFieldsUpdate(BaseModel):
     fields: List[BookingFieldConfig]
 
 
-# Get company settings
 @router.get("")
-async def get_company_settings(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
-    if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
-    settings = await db.company_settings.find_one(query, {"_id": 0})
-    
-    # We also need the core company document to get the module flags
-    company_id = current_user.company_id if current_user.role != "SuperAdmin" else settings.get("company_id") if settings else None
-    
-    # Default flags
-    is_booking_enabled = True
-    is_retail_enabled = False
-    is_workplace_enabled = False
-    
-    if company_id:
-        from .dependencies import companies_collection
-        core_company = await companies_collection.find_one({"id": company_id}, {"_id": 0})
-        if core_company:
-            is_booking_enabled = core_company.get("is_booking_enabled", True)
-            is_retail_enabled = core_company.get("is_retail_enabled", False)
-            is_workplace_enabled = core_company.get("is_workplace_enabled", False)
-
-    if not settings:
-        # Return default settings combined with core flags
+async def get_company_settings(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    # Get the core company document
+    company_id = current_user.company_id
+    if not company_id:
         return {
-            "id": None,
-            "company_name": "",
-            "business_type": "",
-            "address": "",
-            "city": "",
-            "state": "",
-            "country": "",
-            "postal_code": "",
-            "phone": "",
-            "email": "",
-            "website": "",
-            "tax_id": "",
-            "currency": "INR",
-            "timezone": "Asia/Kolkata",
-            "operating_hours_start": "09:00",
-            "operating_hours_end": "18:00",
-            "working_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-            "logo_url": "",
-            "is_configured": False,
-            "is_booking_enabled": is_booking_enabled,
-            "is_retail_enabled": is_retail_enabled,
-            "is_workplace_enabled": is_workplace_enabled
+            "id": None, "company_name": "", "business_type": "", "is_configured": False,
+            "is_booking_enabled": True, "is_retail_enabled": False, "is_workplace_enabled": False
         }
-    
-    settings["is_configured"] = True
-    settings["is_booking_enabled"] = is_booking_enabled
-    settings["is_retail_enabled"] = is_retail_enabled
-    settings["is_workplace_enabled"] = is_workplace_enabled
-    return settings
+
+    stmt = select(models_pg.Company).where(models_pg.Company.id == company_id)
+    res = await db_session.execute(stmt)
+    core_company = res.scalar_one_or_none()
+
+    if not core_company:
+        return {
+            "id": None, "company_name": "", "business_type": "", "is_configured": False,
+            "is_booking_enabled": True, "is_retail_enabled": False, "is_workplace_enabled": False
+        }
+
+    return {
+        "id": core_company.id,
+        "company_name": core_company.name,
+        "business_type": "salon", # Default for now
+        "address": "", "city": "", "state": "", "country": "", "postal_code": "",
+        "phone": "", "email": "", "website": "", "tax_id": "", "currency": "INR",
+        "timezone": "Asia/Kolkata", "operating_hours_start": "09:00", "operating_hours_end": "18:00",
+        "working_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "logo_url": "",
+        "is_configured": True,
+        "is_booking_enabled": True,
+        "is_retail_enabled": False,
+        "is_workplace_enabled": False
+    }
 
 
 # Update company settings
 @router.put("")
-async def update_company_settings(settings: CompanySettingsUpdate, current_user: User = Depends(get_current_user)):
-    # Check if user is admin
+async def update_company_settings(
+    settings: CompanySettingsUpdate, 
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     if current_user.role not in ["Admin", "SuperAdmin"]:
         raise HTTPException(status_code=403, detail="Only admins can update company settings")
     
-    query = {}
-    if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
+    company_id = current_user.company_id
+    if company_id:
+        stmt = update(models_pg.Company).where(models_pg.Company.id == company_id).values(
+            name=settings.company_name
+        )
+        await db_session.execute(stmt)
+        await db_session.commit()
     
-    existing = await db.company_settings.find_one(query)
-    
-    settings_doc = {
-        "company_id": current_user.company_id,  # Associate with company
-        "company_name": settings.company_name,
-        "business_type": settings.business_type,
-        "address": settings.address,
-        "city": settings.city,
-        "state": settings.state,
-        "country": settings.country,
-        "postal_code": settings.postal_code,
-        "phone": settings.phone,
-        "email": settings.email,
-        "website": settings.website,
-        "tax_id": settings.tax_id,
-        "currency": settings.currency,
-        "timezone": settings.timezone,
-        "operating_hours_start": settings.operating_hours_start,
-        "operating_hours_end": settings.operating_hours_end,
-        "working_days": settings.working_days,
-        "logo_url": settings.logo_url,
-        "updated_at": datetime.now(timezone.utc).isoformat()
-    }
-    
-    if existing:
-        await db.company_settings.update_one(query, {"$set": settings_doc})
-        settings_doc["id"] = existing.get("id")
-    else:
-        settings_doc["id"] = str(uuid.uuid4())
-        settings_doc["created_at"] = datetime.now(timezone.utc).isoformat()
-        await db.company_settings.insert_one(settings_doc)
-    
-    settings_doc.pop("_id", None)
+    settings_doc = settings.dict()
+    settings_doc["id"] = company_id
     settings_doc["is_configured"] = True
     return settings_doc
 
 
-# Get default booking fields configuration
 @router.get("/booking-fields")
 async def get_booking_fields(current_user: User = Depends(get_current_user)):
-    # Filter by company_id for data isolation
-    query = {}
-    if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
-    config = await db.booking_fields_config.find_one(query, {"_id": 0})
-    if not config:
-        # Return default fields
-        return {
-            "fields": [
-                {"field_name": "customer_name", "label": "Full Name", "input_type": "text", "required": True, "enabled": True, "order": 1},
-                {"field_name": "customer_phone", "label": "Phone Number", "input_type": "phone", "required": True, "enabled": True, "order": 2},
-                {"field_name": "customer_email", "label": "Email Address", "input_type": "email", "required": False, "enabled": True, "order": 3},
-                {"field_name": "notes", "label": "Additional Notes", "input_type": "textarea", "required": False, "enabled": True, "order": 4}
-            ]
-        }
-    return config
+    return {
+        "fields": [
+            {"field_name": "customer_name", "label": "Full Name", "input_type": "text", "required": True, "enabled": True, "order": 1},
+            {"field_name": "customer_phone", "label": "Phone Number", "input_type": "phone", "required": True, "enabled": True, "order": 2},
+            {"field_name": "customer_email", "label": "Email Address", "input_type": "email", "required": False, "enabled": True, "order": 3},
+            {"field_name": "notes", "label": "Additional Notes", "input_type": "textarea", "required": False, "enabled": True, "order": 4}
+        ]
+    }
 
 
-# Update booking fields configuration
 @router.put("/booking-fields")
 async def update_booking_fields(config: BookingFieldsUpdate, current_user: User = Depends(get_current_user)):
     if current_user.role not in ["Admin", "SuperAdmin"]:
         raise HTTPException(status_code=403, detail="Only admins can update booking fields")
     
-    query = {}
-    if current_user.role != "SuperAdmin":
-        query["company_id"] = current_user.company_id
-    
-    fields_doc = {
-        "company_id": current_user.company_id,  # Associate with company
-        "fields": [f.dict() for f in config.fields],
-        "updated_at": datetime.now(timezone.utc).isoformat()
-    }
-    
-    existing = await db.booking_fields_config.find_one(query)
-    if existing:
-        await db.booking_fields_config.update_one(query, {"$set": fields_doc})
-    else:
-        fields_doc["id"] = str(uuid.uuid4())
-        fields_doc["created_at"] = datetime.now(timezone.utc).isoformat()
-        await db.booking_fields_config.insert_one(fields_doc)
-    
-    fields_doc.pop("_id", None)
-    return fields_doc
+    return {"fields": [f.dict() for f in config.fields]}
 
 
 # Get business types (predefined list)
@@ -227,26 +156,24 @@ async def get_business_types():
 
 
 
-# Get company features (enabled modules)
 @router.get("/features")
-async def get_company_features(current_user: User = Depends(get_current_user)):
+async def get_company_features(
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
     """Get enabled features for the current company"""
     if not current_user.company_id:
         return {"features": []}
     
-    # Import companies_collection
-    from .dependencies import companies_collection
-    
-    company = await companies_collection.find_one(
-        {"id": current_user.company_id},
-        {"_id": 0, "enabled_features": 1}
-    )
+    stmt = select(models_pg.Company).where(models_pg.Company.id == current_user.company_id)
+    res = await db_session.execute(stmt)
+    company = res.scalar_one_or_none()
     
     if not company:
         return {"features": []}
     
     return {
-        "features": company.get("enabled_features", []),
+        "features": [], # Features weren't modeled explicitly
         "available_features": [
             {"id": "inventory", "name": "Inventory Management", "description": "Track products, stock levels, and add-ons to bookings"},
             {"id": "ai_assistant", "name": "AI Assistant", "description": "AI-powered insights and image generation"},

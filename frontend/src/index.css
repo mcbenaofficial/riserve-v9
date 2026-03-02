@@ -395,77 +395,77 @@ code {
 /* ─── ZEN DARK MODE — Remap Vivid Dark Hex to Warm Neutrals ─── */
 
 /* Background primary: #0B0D10 → #12100D */
-.zen.dark [class*="bg-[#0B0D10]"] {
+.zen.dark [class~="bg-[#0B0D10]"] {
     background-color: #12100D !important;
 }
 
 /* Surface / card: #12161C → #1C1915 */
-.zen.dark [class*="bg-[#12161C]"] {
+.zen.dark [class~="bg-[#12161C]"] {
     background-color: #1C1915 !important;
 }
 
 /* Popover / dropdown: #171C22 → #25221E */
-.zen.dark [class*="bg-[#171C22]"] {
+.zen.dark [class~="bg-[#171C22]"] {
     background-color: #25221E !important;
 }
 
 /* Border / divider: #1F2630 → #3A3530 */
-.zen.dark [class*="border-[#1F2630]"] {
+.zen.dark [class~="border-[#1F2630]"] {
     border-color: #3A3530 !important;
 }
 
 /* Hover bg: #1F2630 → #3A3530 */
-.zen.dark [class*="hover:bg-[#1F2630]"]:hover {
+.zen.dark [class~="hover:bg-[#1F2630]"]:hover {
     background-color: #3A3530 !important;
 }
 
 /* Surface bg: #1F2630 → #3A3530 */
-.zen.dark [class*="bg-[#1F2630]"] {
+.zen.dark [class~="bg-[#1F2630]"] {
     background-color: #3A3530 !important;
 }
 
 /* Primary text: #E6E8EB → #F2EDE6 */
-.zen.dark [class*="text-[#E6E8EB]"] {
+.zen.dark [class~="text-[#E6E8EB]"] {
     color: #F2EDE6 !important;
 }
 
 /* Secondary text: #A9AFB8 → #A8A39A */
-.zen.dark [class*="text-[#A9AFB8]"] {
+.zen.dark [class~="text-[#A9AFB8]"] {
     color: #A8A39A !important;
 }
 
 /* Muted text: #7D8590 → #A8A39A */
-.zen.dark [class*="text-[#7D8590]"] {
+.zen.dark [class~="text-[#7D8590]"] {
     color: #A8A39A !important;
 }
 
 /* Alt muted: #9CA3AF → #A8A39A */
-.zen.dark [class*="text-[#9CA3AF]"] {
+.zen.dark [class~="text-[#9CA3AF]"] {
     color: #A8A39A !important;
 }
 
 /* Accent text: #5FA8D3 → #D4A89A */
-.zen.dark [class*="text-[#5FA8D3]"] {
+.zen.dark [class~="text-[#5FA8D3]"] {
     color: #D4A89A !important;
 }
 
 /* Accent bg: #5FA8D3 → #D4A89A */
-.zen.dark [class*="bg-[#5FA8D3]"] {
+.zen.dark [class~="bg-[#5FA8D3]"] {
     background-color: #D4A89A !important;
 }
 
 /* Ring accent */
-.zen.dark [class*="ring-[#5FA8D3]"] {
+.zen.dark [class~="ring-[#5FA8D3]"] {
     --tw-ring-color: #D4A89A !important;
 }
 
 /* Ring offset */
-.zen.dark [class*="ring-offset-[#12161C]"] {
+.zen.dark [class~="ring-offset-[#12161C]"] {
     --tw-ring-offset-color: #1C1915 !important;
 }
 
 /* Scrollbar thumb */
-.zen.dark [class*="scrollbar-thumb-[#1F2630]"]::-webkit-scrollbar-thumb {
+.zen.dark [class~="scrollbar-thumb-[#1F2630]"]::-webkit-scrollbar-thumb {
     background-color: #3A3530 !important;
 }
 
@@ -473,49 +473,49 @@ code {
 /* ─── ZEN LIGHT MODE — Remap Vivid Light Hex to Warm Neutrals ─── */
 
 /* Background primary: #F6F7F9 → #FDFAF5 */
-.zen:not(.dark) [class*="bg-[#F6F7F9]"] {
+.zen:not(.dark) [class~="bg-[#F6F7F9]"] {
     background-color: #FDFAF5 !important;
 }
 
 /* Background secondary: #ECEFF3 → #F2EDE6 */
-.zen:not(.dark) [class*="bg-[#ECEFF3]"] {
+.zen:not(.dark) [class~="bg-[#ECEFF3]"] {
     background-color: #F2EDE6 !important;
 }
 
 /* Hover bg: #F6F7F9 → #FDFAF5 */
-.zen:not(.dark) [class*="hover:bg-[#F6F7F9]"]:hover {
+.zen:not(.dark) [class~="hover:bg-[#F6F7F9]"]:hover {
     background-color: #FDFAF5 !important;
 }
 
 /* Border: #D9DEE5 → #E8E2D9 */
-.zen:not(.dark) [class*="border-[#D9DEE5]"] {
+.zen:not(.dark) [class~="border-[#D9DEE5]"] {
     border-color: #E8E2D9 !important;
 }
 
 /* Primary text: #0E1116 → #2F2A25 */
-.zen:not(.dark) [class*="text-[#0E1116]"] {
+.zen:not(.dark) [class~="text-[#0E1116]"] {
     color: #2F2A25 !important;
 }
 
 /* Secondary text: #4B5563 / #4A5568 → #7A746A */
-.zen:not(.dark) [class*="text-[#4B5563]"],
-.zen:not(.dark) [class*="text-[#4A5568]"] {
+.zen:not(.dark) [class~="text-[#4B5563]"],
+.zen:not(.dark) [class~="text-[#4A5568]"] {
     color: #7A746A !important;
 }
 
 /* Muted text: #6B7280 / #718096 → #7A746A */
-.zen:not(.dark) [class*="text-[#6B7280]"],
-.zen:not(.dark) [class*="text-[#718096]"] {
+.zen:not(.dark) [class~="text-[#6B7280]"],
+.zen:not(.dark) [class~="text-[#718096]"] {
     color: #7A746A !important;
 }
 
 /* Accent text: #5FA8D3 → #C68A7A */
-.zen:not(.dark) [class*="text-[#5FA8D3]"] {
+.zen:not(.dark) [class~="text-[#5FA8D3]"] {
     color: #C68A7A !important;
 }
 
 /* Accent bg: #5FA8D3 → #C68A7A */
-.zen:not(.dark) [class*="bg-[#5FA8D3]"] {
+.zen:not(.dark) [class~="bg-[#5FA8D3]"] {
     background-color: #C68A7A !important;
 }
 
@@ -600,7 +600,7 @@ code {
 }
 
 /* Ring: #5FA8D3 → warm */
-.zen [class*="ring-[#5FA8D3]"] {
+.zen [class~="ring-[#5FA8D3]"] {
     --tw-ring-color: #C68A7A !important;
 }
 
@@ -738,15 +738,15 @@ code {
 }
 
 .zen [class*="bg-green-500/"] {
-    background-color: rgba(139, 158, 126, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(139, 158, 126, 0.1) !important;
 }
 
 .zen [class*="bg-green-900/"] {
-    background-color: rgba(106, 126, 94, var(--tw-bg-opacity, 0.2)) !important;
+    background-color: rgba(106, 126, 94, 0.2) !important;
 }
 
 .zen [class*="border-green-500/"] {
-    border-color: rgba(139, 158, 126, var(--tw-border-opacity, 0.2)) !important;
+    border-color: rgba(139, 158, 126, 0.2) !important;
 }
 
 .zen [class*="hover:bg-green-600"]:hover {
@@ -823,19 +823,19 @@ code {
 }
 
 .zen [class*="bg-red-500/"] {
-    background-color: rgba(184, 136, 126, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(184, 136, 126, 0.1) !important;
 }
 
 .zen [class*="bg-red-900/"] {
-    background-color: rgba(152, 104, 94, var(--tw-bg-opacity, 0.2)) !important;
+    background-color: rgba(152, 104, 94, 0.2) !important;
 }
 
 .zen [class*="border-red-500/"] {
-    border-color: rgba(184, 136, 126, var(--tw-border-opacity, 0.2)) !important;
+    border-color: rgba(184, 136, 126, 0.2) !important;
 }
 
 .zen [class*="hover:bg-red-500/"]:hover {
-    background-color: rgba(184, 136, 126, var(--tw-bg-opacity, 0.15)) !important;
+    background-color: rgba(184, 136, 126, 0.15) !important;
 }
 
 .zen [class*="hover:bg-red-600"]:hover {
@@ -888,7 +888,7 @@ code {
 }
 
 .zen [class*="bg-yellow-500/"] {
-    background-color: rgba(196, 168, 110, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(196, 168, 110, 0.1) !important;
 }
 
 /* ─── AMBER → GOLDEN SAND ─── */
@@ -913,11 +913,11 @@ code {
 }
 
 .zen [class*="text-amber-200/"] {
-    color: rgba(216, 184, 128, var(--tw-text-opacity, 0.8)) !important;
+    color: rgba(216, 184, 128, 0.8) !important;
 }
 
 .zen [class*="text-amber-700/"] {
-    color: rgba(152, 120, 64, var(--tw-text-opacity, 0.8)) !important;
+    color: rgba(152, 120, 64, 0.8) !important;
 }
 
 .zen .bg-amber-500 {
@@ -957,15 +957,15 @@ code {
 }
 
 .zen [class*="bg-amber-500/"] {
-    background-color: rgba(184, 152, 96, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(184, 152, 96, 0.1) !important;
 }
 
 .zen [class*="bg-amber-900/"] {
-    background-color: rgba(152, 120, 64, var(--tw-bg-opacity, 0.2)) !important;
+    background-color: rgba(152, 120, 64, 0.2) !important;
 }
 
 .zen [class*="border-amber-500/"] {
-    border-color: rgba(184, 152, 96, var(--tw-border-opacity, 0.2)) !important;
+    border-color: rgba(184, 152, 96, 0.2) !important;
 }
 
 .zen [class*="hover:bg-amber-600"]:hover {
@@ -1014,15 +1014,15 @@ code {
 }
 
 .zen [class*="bg-blue-500/"] {
-    background-color: rgba(136, 153, 168, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(136, 153, 168, 0.1) !important;
 }
 
 .zen [class*="bg-blue-900/"] {
-    background-color: rgba(104, 121, 136, var(--tw-bg-opacity, 0.2)) !important;
+    background-color: rgba(104, 121, 136, 0.2) !important;
 }
 
 .zen [class*="border-blue-500/"] {
-    border-color: rgba(136, 153, 168, var(--tw-border-opacity, 0.2)) !important;
+    border-color: rgba(136, 153, 168, 0.2) !important;
 }
 
 .zen [class*="shadow-[0_0_10px_rgba(59,130,246"] {
@@ -1075,11 +1075,11 @@ code {
 }
 
 .zen [class*="bg-orange-500/"] {
-    background-color: rgba(180, 136, 104, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(180, 136, 104, 0.1) !important;
 }
 
 .zen [class*="bg-orange-900/"] {
-    background-color: rgba(148, 104, 72, var(--tw-bg-opacity, 0.2)) !important;
+    background-color: rgba(148, 104, 72, 0.2) !important;
 }
 
 .zen [class*="hover:bg-orange-600"]:hover {
@@ -1128,11 +1128,11 @@ code {
 }
 
 .zen [class*="bg-cyan-500/"] {
-    background-color: rgba(126, 168, 160, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(126, 168, 160, 0.1) !important;
 }
 
 .zen [class*="bg-teal-500/"] {
-    background-color: rgba(126, 168, 160, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(126, 168, 160, 0.1) !important;
 }
 
 /* ─── EMERALD → SAGE (same as green family) ─── */
@@ -1169,15 +1169,15 @@ code {
 }
 
 .zen [class*="bg-emerald-500/"] {
-    background-color: rgba(139, 158, 126, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(139, 158, 126, 0.1) !important;
 }
 
 .zen [class*="bg-emerald-900/"] {
-    background-color: rgba(106, 126, 94, var(--tw-bg-opacity, 0.2)) !important;
+    background-color: rgba(106, 126, 94, 0.2) !important;
 }
 
 .zen [class*="border-emerald-500/"] {
-    border-color: rgba(139, 158, 126, var(--tw-border-opacity, 0.2)) !important;
+    border-color: rgba(139, 158, 126, 0.2) !important;
 }
 
 /* ─── INDIGO → MUTED PLUM ─── */
@@ -1202,7 +1202,7 @@ code {
 }
 
 .zen [class*="bg-indigo-500/"] {
-    background-color: rgba(142, 142, 168, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(142, 142, 168, 0.1) !important;
 }
 
 /* ─── PINK → MUTED ROSE (complement the existing purple remaps) ─── */
@@ -1227,7 +1227,7 @@ code {
 }
 
 .zen [class*="bg-pink-500/"] {
-    background-color: rgba(184, 144, 128, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(184, 144, 128, 0.1) !important;
 }
 
 /* ─── PURPLE (extending existing remaps) ─── */
@@ -1256,15 +1256,15 @@ code {
 }
 
 .zen [class*="bg-purple-500/"] {
-    background-color: rgba(198, 138, 122, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(198, 138, 122, 0.1) !important;
 }
 
 .zen [class*="border-purple-500/"] {
-    border-color: rgba(198, 138, 122, var(--tw-border-opacity, 0.25)) !important;
+    border-color: rgba(198, 138, 122, 0.25) !important;
 }
 
 .zen [class*="shadow-purple-500/"] {
-    --tw-shadow-color: rgba(198, 138, 122, var(--tw-shadow-opacity, 0.2)) !important;
+    --tw-shadow-color: rgba(198, 138, 122, 0.2) !important;
 }
 
 /* ─── GRAY (muted cool gray → warm gray in Zen) ─── */
@@ -1281,7 +1281,7 @@ code {
 }
 
 .zen [class*="bg-gray-500/"] {
-    background-color: rgba(158, 152, 144, var(--tw-bg-opacity, 0.1)) !important;
+    background-color: rgba(158, 152, 144, 0.1) !important;
 }
 
 /* ─── CHART COLORS — Zen warm overrides ─── */

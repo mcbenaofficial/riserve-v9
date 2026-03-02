@@ -3,12 +3,12 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone, timedelta
 import uuid
 import logging
-# Imports moved inside functions to avoid circular reference
-# from routes.dependencies import (
-#     bookings_collection, services_collection, outlets_collection,
-#     users_collection, ai_conversations_collection, products_collection
-# )
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func, desc, and_
 from pydantic import BaseModel, Field
+
+import models_pg
+from database_pg import engine
 
 logger = logging.getLogger(__name__)
 
@@ -66,24 +66,28 @@ async def get_recent_bookings(limit: int = 5, user_context: Dict[str, Any] = Non
     Get a list of the most recent bookings for the user's company.
     Accessible by Admin, Manager, and Staff.
     """
-    from routes.dependencies import bookings_collection
     if not user_context:
         return "Error: No user context provided."
 
     company_id = user_context.get("company_id")
     
-    query = {"company_id": company_id} if company_id else {}
-    
-    bookings = await bookings_collection.find(query).sort("created_at", -1).limit(limit).to_list(limit)
+    async with AsyncSession(engine) as session:
+        stmt = select(models_pg.Booking)
+        if company_id:
+            stmt = stmt.where(models_pg.Booking.company_id == company_id)
+        
+        stmt = stmt.order_by(desc(models_pg.Booking.created_at)).limit(limit)
+        result = await session.execute(stmt)
+        bookings = result.scalars().all()
     
     if not bookings:
         return "No recent bookings found."
         
-    result = "Recent Bookings:\n"
+    res_text = "Recent Bookings:\n"
     for b in bookings:
-        result += f"- {b.get('customer_name')} ({b.get('date')} {b.get('time')}): {b.get('status')} - {b.get('amount')}\n"
+        res_text += f"- {b.customer_name} ({b.date} {b.time}): {b.status} - {b.amount}\n"
         
-    return result
+    return res_text
 
 @tool(args_schema=BookingCreateSchema)
 async def create_booking_tool(customer_name: str, service_name: str, date: str, time: str, outlet_name: Optional[str] = None, user_context: Dict[str, Any] = None) -> str:
@@ -91,56 +95,59 @@ async def create_booking_tool(customer_name: str, service_name: str, date: str, 
     Create a new booking. Requires finding the service and outlet first.
     Accessible by Admin, Manager, and Staff.
     """
-    from routes.dependencies import bookings_collection, services_collection, outlets_collection
     if not user_context:
         return "Error: No user context provided."
         
     company_id = user_context.get("company_id")
     
-    # 1. Find Service
-    service_query = {"name": {"$regex": service_name, "$options": "i"}, "company_id": company_id} if company_id else {"name": {"$regex": service_name, "$options": "i"}}
-    service = await services_collection.find_one(service_query)
-    
-    if not service:
-        return f"Error: Service '{service_name}' not found."
+    async with AsyncSession(engine) as session:
+        # 1. Find Service
+        service_stmt = select(models_pg.Service).where(
+            models_pg.Service.name.ilike(f"%{service_name}%")
+        )
+        if company_id:
+            service_stmt = service_stmt.where(models_pg.Service.company_id == company_id)
         
-    # 2. Find Outlet
-    outlet_query = {"company_id": company_id} if company_id else {}
-    if outlet_name:
-        outlet_query["name"] = {"$regex": outlet_name, "$options": "i"}
+        service = (await session.execute(service_stmt)).scalar_one_or_none()
         
-    outlet = await outlets_collection.find_one(outlet_query)
-    # If not specified and multiple exist, pick first (simplified logic)
-    if not outlet and not outlet_name:
-        outlet = await outlets_collection.find_one({"company_id": company_id} if company_id else {})
+        if not service:
+            return f"Error: Service '{service_name}' not found."
+            
+        # 2. Find Outlet
+        outlet_stmt = select(models_pg.Outlet)
+        if company_id:
+            outlet_stmt = outlet_stmt.where(models_pg.Outlet.company_id == company_id)
         
-    if not outlet:
-        return f"Error: Outlet not found. Please specify a valid outlet."
+        if outlet_name:
+            outlet_stmt = outlet_stmt.where(models_pg.Outlet.name.ilike(f"%{outlet_name}%"))
+            
+        outlet = (await session.execute(outlet_stmt)).scalar_one_or_none()
+        
+        if not outlet:
+            return f"Error: Outlet not found. Please specify a valid outlet."
 
-    # 3. Create Booking Object
-    booking_id = str(uuid.uuid4())
-    booking = {
-        "id": booking_id,
-        "customer_name": customer_name,
-        "customer": customer_name, # Legacy field
-        "service_id": service["id"],
-        "service_ids": [service["id"]],
-        "outlet_id": outlet["id"],
-        "date": date,
-        "time": time,
-        "amount": service["price"],
-        "status": "Pending",
-        "company_id": company_id,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "source": "ai_agent"
-    }
-    
-    try:
-        await bookings_collection.insert_one(booking)
-        return f"Booking created successfully for {customer_name} on {date} at {time}."
-    except Exception as e:
-        logger.error(f"Failed to create booking: {e}")
-        return f"Error creating booking: {str(e)}"
+        # 3. Create Booking Object
+        new_booking = models_pg.Booking(
+            id=str(uuid.uuid4()),
+            customer_name=customer_name,
+            outlet_id=outlet.id,
+            date=date, # Hopefully string date works or needs parsing
+            time=time,
+            amount=service.price,
+            status="Pending",
+            company_id=company_id,
+            source="ai_agent"
+        )
+        # Note: Booking model has a list of services in SQLAlchemy now
+        new_booking.services.append(service)
+        
+        try:
+            session.add(new_booking)
+            await session.commit()
+            return f"Booking created successfully for {customer_name} on {date} at {time}."
+        except Exception as e:
+            logger.error(f"Failed to create booking: {e}")
+            return f"Error creating booking: {str(e)}"
 
 @tool(args_schema=RevenueStatsSchema)
 async def get_revenue_stats(period: str = "month", user_context: Dict[str, Any] = None) -> str:
@@ -148,7 +155,6 @@ async def get_revenue_stats(period: str = "month", user_context: Dict[str, Any] 
     Get revenue statistics. Period can be 'today', 'week', 'month', or 'all'.
     Accessible by Admin and Owner only.
     """
-    from routes.dependencies import bookings_collection
     if not user_context:
         return "Error: No user context provided."
         
@@ -159,65 +165,67 @@ async def get_revenue_stats(period: str = "month", user_context: Dict[str, Any] 
     company_id = user_context.get("company_id")
     now = datetime.now(timezone.utc)
     
-    date_query = {}
-    if period == "today":
-        date_query = {"$gte": now.strftime("%Y-%m-%d")}
-    elif period == "week":
-        start_date = now - timedelta(days=7)
-        date_query = {"$gte": start_date.strftime("%Y-%m-%d")}
-    elif period == "month":
-        start_date = now - timedelta(days=30)
-        date_query = {"$gte": start_date.strftime("%Y-%m-%d")}
+    async with AsyncSession(engine) as session:
+        stmt = select(
+            func.sum(models_pg.Booking.amount).label("total_revenue"),
+            func.count(models_pg.Booking.id).label("count")
+        )
         
-    match_stage = {"company_id": company_id} if company_id else {}
-    if date_query:
-        match_stage["date"] = date_query
-        
-    pipeline = [
-        {"$match": match_stage},
-        {"$group": {"_id": None, "total_revenue": {"$sum": "$amount"}, "count": {"$sum": 1}}}
-    ]
+        if company_id:
+            stmt = stmt.where(models_pg.Booking.company_id == company_id)
+            
+        if period == "today":
+            today_str = now.strftime("%Y-%m-%d")
+            stmt = stmt.where(models_pg.Booking.date == today_str)
+        elif period == "week":
+            start_date = (now - timedelta(days=7)).strftime("%Y-%m-%d")
+            stmt = stmt.where(models_pg.Booking.date >= start_date)
+        elif period == "month":
+            start_date = (now - timedelta(days=30)).strftime("%Y-%m-%d")
+            stmt = stmt.where(models_pg.Booking.date >= start_date)
+            
+        result = await session.execute(stmt)
+        data = result.one_or_none()
     
-    result = await bookings_collection.aggregate(pipeline).to_list(1)
-    
-    if not result:
+    if not data or data.count == 0:
         return f"No revenue data found for period: {period}."
         
-    data = result[0]
-    return f"Revenue Stats ({period}): Total Revenue = {data['total_revenue']}, Total Bookings = {data['count']}"
+    return f"Revenue Stats ({period}): Total Revenue = {data.total_revenue or 0}, Total Bookings = {data.count}"
 
 @tool(args_schema=InventoryCheckSchema)
 async def check_inventory_tool(product_name: Optional[str] = None, low_stock_only: bool = False, user_context: Dict[str, Any] = None) -> str:
     """
     Check inventory levels. Can search by product name or list low stock items.
     """
-    from routes.dependencies import products_collection
     if not user_context:
         return "Error: No user context provided."
         
     company_id = user_context.get("company_id")
-    query = {"company_id": company_id} if company_id else {}
     
-    if product_name:
-        query["name"] = {"$regex": product_name, "$options": "i"}
+    async with AsyncSession(engine) as session:
+        stmt = select(models_pg.Product)
+        if company_id:
+            stmt = stmt.where(models_pg.Product.company_id == company_id)
         
-    if low_stock_only:
-        # Assuming we have a field or logic for 'reorder_level' comparison
-        # Since MongoDB $expr with fields is complex in find(), we'll filter in python for simplicity if needed
-        # Or better: use simple $where or $expr
-         query["$expr"] = {"$lte": ["$stock_quantity", "$reorder_level"]}
+        if product_name:
+            stmt = stmt.where(models_pg.Product.name.ilike(f"%{product_name}%"))
+            
+        if low_stock_only:
+            stmt = stmt.where(models_pg.Product.stock_quantity <= models_pg.Product.reorder_level)
 
-    products = await products_collection.find(query).limit(10).to_list(10)
+        stmt = stmt.limit(10)
+        result = await session.execute(stmt)
+        products = result.scalars().all()
     
     if not products:
         return "No products found matching criteria."
         
-    result = "Inventory Status:\n"
+    res_text = "Inventory Status:\n"
     for p in products:
-        status = "LOW STOCK" if p.get('stock_quantity', 0) <= p.get('reorder_level', 0) else "OK"
-        result += f"- {p.get('name')}: {p.get('stock_quantity')} units (Reorder at {p.get('reorder_level')}) [{status}]\n"
+        status = "LOW STOCK" if p.stock_quantity <= p.reorder_level else "OK"
+        res_text += f"- {p.name}: {p.stock_quantity} units (Reorder at {p.reorder_level}) [{status}]\n"
         
-    return result
+    return res_text
 
 @tool(args_schema=InventoryReorderSchema)
 async def trigger_inventory_reorder(user_context: Dict[str, Any] = None) -> str:
@@ -225,7 +233,6 @@ async def trigger_inventory_reorder(user_context: Dict[str, Any] = None) -> str:
     Analyzes low stock inventory and generates a Human-in-the-Loop report to reorder items.
     Call this when the user wants to replenish stock or automatically reorder items.
     """
-    from routes.dependencies import products_collection
     from routes.hitl import analyze_inventory
     from pydantic import BaseModel
     
@@ -233,6 +240,7 @@ async def trigger_inventory_reorder(user_context: Dict[str, Any] = None) -> str:
     class MockUser(BaseModel):
         company_id: Optional[str] = None
         id: str = "system_agent"
+        role: str = "Staff"
     
     if not user_context:
         return "Error: No user context provided."
@@ -240,18 +248,15 @@ async def trigger_inventory_reorder(user_context: Dict[str, Any] = None) -> str:
     company_id = user_context.get("company_id")
     current_user = MockUser(company_id=company_id)
     
-    # Needs db, we can import get_db
-    from routes.dependencies import get_db
-    
-    db = get_db()
-    
-    try:
-        res = await analyze_inventory(current_user=current_user, db=db)
-        if res.get("status") == "success" and res.get("report_generated"):
-            return f"Successfully generated an inventory reorder report for {res.get('items_count')} items. The operations team can review and approve it on the dashboard."
-        return f"Inventory analysis complete: {res.get('reason', 'No action needed')}."
-    except Exception as e:
-        return f"Error triggering inventory reorder: {str(e)}"
+    async with AsyncSession(engine) as session:
+        try:
+            res = await analyze_inventory(current_user=current_user, db=session)
+            if res.get("status") == "success" and res.get("report_generated"):
+                return f"Successfully generated an inventory reorder report for {res.get('items_count')} items. The operations team can review and approve it on the dashboard."
+            return f"Inventory analysis complete: {res.get('reason', 'No action needed')}."
+        except Exception as e:
+            logger.error(f"Error triggering inventory reorder: {e}")
+            return f"Error triggering inventory reorder: {str(e)}"
 
 # List of all available tools
 all_tools = [get_recent_bookings, create_booking_tool, get_revenue_stats, check_inventory_tool, trigger_inventory_reorder]
