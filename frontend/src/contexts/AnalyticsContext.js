@@ -43,6 +43,105 @@ const CHART_TEMPLATES = {
     }
 };
 
+// --- Date filter utilities ---
+
+/**
+ * Returns { start: Date, end: Date } for a given preset key.
+ * For 'custom', callers pass explicit start/end.
+ */
+export const getDateBounds = (dateRange, customStart, customEnd) => {
+    const now = new Date();
+    const end = new Date(now);
+    end.setHours(23, 59, 59, 999);
+
+    switch (dateRange) {
+        case '7days': {
+            const start = new Date(now);
+            start.setDate(now.getDate() - 6);
+            start.setHours(0, 0, 0, 0);
+            return { start, end };
+        }
+        case '30days': {
+            const start = new Date(now);
+            start.setDate(now.getDate() - 29);
+            start.setHours(0, 0, 0, 0);
+            return { start, end };
+        }
+        case '90days': {
+            const start = new Date(now);
+            start.setDate(now.getDate() - 89);
+            start.setHours(0, 0, 0, 0);
+            return { start, end };
+        }
+        case 'year': {
+            const start = new Date(now.getFullYear(), 0, 1);
+            return { start, end };
+        }
+        case 'custom': {
+            const start = customStart ? new Date(customStart) : new Date(now.getFullYear(), 0, 1);
+            const fin = customEnd ? new Date(customEnd) : end;
+            start.setHours(0, 0, 0, 0);
+            fin.setHours(23, 59, 59, 999);
+            return { start, end: fin };
+        }
+        default: {
+            const start = new Date(now);
+            start.setDate(now.getDate() - 29);
+            start.setHours(0, 0, 0, 0);
+            return { start, end };
+        }
+    }
+};
+
+/**
+ * Returns a bucket label array + bucketing function for a given date range.
+ * Short ranges ->  daily labels (Mon, Tue …)
+ * Medium ranges -> weekly labels (Week 1 …)
+ * Year  ->  monthly labels (Jan, Feb …)
+ */
+const getBucketConfig = (dateRange, start, end) => {
+    const diffDays = Math.round((end - start) / 86400000) + 1;
+
+    if (diffDays <= 31) {
+        // Daily buckets
+        const labels = [];
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        }
+        const getKey = (date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        return { labels, getKey, type: 'daily' };
+    } else if (diffDays <= 120) {
+        // Weekly buckets
+        const labels = [];
+        let weekNum = 1;
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 7)) {
+            const weekEnd = new Date(d);
+            weekEnd.setDate(d.getDate() + 6);
+            labels.push(`${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`);
+            weekNum++;
+        }
+        const getKey = (date) => {
+            const d = new Date(date);
+            const diffFromStart = Math.floor((d - start) / (7 * 86400000));
+            const weekStart = new Date(start);
+            weekStart.setDate(start.getDate() + diffFromStart * 7);
+            return weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        };
+        return { labels, getKey, type: 'weekly' };
+    } else {
+        // Monthly buckets
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const labels = [];
+        const d = new Date(start.getFullYear(), start.getMonth(), 1);
+        while (d <= end) {
+            labels.push(months[d.getMonth()]);
+            d.setMonth(d.getMonth() + 1);
+        }
+        const getKey = (date) => months[new Date(date).getMonth()];
+        return { labels, getKey, type: 'monthly' };
+    }
+};
+
 export const AnalyticsProvider = ({ children }) => {
     // Dynamic widgets added from chat
     const [dynamicWidgets, setDynamicWidgets] = useState([]);
@@ -117,35 +216,61 @@ export const AnalyticsProvider = ({ children }) => {
         ));
     }, []);
 
-    // Process bookings into monthly trend data
-    const getMonthlyTrends = useCallback(() => {
-        const monthlyData = {};
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    /**
+     * Filter bookings to only those within a date range.
+     * dateRange: '7days' | '30days' | '90days' | 'year' | 'custom'
+     * customStart/customEnd: ISO date strings for 'custom'
+     */
+    const filterBookings = useCallback((dateRange = '30days', customStart, customEnd) => {
+        const { start, end } = getDateBounds(dateRange, customStart, customEnd);
+        return analyticsData.bookings.filter(b => {
+            const d = new Date(b.date || b.created_at);
+            return d >= start && d <= end;
+        });
+    }, [analyticsData.bookings]);
 
-        // Initialize months
-        months.forEach((month, idx) => {
-            monthlyData[idx] = { name: month, revenue: 0, bookings: 0 };
+    const filterTransactions = useCallback((dateRange = '30days', customStart, customEnd) => {
+        const { start, end } = getDateBounds(dateRange, customStart, customEnd);
+        return analyticsData.transactions.filter(tx => {
+            const d = new Date(tx.date || tx.created_at);
+            return d >= start && d <= end;
+        });
+    }, [analyticsData.transactions]);
+
+    /**
+     * Process filtered bookings into time-bucketed trend data.
+     * Returns array of { name, revenue, bookings }.
+     */
+    const getMonthlyTrends = useCallback((dateRange = '30days', customStart, customEnd) => {
+        const { start, end } = getDateBounds(dateRange, customStart, customEnd);
+        const bookings = filterBookings(dateRange, customStart, customEnd);
+        const transactions = filterTransactions(dateRange, customStart, customEnd);
+
+        const { labels, getKey } = getBucketConfig(dateRange, start, end);
+
+        // Initialize buckets
+        const buckets = {};
+        labels.forEach(label => { buckets[label] = { name: label, revenue: 0, bookings: 0 }; });
+
+        bookings.forEach(booking => {
+            const key = getKey(booking.date || booking.created_at);
+            if (buckets[key]) {
+                buckets[key].bookings += 1;
+                buckets[key].revenue += parseFloat(booking.total_price || booking.amount || 0);
+            }
         });
 
-        // Aggregate bookings
-        analyticsData.bookings.forEach(booking => {
-            const date = new Date(booking.date || booking.created_at);
-            const month = date.getMonth();
-            monthlyData[month].bookings += 1;
-            monthlyData[month].revenue += parseFloat(booking.total_price || booking.amount || 0);
+        transactions.forEach(tx => {
+            const key = getKey(tx.date || tx.created_at);
+            if (buckets[key]) {
+                buckets[key].revenue += parseFloat(tx.amount || 0);
+            }
         });
 
-        // Aggregate transactions
-        analyticsData.transactions.forEach(tx => {
-            const date = new Date(tx.date || tx.created_at);
-            const month = date.getMonth();
-            monthlyData[month].revenue += parseFloat(tx.amount || 0);
-        });
+        const result = labels.map(l => buckets[l]);
 
-        const trendsArray = Object.values(monthlyData);
-
-        // If all revenue is 0, inject realistic fallback data so graphs aren't flat
-        if (trendsArray.every(m => m.revenue === 0 && m.bookings === 0)) {
+        // Inject fallback only if ALL buckets are empty
+        if (result.every(m => m.revenue === 0 && m.bookings === 0)) {
             return [
                 { name: 'Jan', revenue: 4200, bookings: 120 },
                 { name: 'Feb', revenue: 3800, bookings: 110 },
@@ -157,17 +282,18 @@ export const AnalyticsProvider = ({ children }) => {
             ];
         }
 
-        return trendsArray;
-    }, [analyticsData.bookings, analyticsData.transactions]);
+        return result;
+    }, [filterBookings, filterTransactions]);
 
-    // Get outlet performance data
-    const getOutletPerformance = useCallback(() => {
+    // Get outlet performance data filtered by date range
+    const getOutletPerformance = useCallback((dateRange = '30days', customStart, customEnd) => {
+        const bookings = filterBookings(dateRange, customStart, customEnd);
+
         const perf = analyticsData.outlets.map(outlet => ({
             name: outlet.name?.substring(0, 15) || 'Outlet',
-            value: analyticsData.bookings.filter(b => b.outlet_id === outlet.id).length
+            value: bookings.filter(b => b.outlet_id === outlet.id).length
         }));
 
-        // Inject fallback if empty or all zero
         if (perf.length === 0 || perf.every(p => p.value === 0)) {
             return [
                 { name: 'Downtown HQ', value: 450 },
@@ -177,14 +303,16 @@ export const AnalyticsProvider = ({ children }) => {
             ];
         }
         return perf;
-    }, [analyticsData.outlets, analyticsData.bookings]);
+    }, [analyticsData.outlets, filterBookings]);
 
-    // Get service breakdown data
-    const getServiceBreakdown = useCallback(() => {
+    // Get service breakdown data filtered by date range
+    const getServiceBreakdown = useCallback((dateRange = '30days', customStart, customEnd) => {
+        const bookings = filterBookings(dateRange, customStart, customEnd);
+
         const breakdown = analyticsData.services.map(service => ({
             subject: service.name?.substring(0, 12) || 'Service',
-            A: analyticsData.bookings.filter(b => b.service_id === service.id).length,
-            B: Math.floor(Math.random() * 50) + 10, // Comparison data
+            A: bookings.filter(b => b.service_id === service.id).length,
+            B: Math.floor(Math.random() * 50) + 10,
             fullMark: 100
         }));
 
@@ -198,7 +326,7 @@ export const AnalyticsProvider = ({ children }) => {
             ];
         }
         return breakdown;
-    }, [analyticsData.services, analyticsData.bookings]);
+    }, [analyticsData.services, filterBookings]);
 
     const value = {
         dynamicWidgets,
@@ -206,6 +334,8 @@ export const AnalyticsProvider = ({ children }) => {
         removeWidget,
         updateWidgetType,
         analyticsData,
+        filterBookings,
+        filterTransactions,
         getMonthlyTrends,
         getOutletPerformance,
         getServiceBreakdown,

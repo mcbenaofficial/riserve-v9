@@ -2086,3 +2086,284 @@ INFO:     127.0.0.1:58205 - "GET /api/bookings HTTP/1.1" 200 OK
 2026-03-02 18:06:55,201 - server - INFO - No expired trials found
 2026-03-02 19:06:55,297 - server - INFO - No expired trials found
 2026-03-02 20:06:55,415 - server - INFO - No expired trials found
+INFO:     127.0.0.1:55736 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55737 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55739 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55743 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55745 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55736 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55737 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55739 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55743 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55745 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55736 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55737 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55745 - "GET /api/services HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        dependant=dependant, values=values, is_coroutine=is_coroutine
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/routes/services.py", line 44, in get_services
+    "duration_min": s.duration_min,
+                    ^^^^^^^^^^^^^^
+AttributeError: 'Service' object has no attribute 'duration_min'
+INFO:     127.0.0.1:55736 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55748 - "GET /api/services HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        dependant=dependant, values=values, is_coroutine=is_coroutine
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/routes/services.py", line 44, in get_services
+    "duration_min": s.duration_min,
+                    ^^^^^^^^^^^^^^
+AttributeError: 'Service' object has no attribute 'duration_min'
+INFO:     127.0.0.1:55750 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55736 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55750 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55736 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55739 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55736 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55743 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55750 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55739 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55737 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55739 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55760 - "OPTIONS /api/slot-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55762 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55764 - "OPTIONS /api/slot-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55760 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55756 - "GET /api/services HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        dependant=dependant, values=values, is_coroutine=is_coroutine
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/routes/services.py", line 44, in get_services
+    "duration_min": s.duration_min,
+                    ^^^^^^^^^^^^^^
+AttributeError: 'Service' object has no attribute 'duration_min'
+INFO:     127.0.0.1:55754 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55759 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55760 - "GET /api/services HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        dependant=dependant, values=values, is_coroutine=is_coroutine
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/routes/services.py", line 44, in get_services
+    "duration_min": s.duration_min,
+                    ^^^^^^^^^^^^^^
+AttributeError: 'Service' object has no attribute 'duration_min'
+INFO:     127.0.0.1:55754 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55766 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55764 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55766 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55762 - "GET /api/slot-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55766 - "GET /api/slot-configs HTTP/1.1" 200 OK

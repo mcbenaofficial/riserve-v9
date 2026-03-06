@@ -23,7 +23,7 @@ export const api = {
   // Bookings
   getBookings: () => axios.get(`${API}/bookings`, { headers: getHeaders() }),
   createBooking: (data) => axios.post(`${API}/bookings`, data, { headers: getHeaders() }),
-  updateBooking: (id, status) => axios.put(`${API}/bookings/${id}?status=${status}`, {}, { headers: getHeaders() }),
+  updateBooking: (id, data) => axios.put(`${API}/bookings/${id}`, typeof data === 'string' ? { status: data } : data, { headers: getHeaders() }),
   rescheduleBooking: (id, time, date, resource_id) => axios.put(`${API}/bookings/${id}/reschedule`, { time, date, resource_id }, { headers: getHeaders() }),
 
   // Transactions
@@ -35,6 +35,14 @@ export const api = {
   getUsers: () => axios.get(`${API}/users`, { headers: getHeaders() }),
   createUser: (data) => axios.post(`${API}/users`, data, { headers: getHeaders() }),
   updateUser: (id, data) => axios.put(`${API}/users/${id}`, data, { headers: getHeaders() }),
+  deleteUser: (id) => axios.delete(`${API}/users/${id}`, { headers: getHeaders() }),
+
+  // Staff
+  getStaff: (params) => axios.get(`${API}/staff`, { params, headers: getHeaders() }),
+  getStaffMember: (id) => axios.get(`${API}/staff/${id}`, { headers: getHeaders() }),
+  createStaff: (data) => axios.post(`${API}/staff`, data, { headers: getHeaders() }),
+  updateStaff: (id, data) => axios.put(`${API}/staff/${id}`, data, { headers: getHeaders() }),
+  deleteStaff: (id) => axios.delete(`${API}/staff/${id}`, { headers: getHeaders() }),
 
   // Customers
   getCustomers: (params) => axios.get(`${API}/customers`, { params, headers: getHeaders() }),
@@ -222,4 +230,23 @@ export const api = {
   getHITLPreferences: () => axios.get(`${API}/hitl/preferences`, { headers: getHeaders() }),
   analyzeSchedule: (data) => axios.post(`${API}/hitl/analyze-schedule`, data || {}, { headers: getHeaders() }),
   analyzeInventory: () => axios.post(`${API}/hitl/analyze-inventory`, {}, { headers: getHeaders() }),
+
+  // ── Staff Portal (personal self-service) ──────────────────────────────
+  portalMe: () => axios.get(`${API}/portal/me`, { headers: getHeaders() }),
+  portalStats: () => axios.get(`${API}/portal/stats`, { headers: getHeaders() }),
+  // Attendance
+  portalClockIn: (data) => axios.post(`${API}/portal/attendance/clock-in`, data || {}, { headers: getHeaders() }),
+  portalClockOut: (data) => axios.post(`${API}/portal/attendance/clock-out`, data || {}, { headers: getHeaders() }),
+  portalAttendanceToday: () => axios.get(`${API}/portal/attendance/today`, { headers: getHeaders() }),
+  portalAttendanceHistory: (days = 30) => axios.get(`${API}/portal/attendance/history?days=${days}`, { headers: getHeaders() }),
+  // Leaves
+  portalGetLeaves: (status) => axios.get(`${API}/portal/leaves${status ? `?status=${status}` : ''}`, { headers: getHeaders() }),
+  portalSubmitLeave: (data) => axios.post(`${API}/portal/leaves`, data, { headers: getHeaders() }),
+  portalCancelLeave: (id) => axios.put(`${API}/portal/leaves/${id}/cancel`, {}, { headers: getHeaders() }),
+  portalReviewLeave: (id, data) => axios.put(`${API}/portal/leaves/${id}/review`, data, { headers: getHeaders() }),
+  // Payslips
+  portalGetPayslips: () => axios.get(`${API}/portal/payslips`, { headers: getHeaders() }),
+  portalGetPayslip: (id) => axios.get(`${API}/portal/payslips/${id}`, { headers: getHeaders() }),
+  // Schedule
+  portalSchedule: (days = 14) => axios.get(`${API}/portal/schedule?days=${days}`, { headers: getHeaders() }),
 };

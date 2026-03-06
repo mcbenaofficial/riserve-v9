@@ -79,6 +79,41 @@ async def trial_check_background_task():
         await asyncio.sleep(3600)  # Check every hour
 
 
+async def sync_slot_config_resources_to_db():
+    """Retroactively sync SlotConfig JSONB resources → resources DB table.
+    Ensures booking.resource_id FK is satisfied for all existing SlotConfig resources.
+    """
+    try:
+        async with AsyncSession(engine) as db_session:
+            result = await db_session.execute(select(models_pg.SlotConfig))
+            configs = result.scalars().all()
+            synced = 0
+            for config in configs:
+                conf = config.configuration or {}
+                resources = conf.get("resources", [])
+                for r in resources:
+                    r_id = r.get("id")
+                    if not r_id:
+                        continue
+                    existing = (await db_session.execute(
+                        select(models_pg.Resource).where(models_pg.Resource.id == r_id)
+                    )).scalar_one_or_none()
+                    if not existing:
+                        db_session.add(models_pg.Resource(
+                            id=r_id,
+                            outlet_id=config.outlet_id,
+                            name=r.get("name", "Resource"),
+                            capacity=r.get("capacity", 1),
+                            active=r.get("active", True)
+                        ))
+                        synced += 1
+            if synced:
+                await db_session.commit()
+                logger.info(f"Startup migration: synced {synced} slot config resources into DB table")
+    except Exception as e:
+        logger.error(f"Error syncing slot config resources: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
@@ -87,6 +122,9 @@ async def lifespan(app: FastAPI):
     
     # Run initial trial check
     await check_and_downgrade_expired_trials()
+    
+    # Sync SlotConfig JSONB resources → resources DB table (one-time retroactive migration)
+    await sync_slot_config_resources_to_db()
     
     # Start background task for periodic checks
     task = asyncio.create_task(trial_check_background_task())
@@ -98,23 +136,37 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down Ri'Serve API...")
 
 
+
 # Create the main app with lifespan
 app = FastAPI(title="Ri'Serve Partner API", lifespan=lifespan)
 
 # Configure CORS
+# IMPORTANT: allow_credentials=True is incompatible with allow_origins=['*'].
+# When credentials (Authorization header) are used, the browser requires an exact origin match.
+_cors_env = os.environ.get('CORS_ORIGINS', '').strip()
+_cors_origins = [o.strip() for o in _cors_env.split(',') if o.strip()] if _cors_env else []
+# Always include dev origins
+_dev_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3000",
+]
+_allowed_origins = list(set(_cors_origins + _dev_origins))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
 # Import all routers
 from routes import (
     auth, public, dashboard, bookings, services, outlets, 
     staff, reports, feedback, assistant, onboarding,
-    users, company, inventory, customers, slots, transactions, promotions, hitl
+    users, company, inventory, customers, slots, transactions, promotions, hitl, portal
 )
 from routes.superadmin import router as superadmin
 
@@ -139,6 +191,7 @@ app.include_router(transactions.router, prefix="/api")
 app.include_router(promotions.promotions_bp, prefix="/api")
 app.include_router(onboarding.router, prefix="/api")
 app.include_router(hitl.router, prefix="/api")
+app.include_router(portal.router, prefix="/api")
 
 
 # Special endpoint for resource-bookings

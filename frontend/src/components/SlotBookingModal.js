@@ -190,8 +190,15 @@ const SlotBookingModal = ({
         };
         await api.createBooking(bookingData);
       } else {
-        // Update booking status
-        await api.updateBooking(existingBooking.id, status);
+        // Update booking: send status + updated resource, time, service
+        await api.updateBooking(existingBooking.id, {
+          status: status,
+          resource_id: formData.resource_id === '' ? null : formData.resource_id,
+          time: formData.time,
+          service_id: formData.service_id,
+          duration: formData.duration,
+          amount: formData.amount
+        });
       }
       onSuccess();
       onClose();
@@ -403,67 +410,76 @@ const SlotBookingModal = ({
                   />
                 </div>
               )}
-
-              {/* Resource & Time Row */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <User size={14} className="inline mr-1" />
-                    Resource
-                  </label>
-                  <div className="relative">
-                    <select
-                      required
-                      value={formData.resource_id}
-                      onChange={(e) => setFormData({ ...formData, resource_id: e.target.value })}
-                      className="w-full px-4 py-3 bg-white dark:bg-[#0B0D10] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all shadow-sm appearance-none"
-                    >
-                      {effectiveResources.map(r => (
-                        <option key={r.id} value={r.id}>{r.name}</option>
-                      ))}
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <ChevronDown size={16} />
-                    </div>
+            </>
+          ) : (
+            <>
+              {/* Existing Booking Identity Summary */}
+              <div className="p-4 bg-gray-50 dark:bg-[#0B0D10] rounded-xl border border-gray-200 dark:border-white/10 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5FA8D3] to-blue-600 flex items-center justify-center font-bold text-white shadow-md">
+                    {(formData.customer || '?').charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900 dark:text-white">{formData.customer || 'Unknown Customer'}</div>
+                    {customFields.customer_email || customFields.customer_phone ? (
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {[customFields.customer_email, customFields.customer_phone].filter(Boolean).join(' • ')}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
+              </div>
+            </>
+          )}
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <Clock size={14} className="inline mr-1" />
-                    Time
-                  </label>
-                  <input
-                    type="time"
-                    required
-                    value={formData.time}
-                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                    className="w-full px-4 py-3 bg-white dark:bg-[#0B0D10] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all shadow-sm"
-                  />
+          {/* SHARED FIELDS: Service, Resource, Time (Available in both Add and Manage modes) */}
+          <div className="space-y-4 border-t border-gray-200 dark:border-white/5 pt-4">
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              Appointment Details
+            </label>
+
+            {/* Service Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <Wrench size={14} className="inline mr-1" />
+                Service
+              </label>
+              <div className="relative">
+                <select
+                  required
+                  value={formData.service_id}
+                  onChange={(e) => handleServiceChange(e.target.value)}
+                  className="w-full px-4 py-3 bg-white dark:bg-[#0B0D10] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all shadow-sm appearance-none"
+                >
+                  <option value="">Select a service</option>
+                  {effectiveServices.filter(s => s.active !== false || s.id === formData.service_id).map(s => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} - {s.duration_min} mins - ₹{s.price}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                  <ChevronDown size={16} />
                 </div>
               </div>
+            </div>
 
-
-
-
-              {/* Service Selection */}
+            {/* Resource & Time Row */}
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  <Wrench size={14} className="inline mr-1" />
-                  Service
+                  <User size={14} className="inline mr-1" />
+                  Resource
                 </label>
                 <div className="relative">
                   <select
-                    required
-                    value={formData.service_id}
-                    onChange={(e) => handleServiceChange(e.target.value)}
+                    value={formData.resource_id || ''}
+                    onChange={(e) => setFormData({ ...formData, resource_id: e.target.value })}
                     className="w-full px-4 py-3 bg-white dark:bg-[#0B0D10] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all shadow-sm appearance-none"
                   >
-                    <option value="">Select a service</option>
-                    {effectiveServices.filter(s => s.active !== false).map(s => (
-                      <option key={s.id} value={s.id}>
-                        {s.name} - {s.duration_min} mins - ₹{s.price}
-                      </option>
+                    <option value="">-- Unassigned --</option>
+                    {effectiveResources.map(r => (
+                      <option key={r.id} value={r.id}>{r.name}</option>
                     ))}
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
@@ -471,6 +487,25 @@ const SlotBookingModal = ({
                   </div>
                 </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <Clock size={14} className="inline mr-1" />
+                  Time
+                </label>
+                <input
+                  type="time"
+                  required
+                  value={formData.time}
+                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  className="w-full px-4 py-3 bg-white dark:bg-[#0B0D10] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all shadow-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          {mode === 'add' ? (
+            <>
 
               {/* Service Details */}
               {getSelectedService() && (
@@ -541,30 +576,11 @@ const SlotBookingModal = ({
               )}
             </>
           ) : (
-            <>
-              {/* Existing Booking Details */}
+            <> {/* Manage Mode Exclusives: Status Update & existing info */}
               <div className="space-y-4">
-                <div className="p-4 bg-gray-50 dark:bg-[#0B0D10] rounded-xl border border-gray-200 dark:border-white/10">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5FA8D3] to-blue-600 flex items-center justify-center font-bold text-white shadow-md">
-                      {formData.customer.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-gray-900 dark:text-white">{formData.customer}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">{formData.customer}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-sm pt-3 border-t border-gray-200 dark:border-white/5">
-                    <span className="text-gray-500 dark:text-gray-400 font-medium">
-                      {effectiveServices.find(s => s.id === formData.service_id)?.name || 'Service'}
-                    </span>
-                    <span className="font-bold text-gray-900 dark:text-white text-lg">₹{formData.amount}</span>
-                  </div>
-                </div>
-
                 {/* Status Update */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <div className="pt-4 border-t border-gray-200 dark:border-white/5">
+                  <label className="block text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
                     Update Status
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -625,8 +641,8 @@ const SlotBookingModal = ({
               {loading ? 'Processing...' : mode === 'add' ? 'Book Slot' : 'Update Status'}
             </button>
           </div>
-        </form>
-      </div>
+        </form >
+      </div >
     </div >
   );
 };

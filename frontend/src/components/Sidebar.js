@@ -150,14 +150,12 @@ const Sidebar = () => {
     { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics', roles: ['SuperAdmin', 'Admin', 'Manager'] },
     { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', roles: ['SuperAdmin', 'Admin'] },
     {
-      key: 'my-workspace',
-      label: 'My Workspace',
+      key: 'my-portal',
+      label: 'My Portal',
       icon: Briefcase,
       path: '/my-workspace',
-      condition: () => isWorkplaceActive,
-      roles: ['SuperAdmin', 'Admin', 'Manager', 'User']
+      roles: ['Admin', 'Manager', 'User']
     },
-    { key: 'users', label: 'Team', icon: Users, path: '/users', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] },
     { key: 'admin', label: 'Admin Console', icon: Shield, path: '/admin', roles: ['SuperAdmin', 'Admin'] },
     { key: 'support', label: 'Support', icon: HelpCircle, path: '/support', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] }
   ];

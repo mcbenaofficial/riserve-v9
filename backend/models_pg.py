@@ -147,6 +147,91 @@ class Staff(Base):
     # Relationships
     user = relationship("User", back_populates="staff_profile")
     outlet = relationship("Outlet", back_populates="staff")
+    attendance_records = relationship("Attendance", back_populates="staff", cascade="all, delete-orphan")
+    leave_requests = relationship("LeaveRequest", back_populates="staff", cascade="all, delete-orphan")
+    payslips = relationship("Payslip", back_populates="staff", cascade="all, delete-orphan")
+
+
+class Attendance(Base):
+    __tablename__ = "attendance"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    date = Column(Date, nullable=False)                        # The work date
+    clock_in = Column(DateTime(timezone=True), nullable=True)
+    clock_out = Column(DateTime(timezone=True), nullable=True)
+    hours_worked = Column(Numeric(5, 2), default=0)            # Computed on clock-out
+    status = Column(String(50), default="present")             # present, absent, half_day, leave
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    staff = relationship("Staff", back_populates="attendance_records")
+
+
+class LeaveRequest(Base):
+    __tablename__ = "leave_requests"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    leave_type = Column(String(50), nullable=False)            # sick, annual, emergency, maternity, unpaid
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
+    days_requested = Column(Integer, default=1)
+    reason = Column(Text, nullable=True)
+    status = Column(String(50), default="pending")             # pending, approved, rejected, cancelled
+    manager_notes = Column(Text, nullable=True)
+    reviewed_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    reviewed_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    staff = relationship("Staff", back_populates="leave_requests")
+
+
+class Payslip(Base):
+    __tablename__ = "payslips"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    month = Column(Integer, nullable=False)                    # 1-12
+    year = Column(Integer, nullable=False)
+    pay_period_label = Column(String(50))                      # e.g. "March 2026"
+    # Earnings
+    basic_salary = Column(Numeric(10, 2), default=0)
+    allowances = Column(Numeric(10, 2), default=0)
+    overtime_pay = Column(Numeric(10, 2), default=0)
+    commission = Column(Numeric(10, 2), default=0)
+    bonus = Column(Numeric(10, 2), default=0)
+    gross_pay = Column(Numeric(10, 2), default=0)
+    # Deductions
+    tax = Column(Numeric(10, 2), default=0)
+    provident_fund = Column(Numeric(10, 2), default=0)
+    other_deductions = Column(Numeric(10, 2), default=0)
+    total_deductions = Column(Numeric(10, 2), default=0)
+    net_pay = Column(Numeric(10, 2), default=0)
+    # Meta
+    hours_worked = Column(Numeric(6, 2), default=0)
+    days_present = Column(Integer, default=0)
+    days_absent = Column(Integer, default=0)
+    leaves_taken = Column(Integer, default=0)
+    status = Column(String(50), default="draft")               # draft, published
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    staff = relationship("Staff", back_populates="payslips")
+
+
 
 class Customer(Base):
     __tablename__ = "customers"

@@ -252,10 +252,20 @@ async def create_booking(
     }
 
 
+class BookingUpdate(BaseModel):
+    status: Optional[str] = None
+    resource_id: Optional[str] = None
+    time: Optional[str] = None
+    service_id: Optional[str] = None
+    duration: Optional[int] = None
+    amount: Optional[float] = None
+    notes: Optional[str] = None
+
+
 @router.put("/{booking_id}")
 async def update_booking(
-    booking_id: str, 
-    status: str, 
+    booking_id: str,
+    update_data: BookingUpdate,
     current_user: User = Depends(get_current_user),
     db_session: AsyncSession = Depends(get_db)
 ):
@@ -263,24 +273,66 @@ async def update_booking(
     if current_user.role != "SuperAdmin":
         stmt = stmt.where(models_pg.Booking.company_id == current_user.company_id)
     booking = (await db_session.execute(stmt)).scalar_one_or_none()
-    
+
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
-        
+
     # Security Check
     if current_user.role in ["Manager", "User"]:
         enforce_outlet_access(current_user, booking.outlet_id)
-        
-    booking.status = status
+
+    # Apply updates for any provided fields
+    if update_data.status is not None:
+        booking.status = update_data.status
+    if update_data.resource_id is not None:
+        booking.resource_id = update_data.resource_id if update_data.resource_id != "" else None
+    elif hasattr(update_data, 'resource_id') and update_data.resource_id == "":
+        booking.resource_id = None  # explicitly unassign
+    if update_data.time is not None:
+        booking.time = update_data.time
+    if update_data.duration is not None:
+        booking.duration = update_data.duration
+    if update_data.amount is not None:
+        booking.amount = update_data.amount
+        # Update associated transaction amount if present
+        t_stmt = select(models_pg.Transaction).where(models_pg.Transaction.booking_id == booking_id)
+        transaction = (await db_session.execute(t_stmt)).scalar_one_or_none()
+        if transaction:
+            transaction.gross = update_data.amount
+            commission = update_data.amount * 0.15
+            transaction.commission = commission
+            transaction.partner_share = update_data.amount - commission
+    if update_data.notes is not None:
+        booking.notes = update_data.notes
+
+    # Update service if provided — update the direct FK column, avoid lazy-loaded relationship
+    if update_data.service_id is not None and update_data.service_id != "":
+        booking.service_id = update_data.service_id
+        # Optionally auto-fill duration/amount from service if not explicitly provided
+        if update_data.duration is None or update_data.amount is None:
+            svc = (await db_session.execute(
+                select(models_pg.Service).where(models_pg.Service.id == update_data.service_id)
+            )).scalar_one_or_none()
+            if svc:
+                if update_data.duration is None:
+                    booking.duration = svc.duration_min
+                if update_data.amount is None:
+                    booking.amount = float(svc.price)
+
+
     await db_session.commit()
-    
+
     return {
         "id": booking.id,
         "status": booking.status,
         "customer_name": booking.customer_name,
         "time": booking.time,
         "date": booking.date.isoformat(),
-        "outlet_id": booking.outlet_id
+        "outlet_id": booking.outlet_id,
+        "resource_id": booking.resource_id,
+        "duration": booking.duration,
+        "amount": booking.amount,
+        "notes": booking.notes
     }
 
 

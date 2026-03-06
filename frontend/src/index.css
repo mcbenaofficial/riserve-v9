@@ -651,6 +651,35 @@ code {
 }
 
 
+/* ─── ZEN MODE — KPI Stat Cards: neutralize solid gradient fills ─── */
+/* These gradients appear on Dashboard StatCards and SmartAnalytics MetricCard overlays.      */
+/* The JS component already renders a glass tile in Zen mode, but these ensure safety.        */
+
+.zen [class*="from-blue-500"][class*="to-indigo-600"] {
+    background: linear-gradient(135deg, rgba(136, 153, 168, 0.12), rgba(136, 153, 168, 0.06)) !important;
+}
+
+.zen [class*="from-green-500"][class*="to-emerald-600"] {
+    background: linear-gradient(135deg, rgba(139, 158, 126, 0.12), rgba(139, 158, 126, 0.06)) !important;
+}
+
+.zen [class*="from-purple-500"][class*="to-pink-600"] {
+    background: linear-gradient(135deg, rgba(198, 138, 122, 0.12), rgba(212, 168, 154, 0.06)) !important;
+}
+
+.zen [class*="from-amber-500"][class*="to-orange-600"] {
+    background: linear-gradient(135deg, rgba(184, 152, 96, 0.12), rgba(196, 152, 96, 0.06)) !important;
+}
+
+.zen [class*="from-cyan-500"][class*="to-blue-600"] {
+    background: linear-gradient(135deg, rgba(126, 168, 160, 0.12), rgba(136, 153, 168, 0.06)) !important;
+}
+
+.zen [class*="from-pink-500"][class*="to-rose-600"] {
+    background: linear-gradient(135deg, rgba(196, 154, 144, 0.12), rgba(184, 136, 126, 0.06)) !important;
+}
+
+
 /* ═══════════════════════════════════════════════════════════════════
    ZEN MODE — Vibrant Color Muting
    Mutes all saturated Tailwind colors to warm, desaturated equivalents

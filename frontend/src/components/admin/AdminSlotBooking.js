@@ -221,7 +221,7 @@ const AdminSlotBooking = () => {
           <h3 className="text-lg font-semibold text-[#0E1116] dark:text-[#E6E8EB]">Outlets & Booking Settings</h3>
         </div>
         <div className="divide-y divide-[#1F2630]">
-          {outlets.filter(o => o.status === 'Active').map((outlet) => {
+          {outlets.filter(o => o.status?.toLowerCase() === 'active').map((outlet) => {
             const config = getOutletConfig(outlet.id);
             const resourceCount = outlet.resources?.length || outlet.capacity || 0;
             const resourceLabel = outlet.resource_label_plural || 'resources';
@@ -349,7 +349,7 @@ const AdminSlotBooking = () => {
             );
           })}
 
-          {outlets.filter(o => o.status === 'Active').length === 0 && (
+          {outlets.filter(o => o.status?.toLowerCase() === 'active').length === 0 && (
             <div className="p-8 text-center text-[#6B7280] dark:text-[#7D8590]">
               No active outlets found. Create an outlet first in the Outlets tab.
             </div>

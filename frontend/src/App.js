@@ -24,6 +24,7 @@ import Services from './pages/Services';
 import Finance from './pages/Finance';
 import Reports from './pages/Reports';
 import Users from './pages/Users';
+import Team from './pages/Team';
 import Customers from './pages/Customers';
 import Support from './pages/Support';
 import AdminConsole from './pages/AdminConsole';
@@ -144,9 +145,9 @@ function MainLayout() {
 
       <div className="flex-1 flex relative min-h-0">
         <Sidebar />
-        <div className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${isGlobalAgentOpen ? 'mr-[320px]' : 'mr-0'}`}>
+        <div className={`flex-1 flex flex-col min-h-0 min-w-0 transition-all duration-300 ${isGlobalAgentOpen ? 'mr-[320px]' : 'mr-0'}`}>
           <Topbar onToggleAgent={() => setIsGlobalAgentOpen(!isGlobalAgentOpen)} />
-          <main className={`flex-1 p-8 min-h-0 ${hideFloatingFAB ? 'overflow-hidden h-full' : 'overflow-auto'}`}>
+          <main className={`flex-1 p-8 min-h-0 min-w-0 ${hideFloatingFAB ? 'overflow-hidden h-full' : 'overflow-auto'}`}>
             <Routes>
               <Route path="/" element={isSuperAdmin ? <SuperAdminDashboard theme={theme} /> : <Dashboard />} />
               <Route path="/bookings" element={<Bookings />} />
@@ -161,7 +162,8 @@ function MainLayout() {
               <Route path="/services" element={<Services />} />
               <Route path="/finance" element={<Finance />} />
               <Route path="/reports" element={<Reports />} />
-              <Route path="/users" element={<Users />} /> {/* Admin Users */}
+              <Route path="/users" element={<Users />} /> {/* Legacy Users page */}
+              <Route path="/team" element={<Team />} /> {/* Unified Team (Users+Staff) */}
               <Route path="/customers" element={<Customers />} /> {/* SaaS Customers */}
               <Route path="/admin" element={<AdminConsole />} />
               <Route path="/support" element={<Support />} />

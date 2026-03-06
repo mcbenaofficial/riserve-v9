@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, Settings, X, Trash2, BarChart2, TrendingUp, PieChart, Activity,
     LineChart as LineChartIcon, Calendar, DollarSign, Star, Users, ArrowUpRight,
-    ArrowDownRight, Zap
+    ArrowDownRight, Zap, ChevronDown
 } from 'lucide-react';
-import { useAnalytics } from '../contexts/AnalyticsContext';
+import { useAnalytics, getDateBounds } from '../contexts/AnalyticsContext';
 import { api } from '../services/api';
 import { DynamicChart } from '../components/analytics/AnalyticsCharts';
 import PendingAIRecommendations from '../components/hitl/PendingAIRecommendations';
@@ -18,6 +18,14 @@ const DEFAULT_WIDGETS = [
     { id: 'distribution', title: 'Outlet Performance', visible: true, chartType: 'bar', colSpan: 'lg:col-span-6' },
 ];
 
+const DATE_PRESETS = [
+    { value: '7days', label: 'Last 7 Days' },
+    { value: '30days', label: 'Last 30 Days' },
+    { value: '90days', label: 'Last 90 Days' },
+    { value: 'year', label: 'This Year' },
+    { value: 'custom', label: 'Custom Range' },
+];
+
 const CHART_TYPES = [
     { type: 'area', label: 'Area', icon: Activity },
     { type: 'line', label: 'Line', icon: LineChartIcon },
@@ -27,39 +35,58 @@ const CHART_TYPES = [
 
 // --- Sub-components ---
 
-const MetricCard = ({ title, value, icon: Icon, color, subtitle, trend }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={`relative overflow-hidden rounded-3xl p-6 glass-panel border-0 group transition-all duration-300 hover:scale-[1.02]`}
-    >
-        <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity`} />
-        <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-gradient-to-br from-white/5 to-white/0 blur-2xl" />
+// Zen mode icon tone map — matches the quiet luxury palette
+const ZEN_METRIC_TONES = {
+    'from-green-500 to-emerald-600': 'bg-[#8B9E7E]/15 text-[#8B9E7E] dark:text-[#A3B596] border-[#8B9E7E]/20',
+    'from-blue-500 to-indigo-600': 'bg-[#8899A8]/15 text-[#8899A8] dark:text-[#98A9B8] border-[#8899A8]/20',
+    'from-purple-500 to-pink-600': 'bg-[#C68A7A]/15 text-[#C68A7A] dark:text-[#D4A89A] border-[#C68A7A]/20',
+    'from-amber-500 to-orange-600': 'bg-[#B89860]/15 text-[#B89860] dark:text-[#C8A870] border-[#B89860]/20',
+};
 
-        <div className="relative z-10 flex justify-between items-start">
-            <div>
-                <p className="text-sm font-medium text-[#6B7280] dark:text-[#9CA3AF] mb-1">{title}</p>
-                <h3 className="text-3xl font-bold text-[#0E1116] dark:text-[#E6E8EB] tracking-tight">{value}</h3>
+const MetricCard = ({ title, value, icon: Icon, color, subtitle, trend }) => {
+    const isZen = typeof document !== 'undefined' && document.documentElement.classList.contains('zen');
+    const zenTone = ZEN_METRIC_TONES[color] || 'bg-[#C68A7A]/15 text-[#C68A7A] dark:text-[#D4A89A] border-[#C68A7A]/20';
 
-                {subtitle && (
-                    <div className="flex items-center gap-2 mt-2">
-                        {trend && (
-                            <span className={`flex items-center text-xs font-semibold ${trend > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {trend > 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                                {Math.abs(trend)}%
-                            </span>
-                        )}
-                        <span className="text-xs text-[#6B7280] dark:text-[#7D8590]">{subtitle}</span>
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`relative overflow-hidden rounded-3xl p-6 glass-panel border-0 group transition-all duration-300 hover:scale-[1.02]`}
+        >
+            {!isZen && <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity`} />}
+            <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-gradient-to-br from-white/5 to-white/0 blur-2xl" />
+
+            <div className="relative z-10 flex justify-between items-start">
+                <div>
+                    <p className="text-sm font-medium text-[#6B7280] dark:text-[#9CA3AF] mb-1">{title}</p>
+                    <h3 className="text-3xl font-bold text-[#0E1116] dark:text-[#E6E8EB] tracking-tight">{value}</h3>
+
+                    {subtitle && (
+                        <div className="flex items-center gap-2 mt-2">
+                            {trend && (
+                                <span className={`flex items-center text-xs font-semibold ${trend > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                    {trend > 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                                    {Math.abs(trend)}%
+                                </span>
+                            )}
+                            <span className="text-xs text-[#6B7280] dark:text-[#7D8590]">{subtitle}</span>
+                        </div>
+                    )}
+                </div>
+
+                {isZen ? (
+                    <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border ${zenTone}`}>
+                        <Icon size={20} />
+                    </div>
+                ) : (
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg shadow-${color.split('-')[1]}-500/20`}>
+                        <Icon size={24} className="text-white" />
                     </div>
                 )}
             </div>
-
-            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg shadow-${color.split('-')[1]}-500/20`}>
-                <Icon size={24} className="text-white" />
-            </div>
-        </div>
-    </motion.div>
-);
+        </motion.div>
+    );
+};
 
 const ChartTypeSelector = ({ currentType, onSelect, isOpen, onClose }) => {
     if (!isOpen) return null;
@@ -92,13 +119,95 @@ const ChartTypeSelector = ({ currentType, onSelect, isOpen, onClose }) => {
     );
 };
 
+// --- Date Range Picker Dropdown ---
+const DateRangePicker = ({ dateRange, customStart, customEnd, onChange, onCustomChange }) => {
+    const [open, setOpen] = useState(false);
+    const selectedLabel = DATE_PRESETS.find(p => p.value === dateRange)?.label || 'Last 30 Days';
+
+    return (
+        <div className="relative">
+            <button
+                onClick={() => setOpen(o => !o)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-transparent text-[#0E1116] dark:text-[#E6E8EB] font-medium hover:bg-gray-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+            >
+                <Calendar size={15} className="text-purple-500 dark:text-purple-400 flex-shrink-0" />
+                <span>{selectedLabel}</span>
+                <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+            </button>
+
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 top-full mt-2 z-50 bg-white dark:bg-[#12161C] border border-gray-200 dark:border-[#1F2630] rounded-2xl shadow-2xl overflow-hidden min-w-[220px]"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="p-2">
+                            {DATE_PRESETS.map(preset => (
+                                <button
+                                    key={preset.value}
+                                    onClick={() => { onChange(preset.value); if (preset.value !== 'custom') setOpen(false); }}
+                                    className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left ${dateRange === preset.value
+                                        ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 dark:bg-purple-500/15'
+                                        : 'text-[#4B5563] dark:text-[#E6E8EB] hover:bg-gray-50 dark:hover:bg-white/5'
+                                        }`}
+                                >
+                                    {dateRange === preset.value && <div className="w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />}
+                                    {preset.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Custom range inputs */}
+                        {dateRange === 'custom' && (
+                            <div className="border-t border-gray-100 dark:border-[#1F2630] p-3 space-y-2">
+                                <div className="text-xs font-semibold text-[#6B7280] dark:text-[#7D8590] uppercase tracking-wider mb-2">Custom Range</div>
+                                <div className="flex flex-col gap-2">
+                                    <div>
+                                        <label className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mb-1 block">From</label>
+                                        <input
+                                            type="date"
+                                            value={customStart}
+                                            onChange={e => onCustomChange('start', e.target.value)}
+                                            className="w-full px-3 py-1.5 rounded-lg text-sm bg-gray-50 dark:bg-[#1F2630] border border-gray-200 dark:border-[#374151] text-[#0E1116] dark:text-[#E6E8EB] focus:outline-none focus:ring-2 focus:ring-purple-500/30"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mb-1 block">To</label>
+                                        <input
+                                            type="date"
+                                            value={customEnd}
+                                            onChange={e => onCustomChange('end', e.target.value)}
+                                            className="w-full px-3 py-1.5 rounded-lg text-sm bg-gray-50 dark:bg-[#1F2630] border border-gray-200 dark:border-[#374151] text-[#0E1116] dark:text-[#E6E8EB] focus:outline-none focus:ring-2 focus:ring-purple-500/30"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={() => setOpen(false)}
+                                        disabled={!customStart || !customEnd}
+                                        className="w-full mt-1 py-2 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-purple-600 to-blue-600 disabled:opacity-40 hover:shadow-lg hover:shadow-purple-500/20 transition-all"
+                                    >
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
+
 // --- Main Component ---
 
 const SmartAnalytics = () => {
     const {
         dynamicWidgets, removeWidget, updateWidgetType,
         getMonthlyTrends, getOutletPerformance, getServiceBreakdown,
-        analyticsData
+        filterBookings, analyticsData
     } = useAnalytics();
 
     const [widgets, setWidgets] = useState(DEFAULT_WIDGETS);
@@ -106,15 +215,23 @@ const SmartAnalytics = () => {
     const [tempWidgets, setTempWidgets] = useState([]);
     const [activeSelector, setActiveSelector] = useState(null);
     const [dateRange, setDateRange] = useState('30days');
+    const [customStart, setCustomStart] = useState('');
+    const [customEnd, setCustomEnd] = useState('');
 
     // Real Data State
     const [feedbackStats, setFeedbackStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Derived Data
-    const trendData = getMonthlyTrends();
-    const outletData = getOutletPerformance();
-    const serviceData = getServiceBreakdown();
+    // Derived Data — all pass the current dateRange + custom bounds
+    const trendData = getMonthlyTrends(dateRange, customStart, customEnd);
+    const outletData = getOutletPerformance(dateRange, customStart, customEnd);
+    const serviceData = getServiceBreakdown(dateRange, customStart, customEnd);
+
+    // KPI totals derived from the filtered bookings
+    const filteredBookings = filterBookings(dateRange, customStart, customEnd);
+    const totalRevenue = filteredBookings.reduce((sum, b) => sum + parseFloat(b.total_price || b.amount || 0), 0);
+    const totalBookings = filteredBookings.length;
+    const avgRevenue = totalBookings > 0 ? totalRevenue / totalBookings : 0;
 
     const isVisible = (widgetId) => widgets.find(w => w.id === widgetId)?.visible ?? true;
     const getChartType = (widgetId) => widgets.find(w => w.id === widgetId)?.chartType ?? 'area';
@@ -153,10 +270,23 @@ const SmartAnalytics = () => {
         setWidgets(prev => prev.map(w => w.id === widgetId ? { ...w, chartType: newType } : w));
     };
 
-    // Calculate totals from trend data for KPI cards
-    const totalRevenue = trendData.reduce((sum, item) => sum + (item.revenue || 0), 0);
-    const totalBookings = trendData.reduce((sum, item) => sum + (item.bookings || 0), 0);
-    const avgRevenue = totalBookings > 0 ? totalRevenue / totalBookings : 0;
+    const handleDateChange = (newRange) => {
+        setDateRange(newRange);
+        if (newRange !== 'custom') {
+            setCustomStart('');
+            setCustomEnd('');
+        }
+    };
+
+    const handleCustomDateChange = (field, value) => {
+        if (field === 'start') setCustomStart(value);
+        else setCustomEnd(value);
+    };
+
+    // Friendly label for the active range in the header
+    const activeDateLabel = dateRange === 'custom' && customStart && customEnd
+        ? `${customStart} → ${customEnd}`
+        : DATE_PRESETS.find(p => p.value === dateRange)?.label || 'Last 30 Days';
 
     return (
         <div className="min-h-screen bg-[#F6F7F9] dark:bg-[#0B0D10] text-[#0E1116] dark:text-[#E6E8EB] font-sans" onClick={() => setActiveSelector(null)}>
@@ -171,7 +301,7 @@ const SmartAnalytics = () => {
                         Smart Analytics
                     </h1>
                     <p className="text-[#6B7280] dark:text-[#9CA3AF] mt-2 text-lg font-medium">
-                        AI-driven insights & performance metrics
+                        AI-driven insights &amp; performance metrics
                         {dynamicWidgets.length > 0 && (
                             <span className="ml-3 px-3 py-1 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-full text-purple-600 dark:text-purple-400 text-xs font-bold uppercase tracking-wider">
                                 {dynamicWidgets.length} AI Widgets Active
@@ -181,16 +311,13 @@ const SmartAnalytics = () => {
                 </div>
 
                 <div className="flex items-center gap-3 bg-white dark:bg-[#12161C] p-1.5 rounded-2xl border border-gray-200 dark:border-[#1F2630] shadow-sm">
-                    <select
-                        value={dateRange}
-                        onChange={(e) => setDateRange(e.target.value)}
-                        className="px-4 py-2.5 rounded-xl bg-transparent text-[#0E1116] dark:text-[#E6E8EB] font-medium focus:outline-none focus:bg-gray-100 dark:focus:bg-white/5 transition-colors cursor-pointer"
-                    >
-                        <option value="7days">Last 7 Days</option>
-                        <option value="30days">Last 30 Days</option>
-                        <option value="90days">Last 90 Days</option>
-                        <option value="year">This Year</option>
-                    </select>
+                    <DateRangePicker
+                        dateRange={dateRange}
+                        customStart={customStart}
+                        customEnd={customEnd}
+                        onChange={handleDateChange}
+                        onCustomChange={handleCustomDateChange}
+                    />
                     <div className="w-px h-6 bg-gray-200 dark:bg-[#1F2630]" />
                     <button
                         onClick={openCustomization}
@@ -211,7 +338,7 @@ const SmartAnalytics = () => {
                         value={`₹${totalRevenue.toLocaleString()}`}
                         icon={DollarSign}
                         color="from-green-500 to-emerald-600"
-                        subtitle="Gross earnings"
+                        subtitle={activeDateLabel}
                         trend={12}
                     />
                     <MetricCard
@@ -219,7 +346,7 @@ const SmartAnalytics = () => {
                         value={totalBookings}
                         icon={Calendar}
                         color="from-blue-500 to-indigo-600"
-                        subtitle="Verified appointments"
+                        subtitle={activeDateLabel}
                         trend={5}
                     />
                     <MetricCard
@@ -328,7 +455,7 @@ const SmartAnalytics = () => {
                                         </div>
                                         <div>
                                             <h3 className="text-xl font-bold text-[#0E1116] dark:text-[#E6E8EB]">Growth Trends</h3>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Revenue vs Booking Volume</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">Revenue vs Booking Volume · {activeDateLabel}</p>
                                         </div>
                                     </div>
 
@@ -472,7 +599,10 @@ const SmartAnalytics = () => {
                                     <div className="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
                                         <Users size={20} />
                                     </div>
-                                    <h3 className="text-lg font-bold text-[#0E1116] dark:text-[#E6E8EB]">Outlet Performance</h3>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-[#0E1116] dark:text-[#E6E8EB]">Outlet Performance</h3>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">{activeDateLabel}</p>
+                                    </div>
                                 </div>
 
                                 <AnimatePresence>

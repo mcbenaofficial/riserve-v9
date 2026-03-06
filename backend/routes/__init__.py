@@ -15,6 +15,7 @@ from .feedback import router as feedback_router
 from .customers import router as customers_router
 from .inventory import router as inventory_router
 from .staff import router as staff_router
+from .portal import router as portal_router
 
 __all__ = [
     "auth_router",
@@ -30,6 +31,7 @@ __all__ = [
     "feedback_router",
     "inventory_router",
     "staff_router",
+    "portal_router",
     "customers_router",
     "slots_router",
     "transactions_router"

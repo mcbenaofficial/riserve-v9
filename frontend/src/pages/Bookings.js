@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { api } from '../services/api';
 import {
   Plus, FileText, Download, Printer, Calendar, Clock, X, CheckCircle,
-  Wrench, ShoppingCart, List, LayoutGrid, ChevronLeft, ChevronRight, Pencil
+  Wrench, ShoppingCart, List, LayoutGrid, ChevronLeft, ChevronRight, Pencil, CalendarDays
 } from 'lucide-react';
 import BookingItemsModal from '../components/BookingItemsModal';
 import BookingDetailModal from '../components/BookingDetailModal';
@@ -17,7 +17,8 @@ const Bookings = () => {
   const [slotConfigs, setSlotConfigs] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('list'); // 'list' | 'timeline'
+  const [viewMode, setViewMode] = useState('list'); // 'list' | 'timeline' | 'calendar'
+  const [calendarMonth, setCalendarMonth] = useState(new Date()); // Month for calendar view
 
   // Filters
   const [query, setQuery] = useState('');
@@ -49,6 +50,17 @@ const Bookings = () => {
   useEffect(() => {
     filterBookings();
   }, [bookings, query, statusFilter, filterOutletId, selectedDate, viewMode]);
+
+  // Lock the parent <main> scroll when in timeline/calendar so the view is contained
+  useEffect(() => {
+    if (viewMode === 'list') return;
+    // Walk up to find the nearest scrollable ancestor (the <main> from App.js)
+    const el = document.querySelector('main');
+    if (!el) return;
+    const prev = el.style.overflow;
+    el.style.overflow = 'hidden';
+    return () => { el.style.overflow = prev; };
+  }, [viewMode]);
 
   const fetchFeatures = async () => {
     try {
@@ -87,6 +99,12 @@ const Bookings = () => {
     }
   };
 
+  // Normalise booking date: handles both "YYYY-MM-DD" and "YYYY-MM-DDTHH:MM:SS" formats
+  const normalizeDate = (rawDate) => {
+    if (!rawDate) return '';
+    return String(rawDate).split('T')[0];
+  };
+
   const filterBookings = () => {
     let filtered = bookings;
 
@@ -110,13 +128,10 @@ const Bookings = () => {
       filtered = filtered.filter(b => b.outlet_id === filterOutletId);
     }
 
-    // 4. Date Filter (Specific to Timeline, optional for List?)
-    // In List Mode, usually we show all upcoming? But let's apply date filter ONLY for Timeline for now, 
-    // unless user explicitly filters list by date (not implemented in UI yet for list).
-    // Actually, for Timeline view, we need bookings for that specific day.
+    // 4. Date Filter — timeline only, with normalised date comparison
     if (viewMode === 'timeline') {
       const dateStr = selectedDate.toISOString().split('T')[0];
-      filtered = filtered.filter(b => b.date === dateStr);
+      filtered = filtered.filter(b => normalizeDate(b.date) === dateStr);
     }
 
     setFilteredBookings(filtered);
@@ -263,13 +278,20 @@ const Bookings = () => {
               onClick={() => {
                 setViewMode('timeline');
                 if (filterOutletId === 'All' && outlets.length > 0) {
-                  setFilterOutletId(outlets[0].id); // Select first outlet when switching to timeline if none selected
+                  setFilterOutletId(outlets[0].id);
                 }
               }}
               className={`p-2 rounded-lg transition-all ${viewMode === 'timeline' ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10'}`}
               title="Timeline View"
             >
               <LayoutGrid size={20} />
+            </button>
+            <button
+              onClick={() => { setViewMode('calendar'); setCalendarMonth(new Date()); }}
+              className={`p-2 rounded-lg transition-all ${viewMode === 'calendar' ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10'}`}
+              title="Calendar View"
+            >
+              <CalendarDays size={20} />
             </button>
           </div>
 
@@ -325,7 +347,7 @@ const Bookings = () => {
 
     if (!outlet || !config) {
       return (
-        <div className="glass-panel p-12 flex flex-col items-center justify-center text-center">
+        <div className="glass-panel p-12 flex flex-col items-center justify-center text-center rounded-3xl flex-1">
           <LayoutGrid size={48} className="text-gray-300 dark:text-gray-700 mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Select an Outlet</h3>
           <p className="text-gray-500 dark:text-gray-400">Please select a specific outlet to view the timeline.</p>
@@ -333,11 +355,8 @@ const Bookings = () => {
       );
     }
 
-    // Need to transform internal Booking objects to match what SlotTimelineView expects?
-    // SlotTimelineView expects standard bookings.
-
     return (
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
         <SlotTimelineView
           config={config}
           outlet={{ ...outlet, services }}
@@ -352,6 +371,142 @@ const Bookings = () => {
           onInventoryClick={hasInventory ? handleAddItems : null}
           onInvoiceClick={handleGenerateInvoice}
         />
+      </div>
+    );
+  };
+
+  // ─── Calendar View ───────────────────────────────────────────────────────────
+  const renderCalendarView = () => {
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+
+    const monthName = calendarMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Build a map: dateStr -> bookings[]
+    const bookingsByDate = {};
+    bookings.forEach(b => {
+      const d = normalizeDate(b.date);
+      if (!d) return;
+      if (!bookingsByDate[d]) bookingsByDate[d] = [];
+      bookingsByDate[d].push(b);
+    });
+
+    const STATUS_DOT = {
+      Completed: 'bg-green-500',
+      'In Progress': 'bg-amber-500',
+      Pending: 'bg-blue-500',
+      Cancelled: 'bg-red-400',
+    };
+
+    const goToPrevMonth = () => setCalendarMonth(m => new Date(m.getFullYear(), m.getMonth() - 1, 1));
+    const goToNextMonth = () => setCalendarMonth(m => new Date(m.getFullYear(), m.getMonth() + 1, 1));
+
+    const handleDayClick = (dayNum) => {
+      const clicked = new Date(year, month, dayNum);
+      setSelectedDate(clicked);
+      setViewMode('timeline');
+      if (filterOutletId === 'All' && outlets.length > 0) setFilterOutletId(outlets[0].id);
+    };
+
+    // Cells: leading empty slots + day cells
+    const cells = [
+      ...Array(firstDay).fill(null),
+      ...Array.from({ length: daysInMonth }, (_, i) => i + 1)
+    ];
+
+    return (
+      <div className="glass-panel rounded-3xl overflow-hidden">
+        {/* Calendar Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#1F2630] bg-gray-50/50 dark:bg-white/5">
+          <button onClick={goToPrevMonth} className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 transition-colors">
+            <ChevronLeft size={20} />
+          </button>
+          <div className="flex items-center gap-3">
+            <Calendar size={18} className="text-purple-500" />
+            <span className="text-lg font-bold text-[#0E1116] dark:text-[#E6E8EB]">{monthName}</span>
+          </div>
+          <button onClick={goToNextMonth} className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 transition-colors">
+            <ChevronRight size={20} />
+          </button>
+        </div>
+
+        {/* Day Headers */}
+        <div className="grid grid-cols-7 border-b border-gray-200 dark:border-[#1F2630]">
+          {weekDays.map(d => (
+            <div key={d} className="py-3 text-center text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF] uppercase tracking-wider">
+              {d}
+            </div>
+          ))}
+        </div>
+
+        {/* Day Grid */}
+        <div className="grid grid-cols-7">
+          {cells.map((dayNum, idx) => {
+            if (!dayNum) return <div key={`empty-${idx}`} className="h-28 border-b border-r border-gray-100 dark:border-[#1F2630]/50" />;
+
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+            const dayBookings = bookingsByDate[dateStr] || [];
+            const isToday = dateStr === todayStr;
+            const isSelected = dateStr === selectedDate.toISOString().split('T')[0];
+
+            // Count by status for dots
+            const statusCounts = dayBookings.reduce((acc, b) => {
+              acc[b.status] = (acc[b.status] || 0) + 1;
+              return acc;
+            }, {});
+
+            return (
+              <div
+                key={dateStr}
+                onClick={() => handleDayClick(dayNum)}
+                className={`h-28 p-2 border-b border-r border-gray-100 dark:border-[#1F2630]/50 cursor-pointer transition-all hover:bg-purple-50 dark:hover:bg-purple-500/5 relative group ${isToday ? 'bg-purple-50/50 dark:bg-purple-500/5' : ''
+                  } ${isSelected ? 'ring-2 ring-inset ring-purple-500/40' : ''
+                  }`}
+              >
+                {/* Day number */}
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-semibold mb-1 ${isToday
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/30'
+                  : 'text-[#0E1116] dark:text-[#E6E8EB] group-hover:bg-purple-100 dark:group-hover:bg-purple-500/10'
+                  }`}>
+                  {dayNum}
+                </div>
+
+                {/* Booking chips (up to 3, then +N) */}
+                <div className="space-y-0.5">
+                  {dayBookings.slice(0, 2).map((b, i) => (
+                    <div key={b.id || i} className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium truncate ${STATUS_DOT[b.status] ? `${STATUS_DOT[b.status]}/15` : 'bg-gray-100 dark:bg-white/5'
+                      } text-[#0E1116] dark:text-[#E6E8EB]`}>
+                      <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${STATUS_DOT[b.status] || 'bg-gray-400'}`} />
+                      <span className="truncate">{b.customer || 'Booking'}</span>
+                    </div>
+                  ))}
+                  {dayBookings.length > 2 && (
+                    <div className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 px-1.5">
+                      +{dayBookings.length - 2} more
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Legend */}
+        <div className="flex items-center gap-4 px-6 py-3 border-t border-gray-100 dark:border-[#1F2630] bg-gray-50/50 dark:bg-white/5">
+          <span className="text-xs text-gray-400 font-medium mr-2">Status:</span>
+          {Object.entries(STATUS_DOT).map(([status, color]) => (
+            <div key={status} className="flex items-center gap-1.5">
+              <div className={`w-2 h-2 rounded-full ${color}`} />
+              <span className="text-xs text-gray-500 dark:text-gray-400">{status}</span>
+            </div>
+          ))}
+          <span className="ml-auto text-xs text-gray-400 italic">Click a day to view timeline</span>
+        </div>
       </div>
     );
   };
@@ -476,10 +631,13 @@ const Bookings = () => {
   }
 
   return (
-    <div className={`transition-all duration-300 ${viewMode === 'timeline' ? 'h-[calc(100vh-6rem)] flex flex-col gap-6' : 'space-y-6'}`}>
+    <div className={`transition-all duration-300 ${viewMode === 'list'
+        ? 'space-y-6'
+        : 'h-full flex flex-col gap-4'
+      }`}>
       {renderHeader()}
 
-      {viewMode === 'timeline' ? renderTimeline() : renderListView()}
+      {viewMode === 'timeline' ? renderTimeline() : viewMode === 'calendar' ? renderCalendarView() : renderListView()}
 
       {/* Modals */}
       {/* AddBookingModal removed — unified to SlotBookingModal */}

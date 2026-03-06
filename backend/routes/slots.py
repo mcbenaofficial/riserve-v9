@@ -14,6 +14,35 @@ import models_pg
 router = APIRouter(prefix="/slot-configs", tags=["Slot Configuration"])
 
 
+async def _sync_resources_to_db(
+    db_session: AsyncSession,
+    outlet_id: str,
+    company_id: str,
+    resources: list
+):
+    """Upsert slot-config JSONB resources into the resources DB table.
+    This ensures booking.resource_id FK constraint is satisfied."""
+    for r in resources:
+        r_id = r.get('id')
+        if not r_id:
+            continue
+        existing = (await db_session.execute(
+            select(models_pg.Resource).where(models_pg.Resource.id == r_id)
+        )).scalar_one_or_none()
+        if existing:
+            # Update name in case it changed
+            existing.name = r.get('name', existing.name)
+        else:
+            db_session.add(models_pg.Resource(
+                id=r_id,
+                outlet_id=outlet_id,
+                name=r.get('name', 'Resource'),
+                capacity=r.get('capacity', 1),
+                active=r.get('active', True)
+            ))
+
+
+
 class SlotConfigCreate(BaseModel):
     outlet_id: str
     business_type: str = "service"
@@ -142,8 +171,11 @@ async def create_slot_config(
     )
     
     db_session.add(new_config)
+    # Sync resources to DB table so booking.resource_id FK is satisfied
+    await _sync_resources_to_db(db_session, config_input.outlet_id, current_user.company_id, resources)
     await db_session.commit()
     return config_doc
+
 
 
 @router.put("/{config_id}")
@@ -192,9 +224,12 @@ async def update_slot_config(
     
     import copy
     config_rec.configuration = copy.deepcopy(current_conf)
+    # Sync resources to DB table so booking.resource_id FK is satisfied
+    await _sync_resources_to_db(db_session, config_input.outlet_id, current_user.company_id, resources)
     await db_session.commit()
     
     return current_conf
+
 
 
 @router.delete("/{config_id}")

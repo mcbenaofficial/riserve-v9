@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Clock, Calendar, MoreVertical, X, Check, Pencil, Trash2, ShoppingCart, FileText } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, Calendar, MoreVertical, X, Check, Pencil, Trash2, ShoppingCart, FileText, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 
 const SlotTimelineView = ({
@@ -26,12 +26,11 @@ const SlotTimelineView = ({
 
     // Drag & Drop State
     const [draggedBooking, setDraggedBooking] = useState(null);
-    const [dragOverInfo, setDragOverInfo] = useState(null); // { resourceId, time, left }
+    const [dragOverInfo, setDragOverInfo] = useState(null);
 
     const date = externalDate || internalDate;
     const bookings = externalBookings || internalBookings;
 
-    // Update current time indicator
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
         return () => clearInterval(timer);
@@ -46,10 +45,9 @@ const SlotTimelineView = ({
     const getViewRange = () => {
         const start = new Date(date);
         const end = new Date(date);
-
         if (viewMode === 'week') {
-            const day = start.getDay(); // 0 is Sunday
-            start.setDate(start.getDate() - day); // Start on Sunday
+            const day = start.getDay();
+            start.setDate(start.getDate() - day);
             end.setDate(start.getDate() + 6);
         } else if (viewMode === 'month') {
             start.setDate(1);
@@ -68,12 +66,8 @@ const SlotTimelineView = ({
                 setInternalBookings(res.data || []);
             } else {
                 const { start, end } = getViewRange();
-                const res = await api.getResourceBookings(
-                    outlet.id,
-                    null,
-                    start.toISOString().split('T')[0],
-                    end.toISOString().split('T')[0]
-                );
+                const res = await api.getResourceBookings(outlet.id, null,
+                    start.toISOString().split('T')[0], end.toISOString().split('T')[0]);
                 setInternalBookings(res.data || []);
             }
         } catch (error) {
@@ -84,15 +78,11 @@ const SlotTimelineView = ({
     };
 
     const handleDateChange = (newDate) => {
-        if (onDateChange) {
-            onDateChange(newDate);
-        } else {
-            setInternalDate(newDate);
-        }
+        if (onDateChange) onDateChange(newDate);
+        else setInternalDate(newDate);
     };
 
-
-    // Generate Columns (Hours or Days)
+    // --- Columns ---
     const generateColumns = () => {
         if (viewMode === 'day') {
             const [startHour] = config.operating_hours_start.split(':').map(Number);
@@ -103,11 +93,9 @@ const SlotTimelineView = ({
             }
             return cols;
         }
-
         const { start, end } = getViewRange();
         const cols = [];
         const current = new Date(start);
-
         while (current <= end) {
             cols.push({
                 id: current.toISOString().split('T')[0],
@@ -127,22 +115,26 @@ const SlotTimelineView = ({
     const columns = generateColumns();
     const columnWidth = viewMode === 'day' ? 140 : viewMode === 'week' ? 200 : 100;
     const totalWidth = columns.length * columnWidth;
-
-    // For Day view compatibility
     const startHour = viewMode === 'day' ? columns[0]?.id || 8 : 0;
     const endHour = viewMode === 'day' ? columns[columns.length - 1]?.id || 20 : 0;
 
-    // Resources
+    // --- Resources ---
     const resources = outlet.resources?.filter(r => r.active !== false) ||
         Array.from({ length: outlet.capacity || 2 }, (_, i) => ({
             id: `resource-${i + 1}`,
             name: `${outlet.resource_label || 'Resource'} ${i + 1}`
         }));
 
-    // Calculate position and width for a booking
-    // Calculate position and width for a booking
+    const resourceIds = new Set(resources.map(r => r.id));
+
+    // Separate bookings: assigned to a known resource vs unassigned
+    const assignedBookings = bookings.filter(b => b.resource_id && resourceIds.has(b.resource_id));
+    const unassignedBookings = bookings.filter(b => !b.resource_id || !resourceIds.has(b.resource_id));
+
+    // --- Booking style ---
     const getBookingStyle = (booking) => {
         if (viewMode === 'day') {
+            if (!booking.time) return { display: 'none' };
             const [h, m] = booking.time.split(':').map(Number);
             const bookingStartMinutes = (h - startHour) * 60 + m;
 
@@ -154,61 +146,45 @@ const SlotTimelineView = ({
                 }
                 if (!duration) duration = 60;
             }
-
             const pixelsPerMinute = columnWidth / 60;
             const left = bookingStartMinutes * pixelsPerMinute;
             const width = duration * pixelsPerMinute;
-
-            return {
-                left: `${left}px`,
-                width: `${Math.max(width, 4)}px`,
-            };
+            return { left: `${left}px`, width: `${Math.max(width, 80)}px` };
         } else {
-            // Week/Month View
-            const bookingDate = booking.date; // YYYY-MM-DD
+            const bookingDate = booking.date?.split('T')[0];
             const colIndex = columns.findIndex(c => c.id === bookingDate);
-
             if (colIndex === -1) return { display: 'none' };
-
-            return {
-                left: `${colIndex * columnWidth + 4}px`,
-                width: `${columnWidth - 8}px`,
-            };
+            return { left: `${colIndex * columnWidth + 4}px`, width: `${columnWidth - 8}px` };
         }
     };
 
-    // Calculate current time indicator position
+    // --- Current time indicator ---
     const getCurrentTimePosition = () => {
-        if (viewMode !== 'day') return null; // Only show in Day view for now
-
+        if (viewMode !== 'day') return null;
         const now = currentTime;
         if (now.toDateString() !== date.toDateString()) return null;
-
         const currentHour = now.getHours();
         const currentMin = now.getMinutes();
-
         if (currentHour < startHour || currentHour > endHour) return null;
-
         const minutesSinceStart = (currentHour - startHour) * 60 + currentMin;
         const pixelsPerMinute = columnWidth / 60;
         return minutesSinceStart * pixelsPerMinute;
     };
-
     const timeIndicatorPos = getCurrentTimePosition();
 
-    // Color mapping based on status
+    // --- Colors ---
     const getBookingColor = (status) => {
         switch (status) {
-            case 'Completed': return 'bg-emerald-100 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/30 dark:text-emerald-100';
-            case 'In Progress': return 'bg-amber-100 border-amber-200 text-amber-800 dark:bg-amber-500/20 dark:border-amber-500/30 dark:text-amber-100';
-            case 'Confirmed': return 'bg-blue-100 border-blue-200 text-blue-800 dark:bg-blue-500/20 dark:border-blue-500/30 dark:text-blue-100';
-            case 'Pending': return 'bg-purple-100 border-purple-200 text-purple-800 dark:bg-purple-500/20 dark:border-purple-500/30 dark:text-purple-100';
-            case 'Cancelled': return 'bg-red-100 border-red-200 text-red-800 dark:bg-red-500/20 dark:border-red-500/30 dark:text-red-100';
-            default: return 'bg-gray-100 border-gray-200 text-gray-800 dark:bg-gray-700/50 dark:border-gray-600 dark:text-gray-300';
+            case 'Completed': return 'bg-emerald-500/80 border-emerald-400';
+            case 'In Progress': return 'bg-amber-500/80 border-amber-400';
+            case 'Confirmed': return 'bg-blue-500/80 border-blue-400';
+            case 'Pending': return 'bg-purple-500/80 border-purple-400';
+            case 'Cancelled': return 'bg-red-500/80 border-red-400';
+            default: return 'bg-gray-500/80 border-gray-400';
         }
     };
 
-    // Interaction Handlers
+    // --- Drag/Drop ---
     const minutesToTime = (minutes) => {
         const h = Math.floor(minutes / 60);
         const m = minutes % 60;
@@ -216,8 +192,7 @@ const SlotTimelineView = ({
     };
 
     const calculateTimeFromEvent = (e, rect) => {
-        if (viewMode !== 'day') return { time: '00:00', left: 0 }; // Drag/Drop only supported in Day view for now
-
+        if (viewMode !== 'day') return { time: '00:00', left: 0 };
         const x = e.clientX - rect.left;
         const minutesToAdd = (x / columnWidth) * 60;
         const totalMinutes = startHour * 60 + minutesToAdd;
@@ -258,68 +233,163 @@ const SlotTimelineView = ({
         setDragOverInfo(null);
     };
 
+    // --- Booking card renderer (shared) ---
+    const renderBookingCard = (booking) => {
+        const service = outlet.services?.find(s => s.id === booking.service_id);
+        const style = getBookingStyle(booking);
+        if (style.display === 'none') return null;
+
+        return (
+            <div
+                key={booking.id}
+                draggable={!!onRescheduleBooking}
+                onDragStart={(e) => handleDragStart(e, booking)}
+                className={`absolute top-2 bottom-2 rounded-xl border shadow-sm overflow-hidden cursor-pointer hover:shadow-lg hover:scale-[1.01] transition-all duration-200 z-10 flex flex-col justify-center px-3 group ${getBookingColor(booking.status)} ${draggedBooking?.id === booking.id ? 'opacity-50 scale-95 ring-2 ring-purple-400' : ''}`}
+                style={style}
+                onClick={(e) => { e.stopPropagation(); (onViewBooking || onEditBooking)(booking); }}
+            >
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                    <div className="text-white text-xs font-bold leading-tight truncate">
+                        {booking.customer_name || booking.customer || 'Customer'}
+                    </div>
+                    <div className="text-white/85 text-[10px] leading-tight truncate mt-0.5">
+                        {service?.name || 'Service'}
+                    </div>
+                    {booking.time && (
+                        <div className="text-white/70 text-[10px] leading-tight mt-0.5 flex items-center gap-1">
+                            <Clock size={8} />
+                            <span>{booking.time}</span>
+                        </div>
+                    )}
+                </div>
+
+                {/* Hover actions */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-sm rounded-lg p-1 shadow-sm border border-white/10 z-20">
+                    {onInventoryClick && (
+                        <button onClick={(e) => { e.stopPropagation(); onInventoryClick(booking); }} className="p-1 px-1.5 hover:bg-white/20 rounded-md text-white transition-colors" title="Items">
+                            <ShoppingCart size={11} strokeWidth={2.5} />
+                        </button>
+                    )}
+                    {onInvoiceClick && (
+                        <button onClick={(e) => { e.stopPropagation(); onInvoiceClick(booking); }} className="p-1 px-1.5 hover:bg-white/20 rounded-md text-white transition-colors" title="Invoice">
+                            <FileText size={11} strokeWidth={2.5} />
+                        </button>
+                    )}
+                    {(onInventoryClick || onInvoiceClick) && <div className="w-px h-3 bg-white/20 mx-0.5" />}
+                    <button onClick={(e) => { e.stopPropagation(); onEditBooking(booking); }} className="p-1 px-1.5 hover:bg-white/20 rounded-md text-white transition-colors" title="Edit">
+                        <Pencil size={11} strokeWidth={2.5} />
+                    </button>
+                    <div className="w-px h-3 bg-white/20 mx-0.5" />
+                    <button onClick={(e) => { e.stopPropagation(); onDeleteBooking && onDeleteBooking(booking); }} className="p-1 px-1.5 hover:bg-red-500/40 text-red-200 hover:text-white rounded-md transition-colors" title="Delete">
+                        <Trash2 size={11} strokeWidth={2.5} />
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
+    // Render a lane row (used for both resource rows and unassigned row)
+    const renderLane = (resource, laneBookings, index, isUnassigned = false) => (
+        <div
+            key={resource.id}
+            className={`flex border-b border-gray-100 dark:border-white/5 transition-colors relative group ${isUnassigned ? 'bg-amber-50/30 dark:bg-amber-500/5' : 'hover:bg-gray-50 dark:hover:bg-white/[0.02]'}`}
+        >
+            {/* Sticky Resource Cell */}
+            <div className={`w-56 flex-shrink-0 sticky left-0 z-20 ${isUnassigned ? 'bg-amber-50 dark:bg-[#1A1500]' : 'bg-white dark:bg-[#0B0D10] group-hover:bg-gray-50 dark:group-hover:bg-[#15191F]'} transition-colors border-r border-gray-200 dark:border-white/5 flex items-center px-4 py-4 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)] dark:shadow-none`}>
+                <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white text-sm shadow-md ${isUnassigned
+                            ? 'bg-amber-500'
+                            : ['bg-purple-500', 'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-pink-500'][index % 5]
+                        }`}>
+                        {isUnassigned ? '?' : resource.name.charAt(0)}
+                    </div>
+                    <div>
+                        <div className="text-sm font-semibold text-gray-900 dark:text-white">{resource.name}</div>
+                        <div className="text-[11px] text-gray-500 flex items-center gap-1">
+                            {isUnassigned && <AlertCircle size={10} className="text-amber-500" />}
+                            {laneBookings.length} booking{laneBookings.length !== 1 ? 's' : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Timeline Lane */}
+            <div
+                className="relative h-32 cursor-pointer"
+                style={{ width: totalWidth }}
+                onClick={(e) => !isUnassigned && handleTimelineClick(e, resource)}
+                onDragOver={(e) => !isUnassigned && handleDragOver(e, resource)}
+                onDrop={(e) => !isUnassigned && handleDrop(e, resource)}
+            >
+                {/* Grid Lines */}
+                {columns.map((col, i) => (
+                    <div key={i} className="absolute top-0 bottom-0 border-r border-gray-100 dark:border-white/5 pointer-events-none" style={{ left: i * columnWidth, width: columnWidth }} />
+                ))}
+
+                {/* Drag indicator */}
+                {dragOverInfo?.resourceId === resource.id && (
+                    <div className="absolute top-2 bottom-2 w-1 bg-purple-500 z-50 pointer-events-none shadow-[0_0_10px_rgba(168,85,247,0.5)] rounded-full transition-all duration-75" style={{ left: dragOverInfo.left }}>
+                        <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">
+                            {dragOverInfo.time}
+                        </div>
+                    </div>
+                )}
+
+                {/* Booking Cards */}
+                {laneBookings.map(booking => renderBookingCard(booking))}
+
+                {/* Current Time Line (only in body, no label here — label is in header) */}
+                {timeIndicatorPos !== null && (
+                    <div className="absolute top-0 bottom-0 w-0.5 bg-red-500/70 z-0 pointer-events-none" style={{ left: timeIndicatorPos }} />
+                )}
+            </div>
+        </div>
+    );
+
     return (
         <div className="glass-panel flex flex-col h-full rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-[#12161C]/50 transition-colors duration-300">
             {/* Header Controls */}
             {!hideHeader && (
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/5 backdrop-blur-sm">
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/5 backdrop-blur-sm flex-shrink-0">
                     <div className="flex items-center gap-4">
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white pl-2">Timeline</h3>
                         <div className="flex bg-gray-200 dark:bg-black/20 rounded-lg p-1 border border-gray-200 dark:border-white/5">
-                            <button onClick={() => setViewMode('day')} className={`px-3 py-1 text-xs font-medium rounded-md shadow-sm transition-all ${viewMode === 'day' ? 'bg-white dark:bg-[#5FA8D3]/20 text-gray-900 dark:text-[#5FA8D3]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>Day</button>
-                            <button onClick={() => setViewMode('week')} className={`px-3 py-1 text-xs font-medium rounded-md shadow-sm transition-all ${viewMode === 'week' ? 'bg-white dark:bg-[#5FA8D3]/20 text-gray-900 dark:text-[#5FA8D3]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>Week</button>
-                            <button onClick={() => setViewMode('month')} className={`px-3 py-1 text-xs font-medium rounded-md shadow-sm transition-all ${viewMode === 'month' ? 'bg-white dark:bg-[#5FA8D3]/20 text-gray-900 dark:text-[#5FA8D3]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>Month</button>
+                            {['day', 'week', 'month'].map(m => (
+                                <button key={m} onClick={() => setViewMode(m)} className={`px-3 py-1 text-xs font-medium rounded-md shadow-sm transition-all capitalize ${viewMode === m ? 'bg-white dark:bg-[#5FA8D3]/20 text-gray-900 dark:text-[#5FA8D3]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>
+                                    {m.charAt(0).toUpperCase() + m.slice(1)}
+                                </button>
+                            ))}
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4 bg-gray-100 dark:bg-black/20 rounded-xl p-1 px-2 border border-gray-200 dark:border-white/5">
-                        <button
-                            onClick={() => {
-                                const newDate = new Date(date);
-                                newDate.setDate(newDate.getDate() - 1);
-                                handleDateChange(newDate);
-                            }}
-                            className="p-1.5 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all"
-                        >
+                        <button onClick={() => { const d = new Date(date); d.setDate(d.getDate() - 1); handleDateChange(d); }} className="p-1.5 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-500 dark:text-gray-400 transition-all">
                             <ChevronLeft size={18} />
                         </button>
-
                         <div className="flex items-center gap-2 px-2">
                             <Calendar size={14} className="text-[#5FA8D3]" />
                             <span className="text-sm font-medium text-gray-900 dark:text-white min-w-[140px] text-center">
                                 {date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' })}
                             </span>
                         </div>
-
-                        <button
-                            onClick={() => {
-                                const newDate = new Date(date);
-                                newDate.setDate(newDate.getDate() + 1);
-                                handleDateChange(newDate);
-                            }}
-                            className="p-1.5 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all"
-                        >
+                        <button onClick={() => { const d = new Date(date); d.setDate(d.getDate() + 1); handleDateChange(d); }} className="p-1.5 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-500 dark:text-gray-400 transition-all">
                             <ChevronRight size={18} />
                         </button>
-
-                        <button
-                            onClick={() => handleDateChange(new Date())}
-                            className="text-xs text-[#5FA8D3] hover:underline px-2 border-l border-gray-200 dark:border-white/10"
-                        >
-                            Today
-                        </button>
+                        <button onClick={() => handleDateChange(new Date())} className="text-xs text-[#5FA8D3] hover:underline px-2 border-l border-gray-200 dark:border-white/10">Today</button>
                     </div>
                 </div>
             )}
 
-            {/* Timeline Content - Scrollable Area */}
-            <div className="flex-1 overflow-auto relative custom-scrollbar bg-white dark:bg-transparent">
+            {/* Timeline Content */}
+            <div className="flex-1 overflow-auto relative bg-white dark:bg-transparent" ref={containerRef}>
                 <div className="min-w-max">
-                    {/* Header Row */}
+                    {/* Sticky Header Row */}
                     <div className="flex sticky top-0 z-30 bg-white/95 dark:bg-[#12161C]/95 backdrop-blur-md border-b border-gray-200 dark:border-white/5">
-                        {/* Top Left Corner */}
-                        <div className="w-56 flex-shrink-0 sticky left-0 z-40 bg-white dark:bg-[#12161C] border-r border-gray-200 dark:border-white/5 flex items-center px-6 h-14 border-b border-gray-200 dark:border-white/5 shadow-sm dark:shadow-none">
-                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Resources ({resources.length})</span>
+                        {/* Corner */}
+                        <div className="w-56 flex-shrink-0 sticky left-0 z-40 bg-white dark:bg-[#12161C] border-r border-gray-200 dark:border-white/5 flex items-center px-6 h-14">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Resources ({resources.length})
+                            </span>
                         </div>
 
                         {/* Time Scale */}
@@ -330,12 +400,15 @@ const SlotTimelineView = ({
                                 </div>
                             ))}
 
-                            {/* Current Time Indicator Header */}
+                            {/* Current Time dot + label — only in header, once */}
                             {timeIndicatorPos !== null && (
-                                <div
-                                    className="absolute bottom-0 w-3 h-3 bg-red-500 rounded-full -ml-1.5 z-50 text-xs text-white flex items-center justify-center transform translate-y-1/2"
-                                    style={{ left: timeIndicatorPos }}
-                                >
+                                <div className="absolute inset-y-0 pointer-events-none flex items-center z-50" style={{ left: timeIndicatorPos }}>
+                                    <div className="relative">
+                                        <div className="w-2.5 h-2.5 bg-red-500 rounded-full shadow-md shadow-red-500/40 -translate-x-1/2" />
+                                        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold whitespace-nowrap shadow-sm">
+                                            {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -346,139 +419,39 @@ const SlotTimelineView = ({
                         {loading ? (
                             <div className="p-12 text-center text-gray-500 w-full">Loading schedule data...</div>
                         ) : (
-                            resources.map((resource, index) => (
-                                <div key={resource.id} className="flex border-b border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors relative group">
-                                    {/* Sticky Resource Cell */}
-                                    <div className="w-56 flex-shrink-0 sticky left-0 z-20 bg-white dark:bg-[#0B0D10] group-hover:bg-gray-50 dark:group-hover:bg-[#15191F] transition-colors border-r border-gray-200 dark:border-white/5 flex items-center px-4 py-6 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)] dark:shadow-none">
-                                        <div className="flex items-center gap-3">
-                                            {/* Avatar / Initial */}
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white text-sm shadow-md ${['bg-purple-500', 'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-pink-500'][index % 5]
-                                                }`}>
-                                                {resource.name.charAt(0)}
-                                            </div>
-                                            <div>
-                                                <div className="text-sm font-semibold text-gray-900 dark:text-white">{resource.name}</div>
-                                                <div className="text-[11px] text-gray-500">
-                                                    {bookings.filter(b => b.resource_id === resource.id).length} bookings
-                                                </div>
-                                            </div>
+                            <>
+                                {/* Unassigned bookings row (shown only if there are unassigned bookings) */}
+                                {unassignedBookings.length > 0 && renderLane(
+                                    { id: '__unassigned__', name: 'Unassigned' },
+                                    unassignedBookings,
+                                    -1,
+                                    true
+                                )}
+
+                                {/* Resource rows */}
+                                {resources.map((resource, index) =>
+                                    renderLane(
+                                        resource,
+                                        assignedBookings.filter(b => b.resource_id === resource.id),
+                                        index,
+                                        false
+                                    )
+                                )}
+
+                                {resources.length === 0 && (
+                                    <div className="p-12 text-center text-gray-500">No resources configured.</div>
+                                )}
+
+                                {/* Empty state for a day with no bookings at all */}
+                                {!loading && bookings.length === 0 && (
+                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <div className="text-center">
+                                            <Calendar size={32} className="text-gray-200 dark:text-gray-700 mx-auto mb-2" />
+                                            <p className="text-sm text-gray-400 dark:text-gray-600">No bookings for this day</p>
                                         </div>
                                     </div>
-
-                                    {/* Timeline Lane */}
-                                    <div
-                                        className="relative h-24 cursor-pointer"
-                                        style={{ width: totalWidth }}
-                                        onClick={(e) => handleTimelineClick(e, resource)}
-                                        onDragOver={(e) => handleDragOver(e, resource)}
-                                        onDrop={(e) => handleDrop(e, resource)}
-                                    >
-                                        {/* Grid Lines */}
-                                        {columns.map((col, i) => (
-                                            <div key={i} className="absolute top-0 bottom-0 border-r border-gray-100 dark:border-white/5 pointer-events-none" style={{ left: i * columnWidth, width: columnWidth }}></div>
-                                        ))}
-
-                                        {/* Drag Indicator */}
-                                        {dragOverInfo?.resourceId === resource.id && (
-                                            <div
-                                                className="absolute top-2 bottom-2 w-1 bg-purple-500 z-50 pointer-events-none shadow-[0_0_10px_rgba(168,85,247,0.5)] rounded-full transition-all duration-75"
-                                                style={{ left: dragOverInfo.left }}
-                                            >
-                                                <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">
-                                                    {dragOverInfo.time}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Bookings */}
-                                        {bookings.filter(b => b.resource_id === resource.id).map(booking => {
-                                            const service = outlet.services?.find(s => s.id === booking.service_id);
-                                            const duration = booking.duration_minutes || 60;
-                                            return (
-                                                <div
-                                                    key={booking.id}
-                                                    draggable={!!onRescheduleBooking}
-                                                    onDragStart={(e) => handleDragStart(e, booking)}
-                                                    className={`absolute top-2 bottom-2 rounded-lg border shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-all duration-200 z-10 flex flex-col justify-center px-3 group ${getBookingColor(booking.status)} ${draggedBooking?.id === booking.id ? 'opacity-50 scale-95 ring-2 ring-purple-400' : ''}`}
-                                                    style={getBookingStyle(booking)}
-                                                    onClick={(e) => { e.stopPropagation(); (onViewBooking || onEditBooking)(booking); }}
-                                                >
-                                                    <div className="flex-1 min-w-0 flex flex-col justify-center p-1">
-                                                        <div className="text-white text-xs font-bold leading-tight truncate">
-                                                            {booking.customer_name || booking.customer || 'Customer'}
-                                                        </div>
-                                                        <div className="text-white/90 text-[10px] leading-tight truncate mt-0.5">
-                                                            {service?.name || 'Service'}
-                                                        </div>
-                                                        <div className="text-white/75 text-[10px] leading-tight mt-0.5 flex items-center gap-1">
-                                                            <span>{booking.time}</span>
-                                                            <span className="w-0.5 h-0.5 bg-white/50 rounded-full"></span>
-                                                            <span className="capitalize">{booking.status}</span>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Hover Overlay with Centered Actions (Restored Previous Style) */}
-                                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 backdrop-blur-sm rounded-lg p-1 shadow-sm border border-white/10 z-20">
-                                                        {onInventoryClick && (
-                                                            <button
-                                                                onClick={(e) => { e.stopPropagation(); onInventoryClick(booking); }}
-                                                                className="p-1 px-1.5 hover:bg-white/20 rounded-md text-white transition-colors"
-                                                                title="Items/Inventory"
-                                                            >
-                                                                <ShoppingCart size={11} strokeWidth={2.5} />
-                                                            </button>
-                                                        )}
-                                                        {onInvoiceClick && (
-                                                            <button
-                                                                onClick={(e) => { e.stopPropagation(); onInvoiceClick(booking); }}
-                                                                className="p-1 px-1.5 hover:bg-white/20 rounded-md text-white transition-colors"
-                                                                title="Invoice"
-                                                            >
-                                                                <FileText size={11} strokeWidth={2.5} />
-                                                            </button>
-                                                        )}
-
-                                                        {(onInventoryClick || onInvoiceClick) && <div className="w-px h-3 bg-white/20 mx-0.5"></div>}
-
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); onEditBooking(booking); }}
-                                                            className="p-1 px-1.5 hover:bg-white/20 rounded-md text-white transition-colors"
-                                                            title="Edit"
-                                                        >
-                                                            <Pencil size={11} strokeWidth={2.5} />
-                                                        </button>
-                                                        <div className="w-px h-3 bg-white/20 mx-0.5"></div>
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); onDeleteBooking && onDeleteBooking(booking); }}
-                                                            className="p-1 px-1.5 hover:bg-red-500/40 text-red-200 hover:text-white rounded-md transition-colors"
-                                                            title="Delete"
-                                                        >
-                                                            <Trash2 size={11} strokeWidth={2.5} />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-
-                                        {/* Current Time Line */}
-                                        {timeIndicatorPos !== null && (
-                                            <div
-                                                className="absolute top-0 bottom-0 w-px bg-red-500 z-0 pointer-events-none"
-                                                style={{ left: timeIndicatorPos }}
-                                            >
-                                                <div className="absolute top-0 -translate-x-1/2 -translate-y-full bg-red-500 text-white text-[10px] padding-0.5 rounded px-1">
-                                                    {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))
-                        )}
-
-                        {/* Empty State */}
-                        {!loading && resources.length === 0 && (
-                            <div className="p-12 text-center text-gray-500">No resources configured.</div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

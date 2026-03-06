@@ -390,15 +390,64 @@ const Dashboard = () => {
   );
 };
 
+const ZEN_ICON_TONES = {
+  blue: { bg: 'bg-[#3A3530]/60 dark:bg-[#25221E]/80', icon: 'text-[#8899A8] dark:text-[#98A9B8]' },
+  green: { bg: 'bg-[#3A3530]/60 dark:bg-[#25221E]/80', icon: 'text-[#8B9E7E] dark:text-[#A3B596]' },
+  purple: { bg: 'bg-[#3A3530]/60 dark:bg-[#25221E]/80', icon: 'text-[#C68A7A] dark:text-[#D4A89A]' },
+  amber: { bg: 'bg-[#3A3530]/60 dark:bg-[#25221E]/80', icon: 'text-[#B89860] dark:text-[#C8A870]' },
+  cyan: { bg: 'bg-[#3A3530]/60 dark:bg-[#25221E]/80', icon: 'text-[#7EA8A0] dark:text-[#8EB8B0]' },
+  pink: { bg: 'bg-[#3A3530]/60 dark:bg-[#25221E]/80', icon: 'text-[#C49A90] dark:text-[#D4AAA0]' },
+};
+
 const StatCard = ({ title, value, growth, suffix, icon: Icon, color, onClick }) => {
-  const colors = { blue: 'from-blue-500 to-indigo-600', green: 'from-green-500 to-emerald-600', purple: 'from-purple-500 to-pink-600', amber: 'from-amber-500 to-orange-600', cyan: 'from-cyan-500 to-blue-600', pink: 'from-pink-500 to-rose-600' };
+  const isZen = typeof document !== 'undefined' && document.documentElement.classList.contains('zen');
+  const gradients = { blue: 'from-blue-500 to-indigo-600', green: 'from-green-500 to-emerald-600', purple: 'from-purple-500 to-pink-600', amber: 'from-amber-500 to-orange-600', cyan: 'from-cyan-500 to-blue-600', pink: 'from-pink-500 to-rose-600' };
+  const zen = ZEN_ICON_TONES[color] || ZEN_ICON_TONES.purple;
+
+  if (isZen) {
+    return (
+      <div
+        className="relative cursor-pointer group transition-all duration-300 rounded-2xl overflow-hidden glass-panel glass-panel-hover border border-[#3A3530]/40 dark:border-[#3A3530]/60 shadow-sm"
+        onClick={onClick}
+      >
+        <div className="p-4 flex flex-col gap-3">
+          {/* Top row: icon + badge */}
+          <div className="flex items-center justify-between">
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center border border-[#3A3530]/30 dark:border-[#3A3530]/50 ${zen.bg} backdrop-blur-sm`}>
+              <Icon size={17} className={zen.icon} />
+            </div>
+            {growth !== undefined && (
+              <span className={`flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${growth >= 0
+                ? 'text-[#8B9E7E] dark:text-[#A3B596] bg-[#8B9E7E]/10 border-[#8B9E7E]/20'
+                : 'text-[#B8887E] dark:text-[#C49A90] bg-[#B8887E]/10 border-[#B8887E]/20'
+                }`}>
+                {growth >= 0 ? <ArrowUpRight size={9} className="mr-0.5" /> : <ArrowDownRight size={9} className="mr-0.5" />}
+                {Math.abs(growth)}%
+              </span>
+            )}
+          </div>
+
+          {/* Value */}
+          <div>
+            <div className="text-xl font-bold text-[#2F2A25] dark:text-[#F2EDE6] tracking-tight truncate">
+              {value}{suffix && <span className="text-sm font-normal text-[#7A746A] dark:text-[#A8A39A] ml-1">{suffix}</span>}
+            </div>
+            <div className="text-xs text-[#7A746A] dark:text-[#A8A39A] mt-0.5 truncate">{title}</div>
+          </div>
+        </div>
+        {/* Subtle bottom accent line */}
+        <div className={`absolute bottom-0 left-0 right-0 h-px ${zen.icon} opacity-20`} />
+      </div>
+    );
+  }
+
   return (
     <Card className="relative cursor-pointer hover:scale-[1.02] transition-all border-0 shadow-lg overflow-hidden" onClick={onClick}>
-      <div className={`absolute inset-0 bg-gradient-to-br ${colors[color]}`} />
+      <div className={`absolute inset-0 bg-gradient-to-br ${gradients[color]}`} />
       <CardContent className="relative z-10 p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0"><Icon size={16} className="text-white" /></div>
-          {growth !== undefined && <Badge variant="secondary" className={`bg-white/20 border-0 text-white text-[10px] px-1.5 flex-shrink-0`}>{growth >= 0 ? <ArrowUpRight size={10} className="mr-0.5" /> : <ArrowDownRight size={10} className="mr-0.5" />}{Math.abs(growth)}%</Badge>}
+          {growth !== undefined && <Badge variant="secondary" className="bg-white/20 border-0 text-white text-[10px] px-1.5 flex-shrink-0">{growth >= 0 ? <ArrowUpRight size={10} className="mr-0.5" /> : <ArrowDownRight size={10} className="mr-0.5" />}{Math.abs(growth)}%</Badge>}
         </div>
         <CardDescription className="text-white/70 text-xs truncate">{title}</CardDescription>
         <div className="text-xl font-bold text-white mt-0.5 truncate">{value}{suffix && <span className="text-sm font-normal text-white/70">{suffix}</span>}</div>

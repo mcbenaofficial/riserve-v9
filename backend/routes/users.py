@@ -51,6 +51,15 @@ async def get_users(
     res = await db_session.execute(stmt)
     users = res.scalars().unique().all()
     
+    # Batch load staff profiles
+    user_id_list = [u.id for u in users]
+    staff_by_user_id = {}
+    if user_id_list:
+        sp_stmt = select(models_pg.Staff).where(models_pg.Staff.user_id.in_(user_id_list))
+        sp_res = await db_session.execute(sp_stmt)
+        for sp in sp_res.scalars().all():
+            staff_by_user_id[sp.user_id] = sp
+    
     results = []
     for u in users:
         # Fetch outlets
@@ -58,6 +67,7 @@ async def get_users(
         outlets_res = await db_session.execute(outlets_stmt)
         outlets_list = [row[0] for row in outlets_res.all()]
         
+        staff_profile = staff_by_user_id.get(u.id)
         results.append({
             "id": u.id,
             "company_id": u.company_id,
@@ -67,10 +77,18 @@ async def get_users(
             "phone": u.phone,
             "status": u.status,
             "outlets": outlets_list,
-            "created_at": u.created_at
+            "created_at": u.created_at,
+            "staff_profile_id": staff_profile.id if staff_profile else None,
+            "staff_profile": {
+                "id": staff_profile.id,
+                "department": staff_profile.department,
+                "employment_type": staff_profile.employment_type,
+                "outlet_id": staff_profile.outlet_id,
+            } if staff_profile else None,
         })
         
     return results
+
 
 
 @router.post("")

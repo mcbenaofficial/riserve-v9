@@ -172,7 +172,7 @@ async def get_public_slot_config(embed_token: str, db_session: AsyncSession = De
     return {
         "config": config_dict,
         "outlet": {"id": outlet_rec.id, "name": outlet_rec.name} if outlet_rec else None,
-        "services": [{"id": s.id, "name": s.name, "price": float(s.price), "duration": s.duration} for s in services]
+        "services": [{"id": s.id, "name": s.name, "price": float(s.price), "duration_min": s.duration} for s in services]
     }
 
 
@@ -200,7 +200,8 @@ async def create_public_booking(booking: PublicBookingCreate, db_session: AsyncS
             phone=booking.customer_phone
         )
         db_session.add(customer)
-        await db_session.commit()
+        # flush() to persist customer without committing, so everything stays in one transaction
+        await db_session.flush()
     else:
         customer_id = customer.id
     
@@ -243,10 +244,11 @@ async def create_public_booking(booking: PublicBookingCreate, db_session: AsyncS
         source="online"
     )
     db_session.add(booking_doc)
+    # flush() so the booking row exists in DB before booking_services FK insert
+    await db_session.flush()
     
-    # Link services in mapping table
+    # Link services in mapping table (booking must be flushed first to satisfy FK constraint)
     for sid in service_ids:
-        # Avoid direct inserts to Table where possible if no declarative mapping, but we can do it via relationship or execute
         from sqlalchemy import insert
         ins = models_pg.booking_services.insert().values(booking_id=booking_id, service_id=sid)
         await db_session.execute(ins)

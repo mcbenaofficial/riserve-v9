@@ -184,7 +184,7 @@ async def get_staff_list(
     current_user: User = Depends(get_current_user),
     db_session: AsyncSession = Depends(get_db)
 ):
-    """Get all staff members"""
+    """Get all staff members with linked user account info"""
     stmt = select(models_pg.Staff).where(models_pg.Staff.company_id == current_user.company_id)
     
     if outlet_id:
@@ -199,23 +199,42 @@ async def get_staff_list(
     res = await db_session.execute(stmt)
     staff_members = res.scalars().all()
     
-    return [
-        {
+    # Batch load linked users
+    user_ids = [s.user_id for s in staff_members if s.user_id]
+    users_by_id = {}
+    if user_ids:
+        u_stmt = select(models_pg.User).where(models_pg.User.id.in_(user_ids))
+        u_res = await db_session.execute(u_stmt)
+        for u in u_res.scalars().all():
+            users_by_id[u.id] = u
+    
+    results = []
+    for s in staff_members:
+        linked_user = users_by_id.get(s.user_id) if s.user_id else None
+        results.append({
             "id": s.id,
             "user_id": s.user_id,
-            "employee_id": s.employee_id,
             "first_name": s.first_name,
             "last_name": s.last_name,
-            "full_name": f"{s.first_name} {s.last_name}",
+            "full_name": f"{s.first_name or ''} {s.last_name or ''}".strip(),
             "email": s.email,
             "phone": s.phone,
             "department": s.department,
-            "designation": s.designation,
             "employment_type": s.employment_type,
             "status": s.status,
-            "outlet_id": s.outlet_id
-        } for s in staff_members
-    ]
+            "outlet_id": s.outlet_id,
+            # Linked user account info
+            "user_account": {
+                "email": linked_user.email,
+                "role": linked_user.role,
+                "status": linked_user.status,
+                "name": linked_user.name,
+            } if linked_user else None,
+            "has_login_access": linked_user is not None,
+        })
+    return results
+
+
 
 
 @router.get("/{staff_id}")
