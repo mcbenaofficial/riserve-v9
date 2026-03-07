@@ -55,6 +55,7 @@ class Company(Base):
     users = relationship("User", back_populates="company")
     outlets = relationship("Outlet", back_populates="company")
     customers = relationship("Customer", back_populates="company")
+    service_categories = relationship("ServiceCategory", back_populates="company")
     services = relationship("Service", back_populates="company")
     bookings = relationship("Booking", back_populates="company")
     transactions = relationship("Transaction", back_populates="company")
@@ -253,11 +254,26 @@ class Customer(Base):
     company = relationship("Company", back_populates="customers")
     bookings = relationship("Booking", back_populates="customer_rep")
 
+class ServiceCategory(Base):
+    __tablename__ = "service_categories"
+    
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    name = Column(String(255), nullable=False)
+    description = Column(Text)
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    company = relationship("Company", back_populates="service_categories")
+    services = relationship("Service", back_populates="category", cascade="all, delete-orphan")
+
 class Service(Base):
     __tablename__ = "services"
     
     id = Column(String, primary_key=True, default=generate_uuid)
     company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    category_id = Column(String, ForeignKey("service_categories.id", ondelete='SET NULL'), nullable=True)
     name = Column(String(255), nullable=False)
     price = Column(Numeric(10, 2), default=0)
     duration = Column(Integer, default=30) # minutes
@@ -267,6 +283,7 @@ class Service(Base):
 
     # Relationships
     company = relationship("Company", back_populates="services")
+    category = relationship("ServiceCategory", back_populates="services")
     bookings = relationship("Booking", secondary=booking_services, back_populates="services")
 
 class Booking(Base):

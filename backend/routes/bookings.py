@@ -138,6 +138,70 @@ async def create_booking(
     # Handle service_ids array
     service_ids = booking_input.service_ids or ([booking_input.service_id] if booking_input.service_id else [])
     
+    # --- Booking Rules Enforcement ---
+    conf_stmt = select(models_pg.SlotConfig).where(models_pg.SlotConfig.outlet_id == booking_input.outlet_id)
+    slot_config = (await db_session.execute(conf_stmt)).scalar_one_or_none()
+    rules = slot_config.configuration if slot_config else {}
+    
+    allow_overlap = rules.get("allow_overlap", False)
+    auto_schedule = rules.get("auto_schedule_next", True)
+    buffer_time = rules.get("buffer_time_minutes", 0)
+    base_duration = booking_input.duration or rules.get("slot_duration_min", 30)
+    
+    if not allow_overlap and booking_input.time:
+        overlap_stmt = select(models_pg.Booking).where(
+            models_pg.Booking.outlet_id == booking_input.outlet_id,
+            models_pg.Booking.date == booking_date,
+            models_pg.Booking.status.not_in(["Cancelled", "Declined"])
+        )
+        if booking_input.resource_id:
+            overlap_stmt = overlap_stmt.where(models_pg.Booking.resource_id == booking_input.resource_id)
+            
+        existing_bookings = (await db_session.execute(overlap_stmt)).scalars().all()
+        
+        def mins_since_midnight(t_str: str) -> int:
+            try:
+                h, m = map(int, t_str.split(':'))
+                return h * 60 + m
+            except:
+                return 0
+                
+        def format_mins(m: int) -> str:
+            return f"{m//60:02d}:{m%60:02d}"
+            
+        req_start = mins_since_midnight(booking_input.time)
+        req_end = req_start + base_duration + buffer_time
+        
+        def is_overlap(s, e):
+            for eb in existing_bookings:
+                if not eb.time: continue
+                eb_s = mins_since_midnight(eb.time)
+                eb_e = eb_s + (eb.duration or rules.get("slot_duration_min", 30)) + buffer_time
+                if s < eb_e and e > eb_s:
+                    return True
+            return False
+            
+        if is_overlap(req_start, req_end):
+            if not auto_schedule:
+                raise HTTPException(status_code=400, detail="The requested time slot is already booked.")
+                
+            # Auto-schedule find next slot
+            op_end_str = rules.get("operating_hours_end", "20:00")
+            op_end = mins_since_midnight(op_end_str)
+            # Find the next non-overlapping slot moving forward by slot_duration
+            step = rules.get("slot_duration_min", 30)
+            if step <= 0: step = 30
+            
+            while is_overlap(req_start, req_end):
+                req_start += step
+                req_end = req_start + base_duration + buffer_time
+                
+            if req_start + base_duration > op_end:
+                raise HTTPException(status_code=400, detail="No available slots found for today within operating hours.")
+                
+            booking_input.time = format_mins(req_start)
+    # --- End Booking Rules Enforcement ---
+    
     # Handle Customer Logic
     customer_id = booking_input.customer_id
     from sqlalchemy.dialects.postgresql import JSONB

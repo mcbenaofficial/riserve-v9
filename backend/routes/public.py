@@ -205,16 +205,88 @@ async def create_public_booking(booking: PublicBookingCreate, db_session: AsyncS
     else:
         customer_id = customer.id
     
-    # Calculate total amount from services if not provided
+    # Calculate total amount & duration from services if not provided
     total_amount = booking.total_amount or 0
+    total_duration = booking.total_duration or 30
     service_ids = booking.service_ids or ([booking.service_id] if booking.service_id else [])
     
-    if not total_amount and service_ids:
+    if (not total_amount or total_duration == 30) and service_ids:
+        calculated_amount = 0
+        calculated_duration = 0
         for sid in service_ids:
             srv_stmt = select(models_pg.Service).where(models_pg.Service.id == sid)
             service = (await db_session.execute(srv_stmt)).scalar_one_or_none()
             if service:
-                total_amount += float(service.price or 0)
+                calculated_amount += float(service.price or 0)
+                calculated_duration += (service.duration_min or 30)
+        
+        total_amount = total_amount or calculated_amount
+        total_duration = booking.total_duration or calculated_duration
+        
+    # Convert date string to python date if valid
+    from datetime import date
+    try:
+        book_date = date.fromisoformat(booking.date.split("T")[0])
+    except:
+        book_date = date.today()
+        
+    # --- Booking Rules Enforcement ---
+    rules = config_rec.configuration or {}
+    allow_overlap = rules.get("allow_overlap", False)
+    auto_schedule = rules.get("auto_schedule_next", True)
+    buffer_time = rules.get("buffer_time_minutes", 0)
+    
+    if not allow_overlap and booking.time:
+        overlap_stmt = select(models_pg.Booking).where(
+            models_pg.Booking.outlet_id == booking.outlet_id,
+            models_pg.Booking.date == book_date,
+            models_pg.Booking.status.not_in(["Cancelled", "Declined"])
+        )
+        if booking.resource_id:
+            overlap_stmt = overlap_stmt.where(models_pg.Booking.resource_id == booking.resource_id)
+            
+        existing_bookings = (await db_session.execute(overlap_stmt)).scalars().all()
+        
+        def mins_since_midnight(t_str: str) -> int:
+            try:
+                h, m = map(int, t_str.split(':'))
+                return h * 60 + m
+            except:
+                return 0
+                
+        def format_mins(m: int) -> str:
+            return f"{m//60:02d}:{m%60:02d}"
+            
+        req_start = mins_since_midnight(booking.time)
+        req_end = req_start + total_duration + buffer_time
+        
+        def is_overlap(s, e):
+            for eb in existing_bookings:
+                if not eb.time: continue
+                eb_s = mins_since_midnight(eb.time)
+                eb_e = eb_s + (eb.duration or rules.get("slot_duration_min", 30)) + buffer_time
+                if s < eb_e and e > eb_s:
+                    return True
+            return False
+            
+        if is_overlap(req_start, req_end):
+            if not auto_schedule:
+                raise HTTPException(status_code=400, detail="The requested time slot is already booked.")
+                
+            op_end_str = rules.get("operating_hours_end", "20:00")
+            op_end = mins_since_midnight(op_end_str)
+            step = rules.get("slot_duration_min", 30)
+            if step <= 0: step = 30
+            
+            while is_overlap(req_start, req_end):
+                req_start += step
+                req_end = req_start + total_duration + buffer_time
+                
+            if req_start + total_duration > op_end:
+                raise HTTPException(status_code=400, detail="No available slots found for today within operating hours.")
+                
+            booking.time = format_mins(req_start)
+    # --- End Booking Rules Enforcement ---
     
     # Create booking
     booking_id = str(uuid.uuid4())
@@ -238,6 +310,7 @@ async def create_public_booking(booking: PublicBookingCreate, db_session: AsyncS
         service_id=service_ids[0] if service_ids else None,
         date=book_date,
         time=booking.time,
+        duration=total_duration,
         notes=booking.notes,
         amount=total_amount,
         status="Pending",

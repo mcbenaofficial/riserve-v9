@@ -14,7 +14,12 @@ export const api = {
   updateOutlet: (id, data) => axios.put(`${API}/outlets/${id}`, data, { headers: getHeaders() }),
   deleteOutlet: (id) => axios.delete(`${API}/outlets/${id}`, { headers: getHeaders() }),
 
-  // Services
+  // Services & Categories
+  getServiceCategories: () => axios.get(`${API}/services/categories`, { headers: getHeaders() }),
+  createServiceCategory: (data) => axios.post(`${API}/services/categories`, data, { headers: getHeaders() }),
+  updateServiceCategory: (id, data) => axios.put(`${API}/services/categories/${id}`, data, { headers: getHeaders() }),
+  deleteServiceCategory: (id) => axios.delete(`${API}/services/categories/${id}`, { headers: getHeaders() }),
+
   getServices: () => axios.get(`${API}/services`, { headers: getHeaders() }),
   createService: (data) => axios.post(`${API}/services`, data, { headers: getHeaders() }),
   updateService: (id, data) => axios.put(`${API}/services/${id}`, data, { headers: getHeaders() }),

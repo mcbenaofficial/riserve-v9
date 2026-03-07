@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { api } from '../services/api';
 
-const AddServiceModal = ({ isOpen, onClose, onSuccess }) => {
+const AddServiceModal = ({ isOpen, onClose, onSuccess, categories = [] }) => {
   const [formData, setFormData] = useState({
     name: '',
     duration_min: 30,
     price: 299,
+    category_id: '',
     description: ''
   });
   const [loading, setLoading] = useState(false);
@@ -18,13 +19,17 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess }) => {
     setError('');
 
     try {
-      await api.createService(formData);
+      await api.createService({
+        ...formData,
+        category_id: formData.category_id || null
+      });
       onSuccess();
       onClose();
       setFormData({
         name: '',
         duration_min: 30,
         price: 299,
+        category_id: '',
         description: ''
       });
     } catch (err) {
@@ -70,6 +75,24 @@ const AddServiceModal = ({ isOpen, onClose, onSuccess }) => {
               className="w-full px-4 py-3 bg-[#0B0D10] border border-[#1F2630] rounded-xl text-white placeholder:text-[#4B5563] focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all"
               placeholder="e.g., Premium Wash"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#A9AFB8] mb-2">
+              Category (Optional)
+            </label>
+            <select
+              value={formData.category_id}
+              onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+              className="w-full px-4 py-3 bg-[#0B0D10] border border-[#1F2630] rounded-xl text-white focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all outline-none"
+            >
+              <option value="">No Category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

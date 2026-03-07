@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { X, Wrench, Clock, DollarSign, ToggleLeft, ToggleRight } from 'lucide-react';
 import { api } from '../services/api';
 
-const EditServiceModal = ({ isOpen, onClose, onSuccess, service }) => {
+const EditServiceModal = ({ isOpen, onClose, onSuccess, service, categories = [] }) => {
   const [formData, setFormData] = useState({
     name: '',
     duration_min: 30,
     price: 299,
+    category_id: '',
     active: true
   });
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ const EditServiceModal = ({ isOpen, onClose, onSuccess, service }) => {
         name: service.name || '',
         duration_min: service.duration_min || 30,
         price: service.price || 299,
+        category_id: service.category_id || '',
         active: service.active !== undefined ? service.active : true
       });
       setError('');
@@ -30,12 +32,15 @@ const EditServiceModal = ({ isOpen, onClose, onSuccess, service }) => {
       setError('Service name is required');
       return;
     }
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
-      await api.updateService(service.id, formData);
+      await api.updateService(service.id, {
+        ...formData,
+        category_id: formData.category_id || null
+      });
       onSuccess();
       onClose();
     } catch (err) {
@@ -90,6 +95,25 @@ const EditServiceModal = ({ isOpen, onClose, onSuccess, service }) => {
             />
           </div>
 
+          {/* Category */}
+          <div>
+            <label className="block text-sm font-medium text-[#A9AFB8] mb-2">
+              Category
+            </label>
+            <select
+              value={formData.category_id}
+              onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+              className="w-full px-4 py-3 bg-[#0B0D10] border border-[#1F2630] rounded-xl text-[#E6E8EB] focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent transition-all outline-none"
+            >
+              <option value="">No Category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Duration */}
           <div>
             <label className="block text-sm font-medium text-[#A9AFB8] mb-2">
@@ -131,11 +155,10 @@ const EditServiceModal = ({ isOpen, onClose, onSuccess, service }) => {
             <button
               type="button"
               onClick={() => setFormData({ ...formData, active: !formData.active })}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
-                formData.active
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${formData.active
                   ? 'bg-green-900/30 border-green-700'
                   : 'bg-[#0B0D10] border-[#1F2630]'
-              }`}
+                }`}
             >
               <span className={`font-medium ${formData.active ? 'text-green-400' : 'text-[#7D8590]'}`}>
                 {formData.active ? 'Active' : 'Inactive'}

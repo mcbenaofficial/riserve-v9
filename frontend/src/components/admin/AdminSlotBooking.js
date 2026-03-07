@@ -440,6 +440,11 @@ const SlotConfigModal = ({ outlet, existingConfig, onClose, onSuccess }) => {
     exceptions: existingConfig?.exceptions || [],
     capacity_type: existingConfig?.capacity_type || 'appointment',
     max_capacity: existingConfig?.max_capacity || 1,
+    // Booking Rules
+    allow_overlap: existingConfig?.allow_overlap ?? false,
+    auto_schedule_next: existingConfig?.auto_schedule_next ?? true,
+    buffer_time_minutes: existingConfig?.buffer_time_minutes || 0,
+    min_notice_hours: existingConfig?.min_notice_hours || 2,
     // Initialize resources logic:
     // 1. Try existing config resources
     // 2. Try outlet resources
@@ -941,6 +946,106 @@ const SlotConfigModal = ({ outlet, existingConfig, onClose, onSuccess }) => {
                   </ul>
                 </div>
               )}
+
+              {/* Booking Rules Section */}
+              <div className="pt-6 border-t border-[#D9DEE5] dark:border-[#1F2630]">
+                <h4 className="font-semibold text-[#0E1116] dark:text-[#E6E8EB] mb-4 flex items-center gap-2">
+                  <Settings size={18} />
+                  Advanced Booking Rules
+                </h4>
+
+                <div className="space-y-4">
+                  {/* Allow Overlap Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, allow_overlap: !formData.allow_overlap })}
+                    className={`w-full flex items-center justify-between px-4 py-4 rounded-xl border transition-all ${formData.allow_overlap
+                        ? 'bg-yellow-900/10 border-yellow-600/50'
+                        : 'bg-[#0B0D10] border-[#D9DEE5] dark:border-[#1F2630]'
+                      }`}
+                  >
+                    <div className="text-left">
+                      <span className={`font-medium ${formData.allow_overlap ? 'text-yellow-500' : 'text-[#6B7280] dark:text-[#7D8590]'}`}>
+                        Allow Slot Overlap
+                      </span>
+                      <p className="text-xs text-[#6B7280] dark:text-[#7D8590] mt-1">
+                        Permit multiple bookings at the exact same time (ignores capacity/resources)
+                      </p>
+                    </div>
+                    {formData.allow_overlap ? (
+                      <ToggleRight size={28} className="text-yellow-500" />
+                    ) : (
+                      <ToggleLeft size={28} className="text-[#6B7280] dark:text-[#7D8590]" />
+                    )}
+                  </button>
+
+                  {/* Auto-Schedule Toggle (only visible if overlap is NOT allowed) */}
+                  {!formData.allow_overlap && (
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, auto_schedule_next: !formData.auto_schedule_next })}
+                      className={`w-full flex items-center justify-between px-4 py-4 rounded-xl border transition-all ${formData.auto_schedule_next
+                          ? 'bg-blue-900/10 border-blue-600/50'
+                          : 'bg-[#0B0D10] border-[#D9DEE5] dark:border-[#1F2630]'
+                        }`}
+                    >
+                      <div className="text-left">
+                        <span className={`font-medium flex items-center gap-2 ${formData.auto_schedule_next ? 'text-blue-400' : 'text-[#6B7280] dark:text-[#7D8590]'}`}>
+                          <Clock size={16} />
+                          Auto-Schedule Next Available Slot
+                        </span>
+                        <p className="text-xs text-[#6B7280] dark:text-[#7D8590] mt-1">
+                          If requested slot is full, automatically book the next available time
+                        </p>
+                      </div>
+                      {formData.auto_schedule_next ? (
+                        <ToggleRight size={28} className="text-blue-400" />
+                      ) : (
+                        <ToggleLeft size={28} className="text-[#6B7280] dark:text-[#7D8590]" />
+                      )}
+                    </button>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Minimum Notice */}
+                    <div>
+                      <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2 flex items-center gap-2">
+                        <AlertCircle size={14} />
+                        Minimum Notice (Hours)
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={formData.min_notice_hours}
+                        onChange={(e) => setFormData({ ...formData, min_notice_hours: parseInt(e.target.value) || 0 })}
+                        className="w-full px-4 py-3 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent"
+                      />
+                      <p className="text-xs text-[#6B7280] dark:text-[#7D8590] mt-1">
+                        How far in advance customers must book
+                      </p>
+                    </div>
+
+                    {/* Buffer Time */}
+                    <div>
+                      <label className="block text-sm font-medium text-[#4B5563] dark:text-[#A9AFB8] mb-2 flex items-center gap-2">
+                        <CoffeeIcon size={14} />
+                        Buffer Time (Minutes)
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="5"
+                        value={formData.buffer_time_minutes}
+                        onChange={(e) => setFormData({ ...formData, buffer_time_minutes: parseInt(e.target.value) || 0 })}
+                        className="w-full px-4 py-3 bg-white dark:bg-[#0B0D10] border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] focus:ring-2 focus:ring-[#5FA8D3] focus:border-transparent"
+                      />
+                      <p className="text-xs text-[#6B7280] dark:text-[#7D8590] mt-1">
+                        Gap added after each appointment for cleanup/prep
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

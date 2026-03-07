@@ -72,20 +72,43 @@ const PublicBooking = () => {
     const slots = [];
     const [startHour, startMin] = config.operating_hours_start.split(':').map(Number);
     const [endHour, endMin] = config.operating_hours_end.split(':').map(Number);
-    const duration = config.slot_duration_min || 30;
+
+    // Support either fixed slot duration or total service duration
+    let duration = config.slot_duration_min || 30;
+    if (duration <= 0) duration = 30; // safety fallback
+
+    const buffer = config.buffer_time_minutes || 0;
+    const minNoticeHours = config.min_notice_hours || 0;
 
     let current = startHour * 60 + startMin;
     const end = endHour * 60 + endMin;
+
+    const now = new Date();
+    const isToday = selectedDate.toDateString() === now.toDateString();
+
+    // current minute in the day
+    const currentMins = now.getHours() * 60 + now.getMinutes();
 
     while (current + duration <= end) {
       const hour = Math.floor(current / 60);
       const min = current % 60;
       const timeStr = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
 
+      let isValid = true;
       if (!isBreakTime(timeStr)) {
-        slots.push(timeStr);
+        if (isToday) {
+          // Check notice period
+          if (current < currentMins + (minNoticeHours * 60)) {
+            isValid = false;
+          }
+        }
+
+        if (isValid) {
+          slots.push(timeStr);
+        }
       }
-      current += duration;
+
+      current += (duration + buffer);
     }
     return slots;
   };
