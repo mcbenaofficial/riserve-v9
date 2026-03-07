@@ -6,6 +6,7 @@ import uuid
 import models_pg
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete, and_, or_, func, desc
+from sqlalchemy.orm import selectinload
 from .dependencies import get_current_user, get_db, require_manager_or_admin, enforce_outlet_access, User
 
 router = APIRouter(prefix="/inventory", tags=["Inventory"])
@@ -23,6 +24,7 @@ class ProductCreate(BaseModel):
     reorder_level: int = 10
     is_addon: bool = True
     active: bool = True
+    supplier_id: Optional[str] = None
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
@@ -36,6 +38,7 @@ class ProductUpdate(BaseModel):
     reorder_level: Optional[int] = None
     is_addon: Optional[bool] = None
     active: Optional[bool] = None
+    supplier_id: Optional[str] = None
 
 class StockAdjustment(BaseModel):
     product_id: str
@@ -60,7 +63,9 @@ async def get_products(
     db: AsyncSession = Depends(get_db)
 ):
     """Get all products with optional filters"""
-    stmt = select(models_pg.Product).where(models_pg.Product.company_id == current_user.company_id)
+    stmt = select(models_pg.Product).options(
+        selectinload(models_pg.Product.supplier_links).selectinload(models_pg.SupplierProduct.supplier)
+    ).where(models_pg.Product.company_id == current_user.company_id)
     
     if active_only:
         stmt = stmt.where(models_pg.Product.active == True)
@@ -111,6 +116,8 @@ async def get_products(
             "reorder_level": p.reorder_level,
             "is_addon": p.is_addon,
             "active": p.active,
+            "supplier_id": p.supplier_links[0].supplier.id if p.supplier_links and p.supplier_links[0].supplier else None,
+            "supplier_name": p.supplier_links[0].supplier.name if p.supplier_links and p.supplier_links[0].supplier else None,
             "created_at": p.created_at.isoformat() if p.created_at else None,
             "updated_at": p.updated_at.isoformat() if p.updated_at else None
         }
@@ -131,7 +138,9 @@ async def get_product(
     db: AsyncSession = Depends(get_db)
 ):
     """Get a single product"""
-    stmt = select(models_pg.Product).where(
+    stmt = select(models_pg.Product).options(
+        selectinload(models_pg.Product.supplier_links).selectinload(models_pg.SupplierProduct.supplier)
+    ).where(
         models_pg.Product.id == product_id, 
         models_pg.Product.company_id == current_user.company_id
     )
@@ -155,6 +164,8 @@ async def get_product(
         "reorder_level": product.reorder_level,
         "is_addon": product.is_addon,
         "active": product.active,
+        "supplier_id": product.supplier_links[0].supplier.id if product.supplier_links and product.supplier_links[0].supplier else None,
+        "supplier_name": product.supplier_links[0].supplier.name if product.supplier_links and product.supplier_links[0].supplier else None,
         "created_at": product.created_at.isoformat() if product.created_at else None,
         "updated_at": product.updated_at.isoformat() if product.updated_at else None
     }
@@ -191,6 +202,19 @@ async def create_product(
     )
     
     db.add(new_product)
+    
+    # Add Supplier link if provided
+    if product.supplier_id:
+        supplier_link = models_pg.SupplierProduct(
+            id=str(uuid.uuid4()),
+            company_id=current_user.company_id,
+            supplier_id=product.supplier_id,
+            product_id=product_id,
+            lead_time_days=7,
+            moq=1,
+            unit_cost=product.cost or 0
+        )
+        db.add(supplier_link)
     
     # Log inventory action
     await log_inventory_action(db, {
@@ -233,10 +257,28 @@ async def update_product(
         if product.outlet_id:
              enforce_outlet_access(current_user, product.outlet_id)
     
-    update_data = {k: v for k, v in product.dict().items() if v is not None}
+    update_data = {k: v for k, v in product.dict().items() if v is not None and k != "supplier_id"}
     for key, value in update_data.items():
         setattr(existing, key, value)
     
+    # Handle Supplier update
+    if getattr(product, 'supplier_id', None) is not None:
+        # Delete existing supplier links for this product
+        await db.execute(delete(models_pg.SupplierProduct).where(models_pg.SupplierProduct.product_id == product_id))
+        
+        # Insert new supplier link
+        if product.supplier_id != "":
+            supplier_link = models_pg.SupplierProduct(
+                id=str(uuid.uuid4()),
+                company_id=current_user.company_id,
+                supplier_id=product.supplier_id,
+                product_id=product_id,
+                lead_time_days=7,
+                moq=1,
+                unit_cost=product.cost if product.cost is not None else existing.cost
+            )
+            db.add(supplier_link)
+
     existing.updated_at = datetime.now(timezone.utc)
     await db.commit()
     

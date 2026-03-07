@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
-import { 
-  Package, Plus, Search, AlertTriangle, Edit2, Trash2, 
+import {
+  Package, Plus, Search, AlertTriangle, Edit2, Trash2,
   Settings, History, BarChart3, X, Save, RefreshCw,
   ChevronDown, Filter, Box, DollarSign, TrendingDown
 } from 'lucide-react';
@@ -25,6 +25,7 @@ const AdminInventory = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [categories, setCategories] = useState([]);
   const [outlets, setOutlets] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -32,13 +33,14 @@ const AdminInventory = () => {
 
   const fetchData = async () => {
     try {
-      const [productsRes, statsRes, alertsRes, settingsRes, categoriesRes, outletsRes] = await Promise.all([
+      const [productsRes, statsRes, alertsRes, settingsRes, categoriesRes, outletsRes, suppliersRes] = await Promise.all([
         api.getProducts(),
         api.getInventoryStats(),
         api.getInventoryAlerts(),
         api.getInventorySettings(),
         api.getProductCategories(),
-        api.getOutlets()
+        api.getOutlets(),
+        api.getSuppliers()
       ]);
       setProducts(productsRes.data);
       setStats(statsRes.data);
@@ -46,6 +48,7 @@ const AdminInventory = () => {
       setSettings(settingsRes.data);
       setCategories(categoriesRes.data);
       setOutlets(outletsRes.data);
+      setSuppliers(suppliersRes.data);
     } catch (error) {
       console.error('Failed to fetch inventory data:', error);
     } finally {
@@ -118,8 +121,8 @@ const AdminInventory = () => {
   };
 
   const filteredProducts = products.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          p.sku?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.sku?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !categoryFilter || p.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
@@ -252,6 +255,7 @@ const AdminInventory = () => {
                   <th className="text-left p-4 text-sm font-medium text-muted-foreground">Product</th>
                   <th className="text-left p-4 text-sm font-medium text-muted-foreground">SKU</th>
                   <th className="text-left p-4 text-sm font-medium text-muted-foreground">Category</th>
+                  <th className="text-left p-4 text-sm font-medium text-muted-foreground">Vendor</th>
                   <th className="text-right p-4 text-sm font-medium text-muted-foreground">Price</th>
                   <th className="text-right p-4 text-sm font-medium text-muted-foreground">Cost</th>
                   <th className="text-center p-4 text-sm font-medium text-muted-foreground">Stock</th>
@@ -264,7 +268,7 @@ const AdminInventory = () => {
                   const isLowStock = product.stock_quantity <= product.reorder_level;
                   const isOutOfStock = product.stock_quantity === 0;
                   const outlet = outlets.find(o => o.id === product.outlet_id);
-                  
+
                   return (
                     <tr key={product.id} className="border-b border-border hover:bg-accent/50 transition-colors">
                       <td className="p-4">
@@ -284,6 +288,7 @@ const AdminInventory = () => {
                       <td className="p-4">
                         <Badge variant="outline">{product.category}</Badge>
                       </td>
+                      <td className="p-4 text-sm text-muted-foreground">{product.supplier_name || '-'}</td>
                       <td className="p-4 text-right font-medium">₹{product.price}</td>
                       <td className="p-4 text-right text-muted-foreground">₹{product.cost || 0}</td>
                       <td className="p-4">
@@ -291,8 +296,8 @@ const AdminInventory = () => {
                           <span className={`font-bold ${isOutOfStock ? 'text-red-500' : isLowStock ? 'text-amber-500' : ''}`}>
                             {product.stock_quantity}
                           </span>
-                          <Progress 
-                            value={Math.min((product.stock_quantity / (product.reorder_level * 3)) * 100, 100)} 
+                          <Progress
+                            value={Math.min((product.stock_quantity / (product.reorder_level * 3)) * 100, 100)}
                             className="w-16 h-1.5"
                           />
                           {isOutOfStock && <Badge variant="destructive" className="text-[10px]">Out</Badge>}
@@ -354,6 +359,7 @@ const AdminInventory = () => {
           title="Add Product"
           outlets={outlets}
           categories={categories}
+          suppliers={suppliers}
           onSave={handleAddProduct}
           onClose={() => setShowAddModal(false)}
         />
@@ -366,6 +372,7 @@ const AdminInventory = () => {
           product={selectedProduct}
           outlets={outlets}
           categories={categories}
+          suppliers={suppliers}
           onSave={handleUpdateProduct}
           onClose={() => { setShowEditModal(false); setSelectedProduct(null); }}
         />
@@ -393,7 +400,7 @@ const AdminInventory = () => {
 };
 
 // Product Modal Component
-const ProductModal = ({ title, product, outlets, categories, onSave, onClose }) => {
+const ProductModal = ({ title, product, outlets, categories, suppliers, onSave, onClose }) => {
   const [formData, setFormData] = useState({
     name: product?.name || '',
     sku: product?.sku || '',
@@ -402,6 +409,7 @@ const ProductModal = ({ title, product, outlets, categories, onSave, onClose }) 
     price: product?.price || 0,
     cost: product?.cost || 0,
     outlet_id: product?.outlet_id || '',
+    supplier_id: product?.supplier_id || '',
     stock_quantity: product?.stock_quantity || 0,
     reorder_level: product?.reorder_level || 10,
     is_addon: product?.is_addon ?? true,
@@ -415,6 +423,7 @@ const ProductModal = ({ title, product, outlets, categories, onSave, onClose }) 
     await onSave({
       ...formData,
       outlet_id: formData.outlet_id || null,
+      supplier_id: formData.supplier_id || null,
       price: parseFloat(formData.price),
       cost: parseFloat(formData.cost),
       stock_quantity: parseInt(formData.stock_quantity),
@@ -465,6 +474,19 @@ const ProductModal = ({ title, product, outlets, categories, onSave, onClose }) 
                 <option value="accessories">Accessories</option>
                 <option value="parts">Parts</option>
                 <option value="retail">Retail</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground mb-1 block">Vendor</label>
+              <select
+                value={formData.supplier_id}
+                onChange={(e) => setFormData({ ...formData, supplier_id: e.target.value })}
+                className="w-full px-4 py-2 bg-background border border-border rounded-xl"
+              >
+                <option value="">No Vendor</option>
+                {suppliers.map(s => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
               </select>
             </div>
             <div>
@@ -630,9 +652,9 @@ const StockAdjustmentModal = ({ product, onSave, onClose }) => {
           </div>
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" className="flex-1" onClick={onClose}>Cancel</Button>
-            <button 
-              type="submit" 
-              disabled={loading || quantity === 0 || newStock < 0} 
+            <button
+              type="submit"
+              disabled={loading || quantity === 0 || newStock < 0}
               className="cosmic-btn flex-1 py-2 rounded-xl font-semibold disabled:opacity-50"
             >
               {loading ? 'Saving...' : 'Confirm Adjustment'}
@@ -680,8 +702,8 @@ const InventorySettingsModal = ({ settings, onSave, onClose }) => {
               <option value="outlet_specific">Outlet Specific (Each outlet has own stock)</option>
             </select>
             <p className="text-xs text-muted-foreground mt-1">
-              {formData.inventory_mode === 'centralized' 
-                ? 'Products are shared across all outlets' 
+              {formData.inventory_mode === 'centralized'
+                ? 'Products are shared across all outlets'
                 : 'Each outlet manages its own inventory'}
             </p>
           </div>

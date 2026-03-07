@@ -56,7 +56,7 @@ async def link_admin_account():
         session.add(admin_user)
         await session.commit()
         
-        print(f"🎉 Successfully created {admin_email} mapped to {company.name}.")
+        print(f"🎉 Successfully created {admin_email} mapped to actual company.")
         print(f"   Role: Admin")
         print(f"   Password: password123")
         

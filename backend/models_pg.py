@@ -66,6 +66,7 @@ class Company(Base):
     feedback = relationship("Feedback", back_populates="company")
     settings = relationship("CompanySetting", back_populates="company", uselist=False)
     products = relationship("Product", back_populates="company")
+    suppliers = relationship("Supplier", back_populates="company")
 
 class User(Base):
     __tablename__ = "users"
@@ -402,6 +403,47 @@ class Product(Base):
 
     # Relationships
     company = relationship("Company", back_populates="products")
+    supplier_links = relationship("SupplierProduct", back_populates="product", cascade="all, delete-orphan")
+
+class Supplier(Base):
+    __tablename__ = "suppliers"
+    
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    name = Column(String(255), nullable=False)
+    email = Column(String(255))
+    phone = Column(String(50))
+    address = Column(Text)
+    contact_person = Column(String(255))
+    notes = Column(Text)
+    active = Column(Boolean, default=True)
+    
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    company = relationship("Company", back_populates="suppliers")
+    product_links = relationship("SupplierProduct", back_populates="supplier", cascade="all, delete-orphan")
+
+class SupplierProduct(Base):
+    __tablename__ = "supplier_products"
+    
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    supplier_id = Column(String, ForeignKey("suppliers.id", ondelete='CASCADE'), nullable=False)
+    product_id = Column(String, ForeignKey("products.id", ondelete='CASCADE'), nullable=False)
+    
+    lead_time_days = Column(Integer, default=0)
+    moq = Column(Integer, default=1) # Minimum order quantity
+    unit_cost = Column(Numeric(10, 2), nullable=True) # Optional supplier-specific cost
+    
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    company = relationship("Company")
+    supplier = relationship("Supplier", back_populates="product_links")
+    product = relationship("Product", back_populates="supplier_links")
 
 class InventoryLog(Base):
     __tablename__ = "inventory_logs"

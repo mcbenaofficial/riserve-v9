@@ -30,7 +30,8 @@ import {
   Atom,
   ShoppingCart,
   GitBranch,
-  Briefcase
+  Briefcase,
+  Truck
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -81,8 +82,8 @@ const Sidebar = () => {
   // Fetch low stock count if inventory is enabled
   useEffect(() => {
     const fetchLowStock = async () => {
-      // Check if general inventory is enabled AND the retail module is enabled
-      if (!enabledFeatures.includes('inventory') && !companySettings?.is_retail_enabled) return;
+      // Check if general inventory is enabled OR retail/booking modules are enabled
+      if (!enabledFeatures.includes('inventory') && !companySettings?.is_retail_enabled && !companySettings?.is_booking_enabled) return;
       try {
         const res = await api.getLowStockProducts();
         setLowStockCount(res.data?.length || 0);
@@ -135,9 +136,17 @@ const Sidebar = () => {
       label: 'Inventory',
       icon: Package,
       path: '/inventory',
-      condition: (features) => features.includes('inventory') || isRetailActive,
+      condition: (features) => features.includes('inventory') || isRetailActive || isBookingActive,
       roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
       badge: lowStockCount > 0 ? lowStockCount : null
+    },
+    {
+      key: 'suppliers',
+      label: 'Suppliers',
+      icon: Truck,
+      path: '/suppliers',
+      condition: (features) => features.includes('inventory') || isRetailActive || isBookingActive,
+      roles: ['SuperAdmin', 'Admin', 'Manager']
     },
     {
       key: 'finance',

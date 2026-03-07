@@ -157,6 +157,18 @@ export const api = {
   getProductCategories: () => axios.get(`${API}/inventory/categories`, { headers: getHeaders() }),
   getInventoryStats: () => axios.get(`${API}/inventory/stats`, { headers: getHeaders() }),
 
+  // Suppliers
+  getSuppliers: () => axios.get(`${API}/suppliers`, { headers: getHeaders() }),
+  getSupplier: (id) => axios.get(`${API}/suppliers/${id}`, { headers: getHeaders() }),
+  createSupplier: (data) => axios.post(`${API}/suppliers`, data, { headers: getHeaders() }),
+  updateSupplier: (id, data) => axios.put(`${API}/suppliers/${id}`, data, { headers: getHeaders() }),
+  deleteSupplier: (id) => axios.delete(`${API}/suppliers/${id}`, { headers: getHeaders() }),
+  getSupplierProducts: (id) => axios.get(`${API}/suppliers/${id}/products`, { headers: getHeaders() }),
+  linkSupplierProduct: (id, data) => axios.post(`${API}/suppliers/${id}/products`, data, { headers: getHeaders() }),
+  updateSupplierProductLink: (supplierId, linkId, data) => axios.put(`${API}/suppliers/${supplierId}/products/${linkId}`, data, { headers: getHeaders() }),
+  deleteSupplierProductLink: (supplierId, linkId) => axios.delete(`${API}/suppliers/${supplierId}/products/${linkId}`, { headers: getHeaders() }),
+  getReorderSuggestions: (lookbackDays = 30) => axios.get(`${API}/suppliers/analytics/reorder-suggestions?lookback_days=${lookbackDays}`, { headers: getHeaders() }),
+
   // Staff Management
   getStaffList: (params) => axios.get(`${API}/staff`, { params, headers: getHeaders() }),
   getStaffMember: (id) => axios.get(`${API}/staff/${id}`, { headers: getHeaders() }),

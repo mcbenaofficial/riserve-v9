@@ -31,6 +31,8 @@ import AdminConsole from './pages/AdminConsole';
 import PublicBooking from './pages/PublicBooking';
 import AIAgent from './pages/AIAgent';
 import Inventory from './pages/Inventory';
+import Suppliers from './pages/Suppliers';
+import SupplierDetail from './pages/SupplierDetail';
 import POS from './pages/POS';
 import CustomerFeedback from './pages/CustomerFeedback';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
@@ -158,6 +160,8 @@ function MainLayout() {
               <Route path="/slots" element={<SlotManagement />} />
               <Route path="/pos" element={<POS />} />
               <Route path="/inventory" element={<Inventory />} />
+              <Route path="/suppliers" element={<Suppliers />} />
+              <Route path="/suppliers/:id" element={<SupplierDetail />} />
               <Route path="/outlets" element={<Outlets />} />
               <Route path="/services" element={<Services />} />
               <Route path="/finance" element={<Finance />} />
