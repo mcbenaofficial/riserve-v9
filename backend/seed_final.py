@@ -41,7 +41,10 @@ async def seed_retail():
             phone="+1 (555) 123-4567",
             address="123 Fashion Blvd, NY",
             plan="pro",
-            status="active"
+            status="active",
+            is_booking_enabled=False,
+            is_retail_enabled=True,
+            is_workplace_enabled=True
         )
         session.add(company)
         await session.flush()

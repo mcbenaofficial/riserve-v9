@@ -74,16 +74,16 @@ async def get_company_settings(
     return {
         "id": core_company.id,
         "company_name": core_company.name,
-        "business_type": "salon", # Default for now
-        "address": "", "city": "", "state": "", "country": "", "postal_code": "",
-        "phone": "", "email": "", "website": "", "tax_id": "", "currency": "INR",
+        "business_type": core_company.business_type or "salon",
+        "address": core_company.address or "", "city": "", "state": "", "country": "", "postal_code": "",
+        "phone": core_company.phone or "", "email": core_company.email or "", "website": "", "tax_id": "", "currency": "INR",
         "timezone": "Asia/Kolkata", "operating_hours_start": "09:00", "operating_hours_end": "18:00",
         "working_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         "logo_url": "",
         "is_configured": True,
-        "is_booking_enabled": True,
-        "is_retail_enabled": False,
-        "is_workplace_enabled": False
+        "is_booking_enabled": core_company.is_booking_enabled,
+        "is_retail_enabled": core_company.is_retail_enabled,
+        "is_workplace_enabled": core_company.is_workplace_enabled
     }
 
 
