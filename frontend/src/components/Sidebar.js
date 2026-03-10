@@ -20,6 +20,7 @@ import {
   Moon,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Clock,
   Shield,
   Building2,
@@ -31,7 +32,19 @@ import {
   ShoppingCart,
   GitBranch,
   Briefcase,
-  Truck
+  Truck,
+  Brain,
+  Bell,
+  BookOpen,
+  MapPin,
+  Sun as SunBriefing,
+  MessageCircle,
+  Target,
+  Crosshair,
+  GitCompareArrows,
+  Gauge,
+  FlaskConical,
+  Bot
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -44,6 +57,7 @@ const Sidebar = () => {
   const [enabledFeatures, setEnabledFeatures] = useState([]);
   const [companySettings, setCompanySettings] = useState(null);
   const [lowStockCount, setLowStockCount] = useState(0);
+  const [hqExpanded, setHqExpanded] = useState(false);
 
   // Check if Super Admin
   const isSuperAdmin = user?.role === 'SuperAdmin';
@@ -157,6 +171,23 @@ const Sidebar = () => {
     },
     { key: 'customers', label: 'Customers', icon: Users, path: '/customers', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] },
     { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics', roles: ['SuperAdmin', 'Admin', 'Manager'] },
+    {
+      key: 'hq-intelligence', label: 'HQ Intelligence', icon: Brain, path: '/hq', roles: ['SuperAdmin', 'Admin'],
+      subItems: [
+        { key: 'hq-command', label: 'Command Center', icon: Brain, path: '/hq' },
+        { key: 'hq-briefing', label: 'Briefing', icon: SunBriefing, path: '/hq/briefing' },
+        { key: 'hq-playbooks', label: 'Playbooks', icon: BookOpen, path: '/hq/playbooks' },
+        { key: 'hq-alerts', label: 'Alerts', icon: Bell, path: '/hq/alerts' },
+        { key: 'hq-regions', label: 'Regions', icon: MapPin, path: '/hq/regions' },
+        { key: 'hq-goals', label: 'Goals', icon: Target, path: '/hq/goals' },
+        { key: 'hq-predictions', label: 'Predictions', icon: Crosshair, path: '/hq/predictions' },
+        { key: 'hq-benchmark', label: 'Benchmark', icon: GitCompareArrows, path: '/hq/benchmark' },
+        { key: 'hq-kpis', label: 'Custom KPIs', icon: Gauge, path: '/hq/kpis' },
+        { key: 'hq-experiments', label: 'Experiments', icon: FlaskConical, path: '/hq/experiments' },
+        { key: 'hq-agent', label: 'Agent Workflows', icon: Bot, path: '/hq/agent' },
+        { key: 'hq-copilot', label: 'Copilot', icon: MessageCircle, path: '/hq/copilot' },
+      ]
+    },
     { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', roles: ['SuperAdmin', 'Admin'] },
     {
       key: 'my-portal',
@@ -180,6 +211,12 @@ const Sidebar = () => {
   const nav = isSuperAdmin ? superAdminNav : regularNav;
 
   const isActive = (path) => location.pathname === path;
+  const isHqPath = location.pathname.startsWith('/hq');
+
+  // Auto-expand HQ sub-menu if on an HQ page
+  React.useEffect(() => {
+    if (isHqPath) setHqExpanded(true);
+  }, [isHqPath]);
 
   return (
     <aside className={`${collapsed ? 'w-20' : 'w-72'} min-w-[5rem] ${collapsed ? 'max-w-[5rem]' : 'max-w-[18rem]'} flex-shrink-0 bg-white/70 dark:bg-[#0B0D10]/80 backdrop-blur-xl border-r border-white/50 dark:border-[#1F2630] p-4 flex flex-col h-screen sticky top-0 transition-all duration-300 z-50 shadow-xl dark:shadow-none`}>
@@ -225,27 +262,65 @@ const Sidebar = () => {
       </button>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2">
+      <nav className="flex-1 space-y-2 overflow-y-auto">
         {nav.map((n) => {
           const IconComponent = n.icon;
+          const hasSubItems = n.subItems && n.subItems.length > 0;
+          const isExpanded = hasSubItems && hqExpanded;
+          const isParentActive = hasSubItems
+            ? isHqPath
+            : isActive(n.path);
+
           return (
-            <button
-              key={n.key}
-              onClick={() => navigate(n.path)}
-              className={`w-full flex items-center ${collapsed ? 'justify-center' : 'gap-3'} px-4 py-3 rounded-xl text-sm font-medium transition-all relative group ${isActive(n.path)
-                ? 'bg-gradient-to-r from-purple-500/10 to-blue-500/10 text-purple-700 dark:text-[#E6E8EB] border border-purple-500/20 dark:border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.1)]'
-                : 'text-[#6B7280] dark:text-[#9CA3AF] hover:bg-black/5 dark:hover:bg-white/5 hover:text-[#0E1116] dark:hover:text-[#E6E8EB] border border-transparent'
-                }`}
-              title={collapsed ? n.label : ''}
-            >
-              <IconComponent size={20} />
-              {!collapsed && <div className="flex-1 text-left">{n.label}</div>}
-              {n.badge && (
-                <span className={`${collapsed ? 'absolute -top-1 -right-1' : ''} min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold`}>
-                  {n.badge}
-                </span>
+            <div key={n.key}>
+              <button
+                onClick={() => {
+                  if (hasSubItems) {
+                    if (collapsed) { navigate(n.path); }
+                    else { setHqExpanded(!hqExpanded); }
+                  } else {
+                    navigate(n.path);
+                  }
+                }}
+                className={`w-full flex items-center ${collapsed ? 'justify-center' : 'gap-3'} px-4 py-3 rounded-xl text-sm font-medium transition-all relative group ${isParentActive
+                  ? 'bg-gradient-to-r from-purple-500/10 to-blue-500/10 text-purple-700 dark:text-[#E6E8EB] border border-purple-500/20 dark:border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.1)]'
+                  : 'text-[#6B7280] dark:text-[#9CA3AF] hover:bg-black/5 dark:hover:bg-white/5 hover:text-[#0E1116] dark:hover:text-[#E6E8EB] border border-transparent'
+                  }`}
+                title={collapsed ? n.label : ''}
+              >
+                <IconComponent size={20} />
+                {!collapsed && <div className="flex-1 text-left">{n.label}</div>}
+                {n.badge && (
+                  <span className={`${collapsed ? 'absolute -top-1 -right-1' : ''} min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold`}>
+                    {n.badge}
+                  </span>
+                )}
+                {hasSubItems && !collapsed && (
+                  <ChevronDown size={14} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                )}
+              </button>
+              {/* Sub-items */}
+              {hasSubItems && isExpanded && !collapsed && (
+                <div className="ml-4 mt-1 space-y-0.5 border-l-2 border-purple-500/20 pl-3">
+                  {n.subItems.map((sub) => {
+                    const SubIcon = sub.icon;
+                    return (
+                      <button
+                        key={sub.key}
+                        onClick={() => navigate(sub.path)}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${isActive(sub.path)
+                          ? 'bg-purple-500/10 text-purple-400 dark:text-purple-300'
+                          : 'text-[#6B7280] dark:text-[#9CA3AF] hover:bg-black/5 dark:hover:bg-white/5 hover:text-[#0E1116] dark:hover:text-[#E6E8EB]'
+                          }`}
+                      >
+                        <SubIcon size={14} />
+                        {sub.label}
+                      </button>
+                    );
+                  })}
+                </div>
               )}
-            </button>
+            </div>
           );
         })}
       </nav>

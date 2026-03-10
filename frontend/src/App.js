@@ -12,6 +12,7 @@ import AgentSidebar from './components/analytics/AgentSidebar'; // Reusing the A
 import { MessageSquare } from 'lucide-react';
 import AIAnalytics from './pages/AIAnalytics';
 import AIRecommendationHistory from './pages/AIRecommendationHistory';
+import StaffScheduling from './pages/StaffScheduling';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
@@ -44,6 +45,19 @@ import ProfileSettings from './pages/ProfileSettings';
 import Flow from './pages/Flow';
 import FlowList from './pages/FlowList';
 import Onboarding from './pages/Onboarding';
+import HQCommandCenter from './pages/HQCommandCenter';
+import HQCopilot from './pages/HQCopilot';
+import HQOutletDetail from './pages/HQOutletDetail';
+import HQBriefing from './pages/HQBriefing';
+import HQPlaybooks from './pages/HQPlaybooks';
+import HQAlerts from './pages/HQAlerts';
+import HQRegionDetail from './pages/HQRegionDetail';
+import HQGoals from './pages/HQGoals';
+import HQPredictions from './pages/HQPredictions';
+import HQBenchmark from './pages/HQBenchmark';
+import HQCustomKPIs from './pages/HQCustomKPIs';
+import HQExperiments from './pages/HQExperiments';
+import HQAgentWorkflows from './pages/HQAgentWorkflows';
 import './App.css';
 
 function App() {
@@ -157,6 +171,7 @@ function MainLayout() {
               <Route path="/my-workspace" element={<ProtectedRoute><MyWorkspace /></ProtectedRoute>} />
               <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalytics /></ProtectedRoute>} />
               <Route path="/analytics/ai-reports" element={<ProtectedRoute><AIRecommendationHistory /></ProtectedRoute>} />
+              <Route path="/analytics/staff-scheduling" element={<ProtectedRoute><StaffScheduling /></ProtectedRoute>} />
               <Route path="/slots" element={<SlotManagement />} />
               <Route path="/pos" element={<POS />} />
               <Route path="/inventory" element={<Inventory />} />
@@ -176,6 +191,21 @@ function MainLayout() {
               <Route path="/flow/builder" element={<Flow />} />
               <Route path="/flow/builder/:flowId" element={<Flow />} />
               <Route path="/profile" element={<ProfileSettings />} />
+              {/* HQ Intelligence */}
+              <Route path="/hq" element={<ProtectedRoute><HQCommandCenter /></ProtectedRoute>} />
+              <Route path="/hq/copilot" element={<ProtectedRoute><HQCopilot /></ProtectedRoute>} />
+              <Route path="/hq/outlet/:outletId" element={<ProtectedRoute><HQOutletDetail /></ProtectedRoute>} />
+              <Route path="/hq/briefing" element={<ProtectedRoute><HQBriefing /></ProtectedRoute>} />
+              <Route path="/hq/playbooks" element={<ProtectedRoute><HQPlaybooks /></ProtectedRoute>} />
+              <Route path="/hq/alerts" element={<ProtectedRoute><HQAlerts /></ProtectedRoute>} />
+              <Route path="/hq/regions" element={<ProtectedRoute><HQRegionDetail /></ProtectedRoute>} />
+              <Route path="/hq/region/:regionName" element={<ProtectedRoute><HQRegionDetail /></ProtectedRoute>} />
+              <Route path="/hq/goals" element={<ProtectedRoute><HQGoals /></ProtectedRoute>} />
+              <Route path="/hq/predictions" element={<ProtectedRoute><HQPredictions /></ProtectedRoute>} />
+              <Route path="/hq/benchmark" element={<ProtectedRoute><HQBenchmark /></ProtectedRoute>} />
+              <Route path="/hq/kpis" element={<ProtectedRoute><HQCustomKPIs /></ProtectedRoute>} />
+              <Route path="/hq/experiments" element={<ProtectedRoute><HQExperiments /></ProtectedRoute>} />
+              <Route path="/hq/agent" element={<ProtectedRoute><HQAgentWorkflows /></ProtectedRoute>} />
               {/* Super Admin Routes */}
               <Route path="/super-admin" element={<SuperAdminDashboard theme={theme} />} />
               <Route path="/super-admin/companies" element={<SuperAdminCompanies theme={theme} />} />

@@ -15,7 +15,32 @@ router = APIRouter(prefix="/feedback", tags=["Customer Feedback"])
 class FeedbackCreate(BaseModel):
     booking_id: str
     rating: int  # 1-5
+    
+    # Section A
+    compared_to_previous: Optional[str] = None
+    
+    # Section B
+    liked_most: Optional[List[str]] = None
+    staff_shoutout: Optional[str] = None
+    
+    # Section C
+    areas_fell_short: Optional[List[str]] = None
+    shortcomings_details: Optional[dict] = None
+    
+    # Section D
+    escalation_notes: Optional[str] = None
+    escalation_contact_opt_in: Optional[bool] = False
+    escalation_contact_number: Optional[str] = None
+    escalation_contact_time: Optional[str] = None
+    
+    # Section E
+    likely_to_visit_again: Optional[str] = None
+    nps_score: Optional[int] = None
+    return_incentive: Optional[str] = None
+    
+    # Other
     comment: Optional[str] = None
+    suggestions: Optional[str] = None
     customer_name: Optional[str] = None
     customer_email: Optional[str] = None
 
@@ -153,7 +178,22 @@ async def submit_feedback(
         # service_id logic: Booking often has many services now
         # We'll just take the first one if it exists or leave NULL
         rating=feedback_input.rating,
+        
+        compared_to_previous=feedback_input.compared_to_previous,
+        liked_most=feedback_input.liked_most or [],
+        staff_shoutout=feedback_input.staff_shoutout,
+        areas_fell_short=feedback_input.areas_fell_short or [],
+        shortcomings_details=feedback_input.shortcomings_details or {},
+        escalation_notes=feedback_input.escalation_notes,
+        escalation_contact_opt_in=feedback_input.escalation_contact_opt_in,
+        escalation_contact_number=feedback_input.escalation_contact_number,
+        escalation_contact_time=feedback_input.escalation_contact_time,
+        likely_to_visit_again=feedback_input.likely_to_visit_again,
+        nps_score=feedback_input.nps_score,
+        return_incentive=feedback_input.return_incentive,
+        
         comment=feedback_input.comment,
+        suggestions=feedback_input.suggestions,
         customer_name=feedback_input.customer_name or booking.customer_name,
         customer_email=feedback_input.customer_email or booking.customer_email
     )
