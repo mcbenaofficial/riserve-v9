@@ -8,11 +8,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, insert, func
 
 from routes.dependencies import (
-    get_current_user, User, get_db, log_audit
+    get_current_user, User, get_db, log_audit, require_feature
 )
 import models_pg
 
-router = APIRouter(prefix="/hitl", tags=["Human-in-the-Loop"])
+router = APIRouter(
+    prefix="/hitl", 
+    tags=["Human-in-the-Loop"],
+    dependencies=[Depends(require_feature("ai_flows"))]
+)
 logger = logging.getLogger(__name__)
 
 # Models and definitions can be directly defined for the router payloads

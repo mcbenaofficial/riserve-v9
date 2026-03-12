@@ -8,9 +8,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, or_, desc
 
 import models_pg
-from .dependencies import get_current_user, User, get_db
+from .dependencies import get_current_user, User, get_db, require_feature
 
-router = APIRouter(prefix="/customers", tags=["Customers"])
+router = APIRouter(
+    prefix="/customers", 
+    tags=["Customers"],
+    dependencies=[Depends(require_feature("crm"))]
+)
 
 class CustomerCreate(BaseModel):
     name: str

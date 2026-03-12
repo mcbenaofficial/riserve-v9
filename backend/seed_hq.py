@@ -136,6 +136,19 @@ async def seed():
         admin_user_id = admin.id if admin else "system"
         print(f"Using admin: {admin.email if admin else 'system'}")
 
+        # ── Ensure all features are enabled for the test company ──
+        from sqlalchemy import update
+        await db.execute(
+            update(models_pg.Company)
+            .where(models_pg.Company.id == COMPANY_ID)
+            .values(enabled_features=[
+                "hq_intelligence", "inventory", "ai_flows", 
+                "crm", "staff_management", "reputation_management"
+            ])
+        )
+        await db.commit()
+        print("✓ Enabled all Omni-Channel modules for the test company")
+
         # ── Clean existing seed data for this company ──
         print("Cleaning existing data...")
         await db.execute(delete(models_pg.Feedback).where(models_pg.Feedback.company_id == COMPANY_ID))
@@ -148,9 +161,17 @@ async def seed():
         await db.execute(delete(models_pg.Resource).where(models_pg.Resource.outlet_id.in_(
             select(models_pg.Outlet.id).where(models_pg.Outlet.company_id == COMPANY_ID)
         )))
+        
         await db.execute(delete(models_pg.Staff).where(models_pg.Staff.outlet_id.in_(
             select(models_pg.Outlet.id).where(models_pg.Outlet.company_id == COMPANY_ID)
         )))
+
+        # Delete all Non-Admin users for this company
+        await db.execute(delete(models_pg.User).where(
+            models_pg.User.company_id == COMPANY_ID,
+            models_pg.User.role != 'Admin'
+        ))
+
         await db.execute(delete(models_pg.Customer).where(models_pg.Customer.company_id == COMPANY_ID))
         await db.execute(delete(models_pg.Service).where(models_pg.Service.company_id == COMPANY_ID))
         await db.execute(delete(models_pg.ServiceCategory).where(models_pg.ServiceCategory.company_id == COMPANY_ID))

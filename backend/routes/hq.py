@@ -13,9 +13,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, case, and_, or_, text, distinct
 
 import models_pg
-from .dependencies import get_current_user, User, get_db
+from .dependencies import get_current_user, User, get_db, require_feature
 
-router = APIRouter(prefix="/hq", tags=["HQ Intelligence"])
+router = APIRouter(
+    prefix="/hq", 
+    tags=["HQ Intelligence"],
+    dependencies=[Depends(require_feature("hq_intelligence"))]
+)
 
 # ─── Constants ───────────────────────────────────────────────────────
 REGIONS = ["South", "West", "North", "East", "Central"]

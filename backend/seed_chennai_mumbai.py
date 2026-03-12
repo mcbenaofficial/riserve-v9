@@ -163,6 +163,19 @@ async def seed():
         admin_user_id = admin.id if admin else "system"
         print(f"Using admin: {admin.email if admin else 'system'}")
 
+        # ── Ensure all features are enabled for the test company ──
+        from sqlalchemy import update
+        await db.execute(
+            update(models_pg.Company)
+            .where(models_pg.Company.id == COMPANY_ID)
+            .values(enabled_features=[
+                "hq_intelligence", "inventory", "ai_flows", 
+                "crm", "staff_management", "reputation_management"
+            ])
+        )
+        await db.commit()
+        print("✓ Enabled all Omni-Channel modules for the test company")
+
         # ── Clean existing non-Bengaluru seed data ──
         print("Cleaning existing Chennai/Mumbai data (if any)...")
         # We don't delete existing Bengaluru outlets — only clean outlets
@@ -456,6 +469,11 @@ async def seed():
                     profile = {"booking_mult": 1.0, "rating_bias": 0.0, "cancel_rate": 0.06}
                 else:
                     profile = {"booking_mult": 0.7, "rating_bias": -0.3, "cancel_rate": 0.12}
+
+            if oregion == "Mumbai":
+                profile["booking_mult"] *= 0.8  # 20% fewer bookings
+                profile["rating_bias"] -= 0.2   # Lower ratings
+                profile["cancel_rate"] *= 1.25  # 25% higher cancellation rate
 
             outlet_profiles[oid] = profile
 

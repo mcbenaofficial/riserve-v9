@@ -7,9 +7,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc, update
 
 import models_pg
-from .dependencies import get_current_user, User, get_db
+from .dependencies import get_current_user, User, get_db, require_feature
 
-router = APIRouter(prefix="/feedback", tags=["Customer Feedback"])
+router = APIRouter(
+    prefix="/feedback", 
+    tags=["Customer Feedback"],
+    dependencies=[Depends(require_feature("reputation_management"))]
+)
 
 
 class FeedbackCreate(BaseModel):

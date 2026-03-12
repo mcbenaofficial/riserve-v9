@@ -15,6 +15,7 @@ import {
   DollarSign,
   TrendingUp,
   Users,
+  User,
   HelpCircle,
   Sun,
   Moon,
@@ -58,6 +59,18 @@ const Sidebar = () => {
   const [companySettings, setCompanySettings] = useState(null);
   const [lowStockCount, setLowStockCount] = useState(0);
   const [hqExpanded, setHqExpanded] = useState(false);
+  const [showAppSwitcher, setShowAppSwitcher] = useState(false);
+  const appSwitcherRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (appSwitcherRef.current && !appSwitcherRef.current.contains(event.target)) {
+        setShowAppSwitcher(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Check if Super Admin
   const isSuperAdmin = user?.role === 'SuperAdmin';
@@ -126,16 +139,41 @@ const Sidebar = () => {
   const isRetailActive = companySettings ? companySettings.is_retail_enabled : true;
   const isWorkplaceActive = companySettings ? companySettings.is_workplace_enabled : true;
 
+  // App Definitions
+  const APPS = [
+    { id: 'core', name: 'Core Platform', icon: LayoutDashboard },
+    { id: 'staff', name: 'Staff Management', icon: Users, feature: 'staff_management' },
+    { id: 'crm', name: 'CRM & Loyalty', icon: Crown, feature: 'crm' },
+    { id: 'inventory', name: 'Inventory & Procurement', icon: Package, feature: 'inventory' },
+    { id: 'flow', name: 'Flows Engine', icon: SiriNewIcon, feature: 'ai_flows' },
+    { id: 'hq', name: 'HQ Intelligence', icon: Brain, feature: 'hq_intelligence' },
+    { id: 'reputation', name: 'Reputation Management', icon: MessageSquare, feature: 'reputation_management' },
+  ];
+
+  const activeAppId = React.useMemo(() => {
+    const path = location.pathname;
+    if (path.startsWith('/hq')) return 'hq';
+    if (path.startsWith('/flow')) return 'flow';
+    if (path.startsWith('/inventory') || path.startsWith('/suppliers')) return 'inventory';
+    if (path.startsWith('/customers')) return 'crm';
+    if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling')) return 'staff';
+    if (path.startsWith('/feedback') || path.startsWith('/reviews')) return 'reputation';
+    return 'core';
+  }, [location.pathname]);
+
+  const activeApp = APPS.find(a => a.id === activeAppId) || APPS[0];
+
   // Navigation Configuration
   const allNavItems = [
-    { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/' },
+    { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/', appId: 'core' },
     {
       key: 'pos',
       label: 'Point of Sale',
       icon: ShoppingCart,
       path: '/pos',
       condition: () => isRetailActive,
-      roles: ['SuperAdmin', 'Admin', 'Manager', 'User']
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
+      appId: 'core'
     },
     {
       key: 'bookings',
@@ -143,36 +181,62 @@ const Sidebar = () => {
       icon: Calendar,
       path: '/bookings',
       condition: () => isBookingActive,
-      roles: ['SuperAdmin', 'Admin', 'Manager', 'User']
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
+      appId: 'core'
     },
     {
       key: 'inventory',
       label: 'Inventory',
       icon: Package,
       path: '/inventory',
-      condition: (features) => features.includes('inventory') || isRetailActive || isBookingActive,
+      condition: (features) => features.includes('inventory'),
       roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
-      badge: lowStockCount > 0 ? lowStockCount : null
+      badge: lowStockCount > 0 ? lowStockCount : null,
+      appId: 'inventory'
     },
     {
       key: 'suppliers',
       label: 'Suppliers',
       icon: Truck,
       path: '/suppliers',
-      condition: (features) => features.includes('inventory') || isRetailActive || isBookingActive,
-      roles: ['SuperAdmin', 'Admin', 'Manager']
+      condition: (features) => features.includes('inventory'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'inventory'
+    },
+    { key: 'finance', label: 'Finance', icon: DollarSign, path: '/finance', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
+    { key: 'customers', label: 'Customer Database', icon: Users, path: '/customers', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'crm' },
+    { key: 'customer-segments', label: 'Segments', icon: User, path: '/customers/segments', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'crm' },
+    {
+      key: 'team',
+      label: 'Staff Roster',
+      icon: Users,
+      path: '/team',
+      condition: (features) => features.includes('staff_management'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'staff'
     },
     {
-      key: 'finance',
-      label: 'Finance',
-      icon: DollarSign,
-      path: '/finance',
-      roles: ['SuperAdmin', 'Admin', 'Manager']
+      key: 'staff-scheduling',
+      label: 'Performance & Schedules',
+      icon: Clock,
+      path: '/analytics/staff-scheduling',
+      condition: (features) => features.includes('staff_management'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'staff'
     },
-    { key: 'customers', label: 'Customers', icon: Users, path: '/customers', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] },
-    { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics', roles: ['SuperAdmin', 'Admin', 'Manager'] },
     {
-      key: 'hq-intelligence', label: 'HQ Intelligence', icon: Brain, path: '/hq', roles: ['SuperAdmin', 'Admin'],
+      key: 'feedback',
+      label: 'Feedback Collections',
+      icon: MessageSquare,
+      path: '/feedback',
+      condition: (features) => features.includes('reputation_management'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'reputation'
+    },
+    { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
+    {
+      key: 'hq-intelligence', label: 'HQ Intelligence', icon: Brain, path: '/hq', condition: (features) => features.includes('hq_intelligence'), roles: ['SuperAdmin', 'Admin'],
+      appId: 'hq',
       subItems: [
         { key: 'hq-command', label: 'Command Center', icon: Brain, path: '/hq' },
         { key: 'hq-briefing', label: 'Briefing', icon: SunBriefing, path: '/hq/briefing' },
@@ -188,16 +252,17 @@ const Sidebar = () => {
         { key: 'hq-copilot', label: 'Copilot', icon: MessageCircle, path: '/hq/copilot' },
       ]
     },
-    { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', roles: ['SuperAdmin', 'Admin'] },
+    { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', condition: (features) => features.includes('ai_flows'), roles: ['SuperAdmin', 'Admin'], appId: 'flow' },
     {
       key: 'my-portal',
       label: 'My Portal',
       icon: Briefcase,
       path: '/my-workspace',
-      roles: ['Admin', 'Manager', 'User']
+      roles: ['Admin', 'Manager', 'User'],
+      appId: 'core'
     },
-    { key: 'admin', label: 'Admin Console', icon: Shield, path: '/admin', roles: ['SuperAdmin', 'Admin'] },
-    { key: 'support', label: 'Support', icon: HelpCircle, path: '/support', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'] }
+    { key: 'admin', label: 'Admin Console', icon: Shield, path: '/admin', roles: ['SuperAdmin', 'Admin'], appId: 'core' },
+    { key: 'support', label: 'Support', icon: HelpCircle, path: '/support', roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'core' }
   ];
 
   const regularNav = allNavItems.filter(item => {
@@ -205,6 +270,8 @@ const Sidebar = () => {
     if (item.condition && !item.condition(enabledFeatures)) return false;
     // Check Roles
     if (item.roles && !item.roles.includes(user?.role || 'User')) return false;
+    // Check Active App
+    if (item.appId !== activeAppId) return false;
     return true;
   });
 
@@ -221,33 +288,108 @@ const Sidebar = () => {
   return (
     <aside className={`${collapsed ? 'w-20' : 'w-72'} min-w-[5rem] ${collapsed ? 'max-w-[5rem]' : 'max-w-[18rem]'} flex-shrink-0 bg-white/70 dark:bg-[#0B0D10]/80 backdrop-blur-xl border-r border-white/50 dark:border-[#1F2630] p-4 flex flex-col h-screen sticky top-0 transition-all duration-300 z-50 shadow-xl dark:shadow-none`}>
       {/* Logo & Toggle */}
-      <div className="flex items-center justify-between mb-8 px-2">
-        {!collapsed && (
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden">
+      <div className="flex flex-col mb-6">
+        <div className="flex items-center justify-between mb-4 px-2">
+          {!collapsed && (
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden">
+                <img
+                  src={mode === 'zen' ? '/logo-zen.png' : (theme === 'dark' ? '/logo-dark.png' : '/logo-light.png')}
+                  alt="Ri'Serve Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="h-6 flex items-center">
+                <img
+                  src={mode === 'zen' ? '/riserve-text-zen.png' : (theme === 'dark' ? '/riserve-text-dark.png' : '/riserve-text-light.png')}
+                  alt="RI'SERVE"
+                  className="h-full object-contain"
+                />
+              </div>
+            </div>
+          )}
+
+          {collapsed && (
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden mx-auto">
               <img
                 src={mode === 'zen' ? '/logo-zen.png' : (theme === 'dark' ? '/logo-dark.png' : '/logo-light.png')}
                 alt="Ri'Serve Logo"
                 className="w-full h-full object-contain"
               />
             </div>
-            <div className="h-8 flex items-center">
-              <img
-                src={mode === 'zen' ? '/riserve-text-zen.png' : (theme === 'dark' ? '/riserve-text-dark.png' : '/riserve-text-light.png')}
-                alt="RI'SERVE"
-                className="h-full object-contain"
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {collapsed && (
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden mx-auto">
-            <img
-              src={mode === 'zen' ? '/logo-zen.png' : (theme === 'dark' ? '/logo-dark.png' : '/logo-light.png')}
-              alt="Ri'Serve Logo"
-              className="w-full h-full object-contain"
-            />
+        {/* App Switcher */}
+        {!collapsed && !isSuperAdmin && (
+          <div className="relative px-2" ref={appSwitcherRef}>
+            <button
+              onClick={() => setShowAppSwitcher(!showAppSwitcher)}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all border ${theme === 'dark' ? 'bg-[#171C22]/50 border-[#1F2630] hover:bg-[#1F2630]' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'}`}
+            >
+              <div className="flex items-center gap-2">
+                <div className={`p-1.5 rounded-lg ${theme === 'dark' ? 'bg-[#1F2630]' : 'bg-white shadow-sm'}`}>
+                  {activeApp.icon && React.createElement(activeApp.icon, { size: 16, className: theme === 'dark' ? 'text-gray-300' : 'text-gray-600' })}
+                </div>
+                <span className={`text-sm font-semibold ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-gray-800'}`}>
+                  {activeApp.name}
+                </span>
+              </div>
+              <ChevronDown size={16} className={`transition-transform duration-200 ${showAppSwitcher ? 'rotate-180' : ''} ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+            </button>
+
+            {/* Dropdown Menu */}
+            {showAppSwitcher && (
+              <div className={`absolute top-full left-2 right-2 mt-2 py-2 rounded-xl shadow-xl border z-50 overflow-hidden ${theme === 'dark' ? 'bg-[#171C22] border-[#1F2630]' : 'bg-white border-gray-200'}`}>
+                <div className="px-3 py-2 border-b bg-gray-50/50 dark:bg-gray-800/20 dark:border-[#1F2630]">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                    Available Modules
+                  </span>
+                </div>
+                <div className="p-1 max-h-64 overflow-y-auto">
+                  {APPS.map((app) => {
+                    const isLocked = app.feature && !enabledFeatures.includes(app.feature);
+                    const Icon = app.icon;
+                    return (
+                      <button
+                        key={app.id}
+                        onClick={() => {
+                          if (isLocked) {
+                            setShowAppSwitcher(false);
+                            alert(`Upgrade Required: You need the ${app.name} license to access this module.`);
+                          } else {
+                            setShowAppSwitcher(false);
+                            if (app.id === 'hq') navigate('/hq');
+                            else if (app.id === 'crm') navigate('/customers');
+                            else if (app.id === 'inventory') navigate('/inventory');
+                            else if (app.id === 'flow') navigate('/flow');
+                            else if (app.id === 'staff') navigate('/team');
+                            else if (app.id === 'reputation') navigate('/feedback');
+                            else navigate('/');
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left transition-colors ${activeApp.id === app.id
+                          ? (theme === 'dark' ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-50 text-purple-600')
+                          : (theme === 'dark' ? 'text-gray-300 hover:bg-[#1F2630]' : 'text-gray-700 hover:bg-gray-50')
+                          } ${isLocked ? 'opacity-60 grayscale' : ''}`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon size={16} className={isLocked ? 'opacity-50' : ''} />
+                          <span className={`text-sm font-medium ${isLocked ? 'opacity-80' : ''}`}>
+                            {app.name}
+                          </span>
+                        </div>
+                        {isLocked && (
+                          <div className={`p-1 rounded-md ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                            <Crown size={12} className="opacity-70" />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

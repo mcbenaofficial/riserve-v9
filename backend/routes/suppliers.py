@@ -5,12 +5,16 @@ from typing import List, Optional
 from datetime import datetime, timezone, timedelta
 
 from database_pg import get_db
-from .dependencies import get_current_user, User
+from .dependencies import get_current_user, User, require_feature
 import models_pg as models
 from pydantic import BaseModel, ConfigDict
 import math
 
-router = APIRouter(prefix="/suppliers", tags=["Suppliers"])
+router = APIRouter(
+    prefix="/suppliers", 
+    tags=["Suppliers"],
+    dependencies=[Depends(require_feature("inventory"))]
+)
 
 # Pydantic Schemas
 class SupplierCreate(BaseModel):

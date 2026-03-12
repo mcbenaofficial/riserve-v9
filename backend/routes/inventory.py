@@ -7,9 +7,13 @@ import models_pg
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete, and_, or_, func, desc
 from sqlalchemy.orm import selectinload
-from .dependencies import get_current_user, get_db, require_manager_or_admin, enforce_outlet_access, User
+from .dependencies import get_current_user, get_db, require_manager_or_admin, enforce_outlet_access, User, require_feature
 
-router = APIRouter(prefix="/inventory", tags=["Inventory"])
+router = APIRouter(
+    prefix="/inventory", 
+    tags=["Inventory"],
+    dependencies=[Depends(require_feature("inventory"))]
+)
 
 # Models
 class ProductCreate(BaseModel):

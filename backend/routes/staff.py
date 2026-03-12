@@ -9,9 +9,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
 
 import models_pg
-from .dependencies import get_current_user, User, get_db
+from .dependencies import get_current_user, User, get_db, require_feature
 
-router = APIRouter(prefix="/staff", tags=["Staff Management"])
+router = APIRouter(
+    prefix="/staff", 
+    tags=["Staff Management"],
+    dependencies=[Depends(require_feature("staff_management"))]
+)
 
 # ============== MODELS ==============
 

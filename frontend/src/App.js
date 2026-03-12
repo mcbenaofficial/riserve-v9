@@ -107,8 +107,8 @@ function MainLayout() {
   // Check if user is Super Admin
   const isSuperAdmin = user?.role === 'SuperAdmin';
 
-  // Hide FAB on AI Agent page
-  const hideFloatingFAB = location.pathname === '/ai-agent';
+  // Hide FAB and apply full-height layout on AI Agent and HQ Copilot pages
+  const hideFloatingFAB = location.pathname === '/ai-agent' || location.pathname === '/hq/copilot';
 
   // Check if currently impersonating
   const isImpersonating = localStorage.getItem('ridn_impersonating') === 'true';

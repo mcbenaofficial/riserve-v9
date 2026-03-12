@@ -260,9 +260,9 @@ const HQCopilot = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#0a0b0f] text-white flex flex-col">
+        <div className="h-full bg-[#0a0b0f] text-white flex flex-col rounded-3xl overflow-hidden border border-white/[0.06]">
             {/* Header */}
-            <div className="border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-xl">
+            <div className="border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-xl shrink-0">
                 <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <button onClick={() => navigate('/hq')} className="p-2 rounded-xl hover:bg-white/5 transition-colors">
@@ -340,7 +340,7 @@ const HQCopilot = () => {
             )}
 
             {/* Input Bar */}
-            <div className="border-t border-white/[0.06] bg-white/[0.02] backdrop-blur-xl">
+            <div className="border-t border-white/[0.06] bg-white/[0.02] backdrop-blur-xl shrink-0">
                 <form onSubmit={handleSubmit} className="max-w-4xl mx-auto px-6 py-4">
                     <div className="flex items-center gap-3">
                         <div className="flex-1 relative">

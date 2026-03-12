@@ -333,3 +333,46 @@ async def check_trial_status(company_id: str, db_session: AsyncSession) -> Dict:
     
     return {"valid": True, "plan": "trial"}
 
+
+def require_feature(feature_name: str):
+    """
+    Dependency factory to check if the current user's company has a specific feature enabled.
+    SuperAdmins automatically bypass this check.
+    """
+    async def feature_dependency(
+        current_user: User = Depends(get_current_user),
+        db_session: AsyncSession = Depends(get_db)
+    ) -> User:
+        if current_user.role == "SuperAdmin":
+            return current_user
+            
+        if not current_user.company_id:
+            raise HTTPException(status_code=403, detail="User not associated with a company")
+            
+        stmt = select(models_pg.Company.enabled_features).where(models_pg.Company.id == current_user.company_id)
+        result = await db_session.execute(stmt)
+        enabled_features = result.scalar_one_or_none()
+        
+        # enabled_features could be [] if no features are enabled, but if company doesn't exist, it's None.
+        # Actually `scalar_one_or_none()` returns None if row not found.
+        # But if the JSONB is null in DB, it might return None. Let's just check if it's explicitly None.
+        if enabled_features is None:
+            # Let's perform a check to distinguish between company not found and null features
+            check_stmt = select(models_pg.Company.id).where(models_pg.Company.id == current_user.company_id)
+            has_company = (await db_session.execute(check_stmt)).scalar_one_or_none()
+            if not has_company:
+                raise HTTPException(status_code=403, detail="Company not found")
+            features = []
+        else:
+            features = enabled_features
+            
+        if feature_name not in features:
+            raise HTTPException(
+                status_code=403, 
+                detail=f"This company does not have access to the '{feature_name}' module. Please upgrade your plan."
+            )
+            
+        return current_user
+        
+    return feature_dependency
+
