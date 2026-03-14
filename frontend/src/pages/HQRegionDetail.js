@@ -32,6 +32,7 @@ const HQRegionList = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [regions, setRegions] = useState([]);
+    const [allOutlets, setAllOutlets] = useState([]);
     const [selectedRegion, setSelectedRegion] = useState(null);
 
     useEffect(() => {
@@ -41,6 +42,7 @@ const HQRegionList = () => {
                 // Sort regions by health score descending
                 const sorted = (res.data.regions || []).sort((a, b) => b.avg_health - a.avg_health);
                 setRegions(sorted);
+                setAllOutlets(res.data.all_outlets || []);
                 if (sorted.length > 0) {
                     setSelectedRegion(sorted[0]);
                 }
@@ -101,6 +103,7 @@ const HQRegionList = () => {
                         <div className="w-full h-full max-h-[700px] flex items-center justify-center">
                             <HQIndiaMap
                                 regions={regions}
+                                allOutlets={allOutlets}
                                 onRegionSelect={(regionName) => {
                                     const r = regions.find(x => x.region === regionName);
                                     if (r) setSelectedRegion(r);

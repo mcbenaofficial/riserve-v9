@@ -207,6 +207,9 @@ async def _compute_outlet_health(outlet, db: AsyncSession, company_id: str) -> d
             # Fallback string manipulation if unknown city
             city_name = parts[-1] if parts else "Unknown"
 
+    if outlet.latitude is not None and outlet.longitude is not None:
+        coords = {"lat": float(outlet.latitude), "lng": float(outlet.longitude)}
+
     cluster = CLUSTERS[hash(outlet.id + "c") % len(CLUSTERS)]
 
     return {
@@ -1631,7 +1634,19 @@ async def list_regions(
             "worst_outlet": {"name": worst["outlet_name"], "score": round(worst["health_score"], 1)},
         })
 
-    return {"status": "success", "regions": regions}
+    all_outlets = []
+    for region_name, data in sorted(region_map.items()):
+        for h in data["healths"]:
+            all_outlets.append({
+                "outlet_id": h["outlet_id"],
+                "outlet_name": h["outlet_name"],
+                "region": region_name,
+                "coordinates": h["coordinates"],
+                "health_score": round(h["health_score"], 1),
+                "metrics": h["metrics"]
+            })
+
+    return {"status": "success", "regions": regions, "all_outlets": all_outlets}
 
 
 @router.get("/regions/{region_name}")

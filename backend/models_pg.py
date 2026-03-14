@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, DateTime, Date, ForeignKey, Integer, String, Text, Numeric, Table
+from sqlalchemy import Boolean, Column, DateTime, Date, ForeignKey, Integer, String, Text, Numeric, Table, Float
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
@@ -99,6 +99,8 @@ class Outlet(Base):
     contact_phone = Column(String(50))
     capacity = Column(Integer, default=1)
     status = Column(String(50), default="active")
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
