@@ -31,6 +31,7 @@ class CompanyCreate(BaseModel):
     is_booking_enabled: bool = True
     is_retail_enabled: bool = False
     is_workplace_enabled: bool = False
+    licensed_modules: List[str] = []
 
 
 class CompanyUpdate(BaseModel):
@@ -45,6 +46,7 @@ class CompanyUpdate(BaseModel):
     is_booking_enabled: Optional[bool] = None
     is_retail_enabled: Optional[bool] = None
     is_workplace_enabled: Optional[bool] = None
+    licensed_modules: Optional[List[str]] = None
 
 
 class PlanChange(BaseModel):
@@ -268,6 +270,7 @@ async def create_company(
         is_booking_enabled=company_data.is_booking_enabled,
         is_retail_enabled=company_data.is_retail_enabled,
         is_workplace_enabled=company_data.is_workplace_enabled,
+        licensed_modules=company_data.licensed_modules,
         created_by=current_user.id
     )
     db.add(new_company)

@@ -5,7 +5,7 @@ import { useAssistant } from '../contexts/AssistantContext';
 import {
   Store, Calendar, DollarSign, Star, TrendingUp,
   Clock, Users, Wrench, ChevronRight, ArrowUpRight, ArrowDownRight,
-  Wallet, CreditCard, BarChart3, Activity, Settings, LayoutDashboard, Package
+  Wallet, CreditCard, BarChart3, Activity, Settings, LayoutDashboard, Package, UtensilsCrossed
 } from 'lucide-react';
 import { Area, AreaChart, Bar, BarChart, Line, LineChart, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
 
@@ -29,6 +29,9 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const [feedbackStats, setFeedbackStats] = useState(null);
   const [config, setConfig] = useState(null);
+  const [enabledFeatures, setEnabledFeatures] = useState(['booking']);
+  const [orderStats, setOrderStats] = useState(null);
+  const [activeOrders, setActiveOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [customizing, setCustomizing] = useState(false);
   const [tempWidgets, setTempWidgets] = useState([]);
@@ -51,10 +54,13 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [reportsRes, bookingsRes, outletsRes, servicesRes, transactionsRes, feedbackRes, configRes] = await Promise.all([
+      const [reportsRes, bookingsRes, outletsRes, servicesRes, transactionsRes, feedbackRes, configRes, featuresRes, orderStatsRes, activeOrdersRes] = await Promise.all([
         api.getReports(), api.getBookings(), api.getOutlets(), api.getServices(), api.getTransactions(),
         api.getFeedbackStats().catch(() => ({ data: null })),
-        api.getDashboardConfigs().catch(() => ({ data: [] }))
+        api.getDashboardConfigs().catch(() => ({ data: [] })),
+        api.getCompanyFeatures().catch(() => ({ data: { features: ['booking'] } })),
+        api.getOrderStats().catch(() => ({ data: null })),
+        api.getActiveOrders().catch(() => ({ data: [] }))
       ]);
       setReports(reportsRes.data); setBookings(bookingsRes.data); setOutlets(outletsRes.data);
       setServices(servicesRes.data); setTransactions(transactionsRes.data); setFeedbackStats(feedbackRes.data);
@@ -62,6 +68,11 @@ const Dashboard = () => {
       if (configRes.data && configRes.data.length > 0) {
         setConfig(configRes.data[0]);
       }
+      if (featuresRes.data && featuresRes.data.features) {
+        setEnabledFeatures(featuresRes.data.features);
+      }
+      setOrderStats(orderStatsRes.data);
+      setActiveOrders(activeOrdersRes.data || []);
     } catch (error) { console.error('Failed to fetch:', error); }
     finally { setLoading(false); }
   };
@@ -214,17 +225,19 @@ const Dashboard = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {isVisible("Total Bookings") && <StatCard title="Total Bookings" value={bookings.length} growth={bookingGrowth} icon={Calendar} color="blue" onClick={() => navigate('/bookings')} />}
-        {isVisible("Total Revenue") && <StatCard title="Total Revenue" value={`₹${(reports?.totalRevenue || 0).toLocaleString()}`} growth={revenueGrowth} icon={DollarSign} color="green" onClick={() => navigate('/finance')} />}
+        {enabledFeatures.includes('booking') && isVisible("Total Bookings") && <StatCard title="Total Bookings" value={bookings.length} growth={bookingGrowth} icon={Calendar} color="blue" onClick={() => navigate('/bookings')} />}
+        {enabledFeatures.includes('restaurant_orders') && isVisible("Active Orders") && <StatCard title="Active Orders" value={activeOrders.length} icon={Activity} color="amber" onClick={() => navigate('/orders')} />}
+        {enabledFeatures.includes('restaurant_orders') && isVisible("Orders Today") && <StatCard title="Orders Today" value={orderStats?.total_orders_today || 0} icon={UtensilsCrossed} color="cyan" onClick={() => navigate('/orders')} />}
+        {isVisible("Total Revenue") && <StatCard title="Total Revenue" value={`₹${((reports?.totalRevenue || 0) + (orderStats?.total_revenue_today || 0)).toLocaleString()}`} growth={revenueGrowth} icon={DollarSign} color="green" onClick={() => navigate('/finance')} />}
         {isVisible("Active Outlets") && <StatCard title="Active Outlets" value={outlets.filter(o => o.status === 'Active').length} icon={Store} color="purple" onClick={() => navigate('/admin')} />}
         {isVisible("Avg Rating") && <StatCard title="Avg Rating" value={feedbackStats?.average_rating?.toFixed(1) || '—'} suffix="/5" icon={Star} color="amber" onClick={() => navigate('/reports')} />}
-        {isVisible("Weekly Bookings") && <StatCard title="Weekly Bookings" value={thisWeekBookings.length} growth={bookingGrowth} icon={TrendingUp} color="cyan" />}
-        {isVisible("Customers") && <StatCard title="Customers" value={new Set(bookings.map(b => b.customer)).size} icon={Users} color="pink" />}
+        {enabledFeatures.includes('booking') && isVisible("Weekly Bookings") && <StatCard title="Weekly Bookings" value={thisWeekBookings.length} growth={bookingGrowth} icon={TrendingUp} color="cyan" />}
+        {enabledFeatures.includes('booking') && isVisible("Customers") && <StatCard title="Customers" value={new Set(bookings.map(b => b.customer)).size} icon={Users} color="pink" />}
       </div>
 
       {/* Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {isVisible('bookingTrend') && (
+        {enabledFeatures.includes('booking') && isVisible('bookingTrend') && (
           <Card className="lg:col-span-2 glass-panel glass-panel-hover border-0">
             <CardHeader className="pb-2"><div className="flex items-center gap-3"><Activity className="h-5 w-5 text-purple-600 dark:text-purple-400" /><div><CardTitle className="text-base text-gray-900 dark:text-[#E6E8EB]">Booking Trend</CardTitle><CardDescription className="text-gray-500 dark:text-[#9CA3AF]">Last 7 days</CardDescription></div></div></CardHeader>
             <CardContent>
@@ -326,8 +339,31 @@ const Dashboard = () => {
             <CardHeader className="pb-4"><CardTitle className="text-base text-gray-900 dark:text-[#E6E8EB]">Quick Actions</CardTitle></CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-3">
-                {[{ icon: Calendar, label: "New Booking", path: "/bookings" }, { icon: Clock, label: "Slot Manager", path: "/slots" }, { icon: Wrench, label: "Services", path: "/admin" }, { icon: BarChart3, label: "Reports", path: "/reports" }].map(a => (
-                  <Button key={a.label} variant="outline" className="h-auto flex-col gap-2 py-4 bg-white/50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-700 dark:text-[#E6E8EB] hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:border-purple-200 dark:hover:border-purple-500/30 hover:text-purple-600 dark:hover:text-purple-400 transition-all font-medium" onClick={() => navigate(a.path)}>
+                {enabledFeatures.includes('booking') && [
+                  { icon: Calendar, label: "New Booking", path: "/bookings" }, 
+                  { icon: Clock, label: "Slot Manager", path: "/slots" }
+                ].map((a, i) => (
+                  <Button key={`booking-${i}`} variant="outline" className="h-auto flex-col gap-2 py-4 bg-white/50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-700 dark:text-[#E6E8EB] hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:border-purple-200 dark:hover:border-purple-500/30 hover:text-purple-600 dark:hover:text-purple-400 transition-all font-medium" onClick={() => navigate(a.path)}>
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-100 to-white dark:from-white/10 dark:to-white/5 flex items-center justify-center border border-gray-100 dark:border-transparent"><a.icon size={20} className="text-gray-700 dark:text-[#E6E8EB]" /></div>
+                    <span className="text-xs">{a.label}</span>
+                  </Button>
+                ))}
+                
+                {enabledFeatures.includes('restaurant_orders') && [
+                  { icon: UtensilsCrossed, label: "Orders", path: "/orders" }, 
+                  { icon: Package, label: "Kitchen", path: "/orders/kitchen" }
+                ].map((a, i) => (
+                  <Button key={`rest-${i}`} variant="outline" className="h-auto flex-col gap-2 py-4 bg-white/50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-700 dark:text-[#E6E8EB] hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:border-amber-200 dark:hover:border-amber-500/30 hover:text-amber-600 dark:hover:text-amber-400 transition-all font-medium" onClick={() => navigate(a.path)}>
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-100 to-white dark:from-white/10 dark:to-white/5 flex items-center justify-center border border-gray-100 dark:border-transparent"><a.icon size={20} className="text-gray-700 dark:text-[#E6E8EB]" /></div>
+                    <span className="text-xs">{a.label}</span>
+                  </Button>
+                ))}
+
+                {[
+                  { icon: Wrench, label: "Settings", path: "/admin" }, 
+                  { icon: BarChart3, label: "Reports", path: "/reports" }
+                ].map((a, i) => (
+                  <Button key={`admin-${i}`} variant="outline" className="h-auto flex-col gap-2 py-4 bg-white/50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-700 dark:text-[#E6E8EB] hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:border-blue-200 dark:hover:border-blue-500/30 hover:text-blue-600 dark:hover:text-blue-400 transition-all font-medium" onClick={() => navigate(a.path)}>
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-100 to-white dark:from-white/10 dark:to-white/5 flex items-center justify-center border border-gray-100 dark:border-transparent"><a.icon size={20} className="text-gray-700 dark:text-[#E6E8EB]" /></div>
                     <span className="text-xs">{a.label}</span>
                   </Button>
@@ -337,7 +373,7 @@ const Dashboard = () => {
           </Card>
         )}
 
-        {isVisible('recentBookings') && (
+        {enabledFeatures.includes('booking') && isVisible('recentBookings') && (
           <Card className="lg:col-span-2 glass-panel glass-panel-hover border-0">
             <CardHeader className="pb-2"><div className="flex items-center justify-between"><CardTitle className="text-base text-gray-900 dark:text-[#E6E8EB]">Recent Bookings</CardTitle><Button variant="ghost" size="sm" onClick={() => navigate('/bookings')} className="text-gray-500 dark:text-[#9CA3AF] hover:text-gray-900 dark:hover:text-[#E6E8EB] hover:bg-black/5 dark:hover:bg-white/5">View All <ChevronRight size={14} className="ml-1" /></Button></div></CardHeader>
             <CardContent className="p-0">
@@ -357,6 +393,26 @@ const Dashboard = () => {
                   );
                 })}
                 {bookings.length === 0 && <div className="p-8 text-center"><Calendar className="mx-auto h-8 w-8 text-muted-foreground/30" /><p className="text-sm text-muted-foreground mt-2">No bookings yet</p></div>}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {enabledFeatures.includes('restaurant_orders') && !enabledFeatures.includes('booking') && isVisible('recentOrders') && (
+          <Card className="lg:col-span-2 glass-panel glass-panel-hover border-0">
+            <CardHeader className="pb-2"><div className="flex items-center justify-between"><CardTitle className="text-base text-gray-900 dark:text-[#E6E8EB]">Recent Orders</CardTitle><Button variant="ghost" size="sm" onClick={() => navigate('/orders')} className="text-gray-500 dark:text-[#9CA3AF] hover:text-gray-900 dark:hover:text-[#E6E8EB] hover:bg-black/5 dark:hover:bg-white/5">View All <ChevronRight size={14} className="ml-1" /></Button></div></CardHeader>
+            <CardContent className="p-0">
+              <div className="divide-y divide-gray-200 dark:divide-[#1F2630]">
+                {activeOrders.slice(0, 4).map(o => (
+                  <div key={o.id} className="flex items-center justify-between p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group" onClick={() => navigate('/orders')}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-1.5 h-10 rounded-full transition-all group-hover:scale-y-110 ${o.status === 'Completed' ? 'bg-green-500' : o.status === 'Preparing' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+                      <div><div className="font-medium text-sm text-gray-900 dark:text-[#E6E8EB]">{o.order_number} <span className="text-xs font-normal text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-[#1F2630] rounded-sm px-1.5 ml-1">{o.order_type}</span></div><div className="text-xs text-gray-500 dark:text-[#9CA3AF]">{o.customer_name} • {o.items?.length || 0} items</div></div>
+                    </div>
+                    <div className="text-right"><div className="font-semibold text-sm text-gray-900 dark:text-[#E6E8EB]">₹{parseFloat(o.total_amount || 0).toFixed(0)}</div><div className="text-xs font-semibold text-amber-500 dark:text-amber-400">{o.status}</div></div>
+                  </div>
+                ))}
+                {activeOrders.length === 0 && <div className="p-8 text-center"><UtensilsCrossed className="mx-auto h-8 w-8 text-muted-foreground/30" /><p className="text-sm text-muted-foreground mt-2">No active orders</p></div>}
               </div>
             </CardContent>
           </Card>

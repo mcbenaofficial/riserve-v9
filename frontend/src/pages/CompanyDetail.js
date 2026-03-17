@@ -557,6 +557,66 @@ const CompanyDetail = ({ theme }) => {
         </div>
       </div>
 
+      {/* Licensed Modules */}
+      <div className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-[#171C22]' : 'bg-white'}`}>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-[#E6E8EB]' : 'text-[#0E1116]'}`}>
+            Licensed Modules
+          </h3>
+          <span className={`text-xs ${theme === 'dark' ? 'text-[#7D8590]' : 'text-[#6B7280]'}`}>
+            Click to toggle
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { id: 'booking', label: 'Booking', color: 'blue' },
+            { id: 'inventory', label: 'Inventory', color: 'purple' },
+            { id: 'supplier', label: 'Supplier', color: 'indigo' },
+            { id: 'workspace', label: 'Workspace', color: 'teal' },
+            { id: 'restaurant_orders', label: 'Restaurant Orders', color: 'amber' },
+            { id: 'retail_pos', label: 'Retail POS', color: 'orange' },
+            { id: 'customer_360', label: 'Customer 360', color: 'pink' },
+            { id: 'finance', label: 'Finance', color: 'emerald' },
+            { id: 'flow', label: 'Flow', color: 'cyan' },
+            { id: 'smart_analytics', label: 'Smart Analytics', color: 'violet' },
+            { id: 'hq_intelligence', label: 'HQ Intelligence', color: 'rose' },
+          ].map(mod => {
+            const modules = company.licensed_modules || [];
+            const isActive = modules.includes(mod.id);
+            return (
+              <button
+                key={mod.id}
+                onClick={async () => {
+                  const updated = isActive
+                    ? modules.filter(m => m !== mod.id)
+                    : [...modules, mod.id];
+                  try {
+                    await api.updateCompanyModules(companyId, updated);
+                    await fetchCompany();
+                  } catch (error) {
+                    console.error('Error updating modules:', error);
+                  }
+                }}
+                className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  isActive
+                    ? `bg-${mod.color}-500/20 text-${mod.color}-${theme === 'dark' ? '300' : '600'} border border-${mod.color}-500/30 shadow-sm`
+                    : `${theme === 'dark' ? 'bg-[#1F2630] text-[#7D8590] border border-transparent' : 'bg-[#F6F7F9] text-[#6B7280] border border-transparent'} hover:border-gray-300 dark:hover:border-gray-600`
+                }`}
+              >
+                <span className="flex items-center gap-1.5">
+                  {isActive && (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                  {mod.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Users Table */}
       <div className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-[#171C22]' : 'bg-white'}`}>
         <div className="flex items-center justify-between mb-6">

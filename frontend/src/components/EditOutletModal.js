@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Store, MapPin, Plus, Trash2, Users, Layers, Scissors, Coffee, Dumbbell, Car, Building2, Sparkles, Briefcase, Camera, Package, User } from 'lucide-react';
+import { X, Store, MapPin, Plus, Trash2, Users, Layers, Scissors, Coffee, Dumbbell, Car, Building2, Sparkles, Briefcase, Camera, Package, User, ExternalLink, Copy, QrCode } from 'lucide-react';
 import { api } from '../services/api';
 
 // Business type presets with Lucide icons
@@ -435,6 +435,57 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
                   Capacity = how many customers can book the same {formData.resource_label.toLowerCase()} at once.
                 </p>
               )}
+            </div>
+          </div>
+
+          {/* Public Access Section */}
+          <div className="space-y-4 pt-4 border-t border-[#1F2630]">
+            <h4 className="text-sm font-semibold text-[#7D8590] uppercase tracking-wider flex items-center gap-2">
+              <QrCode size={14} />
+              Public Access
+            </h4>
+            
+            <p className="text-xs text-[#7D8590]">
+              Share this link with customers for digital ordering.
+            </p>
+
+            <div className="flex items-center gap-2 p-3 bg-[#0B0D10] border border-[#1F2630] rounded-xl">
+              <div className="flex-1 truncate">
+                <p className="text-xs text-[#7D8590] mb-1">Customer Order Link</p>
+                <p className="text-sm text-[#E6E8EB] font-mono truncate">
+                  {`${window.location.origin}/order/${outlet?.id}/menu`}
+                </p>
+              </div>
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/order/${outlet?.id}/menu`);
+                    alert('Link copied to clipboard!');
+                  }}
+                  className="p-2 hover:bg-[#1F2630] rounded-lg transition-all text-[#5FA8D3]"
+                  title="Copy Link"
+                >
+                  <Copy size={16} />
+                </button>
+                <a
+                  href={`/order/${outlet?.id}/menu`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 hover:bg-[#1F2630] rounded-lg transition-all text-[#7D8590]"
+                  title="Open Link"
+                >
+                  <ExternalLink size={16} />
+                </a>
+              </div>
+            </div>
+            
+            <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-3">
+              <QrCode size={24} className="text-amber-500" />
+              <div>
+                <p className="text-xs font-semibold text-amber-500 uppercase">Pro Tip: QR Codes</p>
+                <p className="text-[10px] text-amber-200/60">Print this QR code for your tables so customers can scan and order instantly.</p>
+              </div>
             </div>
           </div>
 

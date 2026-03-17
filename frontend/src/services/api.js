@@ -325,4 +325,31 @@ export const api = {
   approveExecution: (id) => axios.post(`${API}/hq/agent/queue/${id}/approve`, {}, { headers: getHeaders() }),
   rejectExecution: (id) => axios.post(`${API}/hq/agent/queue/${id}/reject`, {}, { headers: getHeaders() }),
   evaluateAgentRules: () => axios.post(`${API}/hq/agent/evaluate`, {}, { headers: getHeaders() }),
+
+  // ── Restaurant Orders ──────────────────────────────────────────────
+  getActiveOrders: (outletId) => axios.get(`${API}/orders/active${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
+  getKitchenOrders: (outletId) => axios.get(`${API}/orders/kitchen${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
+  getPickupOrders: (outletId) => axios.get(`${API}/orders/pickup${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
+  getCompletedOrders: (outletId) => axios.get(`${API}/orders/completed${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
+  updateOrderStatus: (id, data) => axios.put(`${API}/orders/${id}/status`, data, { headers: getHeaders() }),
+  verifyOrderQR: (token) => axios.post(`${API}/orders/verify-qr?confirmation_token=${token}`, {}, { headers: getHeaders() }),
+  createStaffOrder: (data) => axios.post(`${API}/orders`, data, { headers: getHeaders() }),
+  getOrderStats: (outletId) => axios.get(`${API}/orders/stats${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
+
+  // ── Menu Management ────────────────────────────────────────────────
+  getMenuItems: (outletId) => axios.get(`${API}/menu/items${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
+  createMenuItem: (data) => axios.post(`${API}/menu/items`, data, { headers: getHeaders() }),
+  updateMenuItem: (id, data) => axios.put(`${API}/menu/items/${id}`, data, { headers: getHeaders() }),
+  deleteMenuItem: (id) => axios.delete(`${API}/menu/items/${id}`, { headers: getHeaders() }),
+
+  // ── Public Order (no auth) ─────────────────────────────────────────
+  getPublicMenu: (outletId) => axios.get(`${API}/public/menu/${outletId}`),
+  placePublicOrder: (data) => axios.post(`${API}/public/order`, data),
+  getPublicOrderStatus: (token) => axios.get(`${API}/public/order/${token}`),
+
+  // ── Company Licensed Modules ───────────────────────────────────────
+  updateCompanyModules: (id, modules) => axios.put(`${API}/super-admin/companies/${id}`, { licensed_modules: modules }, { headers: getHeaders() }),
+
+  // ── Upload ───────────────────────────────────────────────────────
+  uploadFiles: (formData) => axios.post(`${API}/upload`, formData, { headers: { ...getHeaders(), 'Content-Type': 'multipart/form-data' } }),
 };

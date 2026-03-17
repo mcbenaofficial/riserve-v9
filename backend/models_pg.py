@@ -40,6 +40,7 @@ class Company(Base):
     trial_end = Column(DateTime(timezone=True))
     status = Column(String(50), default="active")  # active, suspended, deactivated
     enabled_features = Column(JSONB, default=list) # e.g. ["inventory", "ai_assistant"]
+    licensed_modules = Column(JSONB, default=list)  # e.g. ["booking", "inventory", "restaurant_orders", ...]
     is_booking_enabled = Column(Boolean, default=True)
     is_retail_enabled = Column(Boolean, default=False)
     is_workplace_enabled = Column(Boolean, default=False)
@@ -67,6 +68,8 @@ class Company(Base):
     settings = relationship("CompanySetting", back_populates="company", uselist=False)
     products = relationship("Product", back_populates="company")
     suppliers = relationship("Supplier", back_populates="company")
+    menu_items = relationship("MenuItem", back_populates="company")
+    restaurant_orders = relationship("RestaurantOrder", back_populates="company")
 
 class User(Base):
     __tablename__ = "users"
@@ -922,4 +925,59 @@ class BriefingSchedule(Base):
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
                         onupdate=lambda: datetime.now(timezone.utc))
+
+
+# ─── Restaurant Orders & Menu ─────────────────────────────────────────
+
+class MenuItem(Base):
+    """Menu items for restaurant/café outlets."""
+    __tablename__ = "menu_items"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='CASCADE'), nullable=True)
+    category = Column(String(100), default="General")  # Coffee, Snacks, Mains, etc.
+    name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    price = Column(Numeric(10, 2), default=0)
+    image_url = Column(Text, nullable=True) # Legacy single image
+    image_urls = Column(JSONB, default=list) # Array of image paths
+    inventory_product_id = Column(String, ForeignKey("products.id", ondelete='SET NULL'), nullable=True)
+    inventory_linked = Column(Boolean, default=False)
+    available = Column(Boolean, default=True)
+    display_order = Column(Integer, default=0)
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", back_populates="menu_items")
+    inventory_product = relationship("Product", foreign_keys=[inventory_product_id])
+
+
+class RestaurantOrder(Base):
+    """Customer order from the public ordering portal or POS."""
+    __tablename__ = "restaurant_orders"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='CASCADE'), nullable=False)
+    order_number = Column(String(20), nullable=False)  # Short human-readable, e.g. "KC-0042"
+    customer_name = Column(String(255), nullable=False)
+    contact_number = Column(String(50), nullable=True)
+    order_type = Column(String(50), default="dine_in")  # dine_in, takeaway, delivery
+    items = Column(JSONB, default=list)  # [{itemId, name, quantity, price, inventoryLinked}]
+    total_amount = Column(Numeric(10, 2), default=0)
+    status = Column(String(50), default="New")  # New, Preparing, ReadyToCollect, Completed, Cancelled
+    payment_status = Column(String(50), default="pending")  # pending, paid, failed
+    payment_ref = Column(String(255), nullable=True)
+    otp = Column(String(10), nullable=True)  # For home delivery verification
+    confirmation_token = Column(String(100), nullable=False, unique=True)  # UUID for QR / status link
+    whatsapp_status = Column(String(50), nullable=True)  # sent, delivered, failed
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", back_populates="restaurant_orders")
 

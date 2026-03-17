@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter, Depends
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -161,12 +162,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount uploads directory for serving static files
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 # Import all routers
 from routes import (
     auth, public, dashboard, bookings, services, outlets, 
     staff, reports, feedback, assistant, onboarding,
-    users, company, inventory, customers, slots, transactions, promotions, hitl, portal, suppliers, analytics, hq
+    users, company, inventory, customers, slots, transactions, promotions, hitl, portal, suppliers, analytics, hq,
+    orders, menu, upload
 )
 from routes.superadmin import router as superadmin
 
@@ -195,6 +200,9 @@ app.include_router(portal.router, prefix="/api")
 app.include_router(suppliers.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
 app.include_router(hq.router, prefix="/api")
+app.include_router(orders.router, prefix="/api")
+app.include_router(menu.router, prefix="/api")
+app.include_router(upload.router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

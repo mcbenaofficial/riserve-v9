@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Settings, Users, Store, Wrench, Mail, MessageSquare,
-  Webhook, Zap, Puzzle, ChevronRight, Shield, Calendar, Building2, Star, Package, UserCog, FileText
+  Webhook, Zap, Puzzle, ChevronRight, Shield, Calendar, Building2, Star, Package, UserCog, FileText,
+  UtensilsCrossed
 } from 'lucide-react';
 import { api } from '../services/api';
 
@@ -21,6 +22,7 @@ import AdminInventory from '../components/admin/AdminInventory';
 import AdminStaff from '../components/admin/AdminStaff';
 import AdminPromotions from '../components/admin/AdminPromotions';
 import AdminBookingForm from '../components/admin/AdminBookingForm';
+import AdminMenuManagement from '../components/admin/AdminMenuManagement';
 
 const AdminConsole = () => {
   const [activeTab, setActiveTab] = useState('company');
@@ -47,15 +49,27 @@ const AdminConsole = () => {
     { id: 'users', label: 'User Management', icon: Users, component: AdminUsers },
     { id: 'staff', label: 'Staff Management', icon: UserCog, component: AdminStaff },
     { id: 'promotions', label: 'Promotions', icon: Star, component: AdminPromotions },
-    { id: 'services', label: 'Services', icon: Wrench, component: AdminServices },
     { id: 'outlets', label: 'Outlets / Locations', icon: Store, component: AdminOutlets },
-    { id: 'slot-booking', label: 'Slot Booking', icon: Calendar, component: AdminSlotBooking },
-    { id: 'booking-form', label: 'Booking Form', icon: FileText, component: AdminBookingForm },
     { id: 'feedback', label: 'Customer Feedback', icon: MessageSquare, component: AdminFeedback },
   ];
 
-  // Conditionally add Inventory tab if feature is enabled
+  // Conditionally add modules based on enabled features
   const featureTabs = [];
+  
+  if (enabledFeatures.includes('booking')) {
+    featureTabs.push(
+      { id: 'services', label: 'Services', icon: Wrench, component: AdminServices },
+      { id: 'slot-booking', label: 'Slot Booking', icon: Calendar, component: AdminSlotBooking },
+      { id: 'booking-form', label: 'Booking Form', icon: FileText, component: AdminBookingForm }
+    );
+  }
+
+  if (enabledFeatures.includes('restaurant_orders')) {
+    featureTabs.push(
+      { id: 'menu-management', label: 'Menu Management', icon: UtensilsCrossed, component: AdminMenuManagement }
+    );
+  }
+
   if (enabledFeatures.includes('inventory')) {
     featureTabs.push({ id: 'inventory', label: 'Inventory', icon: Package, component: AdminInventory });
   }

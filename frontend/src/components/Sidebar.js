@@ -45,7 +45,9 @@ import {
   GitCompareArrows,
   Gauge,
   FlaskConical,
-  Bot
+  Bot,
+  UtensilsCrossed,
+  ChefHat
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -135,9 +137,9 @@ const Sidebar = () => {
   ];
 
   // Feature flag helpers (default to true if settings haven't loaded yet to avoid flickering)
-  const isBookingActive = companySettings ? companySettings.is_booking_enabled : true;
-  const isRetailActive = companySettings ? companySettings.is_retail_enabled : true;
-  const isWorkplaceActive = companySettings ? companySettings.is_workplace_enabled : true;
+  const isBookingActive = (companySettings?.is_booking_enabled) || enabledFeatures.includes('booking');
+  const isRetailActive = (companySettings?.is_retail_enabled) || enabledFeatures.includes('retail_pos');
+  const isWorkplaceActive = companySettings?.is_workplace_enabled;
 
   // App Definitions
   const APPS = [
@@ -146,6 +148,7 @@ const Sidebar = () => {
     { id: 'crm', name: 'CRM & Loyalty', icon: Crown, feature: 'crm' },
     { id: 'inventory', name: 'Inventory & Procurement', icon: Package, feature: 'inventory' },
     { id: 'flow', name: 'Flows Engine', icon: SiriNewIcon, feature: 'ai_flows' },
+    { id: 'restaurant', name: 'Restaurant Orders', icon: UtensilsCrossed, feature: 'restaurant_orders' },
     { id: 'hq', name: 'HQ Intelligence', icon: Brain, feature: 'hq_intelligence' },
     { id: 'reputation', name: 'Reputation Management', icon: MessageSquare, feature: 'reputation_management' },
   ];
@@ -154,6 +157,7 @@ const Sidebar = () => {
     const path = location.pathname;
     if (path.startsWith('/hq')) return 'hq';
     if (path.startsWith('/flow')) return 'flow';
+    if (path.startsWith('/orders')) return 'restaurant';
     if (path.startsWith('/inventory') || path.startsWith('/suppliers')) return 'inventory';
     if (path.startsWith('/customers')) return 'crm';
     if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling')) return 'staff';
@@ -253,6 +257,34 @@ const Sidebar = () => {
       ]
     },
     { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', condition: (features) => features.includes('ai_flows'), roles: ['SuperAdmin', 'Admin'], appId: 'flow' },
+    // Restaurant Orders App
+    {
+      key: 'orders-dashboard',
+      label: 'Orders Dashboard',
+      icon: UtensilsCrossed,
+      path: '/orders',
+      condition: (features) => features.includes('restaurant_orders'),
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
+      appId: 'restaurant'
+    },
+    {
+      key: 'kitchen-display',
+      label: 'Kitchen Display',
+      icon: ChefHat,
+      path: '/orders/kitchen',
+      condition: (features) => features.includes('restaurant_orders'),
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
+      appId: 'restaurant'
+    },
+    {
+      key: 'pickup-display',
+      label: 'Pickup Counter',
+      icon: Package,
+      path: '/orders/pickup',
+      condition: (features) => features.includes('restaurant_orders'),
+      roles: ['SuperAdmin', 'Admin', 'Manager', 'User'],
+      appId: 'restaurant'
+    },
     {
       key: 'my-portal',
       label: 'My Portal',
@@ -365,6 +397,7 @@ const Sidebar = () => {
                             else if (app.id === 'flow') navigate('/flow');
                             else if (app.id === 'staff') navigate('/team');
                             else if (app.id === 'reputation') navigate('/feedback');
+                            else if (app.id === 'restaurant') navigate('/orders');
                             else navigate('/');
                           }
                         }}
