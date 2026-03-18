@@ -1,6 +1,15 @@
 import axios from 'axios';
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+const API = `${BACKEND_URL}/api`;
+
+export const getImageUrl = (path) => {
+  if (!path) return null;
+  if (path.startsWith('http')) return path;
+  if (path.startsWith('/uploads')) return `${BACKEND_URL}${path}`;
+  if (path.startsWith('uploads')) return `${BACKEND_URL}/${path}`;
+  return path;
+};
 
 const getHeaders = () => {
   const token = localStorage.getItem('ridn_token');

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { api } from '../../services/api';
+import { api, getImageUrl } from '../../services/api';
 import { 
   Plus, Edit, Trash2, Search, Link as LinkIcon, 
   Image as ImageIcon, Loader2, AlertCircle, CheckCircle2, Package, X, UploadCloud
@@ -34,7 +34,7 @@ const AdminMenuManagement = () => {
     price: '',
     image_url: '',
     image_urls: [],
-    is_available: true,
+    available: true,
     inventory_linked: false,
     inventory_product_id: ''
   });
@@ -71,7 +71,7 @@ const AdminMenuManagement = () => {
         price: item.price || '',
         image_url: item.image_url || '',
         image_urls: item.image_urls || [],
-        is_available: item.is_available ?? true,
+        available: item.available ?? true,
         inventory_linked: item.inventory_linked ?? false,
         inventory_product_id: item.inventory_product_id || 'auto_create'
       });
@@ -83,7 +83,7 @@ const AdminMenuManagement = () => {
         price: '',
         image_url: '',
         image_urls: [],
-        is_available: true,
+        available: true,
         inventory_linked: false,
         inventory_product_id: 'auto_create'
       });
@@ -203,7 +203,7 @@ const AdminMenuManagement = () => {
                 <div className="flex gap-4">
                   <div className="w-20 h-20 rounded-lg bg-gray-100 dark:bg-[#12161C] flex-shrink-0 overflow-hidden border border-gray-200 dark:border-[#1F2630] flex items-center justify-center">
                     {(item.image_urls?.[0] || item.image_url) ? (
-                      <img src={item.image_urls?.[0] || item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                      <img src={getImageUrl(item.image_urls?.[0] || item.image_url)} alt={item.name} className="w-full h-full object-cover" />
                     ) : (
                       <ImageIcon size={24} className="text-gray-400" />
                     )}
@@ -219,7 +219,7 @@ const AdminMenuManagement = () => {
                       <Badge variant="outline" className="text-[10px] uppercase font-semibold text-gray-500 border-gray-200 dark:border-[#1F2630]">
                         {item.category}
                       </Badge>
-                      {!item.is_available && (
+                      {!item.available && (
                         <Badge variant="destructive" className="text-[10px]">Sold Out</Badge>
                       )}
                       {item.inventory_linked && (
@@ -323,7 +323,7 @@ const AdminMenuManagement = () => {
                 <div className="flex gap-2 flex-wrap mt-2">
                   {formData.image_urls?.map((url, i) => (
                     <div key={`url-${i}`} className="relative w-16 h-16 rounded overflow-hidden border">
-                      <img src={url} alt={`img-${i}`} className="w-full h-full object-cover" />
+                      <img src={getImageUrl(url)} alt={`img-${i}`} className="w-full h-full object-cover" />
                       <button 
                         className="absolute top-0 right-0 bg-red-500 text-white rounded-bl p-0.5"
                         onClick={(e) => {
@@ -364,8 +364,8 @@ const AdminMenuManagement = () => {
                   <p className="text-xs text-gray-500">Allow customers to order this item.</p>
                 </div>
                 <Switch 
-                  checked={formData.is_available} 
-                  onCheckedChange={(c) => setFormData({...formData, is_available: c})} 
+                  checked={formData.available} 
+                  onCheckedChange={(c) => setFormData({...formData, available: c})} 
                 />
               </div>
 

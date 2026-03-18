@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Plus, Minus, ArrowLeft, Search, X, Loader2 } from 'lucide-react';
+import { getImageUrl } from '../services/api';
 import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -193,7 +194,7 @@ const CustomerMenu = () => {
               {/* Item Image Placeholder */}
               <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-amber-600/20 to-orange-600/20 flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {item.image_url ? (
-                  <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                  <img src={getImageUrl(item.image_url)} alt={item.name} className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-2xl">{item.category === 'Coffee' ? '☕' : item.category === 'Tea' ? '🍵' : item.category === 'Smoothies' ? '🥤' : item.category === 'Snacks' ? '🥑' : item.category === 'Mains' ? '🍔' : '🍰'}</span>
                 )}

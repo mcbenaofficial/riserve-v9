@@ -3055,3 +3055,1555 @@ INFO:     127.0.0.1:50067 - "GET /api/bookings HTTP/1.1" 200 OK
 INFO:     127.0.0.1:50061 - "GET /api/reports HTTP/1.1" 200 OK
 INFO:     127.0.0.1:50067 - "GET /api/reports HTTP/1.1" 200 OK
 INFO:     127.0.0.1:50079 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:11:01,020 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21390]
+INFO:     Started server process [29085]
+INFO:     Waiting for application startup.
+2026-03-17 06:11:02,985 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:11:03,038 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:11:03,087 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:11:14,816 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29085]
+INFO:     Started server process [29220]
+INFO:     Waiting for application startup.
+2026-03-17 06:11:16,172 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:11:16,219 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:11:16,256 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:11:38,888 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29220]
+INFO:     Started server process [29558]
+INFO:     Waiting for application startup.
+2026-03-17 06:11:40,609 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:11:40,712 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:11:40,752 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:11:52,892 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29558]
+INFO:     Started server process [29690]
+INFO:     Waiting for application startup.
+2026-03-17 06:11:54,280 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:11:54,324 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:11:54,364 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:12:06,204 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29690]
+INFO:     Started server process [29821]
+INFO:     Waiting for application startup.
+2026-03-17 06:12:07,544 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:12:07,604 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:12:07,647 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:12:40,309 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29821]
+INFO:     Started server process [29960]
+INFO:     Waiting for application startup.
+2026-03-17 06:12:41,883 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:12:41,934 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:12:41,973 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:13:07,699 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29960]
+INFO:     Started server process [30096]
+INFO:     Waiting for application startup.
+2026-03-17 06:13:09,129 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:13:09,186 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:13:09,226 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:13:23,288 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30096]
+INFO:     Started server process [30238]
+INFO:     Waiting for application startup.
+2026-03-17 06:13:24,721 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:13:24,772 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:13:24,813 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:13:38,651 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30238]
+INFO:     Started server process [30409]
+INFO:     Waiting for application startup.
+2026-03-17 06:13:40,224 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:13:40,273 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:13:40,308 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:13:51,025 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30409]
+INFO:     Started server process [30649]
+INFO:     Waiting for application startup.
+2026-03-17 06:13:52,819 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:13:52,869 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:13:52,914 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:14:04,645 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30649]
+INFO:     Started server process [30781]
+INFO:     Waiting for application startup.
+2026-03-17 06:14:06,261 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:14:06,303 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:14:06,342 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:14:17,465 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30781]
+INFO:     Started server process [30920]
+INFO:     Waiting for application startup.
+2026-03-17 06:14:19,081 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:14:19,139 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:14:19,180 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:14:32,217 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30920]
+INFO:     Started server process [31057]
+INFO:     Waiting for application startup.
+2026-03-17 06:14:33,593 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:14:33,643 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:14:33,683 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:14:46,514 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31057]
+INFO:     Started server process [31189]
+INFO:     Waiting for application startup.
+2026-03-17 06:14:47,930 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:14:47,989 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:14:47,992 - server - INFO - No expired trials found
+INFO:     127.0.0.1:50252 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50252 - "GET /api/inventory/low-stock HTTP/1.1" 401 Unauthorized
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:15:23,227 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31189]
+INFO:     Started server process [31444]
+INFO:     Waiting for application startup.
+2026-03-17 06:15:24,811 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:15:24,898 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:15:24,902 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:15:46,248 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31444]
+INFO:     Started server process [31589]
+INFO:     Waiting for application startup.
+2026-03-17 06:15:47,813 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:15:47,863 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:15:47,867 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:16:10,841 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31589]
+INFO:     Started server process [31731]
+INFO:     Waiting for application startup.
+2026-03-17 06:16:12,465 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:16:12,519 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:16:12,523 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:16:34,010 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31731]
+INFO:     Started server process [31871]
+INFO:     Waiting for application startup.
+2026-03-17 06:16:35,731 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:16:35,785 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:16:35,792 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:16:57,232 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31871]
+INFO:     Started server process [32049]
+INFO:     Waiting for application startup.
+2026-03-17 06:16:58,712 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:16:58,772 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:16:58,775 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:17:20,658 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32049]
+INFO:     Started server process [32197]
+INFO:     Waiting for application startup.
+2026-03-17 06:17:22,153 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:17:22,205 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:17:22,209 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:17:43,741 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32197]
+INFO:     Started server process [32330]
+INFO:     Waiting for application startup.
+2026-03-17 06:17:45,093 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:17:45,145 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:17:45,148 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:18:06,714 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32330]
+INFO:     Started server process [32490]
+INFO:     Waiting for application startup.
+2026-03-17 06:18:08,210 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:18:08,264 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:18:08,267 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:18:40,019 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32490]
+INFO:     Started server process [32643]
+INFO:     Waiting for application startup.
+2026-03-17 06:18:41,777 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:18:41,847 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:18:41,851 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:19:02,077 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32643]
+INFO:     Started server process [32775]
+INFO:     Waiting for application startup.
+2026-03-17 06:19:03,509 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:19:03,563 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:19:03,567 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:19:24,807 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32775]
+INFO:     Started server process [32921]
+INFO:     Waiting for application startup.
+2026-03-17 06:19:26,198 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:19:26,244 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:19:26,248 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:19:48,208 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32921]
+INFO:     Started server process [33055]
+INFO:     Waiting for application startup.
+2026-03-17 06:19:49,670 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:19:49,720 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:19:49,725 - server - INFO - No expired trials found
+INFO:     127.0.0.1:50401 - "GET /api/inventory/low-stock HTTP/1.1" 401 Unauthorized
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:20:12,166 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33055]
+INFO:     Started server process [33191]
+INFO:     Waiting for application startup.
+2026-03-17 06:20:13,908 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:20:13,969 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:20:13,972 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:20:35,738 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33191]
+INFO:     Started server process [33335]
+INFO:     Waiting for application startup.
+2026-03-17 06:20:37,103 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:20:37,160 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:20:37,163 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:20:59,490 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33335]
+INFO:     Started server process [33467]
+INFO:     Waiting for application startup.
+2026-03-17 06:21:01,181 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:21:01,231 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:21:01,235 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:21:24,593 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33467]
+INFO:     Started server process [33658]
+INFO:     Waiting for application startup.
+2026-03-17 06:21:26,781 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:21:26,838 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:21:26,842 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:21:54,492 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33658]
+INFO:     Started server process [33888]
+INFO:     Waiting for application startup.
+2026-03-17 06:21:56,179 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:21:56,233 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:21:56,239 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:22:34,993 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33888]
+INFO:     Started server process [34050]
+INFO:     Waiting for application startup.
+2026-03-17 06:22:37,914 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:22:37,966 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:22:37,969 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:22:59,219 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34050]
+INFO:     Started server process [34190]
+INFO:     Waiting for application startup.
+2026-03-17 06:23:01,032 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:23:01,102 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:23:01,108 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:23:23,484 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34190]
+INFO:     Started server process [34327]
+INFO:     Waiting for application startup.
+2026-03-17 06:23:25,512 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:23:25,591 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:23:25,597 - server - INFO - No expired trials found
+INFO:     127.0.0.1:50570 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50572 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50574 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50577 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50578 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50570 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50572 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50574 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50577 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50578 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50570 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50572 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50568 - "GET /api/public/menu/5c8666a8-8f65-44e4-bb04-e4544fb62a06 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50568 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50568 - "GET /api/public/menu/5c8666a8-8f65-44e4-bb04-e4544fb62a06 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50568 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50577 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50578 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50570 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50572 - "GET /api/services HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50574 - "GET /api/reports HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50578 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50577 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50568 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50570 - "GET /api/services HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50572 - "GET /api/reports HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50590 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50593 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50594 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50596 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50598 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50600 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50590 - "GET /api/dashboard-configs HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50593 - "GET /api/company/features HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50594 - "GET /api/orders/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50596 - "GET /api/orders/active HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50598 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50600 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50590 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50593 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50594 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50596 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50598 - "GET /api/dashboard-configs HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50600 - "GET /api/company/features HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50590 - "GET /api/orders/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50593 - "GET /api/orders/active HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50594 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50594 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50594 - "OPTIONS /api/onboarding/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50594 - "POST /api/onboarding/chat HTTP/1.1" 403 Forbidden
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:23:50,761 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34327]
+INFO:     Started server process [34478]
+INFO:     Waiting for application startup.
+2026-03-17 06:23:53,345 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:23:53,415 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:23:53,422 - server - INFO - No expired trials found
+INFO:     127.0.0.1:50613 - "GET /api/inventory/products?active_only=true HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50615 - "GET /api/inventory/products?active_only=true HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50615 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50615 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/portal/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50615 - "GET /api/portal/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50615 - "GET /api/portal/schedule?days=14 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50619 - "GET /api/portal/leaves HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50615 - "GET /api/portal/schedule?days=14 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/portal/leaves HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50622 - "GET /api/portal/payslips HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50624 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50613 - "GET /api/portal/payslips HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50629 - "GET /api/company/features HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50629 - "GET /api/company/features HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50629 - "GET /api/company HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50631 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50629 - "GET /api/company HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50633 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50633 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50629 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50631 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50633 - "GET /api/dashboard-configs HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50629 - "GET /api/company/features HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50631 - "GET /api/orders/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50637 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50639 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50641 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50633 - "GET /api/orders/active HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50629 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50631 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50637 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50639 - "GET /api/dashboard-configs HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50641 - "GET /api/company/features HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50633 - "GET /api/orders/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50629 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50631 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50637 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50639 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50641 - "GET /api/orders/active HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50637 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50648 - "GET /api/orders/active HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50650 - "GET /api/orders/completed HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50652 - "GET /api/orders/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50648 - "GET /api/orders/active HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50650 - "GET /api/orders/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50654 - "GET /api/orders/completed HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50663 - "GET /api/orders/kitchen HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50663 - "GET /api/orders/kitchen HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50663 - "GET /api/orders/pickup HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50665 - "GET /api/orders/pickup HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50673 - "GET /api/orders/pickup HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50678 - "GET /api/orders/pickup HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50682 - "GET /api/orders/pickup HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50701 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50704 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50706 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50708 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50709 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50701 - "GET /api/reports HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50704 - "GET /api/transactions HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50706 - "GET /api/outlets HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50708 - "GET /api/services HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50711 - "GET /api/bookings HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50714 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+2026-03-17 06:24:33,917 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/joshua.lawrence/Documents/Riserve-v8-main/backend/venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     127.0.0.1:50714 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "OPTIONS /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50720 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50722 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50722 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50722 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50722 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50726 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50728 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50724 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50726 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50728 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50724 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50726 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50722 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50720 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50724 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50728 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50726 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50722 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50720 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50724 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50728 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50726 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50722 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50720 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50728 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50724 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50726 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50722 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50714 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50720 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50720 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50720 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50720 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50744 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50746 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50744 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50744 - "OPTIONS /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50748 - "OPTIONS /api/portal/attendance/history?days=30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50751 - "OPTIONS /api/portal/leaves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50752 - "OPTIONS /api/portal/payslips HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50746 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50744 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50751 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50748 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50752 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50744 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50746 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50748 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50751 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50756 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50756 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50758 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50758 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50756 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "OPTIONS /api/feedback/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50758 - "OPTIONS /api/feedback HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "OPTIONS /api/feedback HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50763 - "OPTIONS /api/feedback/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50756 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50765 - "GET /api/feedback/config HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50758 - "GET /api/feedback HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50763 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50765 - "GET /api/feedback HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50756 - "GET /api/feedback/config HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50756 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50765 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50765 - "GET /api/feedback/config HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50756 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50763 - "GET /api/feedback HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50758 - "GET /api/feedback/config HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50765 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50756 - "GET /api/feedback HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50756 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50765 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50772 - "OPTIONS /api/staff HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50776 - "OPTIONS /api/staff/stats/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50777 - "OPTIONS /api/staff HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50779 - "OPTIONS /api/staff/stats/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50772 - "GET /api/staff HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50776 - "GET /api/staff/stats/overview HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50779 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /api/staff HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50772 - "GET /api/staff/stats/overview HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50772 - "OPTIONS /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50779 - "OPTIONS /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50772 - "GET /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50779 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50773 - "GET /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50786 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50786 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50788 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50792 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50794 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50793 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50792 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50786 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50794 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50788 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50788 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50788 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50794 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50786 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50786 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50786 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50792 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50794 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50788 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50793 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50797 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50794 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50788 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50792 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50786 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50793 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50797 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50794 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50792 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50793 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50786 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50788 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50797 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50794 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50793 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50786 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50792 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50793 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50793 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50792 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50793 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50786 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50792 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50786 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50804 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50804 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50806 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50806 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50804 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50806 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50826 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50824 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50821 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50822 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50828 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50824 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50826 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50818 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50821 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50822 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50828 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50824 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50826 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50822 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50828 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50818 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50821 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50826 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50822 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50824 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50822 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50822 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 06:25:22,880 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34478]
+WARNING:  WatchFiles detected changes in 'seed_kosmo_cafe_v2.py'. Reloading...
+INFO:     Started server process [34647]
+INFO:     Waiting for application startup.
+2026-03-17 06:25:25,081 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 06:25:25,221 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 06:25:25,226 - server - INFO - No expired trials found
+INFO:     127.0.0.1:50880 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50898 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50914 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50928 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50945 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50968 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50978 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:50995 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51014 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51029 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51029 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51044 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51060 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51077 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51092 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51107 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51120 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51133 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51151 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51167 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51183 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51197 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51197 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51212 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51224 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51241 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51258 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51275 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51291 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51306 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51318 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51344 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51359 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51359 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51371 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51385 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51401 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51420 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51441 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51458 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51470 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51485 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51502 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51525 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51539 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51539 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51554 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51565 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51578 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51595 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51612 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51623 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51639 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51700 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51724 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51736 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51755 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51755 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51774 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51788 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51807 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51818 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51832 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51850 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51865 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 07:25:25,260 - server - INFO - No expired trials found
+INFO:     127.0.0.1:51884 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51895 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51914 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51929 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51929 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51950 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51969 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51979 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:51992 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52004 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52020 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52037 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52049 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52062 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52077 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52094 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52094 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52107 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52124 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52137 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52152 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52167 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52182 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52197 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52212 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52228 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52250 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52272 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52272 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52288 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52306 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52319 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52349 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52361 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52378 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52392 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52414 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52427 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52450 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52467 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52467 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52480 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52492 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52511 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52523 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52547 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52559 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52574 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52591 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52612 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52629 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52651 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52651 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52665 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52684 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52699 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52715 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52725 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52748 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52775 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52791 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52806 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52890 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52903 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52903 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52927 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 08:25:25,297 - server - INFO - No expired trials found
+INFO:     127.0.0.1:52948 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52964 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52977 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:52994 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53006 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53033 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53044 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53059 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53075 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53093 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53093 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53115 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53135 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53150 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53170 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53188 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53209 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53222 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53247 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53259 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53282 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53299 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53299 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53317 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53327 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53343 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53362 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53439 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53454 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53472 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53487 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53511 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53532 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53548 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53548 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53561 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53582 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53595 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53614 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53634 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53651 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53662 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53686 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53703 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53727 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53745 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53745 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53761 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53777 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53798 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53813 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53827 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53845 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53864 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53877 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53891 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53903 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53924 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53924 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53940 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53964 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53982 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:53997 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54011 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54032 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 09:25:25,342 - server - INFO - No expired trials found
+INFO:     127.0.0.1:54052 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54068 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54081 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54099 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54114 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54114 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54138 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54153 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54167 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54180 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54204 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54223 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54242 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54260 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54279 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54298 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54316 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54316 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54334 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54349 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54361 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54385 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54455 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54474 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54485 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54511 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54527 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54551 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54567 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54567 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54577 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54593 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54613 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54625 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54644 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54658 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54673 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54686 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54702 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54717 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54739 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54739 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54750 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54763 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54778 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54795 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54807 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54826 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54842 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54856 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54875 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54886 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54898 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54898 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54923 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54934 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54949 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54967 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:54989 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55002 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55020 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55035 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55050 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55070 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55087 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55087 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 10:25:25,382 - server - INFO - No expired trials found
+INFO:     127.0.0.1:55100 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55119 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55131 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55144 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55157 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55177 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55188 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55204 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55218 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55241 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55256 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55256 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55270 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55280 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55299 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55319 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55333 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55349 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55360 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55372 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55389 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55412 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55427 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55427 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55437 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55450 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55463 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55482 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55505 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55516 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55528 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55549 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55564 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55620 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55641 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55641 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55658 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55673 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55687 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55702 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55716 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55735 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55749 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55761 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55782 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55794 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55817 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55817 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55837 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55855 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55869 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55884 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55897 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55913 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55929 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55941 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55952 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55970 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:55985 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55985 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56001 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56021 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56034 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56047 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56062 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 11:25:25,424 - server - INFO - No expired trials found
+INFO:     127.0.0.1:56076 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56094 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56110 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56123 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56143 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56234 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56234 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56245 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56255 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56269 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56288 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56301 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56318 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56331 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56345 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56360 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56383 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56383 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56401 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56413 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56425 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56439 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56452 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56473 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56483 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56502 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56517 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56537 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56551 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56551 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56567 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56580 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56603 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56614 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56630 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56642 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56663 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56679 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56693 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56708 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56721 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56721 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56737 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56755 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56771 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56786 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56798 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56815 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56834 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56855 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56871 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56884 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56898 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56898 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56915 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56929 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56947 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56958 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56974 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:56990 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57004 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57020 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57039 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57053 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57077 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57077 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 12:25:25,462 - server - INFO - No expired trials found
+INFO:     127.0.0.1:57095 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57112 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57124 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57143 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57163 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57182 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57192 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57203 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57220 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57234 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57253 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57253 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57269 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57283 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57297 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57311 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57325 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57344 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57359 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57368 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57381 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57401 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57418 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57418 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57434 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57448 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57464 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57480 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57500 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57510 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57529 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57552 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57565 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57582 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57597 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57597 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57616 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57633 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57652 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57664 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57677 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57690 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57705 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57724 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57740 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57806 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57825 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57825 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57845 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57863 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57883 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57895 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57906 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57921 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57935 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57947 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57961 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57977 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:57994 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57994 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58011 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58026 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58036 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58047 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58068 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 13:25:25,515 - server - INFO - No expired trials found
+INFO:     127.0.0.1:58082 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58095 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58110 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58121 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58133 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58157 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58157 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58171 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58181 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58194 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58209 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58219 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58240 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58250 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58266 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58279 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58292 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58305 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58305 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58325 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58338 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58353 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58367 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58380 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58391 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58415 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58429 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58445 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58461 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58472 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58472 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58484 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58512 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58525 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58540 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58551 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58570 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58584 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58607 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58617 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58631 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58645 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58645 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58663 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58677 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58700 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58710 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58725 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58740 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58759 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58778 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58800 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58810 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58810 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58835 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58852 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58871 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58879 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58900 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58917 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58934 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58949 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58964 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58975 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:58996 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58996 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 14:25:25,551 - server - INFO - No expired trials found
+INFO:     127.0.0.1:59015 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59032 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59046 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59065 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59077 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59097 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59112 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59125 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59139 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59158 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59172 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59172 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59208 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59270 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59287 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59302 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59317 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59331 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59346 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59362 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59379 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59400 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59417 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59417 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59426 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59445 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59463 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59538 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59557 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59571 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59582 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59609 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59627 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59647 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59659 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59659 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59680 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59696 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59717 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59734 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59749 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59763 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59780 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59791 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59813 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59828 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59845 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59845 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59863 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59882 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59898 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59913 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59924 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59946 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59960 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59976 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:59986 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60006 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60017 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60017 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60040 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60056 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60072 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60083 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60106 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+2026-03-17 15:25:25,607 - server - INFO - No expired trials found
+INFO:     127.0.0.1:60116 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60138 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60151 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60166 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60179 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60198 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60198 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60212 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60230 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60243 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60260 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60270 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60288 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60298 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60323 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60336 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60354 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60367 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60367 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60387 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60414 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60435 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60443 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60443 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "OPTIONS /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60443 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60443 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60443 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60443 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60435 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60443 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60435 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60436 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60443 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60438 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60444 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60444 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60482 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60484 - "GET /api/hitl/pending HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60482 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60484 - "GET /api/feedback/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60484 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60482 - "OPTIONS /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60489 - "OPTIONS /api/portal/attendance/history?days=30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60490 - "OPTIONS /api/portal/leaves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "OPTIONS /api/portal/payslips HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60484 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60482 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60489 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60490 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60491 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60484 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60491 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60490 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60490 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60490 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60490 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60482 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60501 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60501 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60503 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60503 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60501 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60503 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60503 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60501 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60571 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60568 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60566 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60569 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60571 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60568 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60563 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60566 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60562 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60569 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60568 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60569 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60562 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60563 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60569 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60568 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60562 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60568 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60566 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60568 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60562 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60566 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60562 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60563 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60562 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60576 - "OPTIONS /api/staff HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60579 - "OPTIONS /api/staff/stats/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60581 - "OPTIONS /api/staff HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60583 - "OPTIONS /api/staff/stats/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60578 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60576 - "GET /api/staff HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60579 - "GET /api/staff/stats/overview HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60583 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60578 - "GET /api/staff HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60576 - "GET /api/staff/stats/overview HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:60587 - "OPTIONS /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60590 - "OPTIONS /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60588 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60587 - "GET /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60590 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60588 - "GET /api/users HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60590 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60587 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60588 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60587 - "GET /api/company HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'routes/company.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-17 15:48:37,454 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34647]
+INFO:     Started server process [55045]
+INFO:     Waiting for application startup.
+2026-03-17 15:48:39,180 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-17 15:48:39,271 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-03-17 15:48:39,276 - server - INFO - No expired trials found
+INFO:     127.0.0.1:60657 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60657 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60653 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60652 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60647 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60652 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60655 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60652 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60686 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60685 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60678 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60681 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60682 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60678 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60686 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60685 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60681 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60682 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60677 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60682 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60677 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60681 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60682 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60686 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60685 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60681 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60686 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60685 - "GET /api/onboarding/progress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60681 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60685 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60686 - "GET /api/company/business-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60681 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60686 - "GET /api/company HTTP/1.1" 200 OK

@@ -174,6 +174,7 @@ async def get_company_features(
     
     return {
         "features": company.enabled_features or [], 
+        "licensed_modules": company.licensed_modules or [],
         "available_features": [
             {"id": "inventory", "name": "Inventory Management", "description": "Track products, stock levels, and add-ons to bookings"},
             {"id": "ai_assistant", "name": "AI Assistant", "description": "AI-powered insights and image generation"},

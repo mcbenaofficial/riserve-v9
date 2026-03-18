@@ -27,6 +27,7 @@ import AdminMenuManagement from '../components/admin/AdminMenuManagement';
 const AdminConsole = () => {
   const [activeTab, setActiveTab] = useState('company');
   const [enabledFeatures, setEnabledFeatures] = useState([]);
+  const [licensedModules, setLicensedModules] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const AdminConsole = () => {
     try {
       const res = await api.getCompanyFeatures();
       setEnabledFeatures(res.data.features || []);
+      setLicensedModules(res.data.licensed_modules || []);
     } catch (error) {
       console.error('Failed to fetch company features:', error);
     } finally {
@@ -53,10 +55,15 @@ const AdminConsole = () => {
     { id: 'feedback', label: 'Customer Feedback', icon: MessageSquare, component: AdminFeedback },
   ];
 
-  // Conditionally add modules based on enabled features
   const featureTabs = [];
+
+  if (enabledFeatures.includes('restaurant_orders') || licensedModules.includes('restaurant_orders')) {
+    featureTabs.push(
+      { id: 'menu-management', label: 'Menu Management', icon: UtensilsCrossed, component: AdminMenuManagement }
+    );
+  }
   
-  if (enabledFeatures.includes('booking')) {
+  if (enabledFeatures.includes('booking') || licensedModules.includes('booking')) {
     featureTabs.push(
       { id: 'services', label: 'Services', icon: Wrench, component: AdminServices },
       { id: 'slot-booking', label: 'Slot Booking', icon: Calendar, component: AdminSlotBooking },
@@ -64,13 +71,7 @@ const AdminConsole = () => {
     );
   }
 
-  if (enabledFeatures.includes('restaurant_orders')) {
-    featureTabs.push(
-      { id: 'menu-management', label: 'Menu Management', icon: UtensilsCrossed, component: AdminMenuManagement }
-    );
-  }
-
-  if (enabledFeatures.includes('inventory')) {
+  if (enabledFeatures.includes('inventory') || licensedModules.includes('inventory')) {
     featureTabs.push({ id: 'inventory', label: 'Inventory', icon: Package, component: AdminInventory });
   }
 
