@@ -26,6 +26,9 @@ class OutletBase(BaseModel):
     solar: bool = False
     water_recycle: bool = False
     services_offered: List[str] = []
+    portal_logo_url: Optional[str] = None
+    portal_color_scheme: Optional[dict] = None
+    portal_custom_colors: bool = False
 
 
 class OutletCreate(OutletBase):
@@ -53,6 +56,9 @@ async def get_outlets(
             "address": o.location,
             "capacity": o.capacity,
             "status": o.status,
+            "portal_logo_url": o.portal_logo_url,
+            "portal_color_scheme": o.portal_color_scheme,
+            "portal_custom_colors": o.portal_custom_colors,
             "created_at": o.created_at
         } for o in outlets
     ]
@@ -93,7 +99,10 @@ async def create_outlet(
         company_id=current_user.company_id,
         location=f"{outlet_input.city}, {outlet_input.address}",
         capacity=outlet_input.capacity,
-        status="active"
+        status="active",
+        portal_logo_url=outlet_input.portal_logo_url,
+        portal_color_scheme=outlet_input.portal_color_scheme,
+        portal_custom_colors=outlet_input.portal_custom_colors
     )
     db_session.add(new_outlet)
     await db_session.commit()
@@ -107,6 +116,9 @@ async def create_outlet(
         "capacity": new_outlet.capacity,
         "status": new_outlet.status,
         "company_id": new_outlet.company_id,
+        "portal_logo_url": new_outlet.portal_logo_url,
+        "portal_color_scheme": new_outlet.portal_color_scheme,
+        "portal_custom_colors": new_outlet.portal_custom_colors,
         "created_at": new_outlet.created_at
     }
 
@@ -124,7 +136,10 @@ async def update_outlet(
         .values(
             name=outlet_input.name,
             location=f"{outlet_input.city}, {outlet_input.address}",
-            capacity=outlet_input.capacity
+            capacity=outlet_input.capacity,
+            portal_logo_url=outlet_input.portal_logo_url,
+            portal_color_scheme=outlet_input.portal_color_scheme,
+            portal_custom_colors=outlet_input.portal_custom_colors
         )
     )
     if current_user.role != "SuperAdmin":
@@ -145,7 +160,10 @@ async def update_outlet(
         "name": outlet.name,
         "location": outlet.location,
         "capacity": outlet.capacity,
-        "status": outlet.status
+        "status": outlet.status,
+        "portal_logo_url": outlet.portal_logo_url,
+        "portal_color_scheme": outlet.portal_color_scheme,
+        "portal_custom_colors": outlet.portal_custom_colors
     }
 
 

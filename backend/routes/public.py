@@ -176,6 +176,22 @@ async def get_public_slot_config(embed_token: str, db_session: AsyncSession = De
     }
 
 
+@router.get("/outlet/{outlet_id}")
+async def get_public_outlet(outlet_id: str, db_session: AsyncSession = Depends(get_db)):
+    stmt = select(models_pg.Outlet).where(models_pg.Outlet.id == outlet_id)
+    outlet = (await db_session.execute(stmt)).scalar_one_or_none()
+    if not outlet:
+        raise HTTPException(status_code=404, detail="Outlet not found")
+        
+    return {
+        "id": outlet.id,
+        "name": outlet.name,
+        "portal_logo_url": getattr(outlet, "portal_logo_url", None),
+        "portal_color_scheme": getattr(outlet, "portal_color_scheme", None),
+        "portal_custom_colors": getattr(outlet, "portal_custom_colors", False),
+    }
+
+
 @router.post("/book")
 async def create_public_booking(booking: PublicBookingCreate, db_session: AsyncSession = Depends(get_db)):
     stmt = select(models_pg.SlotConfig).where(models_pg.SlotConfig.outlet_id == booking.outlet_id)

@@ -35,6 +35,7 @@ const AdminMenuManagement = () => {
     image_url: '',
     image_urls: [],
     available: true,
+    is_veg: true,
     inventory_linked: false,
     inventory_product_id: ''
   });
@@ -72,6 +73,7 @@ const AdminMenuManagement = () => {
         image_url: item.image_url || '',
         image_urls: item.image_urls || [],
         available: item.available ?? true,
+        is_veg: item.is_veg ?? true,
         inventory_linked: item.inventory_linked ?? false,
         inventory_product_id: item.inventory_product_id || 'auto_create'
       });
@@ -84,6 +86,7 @@ const AdminMenuManagement = () => {
         image_url: '',
         image_urls: [],
         available: true,
+        is_veg: true,
         inventory_linked: false,
         inventory_product_id: 'auto_create'
       });
@@ -218,6 +221,9 @@ const AdminMenuManagement = () => {
                     <div className="flex flex-wrap items-center gap-2 mt-auto">
                       <Badge variant="outline" className="text-[10px] uppercase font-semibold text-gray-500 border-gray-200 dark:border-[#1F2630]">
                         {item.category}
+                      </Badge>
+                      <Badge variant="outline" className={`text-[10px] font-bold uppercase border-0 ${item.is_veg !== false ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
+                        {item.is_veg !== false ? 'Veg' : 'Non-Veg'}
                       </Badge>
                       {!item.available && (
                         <Badge variant="destructive" className="text-[10px]">Sold Out</Badge>
@@ -366,6 +372,17 @@ const AdminMenuManagement = () => {
                 <Switch 
                   checked={formData.available} 
                   onCheckedChange={(c) => setFormData({...formData, available: c})} 
+                />
+              </div>
+
+              <div className="border-t border-gray-200 dark:border-[#1F2630] pt-4 flex items-center justify-between">
+                <div>
+                  <Label className="text-base font-semibold">Vegetarian Item</Label>
+                  <p className="text-xs text-gray-500">Specify whether this dish is veg or non-veg.</p>
+                </div>
+                <Switch 
+                  checked={formData.is_veg} 
+                  onCheckedChange={(c) => setFormData({...formData, is_veg: c})} 
                 />
               </div>
 

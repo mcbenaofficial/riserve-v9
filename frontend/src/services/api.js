@@ -352,6 +352,7 @@ export const api = {
   deleteMenuItem: (id) => axios.delete(`${API}/menu/items/${id}`, { headers: getHeaders() }),
 
   // ── Public Order (no auth) ─────────────────────────────────────────
+  getPublicOutletInfo: (outletId) => axios.get(`${API}/public/outlet/${outletId}`),
   getPublicMenu: (outletId) => axios.get(`${API}/public/menu/${outletId}`),
   placePublicOrder: (data) => axios.post(`${API}/public/order`, data),
   getPublicOrderStatus: (token) => axios.get(`${API}/public/order/${token}`),

@@ -164,6 +164,9 @@ async def get_public_menu(outlet_id: str, db: AsyncSession = Depends(get_db)):
             "name": outlet.name,
             "location": outlet.location,
             "contact_phone": outlet.contact_phone,
+            "portal_logo_url": getattr(outlet, "portal_logo_url", None),
+            "portal_color_scheme": getattr(outlet, "portal_color_scheme", None),
+            "portal_custom_colors": getattr(outlet, "portal_custom_colors", False),
         },
         "company": {
             "name": company.name if company else "Restaurant",
@@ -278,6 +281,11 @@ async def get_order_status(confirmation_token: str, db: AsyncSession = Depends(g
     return {
         "order": _serialize_order(order),
         "outlet_name": outlet.name if outlet else "Restaurant",
+        "outlet_info": {
+            "name": outlet.name,
+            "portal_color_scheme": outlet.portal_color_scheme,
+            "portal_logo_url": outlet.portal_logo_url
+        } if outlet else {}
     }
 
 

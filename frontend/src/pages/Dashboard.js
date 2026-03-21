@@ -176,7 +176,7 @@ const Dashboard = () => {
       <div className="flex justify-between items-center glass-panel p-6 rounded-2xl glass-panel-hover transition-all">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-[#E6E8EB] text-gradient-pro">Dashboard</h2>
-          <p className="text-gray-500 dark:text-[#9CA3AF]">Overview of your car wash business</p>
+          <p className="text-gray-500 dark:text-[#9CA3AF]">Overview of your business</p>
         </div>
         <div className="flex gap-2">
           <Button

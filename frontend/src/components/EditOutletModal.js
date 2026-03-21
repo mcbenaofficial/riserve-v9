@@ -26,7 +26,10 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
     resource_label: 'Resource',
     resource_label_plural: 'Resources',
     resources: [],
-    default_capacity: 1
+    default_capacity: 1,
+    portal_logo_url: '',
+    portal_color_scheme: { primary: '#F59E0B', secondary: '#F97316' },
+    portal_custom_colors: false
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -71,7 +74,10 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
         resource_label: outlet.resource_label || preset.resourceLabel,
         resource_label_plural: outlet.resource_label_plural || preset.resourceLabelPlural,
         resources: resources,
-        default_capacity: outlet.default_capacity || preset.defaultCapacity
+        default_capacity: outlet.default_capacity || preset.defaultCapacity,
+        portal_logo_url: outlet.portal_logo_url || '',
+        portal_color_scheme: outlet.portal_color_scheme || { primary: '#F59E0B', secondary: '#F97316' },
+        portal_custom_colors: outlet.portal_custom_colors || false
       });
       setError('');
     }
@@ -150,7 +156,10 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
         resource_label_plural: formData.resource_label_plural,
         resources: formData.resources,
         default_capacity: formData.default_capacity,
-        capacity: formData.resources.length
+        capacity: formData.resources.length,
+        portal_logo_url: formData.portal_logo_url,
+        portal_color_scheme: formData.portal_color_scheme,
+        portal_custom_colors: formData.portal_custom_colors
       };
 
       await api.updateOutlet(outlet.id, submitData);
@@ -489,6 +498,8 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
                 </div>
               </div>
             </div>
+
+
 
             {/* Actions */}
           <div className="flex gap-3 pt-4 border-t border-[#1F2630]">

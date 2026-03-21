@@ -273,6 +273,9 @@ class Outlet(Base):
     close_time = Column(Time)
     timezone = Column(String(50), default='UTC')
     image_url = Column(String(500))
+    portal_logo_url = Column(String(500))
+    portal_color_scheme = Column(JSONB)
+    portal_custom_colors = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     

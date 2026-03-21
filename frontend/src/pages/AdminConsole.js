@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Settings, Users, Store, Wrench, Mail, MessageSquare,
   Webhook, Zap, Puzzle, ChevronRight, Shield, Calendar, Building2, Star, Package, UserCog, FileText,
-  UtensilsCrossed
+  UtensilsCrossed, Palette
 } from 'lucide-react';
 import { api } from '../services/api';
 
@@ -23,6 +23,7 @@ import AdminStaff from '../components/admin/AdminStaff';
 import AdminPromotions from '../components/admin/AdminPromotions';
 import AdminBookingForm from '../components/admin/AdminBookingForm';
 import AdminMenuManagement from '../components/admin/AdminMenuManagement';
+import AdminPortalDesign from '../components/admin/AdminPortalDesign';
 
 const AdminConsole = () => {
   const [activeTab, setActiveTab] = useState('company');
@@ -48,6 +49,7 @@ const AdminConsole = () => {
 
   const baseTabs = [
     { id: 'company', label: 'Company Settings', icon: Building2, component: AdminCompanySettings },
+    { id: 'portal-design', label: 'Portal Design', icon: Palette, component: AdminPortalDesign },
     { id: 'users', label: 'User Management', icon: Users, component: AdminUsers },
     { id: 'staff', label: 'Staff Management', icon: UserCog, component: AdminStaff },
     { id: 'promotions', label: 'Promotions', icon: Star, component: AdminPromotions },

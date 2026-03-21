@@ -31,9 +31,6 @@ const AdminServices = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    filterServices();
-  }, [services, query]);
 
   const fetchData = async () => {
     setLoading(true);

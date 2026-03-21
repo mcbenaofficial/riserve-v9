@@ -104,6 +104,9 @@ class Outlet(Base):
     status = Column(String(50), default="active")
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+    portal_logo_url = Column(String(255), nullable=True)
+    portal_color_scheme = Column(JSONB, nullable=True)
+    portal_custom_colors = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
@@ -945,6 +948,7 @@ class MenuItem(Base):
     inventory_product_id = Column(String, ForeignKey("products.id", ondelete='SET NULL'), nullable=True)
     inventory_linked = Column(Boolean, default=False)
     available = Column(Boolean, default=True)
+    is_veg = Column(Boolean, default=True)
     display_order = Column(Integer, default=0)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
