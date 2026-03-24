@@ -178,12 +178,7 @@ export const api = {
   deleteSupplierProductLink: (supplierId, linkId) => axios.delete(`${API}/suppliers/${supplierId}/products/${linkId}`, { headers: getHeaders() }),
   getReorderSuggestions: (lookbackDays = 30) => axios.get(`${API}/suppliers/analytics/reorder-suggestions?lookback_days=${lookbackDays}`, { headers: getHeaders() }),
 
-  // Staff Management
-  getStaffList: (params) => axios.get(`${API}/staff`, { params, headers: getHeaders() }),
-  getStaffMember: (id) => axios.get(`${API}/staff/${id}`, { headers: getHeaders() }),
-  createStaff: (data) => axios.post(`${API}/staff`, data, { headers: getHeaders() }),
-  updateStaff: (id, data) => axios.put(`${API}/staff/${id}`, data, { headers: getHeaders() }),
-  deleteStaff: (id) => axios.delete(`${API}/staff/${id}`, { headers: getHeaders() }),
+  // Staff Stats
   getStaffStats: () => axios.get(`${API}/staff/stats/overview`, { headers: getHeaders() }),
 
   // Leave Management

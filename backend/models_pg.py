@@ -168,7 +168,7 @@ class Attendance(Base):
     id = Column(String, primary_key=True, default=generate_uuid)
     staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
     company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
-    date = Column(Date, nullable=False)                        # The work date
+    date = Column(Date, nullable=False, index=True)                        # The work date
     clock_in = Column(DateTime(timezone=True), nullable=True)
     clock_out = Column(DateTime(timezone=True), nullable=True)
     hours_worked = Column(Numeric(5, 2), default=0)            # Computed on clock-out
@@ -311,7 +311,7 @@ class Booking(Base):
     customer_email = Column(String(255))
     
     time = Column(String(20)) # "10:00"
-    date = Column(Date)       # Native date type
+    date = Column(Date, index=True)       # Native date type
     duration = Column(Integer)
     notes = Column(Text)
     custom_fields = Column(JSONB, default=dict)
@@ -322,7 +322,7 @@ class Booking(Base):
     total_amount = Column(Numeric(10, 2), default=0)
     items = Column(JSONB, default=list) # Array of items added to booking
     
-    status = Column(String(50), default="Pending")
+    status = Column(String(50), default="Pending", index=True)
     source = Column(String(50), default="app")
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
@@ -360,7 +360,7 @@ class Transaction(Base):
     
     status = Column(String(50), default="Settled")
     created_by = Column(String, ForeignKey("users.id", ondelete='SET NULL'), nullable=True)
-    date = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    date = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
@@ -610,7 +610,7 @@ class AuditLog(Base):
     company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=True)
     details = Column(JSONB, default=dict)
     ip_address = Column(String(50))
-    timestamp = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    timestamp = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True)
 
     # Relationships
     company = relationship("Company", back_populates="audit_logs")
@@ -756,7 +756,7 @@ class HQAlert(Base):
     severity = Column(String(50))   # critical, high, medium, low
     title = Column(String(500), nullable=False)
     message = Column(Text)
-    status = Column(String(50), default="open")  # open, acknowledged, resolved, dismissed
+    status = Column(String(50), default="open", index=True)  # open, acknowledged, resolved, dismissed
     assigned_to = Column(String, ForeignKey("users.id", ondelete='SET NULL'), nullable=True)
     resolved_by = Column(String, ForeignKey("users.id", ondelete='SET NULL'), nullable=True)
     resolved_at = Column(DateTime(timezone=True), nullable=True)
@@ -972,7 +972,7 @@ class RestaurantOrder(Base):
     order_type = Column(String(50), default="dine_in")  # dine_in, takeaway, delivery
     items = Column(JSONB, default=list)  # [{itemId, name, quantity, price, inventoryLinked}]
     total_amount = Column(Numeric(10, 2), default=0)
-    status = Column(String(50), default="New")  # New, Preparing, ReadyToCollect, Completed, Cancelled
+    status = Column(String(50), default="New", index=True)  # New, Preparing, ReadyToCollect, Completed, Cancelled
     payment_status = Column(String(50), default="pending")  # pending, paid, failed
     payment_ref = Column(String(255), nullable=True)
     otp = Column(String(10), nullable=True)  # For home delivery verification

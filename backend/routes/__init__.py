@@ -17,6 +17,15 @@ from .inventory import router as inventory_router
 from .staff import router as staff_router
 from .portal import router as portal_router
 from .hq import router as hq_router
+from .onboarding import router as onboarding_router
+from .hitl import router as hitl_router
+from .promotions import promotions_bp as promotions_router
+from .suppliers import router as suppliers_router
+from .analytics import router as analytics_router
+from .orders import router as orders_router
+from .menu import router as menu_router
+from .upload import router as upload_router
+from .omni import router as omni_router
 
 __all__ = [
     "auth_router",
@@ -36,5 +45,14 @@ __all__ = [
     "customers_router",
     "slots_router",
     "transactions_router",
-    "hq_router"
+    "hq_router",
+    "onboarding_router",
+    "hitl_router",
+    "promotions_router",
+    "suppliers_router",
+    "analytics_router",
+    "orders_router",
+    "menu_router",
+    "upload_router",
+    "omni_router",
 ]

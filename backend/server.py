@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter, Depends
+from routes.dependencies import get_current_user
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -211,10 +212,9 @@ app.include_router(omni.router, prefix="/api")
 async def get_resource_bookings(
     outlet_id: str, 
     date: str = None, 
-    current_user: models_pg.User = Depends(get_db), 
+    current_user = Depends(get_current_user), 
     db: AsyncSession = Depends(get_db)
 ):
-    # This is a bit of a hacky endpoint, but refactoring for Postgres
     from sqlalchemy import select
     stmt = select(models_pg.Booking).where(models_pg.Booking.outlet_id == outlet_id)
     if date:
@@ -225,12 +225,7 @@ async def get_resource_bookings(
     return bookings
 
 
-# Password hashing for seed
-from passlib.context import CryptContext
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
 
 
 # ==================== MAINTENANCE ENDPOINTS ====================

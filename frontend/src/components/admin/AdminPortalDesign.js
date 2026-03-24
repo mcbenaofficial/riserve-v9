@@ -258,7 +258,7 @@ const AdminPortalDesign = () => {
 
             <div className="mt-8 flex items-center justify-between">
               <a 
-                href={`/order/${selectedOutletId}`} 
+                href={`http://localhost:3001/menu/${selectedOutletId}`} 
                 target="_blank" 
                 rel="noreferrer"
                 className="flex items-center gap-2 text-sm text-purple-600 dark:text-purple-400 hover:underline"
@@ -312,7 +312,7 @@ const AdminPortalDesign = () => {
               {/* Content Mockup */}
               <div className="pt-12 px-5 pb-6 text-center space-y-6">
                 <div>
-                  <h1 className="text-xl font-bold tracking-tight mb-1" style={{ color: colors.textColor }}>Kosmo Cafe</h1>
+                  <h1 className="text-xl font-bold tracking-tight mb-1" style={{ color: colors.textColor }}>{outlets.find(o => o.id === selectedOutletId)?.name || 'Your Restaurant'}</h1>
                   <p className="text-xs opacity-60 uppercase tracking-widest" style={{ color: colors.textColor }}>Order & Dining</p>
                 </div>
 

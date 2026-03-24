@@ -204,6 +204,8 @@ async def get_company(
         "address": company.address,
         "plan": company.plan,
         "status": company.status,
+        "licensed_modules": company.licensed_modules or [],
+        "enabled_features": company.enabled_features or [],
         "created_at": company.created_at.isoformat() if company.created_at else None,
         "stats": {
             "users": users_count,

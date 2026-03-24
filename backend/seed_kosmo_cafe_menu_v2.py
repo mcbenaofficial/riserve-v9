@@ -149,6 +149,10 @@ async def seed_menu():
             if "Pasta" in data["category"] or "Main" in data["category"]:
                 img = MAIN_IMG
 
+            # Determine is_veg based on category
+            NON_VEG_KEYWORDS = ["Chicken", "Shrimp", "Omelette"]
+            is_veg = not any(kw in data["category"] for kw in NON_VEG_KEYWORDS)
+
             item = MenuItem(
                 company_id=COMPANY_ID,
                 outlet_id=OUTLET_ID,
@@ -160,6 +164,7 @@ async def seed_menu():
                 image_urls=[img],
                 available=True,
                 active=True,
+                is_veg=is_veg,
                 display_order=i
             )
             items_to_add.append(item)

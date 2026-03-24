@@ -18,27 +18,28 @@ from datetime import datetime, timezone, timedelta
 from decimal import Decimal
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 from database_pg import engine, AsyncSessionLocal
 import models_pg
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-COMPANY_ID = str(uuid.uuid4())
-OUTLET_ID = str(uuid.uuid4())
+COMPANY_ID = '3821aa11-8386-452d-b6be-174ef77d1970'
+OUTLET_ID = '36e8bc27-f972-4859-9f99-459ecece81fc'
 ADMIN_ID = str(uuid.uuid4())
 
 
 async def seed():
     async with AsyncSessionLocal() as db:
-        # ── Check if already seeded ───────────────────────────────────
-        existing = (await db.execute(
-            select(models_pg.Company).where(models_pg.Company.email == "info@kosmocafe.com")
-        )).scalar_one_or_none()
-        if existing:
-            print(f"⚠ Kosmo Cafe already exists (id={existing.id}). Skipping.")
-            return
+        # ── Clear existing ───────────────────────────────────────────
+        await db.execute(
+            delete(models_pg.Company).where(models_pg.Company.id == COMPANY_ID)
+        )
+        await db.execute(
+            delete(models_pg.Company).where(models_pg.Company.email == "info@kosmocafe.com")
+        )
+        await db.commit()
 
         # ── Company ───────────────────────────────────────────────────
         company = models_pg.Company(

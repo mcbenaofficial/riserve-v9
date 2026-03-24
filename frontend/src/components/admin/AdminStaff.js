@@ -648,7 +648,7 @@ const StaffDirectory = ({ onUpdate }) => {
   const fetchData = async () => {
     try {
       const [staffRes, outletsRes] = await Promise.all([
-        api.getStaffList(),
+        api.getStaff(),
         api.getOutlets()
       ]);
       setStaff(staffRes.data || []);
@@ -1469,7 +1469,7 @@ const StaffSchedules = () => {
     try {
       const [schedRes, staffRes, tempRes] = await Promise.all([
         api.getStaffSchedules({ start_date: currentWeek[0], end_date: currentWeek[6] }),
-        api.getStaffList(),
+        api.getStaff(),
         api.getShiftTemplates()
       ]);
       setSchedules(schedRes.data || []);

@@ -147,7 +147,5 @@ async def seed_rbac():
     print("RBAC Seeding complete!")
 
 if __name__ == "__main__":
-    asyncio.run(seed_rbac())
-
-if __name__ == "__main__":
-    asyncio.run(seed_rbac())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(seed_rbac())

@@ -9,9 +9,6 @@ cleanup() {
 
 trap cleanup SIGINT SIGTERM
 
-echo "Starting MongoDB..."
-brew services start mongodb-community || echo "MongoDB start failed or already running"
-
 echo "Starting Backend..."
 cd backend
 source venv/bin/activate

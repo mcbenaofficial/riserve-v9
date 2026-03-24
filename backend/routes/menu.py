@@ -80,6 +80,7 @@ def _serialize_menu_item(item, stock_qty=None):
         "available": item.available,
         "display_order": item.display_order,
         "active": item.active,
+        "is_veg": getattr(item, "is_veg", True),
     }
     if stock_qty is not None:
         d["stock_quantity"] = stock_qty

@@ -73,8 +73,8 @@ class BrandGenerateRequest(BaseModel):
 
 @router.post("/generate-brand")
 async def generate_brand(req: BrandGenerateRequest, current_user: dict = Depends(get_current_user)):
-    import time
-    time.sleep(1.8) # Simulate LLM thinking
+    import asyncio
+    await asyncio.sleep(1.8) # Simulate LLM thinking
     
     prompt_lower = req.prompt.lower()
     
