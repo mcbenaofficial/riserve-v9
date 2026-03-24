@@ -461,12 +461,12 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
                   </label>
                   <div className="flex gap-2">
                     <div className="flex-1 bg-[#12161C] border border-[#1F2630] rounded-lg px-3 py-2 text-sm text-[#5FA8D3] truncate">
-                      {window.location.origin}/order/{outlet.id}/menu
+                      http://localhost:3001/menu/{outlet.id}
                     </div>
                     <button 
                       type="button"
                       onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/order/${outlet.id}/menu`);
+                        navigator.clipboard.writeText(`http://localhost:3001/menu/${outlet.id}`);
                         alert('Link copied to clipboard!');
                       }}
                       className="p-2 bg-[#12161C] border border-[#1F2630] rounded-lg text-[#7D8590] hover:text-[#5FA8D3] transition-all"
@@ -489,7 +489,7 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
                     <button 
                       type="button"
                       className="text-xs font-bold text-[#5FA8D3] hover:underline flex items-center gap-1"
-                      onClick={() => window.open(`${window.location.origin}/order/${outlet.id}/menu`, '_blank')}
+                      onClick={() => window.open(`http://localhost:3001/menu/${outlet.id}`, '_blank')}
                     >
                       Preview Store Front
                       <Link size={10} />

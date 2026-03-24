@@ -58,9 +58,6 @@ import HQBenchmark from './pages/HQBenchmark';
 import HQCustomKPIs from './pages/HQCustomKPIs';
 import HQExperiments from './pages/HQExperiments';
 import HQAgentWorkflows from './pages/HQAgentWorkflows';
-import CustomerOrderPortal from './pages/CustomerOrderPortal';
-import CustomerMenu from './pages/CustomerMenu';
-import CustomerOrderConfirmation from './pages/CustomerOrderConfirmation';
 import OrdersDashboard from './pages/OrdersDashboard';
 import KitchenDisplay from './pages/KitchenDisplay';
 import PickupDisplay from './pages/PickupDisplay';
@@ -84,10 +81,7 @@ function App() {
                 <Route path="/book/:token" element={<PublicBooking />} />
                 <Route path="/b/:token" element={<PublicBooking />} />
                 <Route path="/rate/:bookingId" element={<CustomerFeedback />} />
-                {/* Customer Order Portal (public, no auth) */}
-                <Route path="/order/:outletId" element={<CustomerOrderPortal />} />
-                <Route path="/order/:outletId/menu" element={<CustomerMenu />} />
-                <Route path="/order/status/:confirmationToken" element={<CustomerOrderConfirmation />} />
+                {/* Customer Order Portal deprecated locally - routing to Next.js on port 3001 */}
                 <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
                 <Route
                   path="/*"
