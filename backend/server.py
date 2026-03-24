@@ -171,7 +171,7 @@ from routes import (
     auth, public, dashboard, bookings, services, outlets, 
     staff, reports, feedback, assistant, onboarding,
     users, company, inventory, customers, slots, transactions, promotions, hitl, portal, suppliers, analytics, hq,
-    orders, menu, upload
+    orders, menu, upload, omni
 )
 from routes.superadmin import router as superadmin
 
@@ -203,6 +203,7 @@ app.include_router(hq.router, prefix="/api")
 app.include_router(orders.router, prefix="/api")
 app.include_router(menu.router, prefix="/api")
 app.include_router(upload.router, prefix="/api")
+app.include_router(omni.router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

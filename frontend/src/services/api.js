@@ -11,7 +11,7 @@ export const getImageUrl = (path) => {
   return path;
 };
 
-const getHeaders = () => {
+export const getHeaders = () => {
   const token = localStorage.getItem('ridn_token');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };

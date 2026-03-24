@@ -47,7 +47,12 @@ import {
   FlaskConical,
   Bot,
   UtensilsCrossed,
-  ChefHat
+  ChefHat,
+  Globe,
+  Palette,
+  Settings2,
+  MonitorPlay,
+  FileText
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -151,10 +156,12 @@ const Sidebar = () => {
     { id: 'restaurant', name: 'Restaurant Orders', icon: UtensilsCrossed, feature: 'restaurant_orders' },
     { id: 'hq', name: 'HQ Intelligence', icon: Brain, feature: 'hq_intelligence' },
     { id: 'reputation', name: 'Reputation Management', icon: MessageSquare, feature: 'reputation_management' },
+    { id: 'portal', name: 'Omni Site Builder', icon: Globe },
   ];
 
   const activeAppId = React.useMemo(() => {
     const path = location.pathname;
+    if (path.startsWith('/omni')) return 'portal';
     if (path.startsWith('/hq')) return 'hq';
     if (path.startsWith('/flow')) return 'flow';
     if (path.startsWith('/orders')) return 'restaurant';
@@ -257,6 +264,11 @@ const Sidebar = () => {
       ]
     },
     { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', condition: (features) => features.includes('ai_flows'), roles: ['SuperAdmin', 'Admin'], appId: 'flow' },
+    // Omni Portal
+    { key: 'omni-design', label: 'Design Studio', icon: Palette, path: '/omni/design', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
+    { key: 'omni-content', label: 'Content Manager', icon: FileText, path: '/omni/content', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
+    { key: 'omni-config', label: 'Site Config & AI', icon: Settings2, path: '/omni/config', roles: ['SuperAdmin', 'Admin'], appId: 'portal' },
+    { key: 'omni-preview', label: 'Live Preview', icon: MonitorPlay, path: '/omni/preview', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     // Restaurant Orders App
     {
       key: 'orders-dashboard',
@@ -398,6 +410,7 @@ const Sidebar = () => {
                             else if (app.id === 'staff') navigate('/team');
                             else if (app.id === 'reputation') navigate('/feedback');
                             else if (app.id === 'restaurant') navigate('/orders');
+                            else if (app.id === 'portal') navigate('/omni/design');
                             else navigate('/');
                           }
                         }}

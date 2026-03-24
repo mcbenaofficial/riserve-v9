@@ -64,6 +64,10 @@ import CustomerOrderConfirmation from './pages/CustomerOrderConfirmation';
 import OrdersDashboard from './pages/OrdersDashboard';
 import KitchenDisplay from './pages/KitchenDisplay';
 import PickupDisplay from './pages/PickupDisplay';
+import OmniDesignStudio from './pages/omni/OmniDesignStudio';
+import OmniSiteConfig from './pages/omni/OmniSiteConfig';
+import OmniPreview from './pages/omni/OmniPreview';
+import OmniContentManager from './pages/omni/OmniContentManager';
 import './App.css';
 
 function App() {
@@ -216,6 +220,11 @@ function MainLayout() {
               <Route path="/hq/kpis" element={<ProtectedRoute><HQCustomKPIs /></ProtectedRoute>} />
               <Route path="/hq/experiments" element={<ProtectedRoute><HQExperiments /></ProtectedRoute>} />
               <Route path="/hq/agent" element={<ProtectedRoute><HQAgentWorkflows /></ProtectedRoute>} />
+              {/* Omni Portal Routes */}
+              <Route path="/omni/design" element={<ProtectedRoute><OmniDesignStudio /></ProtectedRoute>} />
+              <Route path="/omni/content" element={<ProtectedRoute><OmniContentManager /></ProtectedRoute>} />
+              <Route path="/omni/config" element={<ProtectedRoute><OmniSiteConfig /></ProtectedRoute>} />
+              <Route path="/omni/preview" element={<ProtectedRoute><OmniPreview /></ProtectedRoute>} />
               {/* Super Admin Routes */}
               <Route path="/super-admin" element={<SuperAdminDashboard theme={theme} />} />
               <Route path="/super-admin/companies" element={<SuperAdminCompanies theme={theme} />} />
