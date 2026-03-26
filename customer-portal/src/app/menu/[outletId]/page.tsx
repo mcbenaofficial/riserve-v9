@@ -1,4 +1,5 @@
 import MenuClient from './MenuClient';
+import IdentityGate from './IdentityGate';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
@@ -29,12 +30,18 @@ export default async function MenuPage({ params }: { params: Promise<{ outletId:
   }
 
   return (
-    <MenuClient 
+    <IdentityGate
       outletId={outletId}
       outlet={menuData.outlet}
       company={menuData.company}
-      categories={menuData.categories}
-      items={menuData.items}
-    />
+    >
+      <MenuClient 
+        outletId={outletId}
+        outlet={menuData.outlet}
+        company={menuData.company}
+        categories={menuData.categories}
+        items={menuData.items}
+      />
+    </IdentityGate>
   );
 }

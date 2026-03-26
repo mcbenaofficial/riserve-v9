@@ -447,55 +447,17 @@ const EditOutletModal = ({ isOpen, onClose, onSuccess, outlet }) => {
             </div>
           </div>
 
-            {/* Digital Access Section */}
-            <div className="space-y-4 pt-4 border-t border-[#1F2630]">
-              <h4 className="text-sm font-semibold text-[#7D8590] uppercase tracking-wider flex items-center gap-2">
-                <QrCode size={14} />
-                Digital Access
-              </h4>
-              
-              <div className="bg-[#0B0D10] border border-[#1F2630] rounded-xl p-4 space-y-4">
-                <div>
-                  <label className="block text-xs font-medium text-[#7D8590] mb-2 uppercase tracking-wide">
-                    Public Ordering Link
-                  </label>
-                  <div className="flex gap-2">
-                    <div className="flex-1 bg-[#12161C] border border-[#1F2630] rounded-lg px-3 py-2 text-sm text-[#5FA8D3] truncate">
-                      http://localhost:3001/menu/{outlet.id}
-                    </div>
-                    <button 
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(`http://localhost:3001/menu/${outlet.id}`);
-                        alert('Link copied to clipboard!');
-                      }}
-                      className="p-2 bg-[#12161C] border border-[#1F2630] rounded-lg text-[#7D8590] hover:text-[#5FA8D3] transition-all"
-                      title="Copy Link"
-                    >
-                      <Link size={16} />
-                    </button>
+            {/* Portal Design Link */}
+            <div className="pt-4 border-t border-[#1F2630]">
+              <div className="flex items-center justify-between px-4 py-3 bg-[#0B0D10] border border-[#1F2630] rounded-xl">
+                <div className="flex items-center gap-3">
+                  <QrCode size={16} className="text-[#5FA8D3]" />
+                  <div>
+                    <p className="text-sm font-medium text-[#E6E8EB]">Digital Access & Portal Design</p>
+                    <p className="text-xs text-[#7D8590]">QR codes, branding, identity gate & more</p>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-4 p-4 bg-[#12161C] rounded-xl border border-[#1F2630]">
-                  <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center p-1 shrink-0">
-                    <QrCode size={64} className="text-black" />
-                  </div>
-                  <div className="flex-1">
-                    <h5 className="text-sm font-semibold text-[#E6E8EB] mb-1">Store Front QR Code</h5>
-                    <p className="text-xs text-[#7D8590] mb-3">
-                      Display this QR code at your tables or entrance for contactless ordering and menu access.
-                    </p>
-                    <button 
-                      type="button"
-                      className="text-xs font-bold text-[#5FA8D3] hover:underline flex items-center gap-1"
-                      onClick={() => window.open(`http://localhost:3001/menu/${outlet.id}`, '_blank')}
-                    >
-                      Preview Store Front
-                      <Link size={10} />
-                    </button>
-                  </div>
-                </div>
+                <span className="text-xs font-bold text-[#5FA8D3]">Admin Console → Portal Design</span>
               </div>
             </div>
 
