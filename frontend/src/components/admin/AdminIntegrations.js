@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Puzzle, Plus, ToggleLeft, ToggleRight, Settings, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
+import { Puzzle, Plus, Settings, ExternalLink, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 
-const AdminIntegrations = () => {
+const AdminIntegrations = ({ onNavigateToTab }) => {
   const [integrations, setIntegrations] = useState([
     { id: 1, name: 'Google Calendar', icon: '📅', description: 'Sync bookings with Google Calendar', connected: true, status: 'healthy' },
     { id: 2, name: 'Stripe', icon: '💳', description: 'Payment processing', connected: true, status: 'healthy' },
@@ -97,16 +97,30 @@ const AdminIntegrations = () => {
             <div className="flex gap-2">
               {integration.connected ? (
                 <>
-                  <button className="flex-1 px-3 py-2 border border-gray-300 dark:border-[#1F2630] rounded-lg text-sm font-medium text-gray-700 dark:text-[#E6E8EB] hover:bg-gray-50 dark:hover:bg-[#1F2630/50] transition-all flex items-center justify-center gap-2">
-                    <Settings size={14} />
-                    Configure
+                  <button
+                    onClick={() => integration.name === 'WhatsApp Business' && onNavigateToTab?.('whatsapp')}
+                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-[#1F2630] rounded-lg text-sm font-medium text-gray-700 dark:text-[#E6E8EB] hover:bg-gray-50 dark:hover:bg-[#1F2630]/50 transition-all flex items-center justify-center gap-2"
+                  >
+                    {integration.name === 'WhatsApp Business'
+                      ? <><MessageCircle size={14} className="text-green-500" /> Configure</>
+                      : <><Settings size={14} /> Configure</>
+                    }
                   </button>
-                  <button className="px-3 py-2 border border-red-300 dark:border-red-400/30 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                  <button
+                    onClick={() => setIntegrations(integrations.map(i => i.id === integration.id ? { ...i, connected: false, status: 'disconnected' } : i))}
+                    className="px-3 py-2 border border-red-300 dark:border-red-400/30 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+                  >
                     Disconnect
                   </button>
                 </>
               ) : (
                 <button
+                  onClick={() => {
+                    if (integration.name === 'WhatsApp Business') {
+                      setIntegrations(integrations.map(i => i.id === integration.id ? { ...i, connected: true, status: 'healthy' } : i));
+                      onNavigateToTab?.('whatsapp');
+                    }
+                  }}
                   className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold text-[#222] transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
                   style={{ background: 'linear-gradient(135deg, #5FA8D3 0%, #4A95C0 100%)' }}
                 >

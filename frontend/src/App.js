@@ -39,6 +39,7 @@ import CustomerFeedback from './pages/CustomerFeedback';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import SuperAdminCompanies from './pages/SuperAdminCompanies';
 import SuperAdminUsers from './pages/SuperAdminUsers';
+import SuperAdminPartnerIntegrations from './pages/SuperAdminPartnerIntegrations';
 import CompanyDetail from './pages/CompanyDetail';
 import AuditLogs from './pages/AuditLogs';
 import ProfileSettings from './pages/ProfileSettings';
@@ -225,6 +226,7 @@ function MainLayout() {
               <Route path="/super-admin/companies/:companyId" element={<CompanyDetail theme={theme} />} />
               <Route path="/super-admin/audit" element={<AuditLogs theme={theme} />} />
               <Route path="/super-admin/users" element={<SuperAdminUsers theme={theme} />} />
+              <Route path="/super-admin/partner-integrations" element={<SuperAdminPartnerIntegrations theme={theme} />} />
               {/* Restaurant Orders */}
               <Route path="/orders" element={<OrdersDashboard theme={theme} />} />
               <Route path="/orders/kitchen" element={<KitchenDisplay theme={theme} />} />

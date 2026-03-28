@@ -16,11 +16,17 @@ uvicorn server:app --host 0.0.0.0 --port 8000 --reload &
 BACKEND_PID=$!
 cd ..
 
-echo "Starting Frontend..."
+echo "Starting Frontend on port 3001..."
 cd frontend
-npm start &
+PORT=3001 npm start &
 FRONTEND_PID=$!
 cd ..
 
+echo "Starting Customer Portal on port 3002..."
+cd customer-portal
+PORT=3002 npm run dev &
+PORTAL_PID=$!
+cd ..
+
 echo "Services started. Press Ctrl+C to stop."
-wait $BACKEND_PID $FRONTEND_PID
+wait $BACKEND_PID $FRONTEND_PID $PORTAL_PID

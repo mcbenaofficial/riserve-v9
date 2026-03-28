@@ -357,4 +357,17 @@ export const api = {
 
   // ── Upload ───────────────────────────────────────────────────────
   uploadFiles: (formData) => axios.post(`${API}/upload`, formData, { headers: { ...getHeaders(), 'Content-Type': 'multipart/form-data' } }),
+
+  // ── WhatsApp Integration ──────────────────────────────────────────
+  getWhatsAppConfig: () => axios.get(`${API}/whatsapp/config`, { headers: getHeaders() }),
+  updateWhatsAppConfig: (data) => axios.put(`${API}/whatsapp/config`, data, { headers: getHeaders() }),
+  sendWhatsAppTest: (data) => axios.post(`${API}/whatsapp/test`, data, { headers: getHeaders() }),
+  getWhatsAppLogs: (params) => axios.get(`${API}/whatsapp/logs`, { headers: getHeaders(), params }),
+  getWhatsAppStats: (days) => axios.get(`${API}/whatsapp/stats${days ? `?days=${days}` : ''}`, { headers: getHeaders() }),
+
+  // ── Super Admin: Partner Integrations ────────────────────────────
+  getSuperAdminWhatsAppStats: (days) => axios.get(`${API}/super-admin/whatsapp/stats${days ? `?days=${days}` : ''}`, { headers: getHeaders() }),
+  getSuperAdminWhatsAppConfig: (companyId) => axios.get(`${API}/super-admin/whatsapp/config/${companyId}`, { headers: getHeaders() }),
+  updateSuperAdminWhatsAppConfig: (companyId, data) => axios.put(`${API}/super-admin/whatsapp/config/${companyId}`, data, { headers: getHeaders() }),
+  superAdminSendWhatsAppTest: (companyId, data) => axios.post(`${API}/super-admin/whatsapp/test/${companyId}`, data, { headers: getHeaders() }),
 };

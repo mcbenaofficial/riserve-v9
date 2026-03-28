@@ -137,6 +137,7 @@ const Sidebar = () => {
     { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/' },
     { key: 'companies', label: 'Companies', icon: Building2, path: '/super-admin/companies' },
     { key: 'users', label: 'All Users', icon: Users, path: '/super-admin/users' },
+    { key: 'partner-integrations', label: 'Partner Integrations', icon: MessageCircle, path: '/super-admin/partner-integrations' },
     { key: 'audit', label: 'Audit Logs', icon: Activity, path: '/super-admin/audit' },
     { key: 'support', label: 'Support', icon: HelpCircle, path: '/support' }
   ];

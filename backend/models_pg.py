@@ -985,3 +985,42 @@ class RestaurantOrder(Base):
 
     company = relationship("Company", back_populates="restaurant_orders")
 
+
+class WhatsAppConfig(Base):
+    """Per-company WhatsApp Business API configuration and template settings"""
+    __tablename__ = "whatsapp_configs"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String(36), ForeignKey("companies.id"), nullable=False, unique=True)
+    enabled = Column(Boolean, default=False)
+    phone_number_id = Column(String(255), nullable=True)       # Meta Phone Number ID
+    waba_id = Column(String(255), nullable=True)               # WhatsApp Business Account ID
+    access_token_enc = Column(Text, nullable=True)             # Encrypted access token
+    display_phone = Column(String(50), nullable=True)          # e.g. +1 555-123-4567
+    # Per-trigger template mapping (JSONB): { "booking_confirmed": { "template_name": "booking_conf_v1", "active": true }, ... }
+    templates = Column(JSONB, nullable=False, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", backref="whatsapp_config", uselist=False)
+
+
+class WhatsAppMessageLog(Base):
+    """Audit log of every WhatsApp message dispatched through the platform"""
+    __tablename__ = "whatsapp_message_logs"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String(36), ForeignKey("companies.id"), nullable=False)
+    trigger = Column(String(100), nullable=False)              # e.g. booking_confirmed
+    template_name = Column(String(255), nullable=True)
+    recipient_phone = Column(String(50), nullable=False)
+    recipient_name = Column(String(255), nullable=True)
+    wa_message_id = Column(String(255), nullable=True)         # ID returned by Meta API
+    status = Column(String(50), nullable=False, default="queued")  # queued, sent, delivered, failed
+    error_message = Column(Text, nullable=True)
+    cost_usd = Column(Float, nullable=True)                    # estimated cost per message
+    sent_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", backref="whatsapp_logs")
+

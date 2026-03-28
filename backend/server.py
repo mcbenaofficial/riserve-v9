@@ -151,6 +151,7 @@ _cors_origins = [o.strip() for o in _cors_env.split(',') if o.strip()] if _cors_
 _dev_origins = [
     "http://localhost:3000",
     "http://localhost:3001",
+    "http://localhost:3002",
     "http://127.0.0.1:3000",
 ]
 _allowed_origins = list(set(_cors_origins + _dev_origins))
@@ -169,10 +170,10 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Import all routers
 from routes import (
-    auth, public, dashboard, bookings, services, outlets, 
+    auth, public, dashboard, bookings, services, outlets,
     staff, reports, feedback, assistant, onboarding,
     users, company, inventory, customers, slots, transactions, promotions, hitl, portal, suppliers, analytics, hq,
-    orders, menu, upload, omni
+    orders, menu, upload, omni, whatsapp
 )
 from routes.superadmin import router as superadmin
 
@@ -205,6 +206,7 @@ app.include_router(orders.router, prefix="/api")
 app.include_router(menu.router, prefix="/api")
 app.include_router(upload.router, prefix="/api")
 app.include_router(omni.router, prefix="/api")
+app.include_router(whatsapp.router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy
