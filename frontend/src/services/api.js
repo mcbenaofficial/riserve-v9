@@ -365,6 +365,20 @@ export const api = {
   getWhatsAppLogs: (params) => axios.get(`${API}/whatsapp/logs`, { headers: getHeaders(), params }),
   getWhatsAppStats: (days) => axios.get(`${API}/whatsapp/stats${days ? `?days=${days}` : ''}`, { headers: getHeaders() }),
 
+  // ── Razorpay Integration ──────────────────────────────────────────
+  getRazorpayConfig: () => axios.get(`${API}/razorpay/config`, { headers: getHeaders() }),
+  updateRazorpayConfig: (data) => axios.put(`${API}/razorpay/config`, data, { headers: getHeaders() }),
+  createRazorpayAccount: () => axios.post(`${API}/razorpay/create-account`, {}, { headers: getHeaders() }),
+  getRazorpayFeePreview: (amount) => axios.get(`${API}/razorpay/fee-preview?amount=${amount}`, { headers: getHeaders() }),
+  createRazorpayOrder: (data) => axios.post(`${API}/razorpay/order`, data, { headers: getHeaders() }),
+  verifyRazorpayPayment: (data) => axios.post(`${API}/razorpay/verify`, data, { headers: getHeaders() }),
+
+  // ── Super Admin: Razorpay ─────────────────────────────────────────
+  getSuperAdminRazorpayStats: () => axios.get(`${API}/super-admin/razorpay/stats`, { headers: getHeaders() }),
+  getSuperAdminRazorpayConfig: (companyId) => axios.get(`${API}/super-admin/razorpay/config/${companyId}`, { headers: getHeaders() }),
+  updateSuperAdminRazorpayConfig: (companyId, data) => axios.put(`${API}/super-admin/razorpay/config/${companyId}`, data, { headers: getHeaders() }),
+  superAdminCreateRazorpayAccount: (companyId) => axios.post(`${API}/super-admin/razorpay/create-account/${companyId}`, {}, { headers: getHeaders() }),
+
   // ── Super Admin: Partner Integrations ────────────────────────────
   getSuperAdminWhatsAppStats: (days) => axios.get(`${API}/super-admin/whatsapp/stats${days ? `?days=${days}` : ''}`, { headers: getHeaders() }),
   getSuperAdminWhatsAppConfig: (companyId) => axios.get(`${API}/super-admin/whatsapp/config/${companyId}`, { headers: getHeaders() }),

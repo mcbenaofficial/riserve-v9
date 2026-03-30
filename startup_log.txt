@@ -1,0 +1,1411 @@
++ trap cleanup SIGINT SIGTERM
++ echo 'Starting Backend...'
+Starting Backend...
++ cd backend
++ source venv/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ '[' -n /bin/bash -o -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ '[' '!' nondestructive = nondestructive ']'
+++ VIRTUAL_ENV=/Users/joshualawrence/Documents/riserve-v9/backend/venv
+++ export VIRTUAL_ENV
+++ _OLD_VIRTUAL_PATH=/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/opt/podman/bin:/Users/joshualawrence/.antigravity/extensions/ms-python.debugpy-2025.18.0-darwin-arm64/bundled/scripts/noConfigScripts:/opt/podman/bin
+++ PATH=/Users/joshualawrence/Documents/riserve-v9/backend/venv/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/opt/podman/bin:/Users/joshualawrence/.antigravity/extensions/ms-python.debugpy-2025.18.0-darwin-arm64/bundled/scripts/noConfigScripts:/opt/podman/bin
+++ export PATH
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='(venv) '
+++ export PS1
+++ '[' -n /bin/bash -o -n '' ']'
+++ hash -r
++ BACKEND_PID=17796
++ cd ..
++ echo 'Starting Frontend on port 3001...'
+Starting Frontend on port 3001...
++ cd frontend
++ uvicorn server:app --host 0.0.0.0 --port 8000 --reload
++ FRONTEND_PID=17797
++ cd ..
++ echo 'Starting Customer Portal on port 3002...'
+Starting Customer Portal on port 3002...
++ cd customer-portal
++ PORT=3001
++ npm start
++ PORTAL_PID=17798
++ cd ..
++ echo 'Services started. Press Ctrl+C to stop.'
+Services started. Press Ctrl+C to stop.
++ PORT=3002
++ npm run dev
++ wait 17796 17797 17798
+INFO:     Will watch for changes in these directories: ['/Users/joshualawrence/Documents/riserve-v9/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [17796] using WatchFiles
+
+> frontend@0.1.0 start
+> craco start
+
+
+> customer-portal@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3002
+- Network:       http://192.168.88.7:3002
+✓ Ready in 284ms
+
+(node:17849) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17849) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+INFO:     Started server process [17800]
+INFO:     Waiting for application startup.
+2026-03-30 02:34:09,760 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-03-30 02:34:09,787 - server - ERROR - Error checking expired trials: password authentication failed for user "joshualawrence"
+2026-03-30 02:34:09,800 - server - ERROR - Error syncing slot config resources: password authentication failed for user "joshualawrence"
+INFO:     Application startup complete.
+2026-03-30 02:34:09,814 - server - ERROR - Error checking expired trials: password authentication failed for user "joshualawrence"
+Compiled successfully!
+
+You can now view frontend in the browser.
+
+  Local:            http://localhost:3001
+  On Your Network:  http://192.168.88.7:3001
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+INFO:     127.0.0.1:56229 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56232 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56234 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56236 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56238 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56239 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56229 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56232 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56234 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56238 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56229 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56232 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56239 - "GET /api/bookings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56234 - "GET /api/transactions HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56236 - "GET /api/reports HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56232 - "GET /api/auth/me HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56238 - "GET /api/outlets HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56229 - "GET /api/services HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56248 - "GET /api/bookings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56252 - "GET /api/reports HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56250 - "GET /api/transactions HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56258 - "GET /api/services HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56254 - "GET /api/auth/me HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     127.0.0.1:56256 - "GET /api/outlets HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 416, in app
+    solved_result = await solve_dependencies(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/dependencies/utils.py", line 648, in solve_dependencies
+    solved = await call(**solved_result.values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py", line 177, in get_current_user
+    result = await db_session.execute(stmt)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 2443, in connect
+    return await connect_utils._connect(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1218, in _connect
+    conn = await _connect_addr(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1054, in _connect_addr
+    return await __connect_addr(params, True, *args)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/asyncpg/connect_utils.py", line 1102, in __connect_addr
+    await connected
+asyncpg.exceptions.InvalidPasswordError: password authentication failed for user "joshualawrence"
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-30 02:36:21,675 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17800]
+INFO:     Stopping reloader process [17796]
+[?25h

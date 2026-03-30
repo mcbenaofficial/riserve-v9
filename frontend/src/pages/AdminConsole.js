@@ -24,7 +24,7 @@ import AdminPromotions from '../components/admin/AdminPromotions';
 import AdminBookingForm from '../components/admin/AdminBookingForm';
 import AdminMenuManagement from '../components/admin/AdminMenuManagement';
 import AdminPortalDesign from '../components/admin/AdminPortalDesign';
-import AdminWhatsApp from '../components/admin/AdminWhatsApp';
+
 
 const AdminConsole = () => {
   const [activeTab, setActiveTab] = useState('company');
@@ -81,7 +81,6 @@ const AdminConsole = () => {
   const integrationTabs = [
     { id: 'email', label: 'Email Notifications', icon: Mail, component: AdminEmail },
     { id: 'sms', label: 'SMS Notifications', icon: MessageSquare, component: AdminSMS },
-    { id: 'whatsapp', label: 'WhatsApp Notifications', icon: MessageCircle, component: AdminWhatsApp },
     { id: 'webhooks', label: 'Webhooks', icon: Webhook, component: AdminWebhooks },
     { id: 'automations', label: 'Automations', icon: Zap, component: AdminAutomations },
     { id: 'integrations', label: 'External Integrations', icon: Puzzle, component: AdminIntegrations },

@@ -1024,3 +1024,42 @@ class WhatsAppMessageLog(Base):
 
     company = relationship("Company", backref="whatsapp_logs")
 
+
+class RazorpayConfig(Base):
+    """Per-company Razorpay Route configuration — linked account + bank details"""
+    __tablename__ = "razorpay_configs"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String(36), ForeignKey("companies.id"), nullable=False, unique=True)
+    enabled = Column(Boolean, default=False)
+
+    # ── Primary details (entered by company admin) ──────────────────────────
+    linked_account_name = Column(String(255), nullable=True)
+    contact_number      = Column(String(50),  nullable=True)
+    email               = Column(String(255), nullable=True)
+
+    # ── Bank details (entered by company admin, stored encrypted in prod) ───
+    bank_account_number = Column(String(255), nullable=True)   # encrypt in prod
+    bank_account_type   = Column(String(50),  nullable=True)   # savings | current
+    ifsc_code           = Column(String(20),  nullable=True)
+    beneficiary_name    = Column(String(255), nullable=True)
+
+    # ── Razorpay API identifiers (set after linked account creation) ─────────
+    razorpay_account_id    = Column(String(100), nullable=True)  # acc_xxxx
+    razorpay_stakeholder_id = Column(String(100), nullable=True) # sth_xxxx
+    account_status         = Column(String(50), nullable=True, default="draft")
+    # draft | pending_verification | active | suspended | rejected
+
+    penny_test_status = Column(String(50), nullable=True, default="pending")
+    # pending | initiated | verified | failed
+
+    # ── Platform fee (set by super admin, shown read-only to company) ────────
+    platform_fee_pct  = Column(Float, nullable=False, default=1.75)  # % of service amount
+    # GST on platform fee is always 18% (Indian statutory rate)
+
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", backref="razorpay_config", uselist=False)
+

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   MessageCircle, Plus, ToggleLeft, ToggleRight, Pencil,
   Send, CheckCircle, XCircle, Clock, Eye, EyeOff, Save,
-  RefreshCw, AlertCircle, TrendingUp, Zap
+  RefreshCw, AlertCircle, TrendingUp, Zap, ChevronRight
 } from 'lucide-react';
 import { api } from '../../services/api';
 
@@ -34,7 +34,7 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-const AdminWhatsApp = () => {
+const AdminWhatsApp = ({ onBack }) => {
   const [config, setConfig] = useState(null);
   const [templates, setTemplates] = useState([]);
   const [logs, setLogs] = useState([]);
@@ -151,6 +151,14 @@ const AdminWhatsApp = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="p-2 rounded-xl transition-colors bg-white/50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-[#1F2630] text-gray-600 dark:text-[#7D8590] hover:text-gray-900 dark:hover:text-[#E6E8EB] border border-transparent dark:border-[#1F2630]"
+            >
+              <ChevronRight size={24} className="rotate-180" />
+            </button>
+          )}
           <div className="w-10 h-10 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
             <MessageCircle size={20} className="text-green-600 dark:text-green-400" />
           </div>
