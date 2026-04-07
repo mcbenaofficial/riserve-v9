@@ -10,27 +10,31 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Badge } from '../ui/badge';
 
+const kpiGradients = {
+  teal:   '#11998e 0%, #38ef7d 100%',
+  blue:   '#5FA8D3 0%, #4A95C0 100%',
+  purple: '#667eea 0%, #764ba2 100%',
+  red:    '#f093fb 0%, #f5576c 100%',
+  amber:  '#f6d365 0%, #fda085 100%',
+  cyan:   '#43e97b 0%, #38f9d7 100%',
+};
+
 const KPICard = ({ title, value, icon: Icon, trend, color, subtitle }) => {
-  const colorMap = {
-    teal:   'bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20',
-    blue:   'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-    purple: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
-    red:    'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
-    amber:  'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-    cyan:   'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20',
-  };
-  const c = colorMap[color] || colorMap.teal;
+  const gradient = kpiGradients[color] || kpiGradients.teal;
 
   return (
-    <Card className="glass-panel glass-panel-hover border-0 group transition-all hover:scale-[1.02]">
-      <CardContent className="p-5 space-y-3">
+    <div
+      className="relative overflow-hidden rounded-3xl p-5 shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl"
+      style={{ background: `linear-gradient(135deg, ${gradient})` }}
+    >
+      <div className="relative z-10 space-y-3">
         <div className="flex items-center justify-between">
-          <div className={`w-9 h-9 rounded-lg ${c} border flex items-center justify-center`}>
-            <Icon size={17} />
+          <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
+            <Icon size={17} className="text-white" strokeWidth={2} />
           </div>
           {trend !== null && trend !== undefined && (
             <span className={`flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-              trend > 0 ? 'text-green-600 dark:text-green-400 bg-green-500/10' : 'text-red-500 bg-red-500/10'
+              trend > 0 ? 'text-white bg-white/20' : 'text-white bg-black/20'
             }`}>
               {trend > 0 ? <ArrowUpRight size={10} className="mr-0.5" /> : <ArrowDownRight size={10} className="mr-0.5" />}
               {Math.abs(trend)}%
@@ -38,12 +42,13 @@ const KPICard = ({ title, value, icon: Icon, trend, color, subtitle }) => {
           )}
         </div>
         <div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{value}</div>
-          <div className="text-xs text-muted-foreground">{title}</div>
+          <div className="text-2xl font-bold text-white drop-shadow tracking-tight">{value}</div>
+          <div className="text-xs text-white/70 font-medium">{title}</div>
         </div>
-        {subtitle && <div className="text-[10px] text-muted-foreground/70">{subtitle}</div>}
-      </CardContent>
-    </Card>
+        {subtitle && <div className="text-[10px] text-white/50">{subtitle}</div>}
+      </div>
+      <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
+    </div>
   );
 };
 

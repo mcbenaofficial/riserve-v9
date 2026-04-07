@@ -1,0 +1,12 @@
+
+> customer-portal@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3002
+- Network:       http://192.168.88.4:3002
+✓ Ready in 368ms
+
+ GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 1490ms (next.js: 911ms, application-code: 579ms)
+ GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc/cart 200 in 472ms (next.js: 431ms, application-code: 42ms)
+ GET /order/b1d5a6ed-f33a-497b-86c6-f0fb5f16199d 200 in 389ms (next.js: 333ms, application-code: 56ms)
