@@ -9,15 +9,63 @@ interface MenuItem {
   price: number;
   category: string;
   image_url: string | null;
+  image_urls: string[];
+  icon: string | null;
   available: boolean;
   is_veg: boolean;
+}
+
+interface CategoryInfo {
+  name: string;
+  icon: string | null;
+  display_order: number;
 }
 
 interface CartItem extends MenuItem {
   quantity: number;
 }
 
-// ─── Veg / Non-Veg Badge ─────────────────────────────────────
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
+// ─── Resolve display image/icon for a menu item ──────────────────────────────
+// Priority: item photo > item icon > category icon
+function resolveItemVisual(item: MenuItem, catIcon?: string | null): { type: 'img'; src: string } | { type: 'emoji'; value: string } | null {
+  // 1. Item has uploaded photo
+  const photo = item.image_urls?.[0] || item.image_url;
+  if (photo) {
+    const src = photo.startsWith('/') ? `${BACKEND_URL}${photo}` : photo;
+    return { type: 'img', src };
+  }
+  // 2. Item has an icon
+  if (item.icon) {
+    if (item.icon.startsWith('/') || item.icon.startsWith('http')) {
+      const src = item.icon.startsWith('/') ? `${BACKEND_URL}${item.icon}` : item.icon;
+      return { type: 'img', src };
+    }
+    return { type: 'emoji', value: item.icon };
+  }
+  // 3. Category icon
+  if (catIcon) {
+    if (catIcon.startsWith('/') || catIcon.startsWith('http')) {
+      const src = catIcon.startsWith('/') ? `${BACKEND_URL}${catIcon}` : catIcon;
+      return { type: 'img', src };
+    }
+    return { type: 'emoji', value: catIcon };
+  }
+  return null;
+}
+
+// ─── Category icon display ────────────────────────────────────────────────────
+const CatIcon = ({ icon, size = 20 }: { icon: string | null; size?: number }) => {
+  if (!icon) return null;
+  if (icon.startsWith('/') || icon.startsWith('http')) {
+    const src = icon.startsWith('/') ? `${BACKEND_URL}${icon}` : icon;
+    return <img src={src} alt="" style={{ width: size, height: size }} className="object-cover rounded-md shrink-0" />;
+  }
+  return <span style={{ fontSize: size * 0.9, lineHeight: 1 }}>{icon}</span>;
+};
+
+// ─── Veg / Non-Veg Badge ─────────────────────────────────────────────────────
 const VegBadge = ({ isVeg, size = 'md' }: { isVeg: boolean; size?: 'sm' | 'md' }) => {
   const s = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
   const d = size === 'sm' ? 'w-2 h-2' : 'w-2.5 h-2.5';
@@ -28,7 +76,7 @@ const VegBadge = ({ isVeg, size = 'md' }: { isVeg: boolean; size?: 'sm' | 'md' }
   );
 };
 
-// ─── Add / Quantity Control ──────────────────────────────────
+// ─── Add / Quantity Control ──────────────────────────────────────────────────
 const AddButton = ({ qty, onAdd, onRemove, primaryColor, size = 'md' }: { qty: number; onAdd: () => void; onRemove: () => void; primaryColor: string; size?: 'sm' | 'md' }) => {
   if (qty === 0) {
     return (
@@ -50,72 +98,96 @@ const AddButton = ({ qty, onAdd, onRemove, primaryColor, size = 'md' }: { qty: n
   );
 };
 
-// ─── Classic Card ────────────────────────────────────────────
-const ClassicCard = ({ item, qty, onAdd, onRemove, primaryColor, BACKEND }: any) => (
-  <div className="bg-white rounded-2xl border border-gray-100 p-4 flex gap-4 hover:shadow-lg hover:border-gray-200 transition-all group">
-    <div className="w-28 h-28 rounded-xl overflow-hidden shrink-0 bg-gray-100 relative">
-      {item.image_url ? (
-        <img src={item.image_url.startsWith('/') ? `${BACKEND}${item.image_url}` : item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+// ─── Visual slot (shared by all card types) ───────────────────────────────────
+const ItemVisual = ({ visual, name, size = 'md' }: { visual: ReturnType<typeof resolveItemVisual>; name: string; size?: 'sm' | 'md' | 'lg' }) => {
+  const dim = size === 'lg' ? 'w-28 h-28' : size === 'md' ? 'w-20 h-20' : 'w-10 h-10';
+  const emojiSize = size === 'lg' ? 'text-5xl' : size === 'md' ? 'text-4xl' : 'text-2xl';
+  return (
+    <div className={`${dim} rounded-xl overflow-hidden shrink-0 bg-gray-100 relative`}>
+      {visual?.type === 'img' ? (
+        <img src={visual.src} alt={name} className="w-full h-full object-cover" />
+      ) : visual?.type === 'emoji' ? (
+        <div className={`w-full h-full flex items-center justify-center ${emojiSize}`}>{visual.value}</div>
       ) : (
         <div className="w-full h-full flex items-center justify-center text-4xl opacity-20">🍽️</div>
       )}
-      <div className="absolute top-1.5 left-1.5"><VegBadge isVeg={item.is_veg} /></div>
     </div>
-    <div className="flex-1 flex flex-col justify-between min-w-0">
-      <div>
-        <h3 className="font-bold text-gray-900 text-base leading-tight truncate">{item.name}</h3>
-        {item.description && <p className="text-gray-400 text-xs mt-1 line-clamp-2 leading-relaxed">{item.description}</p>}
-      </div>
-      <div className="flex items-center justify-between mt-3">
-        <span className="font-black text-lg" style={{ color: primaryColor }}>₹{item.price}</span>
-        <AddButton qty={qty} onAdd={() => onAdd(item)} onRemove={() => onRemove(item.id)} primaryColor={primaryColor} />
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
-// ─── Compact Row ─────────────────────────────────────────────
-const CompactRow = ({ item, qty, onAdd, onRemove, primaryColor }: any) => (
-  <div className="flex items-center justify-between py-3 px-4 bg-white border-b border-gray-50 hover:bg-gray-50/50 transition-colors group">
-    <div className="flex items-center gap-3 flex-1 min-w-0">
-      <VegBadge isVeg={item.is_veg} size="sm" />
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-gray-900 text-sm truncate">{item.name}</h3>
-        {item.description && <p className="text-gray-400 text-[11px] truncate mt-0.5">{item.description}</p>}
+// ─── Classic Card ────────────────────────────────────────────────────────────
+const ClassicCard = ({ item, qty, onAdd, onRemove, primaryColor, secondaryColor, textColor, catIcon }: any) => {
+  const visual = resolveItemVisual(item, catIcon);
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 flex gap-4 hover:shadow-lg hover:border-gray-200 transition-all group">
+      <div className="relative shrink-0">
+        <ItemVisual visual={visual} name={item.name} size="lg" />
+        <div className="absolute top-1.5 left-1.5"><VegBadge isVeg={item.is_veg} /></div>
+      </div>
+      <div className="flex-1 flex flex-col justify-between min-w-0">
+        <div>
+          <h3 className="font-bold text-base leading-tight truncate" style={{ color: textColor }}>{item.name}</h3>
+          {item.description && <p className="text-xs mt-1 line-clamp-2 leading-relaxed" style={{ color: textColor, opacity: 0.5 }}>{item.description}</p>}
+        </div>
+        <div className="flex items-center justify-between mt-3">
+          <span className="font-black text-lg" style={{ color: secondaryColor }}>₹{item.price}</span>
+          <AddButton qty={qty} onAdd={() => onAdd(item)} onRemove={() => onRemove(item.id)} primaryColor={primaryColor} />
+        </div>
       </div>
     </div>
-    <div className="flex items-center gap-4 shrink-0 ml-3">
-      <span className="font-black text-sm" style={{ color: primaryColor }}>₹{item.price}</span>
-      <AddButton qty={qty} onAdd={() => onAdd(item)} onRemove={() => onRemove(item.id)} primaryColor={primaryColor} size="sm" />
-    </div>
-  </div>
-);
+  );
+};
 
-// ─── Grid Tile ───────────────────────────────────────────────
-const GridTile = ({ item, qty, onAdd, onRemove, primaryColor, BACKEND }: any) => (
-  <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-gray-200 transition-all group">
-    <div className="aspect-square relative overflow-hidden bg-gray-100">
-      {item.image_url ? (
-        <img src={item.image_url.startsWith('/') ? `${BACKEND}${item.image_url}` : item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center text-5xl opacity-15 bg-gradient-to-b from-gray-50 to-gray-100">🍽️</div>
-      )}
-      <div className="absolute top-2 left-2"><VegBadge isVeg={item.is_veg} /></div>
-      {/* Quick add overlay */}
-      <div className="absolute bottom-2 right-2">
+// ─── Compact Row ─────────────────────────────────────────────────────────────
+const CompactRow = ({ item, qty, onAdd, onRemove, primaryColor, secondaryColor, textColor, catIcon }: any) => {
+  const visual = resolveItemVisual(item, catIcon);
+  return (
+    <div className="flex items-center justify-between py-3 px-4 bg-white border-b border-gray-50 hover:bg-gray-50/50 transition-colors group">
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        <VegBadge isVeg={item.is_veg} size="sm" />
+        {visual && <ItemVisual visual={visual} name={item.name} size="sm" />}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-sm truncate" style={{ color: textColor }}>{item.name}</h3>
+          {item.description && <p className="text-[11px] truncate mt-0.5" style={{ color: textColor, opacity: 0.5 }}>{item.description}</p>}
+        </div>
+      </div>
+      <div className="flex items-center gap-4 shrink-0 ml-3">
+        <span className="font-black text-sm" style={{ color: secondaryColor }}>₹{item.price}</span>
         <AddButton qty={qty} onAdd={() => onAdd(item)} onRemove={() => onRemove(item.id)} primaryColor={primaryColor} size="sm" />
       </div>
     </div>
-    <div className="p-3">
-      <h3 className="font-bold text-gray-900 text-sm truncate">{item.name}</h3>
-      {item.description && <p className="text-gray-400 text-[11px] truncate mt-0.5">{item.description}</p>}
-      <p className="font-black text-base mt-1.5" style={{ color: primaryColor }}>₹{item.price}</p>
-    </div>
-  </div>
-);
+  );
+};
 
-// ─── Accordion Category ─────────────────────────────────────
-const AccordionCategory = ({ cat, items, getCartQuantity, addToCart, removeFromCart, primaryColor, BACKEND, defaultOpen }: any) => {
+// ─── Grid Tile ───────────────────────────────────────────────────────────────
+const GridTile = ({ item, qty, onAdd, onRemove, primaryColor, secondaryColor, textColor, catIcon }: any) => {
+  const visual = resolveItemVisual(item, catIcon);
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-gray-200 transition-all group">
+      <div className="aspect-square relative overflow-hidden bg-gray-100">
+        {visual?.type === 'img' ? (
+          <img src={visual.src} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        ) : visual?.type === 'emoji' ? (
+          <div className="w-full h-full flex items-center justify-center text-6xl bg-gradient-to-b from-gray-50 to-gray-100">{visual.value}</div>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-5xl opacity-15 bg-gradient-to-b from-gray-50 to-gray-100">🍽️</div>
+        )}
+        <div className="absolute top-2 left-2"><VegBadge isVeg={item.is_veg} /></div>
+        <div className="absolute bottom-2 right-2">
+          <AddButton qty={qty} onAdd={() => onAdd(item)} onRemove={() => onRemove(item.id)} primaryColor={primaryColor} size="sm" />
+        </div>
+      </div>
+      <div className="p-3">
+        <h3 className="font-bold text-sm truncate" style={{ color: textColor }}>{item.name}</h3>
+        {item.description && <p className="text-[11px] truncate mt-0.5" style={{ color: textColor, opacity: 0.5 }}>{item.description}</p>}
+        <p className="font-black text-base mt-1.5" style={{ color: secondaryColor }}>₹{item.price}</p>
+      </div>
+    </div>
+  );
+};
+
+// ─── Accordion Category ─────────────────────────────────────────────────────
+const AccordionCategory = ({ cat, catIcon, items, getCartQuantity, addToCart, removeFromCart, primaryColor, secondaryColor, textColor, defaultOpen }: any) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all">
@@ -124,8 +196,12 @@ const AccordionCategory = ({ cat, items, getCartQuantity, addToCart, removeFromC
         className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50/50 transition-colors"
       >
         <div className="flex items-center gap-3">
-          <span className="w-1.5 h-6 rounded-full" style={{ backgroundColor: primaryColor }} />
-          <h2 className="font-black text-gray-800 text-base">{cat}</h2>
+          {catIcon ? (
+            <CatIcon icon={catIcon} size={22} />
+          ) : (
+            <span className="w-1.5 h-6 rounded-full" style={{ backgroundColor: primaryColor }} />
+          )}
+          <h2 className="font-black text-base" style={{ color: textColor }}>{cat}</h2>
           <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{items.length}</span>
         </div>
         <svg
@@ -139,22 +215,19 @@ const AccordionCategory = ({ cat, items, getCartQuantity, addToCart, removeFromC
         <div className="border-t border-gray-50">
           {items.map((item: MenuItem) => {
             const qty = getCartQuantity(item.id);
+            const visual = resolveItemVisual(item, catIcon);
             return (
               <div key={item.id} className="flex items-center justify-between px-5 py-3 border-b border-gray-50 last:border-b-0 hover:bg-gray-50/30 transition-colors">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <VegBadge isVeg={item.is_veg} size="sm" />
-                  {item.image_url && (
-                    <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
-                      <img src={item.image_url.startsWith('/') ? `${BACKEND}${item.image_url}` : item.image_url} alt={item.name} className="w-full h-full object-cover" />
-                    </div>
-                  )}
+                  {visual && <ItemVisual visual={visual} name={item.name} size="sm" />}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 text-sm truncate">{item.name}</h3>
-                    {item.description && <p className="text-gray-400 text-[11px] truncate">{item.description}</p>}
+                    <h3 className="font-semibold text-sm truncate" style={{ color: textColor }}>{item.name}</h3>
+                    {item.description && <p className="text-[11px] truncate" style={{ color: textColor, opacity: 0.5 }}>{item.description}</p>}
                   </div>
                 </div>
                 <div className="flex items-center gap-4 shrink-0 ml-3">
-                  <span className="font-black text-sm" style={{ color: primaryColor }}>₹{item.price}</span>
+                  <span className="font-black text-sm" style={{ color: secondaryColor }}>₹{item.price}</span>
                   <AddButton qty={qty} onAdd={() => addToCart(item)} onRemove={() => removeFromCart(item.id)} primaryColor={primaryColor} size="sm" />
                 </div>
               </div>
@@ -172,12 +245,14 @@ export default function MenuClient({
   outlet,
   company,
   categories,
+  category_info,
   items,
 }: {
   outletId: string;
   outlet: any;
   company: any;
   categories: Record<string, MenuItem[]>;
+  category_info?: CategoryInfo[];
   items: MenuItem[];
 }) {
   const [search, setSearch] = useState('');
@@ -187,10 +262,22 @@ export default function MenuClient({
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const categoryNavRef = useRef<HTMLDivElement>(null);
 
+  // Build category icon lookup
+  const catIconMap: Record<string, string | null> = {};
+  if (category_info) {
+    for (const ci of category_info) catIconMap[ci.name] = ci.icon;
+  }
+
   const colors = outlet?.portal_color_scheme || {};
   const primaryColor = colors.primary || '#1A1A1A';
-  const accentColor = colors.secondary || '#F59E0B';
+  const secondaryColor = colors.secondary || colors.primary || '#F59E0B';
+  const bgColor = colors.bgColor || '#FAFAFA';
+  const textColor = colors.textColor || '#1A1A1A';
+  const fontFamily = colors.fontFamily || 'Inter';
   const menuLayout = colors.menuLayout || 'classic';
+  const heroImageUrl = colors.heroImage
+    ? (colors.heroImage.startsWith('/') ? `${BACKEND_URL}${colors.heroImage}` : colors.heroImage)
+    : null;
 
   // Filter items
   const filteredCategories: Record<string, MenuItem[]> = {};
@@ -236,7 +323,7 @@ export default function MenuClient({
   const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0);
   const totalPrice = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
 
-  // Intersection observer for active category (not used in accordion mode)
+  // Intersection observer for active category
   useEffect(() => {
     if (menuLayout === 'accordion') return;
     const observer = new IntersectionObserver(
@@ -249,7 +336,6 @@ export default function MenuClient({
       },
       { rootMargin: '-120px 0px -60% 0px', threshold: 0.1 }
     );
-
     for (const ref of Object.values(categoryRefs.current)) {
       if (ref) observer.observe(ref);
     }
@@ -261,9 +347,6 @@ export default function MenuClient({
     sessionStorage.setItem(`cart_${outletId}`, JSON.stringify(cart));
   }, [cart, outletId]);
 
-  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-
-  // Grid classes per layout
   const gridClass = menuLayout === 'grid'
     ? 'grid grid-cols-2 md:grid-cols-3 gap-3'
     : menuLayout === 'compact'
@@ -271,17 +354,29 @@ export default function MenuClient({
     : 'grid grid-cols-1 md:grid-cols-2 gap-4';
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="min-h-screen" style={{ backgroundColor: bgColor, fontFamily: `${fontFamily}, system-ui, sans-serif` }}>
+      {/* Font import */}
+      <style dangerouslySetInnerHTML={{ __html: `@import url('https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}:wght@300;400;500;600;700;900&display=swap');` }} />
+
       {/* Hero Header */}
-      <div className="relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}dd)` }}>
+      <div className="relative overflow-hidden">
+        {heroImageUrl ? (
+          <>
+            <img src={heroImageUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${primaryColor}E6, ${primaryColor}B3)` }} />
+          </>
+        ) : (
+          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}dd)` }} />
+        )}
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
         <div className="relative container mx-auto px-4 py-8 md:py-12">
           <div className="flex items-center gap-4 mb-4">
             {outlet?.portal_logo_url && (
               <img
-                src={outlet.portal_logo_url.startsWith('/') ? `${BACKEND}${outlet.portal_logo_url}` : outlet.portal_logo_url}
+                src={outlet.portal_logo_url.startsWith('/') ? `${BACKEND_URL}${outlet.portal_logo_url}` : outlet.portal_logo_url}
                 alt="Logo"
-                className="w-14 h-14 rounded-2xl bg-white p-1.5 shadow-lg object-contain"
+                className="w-14 h-14 rounded-2xl object-cover"
+                style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.35))' }}
               />
             )}
             <div>
@@ -335,20 +430,27 @@ export default function MenuClient({
             className="container mx-auto px-4 flex gap-1 overflow-x-auto py-3 scrollbar-hide"
             style={{ scrollbarWidth: 'none' }}
           >
-            {categoryNames.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => scrollToCategory(cat)}
-                className={`whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all shrink-0 ${
-                  activeCategory === cat
-                    ? 'text-white shadow-md scale-105'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-                }`}
-                style={activeCategory === cat ? { backgroundColor: primaryColor } : {}}
-              >
-                {cat}
-              </button>
-            ))}
+            {categoryNames.map((cat) => {
+              const icon = catIconMap[cat];
+              const isActive = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => scrollToCategory(cat)}
+                  className={`whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all shrink-0 ${
+                    isActive ? 'text-white shadow-md scale-105' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  }`}
+                  style={isActive ? { backgroundColor: primaryColor } : {}}
+                >
+                  {icon && (
+                    icon.startsWith('/') || icon.startsWith('http')
+                      ? <img src={icon.startsWith('/') ? `${BACKEND_URL}${icon}` : icon} alt="" className="w-4 h-4 rounded object-cover" />
+                      : <span className="text-base leading-none">{icon}</span>
+                  )}
+                  {cat}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
@@ -369,49 +471,56 @@ export default function MenuClient({
               <AccordionCategory
                 key={cat}
                 cat={cat}
+                catIcon={catIconMap[cat] ?? null}
                 items={filteredCategories[cat]}
                 getCartQuantity={getCartQuantity}
                 addToCart={addToCart}
                 removeFromCart={removeFromCart}
                 primaryColor={primaryColor}
-                BACKEND={BACKEND}
+                secondaryColor={secondaryColor}
+                textColor={textColor}
                 defaultOpen={idx === 0}
               />
             ))}
           </div>
         ) : (
           /* ─── CLASSIC / COMPACT / GRID LAYOUTS ─── */
-          categoryNames.map((cat) => (
-            <div
-              key={cat}
-              ref={(el) => { categoryRefs.current[cat] = el; }}
-              data-category={cat}
-              className="mb-8 scroll-mt-20"
-            >
-              <h2 className="text-xl font-black text-gray-800 mb-4 flex items-center gap-3">
-                <span className="w-1.5 h-8 rounded-full" style={{ backgroundColor: primaryColor }} />
-                {cat}
-                <span className="text-sm font-medium text-gray-400 ml-1">
-                  ({filteredCategories[cat].length})
-                </span>
-              </h2>
+          categoryNames.map((cat) => {
+            const catIcon = catIconMap[cat] ?? null;
+            return (
+              <div
+                key={cat}
+                ref={(el) => { categoryRefs.current[cat] = el; }}
+                data-category={cat}
+                className="mb-8 scroll-mt-20"
+              >
+                <h2 className="text-xl font-black mb-4 flex items-center gap-3" style={{ color: textColor }}>
+                  {catIcon ? (
+                    <CatIcon icon={catIcon} size={24} />
+                  ) : (
+                    <span className="w-1.5 h-8 rounded-full inline-block" style={{ backgroundColor: primaryColor }} />
+                  )}
+                  {cat}
+                  <span className="text-sm font-medium text-gray-400 ml-1">
+                    ({filteredCategories[cat].length})
+                  </span>
+                </h2>
 
-              <div className={gridClass}>
-                {filteredCategories[cat].map((item) => {
-                  const qty = getCartQuantity(item.id);
-
-                  if (menuLayout === 'compact') {
-                    return <CompactRow key={item.id} item={item} qty={qty} onAdd={addToCart} onRemove={removeFromCart} primaryColor={primaryColor} />;
-                  }
-                  if (menuLayout === 'grid') {
-                    return <GridTile key={item.id} item={item} qty={qty} onAdd={addToCart} onRemove={removeFromCart} primaryColor={primaryColor} BACKEND={BACKEND} />;
-                  }
-                  // Classic (default)
-                  return <ClassicCard key={item.id} item={item} qty={qty} onAdd={addToCart} onRemove={removeFromCart} primaryColor={primaryColor} BACKEND={BACKEND} />;
-                })}
+                <div className={gridClass}>
+                  {filteredCategories[cat].map((item) => {
+                    const qty = getCartQuantity(item.id);
+                    if (menuLayout === 'compact') {
+                      return <CompactRow key={item.id} item={item} qty={qty} onAdd={addToCart} onRemove={removeFromCart} primaryColor={primaryColor} secondaryColor={secondaryColor} textColor={textColor} catIcon={catIcon} />;
+                    }
+                    if (menuLayout === 'grid') {
+                      return <GridTile key={item.id} item={item} qty={qty} onAdd={addToCart} onRemove={removeFromCart} primaryColor={primaryColor} secondaryColor={secondaryColor} textColor={textColor} catIcon={catIcon} />;
+                    }
+                    return <ClassicCard key={item.id} item={item} qty={qty} onAdd={addToCart} onRemove={removeFromCart} primaryColor={primaryColor} secondaryColor={secondaryColor} textColor={textColor} catIcon={catIcon} />;
+                  })}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 

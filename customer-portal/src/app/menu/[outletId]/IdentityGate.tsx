@@ -76,13 +76,11 @@ export default function IdentityGate({ outletId, outlet, company, children }: Id
         {/* Logo + Name */}
         <div className="text-center mb-8">
           {outlet?.portal_logo_url && (
-            <div className="w-20 h-20 mx-auto rounded-2xl bg-white shadow-xl flex items-center justify-center p-3 mb-4 border border-gray-100">
-              <img
-                src={outlet.portal_logo_url.startsWith('/') ? `${BACKEND}${outlet.portal_logo_url}` : outlet.portal_logo_url}
-                alt="Logo"
-                className="max-w-full max-h-full object-contain"
-              />
-            </div>
+            <img
+              src={outlet.portal_logo_url.startsWith('/') ? `${BACKEND}${outlet.portal_logo_url}` : outlet.portal_logo_url}
+              alt="Logo"
+              className="w-20 h-20 mx-auto object-contain mb-4"
+            />
           )}
           <h1 className="text-3xl font-black tracking-tight mb-1" style={{ color: textColor }}>
             {company?.name || 'Welcome'}

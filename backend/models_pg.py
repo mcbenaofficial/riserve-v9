@@ -68,6 +68,7 @@ class Company(Base):
     settings = relationship("CompanySetting", back_populates="company", uselist=False)
     products = relationship("Product", back_populates="company")
     suppliers = relationship("Supplier", back_populates="company")
+    menu_categories = relationship("MenuCategory", back_populates="company")
     menu_items = relationship("MenuItem", back_populates="company")
     restaurant_orders = relationship("RestaurantOrder", back_populates="company")
 
@@ -932,6 +933,24 @@ class BriefingSchedule(Base):
 
 # ─── Restaurant Orders & Menu ─────────────────────────────────────────
 
+class MenuCategory(Base):
+    """User-defined menu categories with optional icons and display ordering."""
+    __tablename__ = "menu_categories"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='CASCADE'), nullable=True)
+    name = Column(String(100), nullable=False)
+    icon = Column(Text, nullable=True)  # emoji char or /uploads/... URL
+    display_order = Column(Integer, default=0)
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", back_populates="menu_categories")
+
+
 class MenuItem(Base):
     """Menu items for restaurant/café outlets."""
     __tablename__ = "menu_items"
@@ -945,6 +964,7 @@ class MenuItem(Base):
     price = Column(Numeric(10, 2), default=0)
     image_url = Column(Text, nullable=True) # Legacy single image
     image_urls = Column(JSONB, default=list) # Array of image paths
+    icon = Column(Text, nullable=True)  # emoji char or /uploads/... URL (fallback when no photo)
     inventory_product_id = Column(String, ForeignKey("products.id", ondelete='SET NULL'), nullable=True)
     inventory_linked = Column(Boolean, default=False)
     available = Column(Boolean, default=True)

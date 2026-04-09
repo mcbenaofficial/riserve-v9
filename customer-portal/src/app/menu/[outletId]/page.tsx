@@ -35,11 +35,12 @@ export default async function MenuPage({ params }: { params: Promise<{ outletId:
       outlet={menuData.outlet}
       company={menuData.company}
     >
-      <MenuClient 
+      <MenuClient
         outletId={outletId}
         outlet={menuData.outlet}
         company={menuData.company}
         categories={menuData.categories}
+        category_info={menuData.category_info}
         items={menuData.items}
       />
     </IdentityGate>

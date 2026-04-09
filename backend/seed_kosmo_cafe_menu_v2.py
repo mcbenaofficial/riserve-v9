@@ -9,16 +9,50 @@ from sqlalchemy import delete
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from database_pg import engine
-from models_pg import MenuItem, Company, Outlet
+from models_pg import MenuItem, MenuCategory
 
 # Verified IDs
 COMPANY_ID = '3821aa11-8386-452d-b6be-174ef77d1970'
 OUTLET_ID = '36e8bc27-f972-4859-9f99-459ecece81fc'
 
-# Image relative paths (served via /uploads mount)
-BEVERAGES_IMG = "/uploads/kosmo_beverages.png"
-SNACKS_IMG = "/uploads/kosmo_snacks.png"
-MAIN_IMG = "/uploads/kosmo_main.png"
+# Fluent Emoji 3D icon URLs
+F = 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets'
+
+# Category definitions: (name, icon_url, display_order)
+CATEGORIES = [
+    ("Beverages - Cold",        f"{F}/Cup%20with%20straw/3D/cup_with_straw_3d.png",                     0),
+    ("Beverages - Hot",         f"{F}/Hot%20beverage/3D/hot_beverage_3d.png",                           1),
+    ("Veg Snacks",              f"{F}/French%20fries/3D/french_fries_3d.png",                           2),
+    ("Veg Sandwich & Burger",   f"{F}/Sandwich/3D/sandwich_3d.png",                                     3),
+    ("Souvlaki Pita",           f"{F}/Burrito/3D/burrito_3d.png",                                       4),
+    ("Veg Pasta",               f"{F}/Spaghetti/3D/spaghetti_3d.png",                                   5),
+    ("Chicken Snacks",          f"{F}/Poultry%20leg/3D/poultry_leg_3d.png",                             6),
+    ("Shrimp Snacks",           f"{F}/Shrimp/3D/shrimp_3d.png",                                         7),
+    ("Omelette",                f"{F}/Cooking/3D/cooking_3d.png",                                       8),
+    ("Chicken Sandwich & Burger", f"{F}/Hamburger/3D/hamburger_3d.png",                                 9),
+    ("Chicken Pasta",           f"{F}/Spaghetti/3D/spaghetti_3d.png",                                  10),
+]
+
+# Per-item icon overrides — items distinctive enough to get their own icon
+ITEM_ICONS = {
+    "Cold Coffee":                      f"{F}/Hot%20beverage/3D/hot_beverage_3d.png",
+    "Tender Coconut Milkshake":         f"{F}/Coconut/3D/coconut_3d.png",
+    "Blueberry Cheesecake Thickshake":  f"{F}/Blueberries/3D/blueberries_3d.png",
+    "Peach Iced Tea":                   f"{F}/Peach/3D/peach_3d.png",
+    "Filter Coffee":                    f"{F}/Hot%20beverage/3D/hot_beverage_3d.png",
+    "Broccoli Cheese Bites":            f"{F}/Broccoli/3D/broccoli_3d.png",
+    "Cheese Garlic Bread":              f"{F}/Baguette%20bread/3D/baguette_bread_3d.png",
+    "Mushroom Sandwich":                f"{F}/Mushroom/3D/mushroom_3d.png",
+    "Pesto Mushroom Sandwich":          f"{F}/Mushroom/3D/mushroom_3d.png",
+    "Alfredo Penne Pasta":              f"{F}/Spaghetti/3D/spaghetti_3d.png",
+    "Baked Mac & Cheese":               f"{F}/Cheese%20wedge/3D/cheese_wedge_3d.png",
+    "Smoked BBQ Wings":                 f"{F}/Poultry%20leg/3D/poultry_leg_3d.png",
+    "Crispy Fried Finger Prawn":        f"{F}/Shrimp/3D/shrimp_3d.png",
+    "Butter Garlic Prawn":              f"{F}/Shrimp/3D/shrimp_3d.png",
+    "Crispy Dynamite Shrimp":           f"{F}/Shrimp/3D/shrimp_3d.png",
+    "Mushroom Cheese Omelette":         f"{F}/Mushroom/3D/mushroom_3d.png",
+    "Egg White Omelette":               f"{F}/Egg/3D/egg_3d.png",
+}
 
 MENU_DATA = [
     # --- BEVERAGES: COLD ---
@@ -132,25 +166,42 @@ MENU_DATA = [
 
 async def seed_menu():
     print(f"🚀 Starting menu seeding for {COMPANY_ID}...")
-    
-    async with AsyncSession(engine) as session:
-        # 1. Clear existing menu items for this outlet to avoid duplicates
-        await session.execute(delete(MenuItem).where(MenuItem.outlet_id == OUTLET_ID))
-        await session.commit()
-        print(f"🧹 Cleared existing menu items for outlet {OUTLET_ID}")
 
-        # 2. Add New Items
+    async with AsyncSession(engine) as session:
+        # 1. Clear existing menu items and categories for this outlet
+        await session.execute(delete(MenuItem).where(MenuItem.outlet_id == OUTLET_ID))
+        await session.execute(
+            delete(MenuCategory).where(
+                MenuCategory.company_id == COMPANY_ID,
+                MenuCategory.outlet_id == OUTLET_ID,
+            )
+        )
+        await session.commit()
+        print(f"🧹 Cleared existing menu items and categories for outlet {OUTLET_ID}")
+
+        # 2. Seed menu categories with icons
+        for name, icon_url, order in CATEGORIES:
+            session.add(MenuCategory(
+                company_id=COMPANY_ID,
+                outlet_id=OUTLET_ID,
+                name=name,
+                icon=icon_url,
+                display_order=order,
+                active=True,
+            ))
+        await session.commit()
+        print(f"✅ Seeded {len(CATEGORIES)} menu categories with icons")
+
+        # 3. Seed menu items
+        # Build category name → icon URL lookup for fallback
+        cat_icon_map = {name: icon_url for name, icon_url, _ in CATEGORIES}
+
+        NON_VEG_KEYWORDS = ["Chicken", "Shrimp", "Omelette"]
         items_to_add = []
         for i, data in enumerate(MENU_DATA):
-            # Assignment of hero images based on category
-            img = BEVERAGES_IMG
-            if "Snacks" in data["category"] or "Burger" in data["category"] or "Sandwich" in data["category"]:
-                img = SNACKS_IMG
-            if "Pasta" in data["category"] or "Main" in data["category"]:
-                img = MAIN_IMG
+            # Resolve icon: item-specific override > category icon
+            item_icon = ITEM_ICONS.get(data["name"]) or cat_icon_map.get(data["category"])
 
-            # Determine is_veg based on category
-            NON_VEG_KEYWORDS = ["Chicken", "Shrimp", "Omelette"]
             is_veg = not any(kw in data["category"] for kw in NON_VEG_KEYWORDS)
 
             item = MenuItem(
@@ -160,15 +211,16 @@ async def seed_menu():
                 name=data["name"],
                 description=data["description"],
                 price=Decimal(str(data["price"])),
-                image_url=img,  # Single image for now
-                image_urls=[img],
+                image_url=item_icon,
+                image_urls=[item_icon] if item_icon else [],
+                icon=item_icon,
                 available=True,
                 active=True,
                 is_veg=is_veg,
-                display_order=i
+                display_order=i,
             )
             items_to_add.append(item)
-        
+
         session.add_all(items_to_add)
         await session.commit()
         print(f"✅ Successfully seeded {len(items_to_add)} menu items!")

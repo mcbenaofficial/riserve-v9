@@ -23,6 +23,38 @@ from sqlalchemy import select, delete
 from database_pg import engine, AsyncSessionLocal
 import models_pg
 
+# Fluent Emoji 3D icon URLs
+_F = 'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets'
+
+# (name, icon_url, display_order)
+V1_CATEGORIES = [
+    ("Coffee",    f"{_F}/Hot%20beverage/3D/hot_beverage_3d.png",                   0),
+    ("Tea",       f"{_F}/Teacup%20without%20handle/3D/teacup_without_handle_3d.png", 1),
+    ("Smoothies", f"{_F}/Tropical%20drink/3D/tropical_drink_3d.png",               2),
+    ("Snacks",    f"{_F}/French%20fries/3D/french_fries_3d.png",                   3),
+    ("Mains",     f"{_F}/Hamburger/3D/hamburger_3d.png",                           4),
+    ("Desserts",  f"{_F}/Shortcake/3D/shortcake_3d.png",                           5),
+]
+
+# Per-item icon overrides
+V1_ITEM_ICONS = {
+    "Espresso":             f"{_F}/Hot%20beverage/3D/hot_beverage_3d.png",
+    "Cappuccino":           f"{_F}/Hot%20beverage/3D/hot_beverage_3d.png",
+    "Café Latte":           f"{_F}/Hot%20beverage/3D/hot_beverage_3d.png",
+    "Cold Brew":            f"{_F}/Cup%20with%20straw/3D/cup_with_straw_3d.png",
+    "Masala Chai":          f"{_F}/Teacup%20without%20handle/3D/teacup_without_handle_3d.png",
+    "Matcha Latte":         f"{_F}/Teacup%20without%20handle/3D/teacup_without_handle_3d.png",
+    "Berry Blast":          f"{_F}/Strawberry/3D/strawberry_3d.png",
+    "Mango Tango":          f"{_F}/Mango/3D/mango_3d.png",
+    "Avocado Toast":        f"{_F}/Avocado/3D/avocado_3d.png",
+    "Truffle Fries":        f"{_F}/French%20fries/3D/french_fries_3d.png",
+    "Smoked Chicken Burger":f"{_F}/Hamburger/3D/hamburger_3d.png",
+    "Margherita Flatbread": f"{_F}/Pizza/3D/pizza_3d.png",
+    "Pesto Pasta":          f"{_F}/Spaghetti/3D/spaghetti_3d.png",
+    "Tiramisu":             f"{_F}/Shortcake/3D/shortcake_3d.png",
+    "Chocolate Lava Cake":  f"{_F}/Chocolate%20bar/3D/chocolate_bar_3d.png",
+}
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 COMPANY_ID = '3821aa11-8386-452d-b6be-174ef77d1970'
@@ -95,6 +127,18 @@ async def seed():
         db.add(outlet)
         await db.flush()  # outlet must exist before menu items
 
+        # ── Menu Categories with Icons ────────────────────────────────
+        for cat_name, cat_icon, cat_order in V1_CATEGORIES:
+            db.add(models_pg.MenuCategory(
+                company_id=COMPANY_ID,
+                outlet_id=OUTLET_ID,
+                name=cat_name,
+                icon=cat_icon,
+                display_order=cat_order,
+                active=True,
+            ))
+        await db.flush()
+
         # ── Menu Items ────────────────────────────────────────────────
         menu_data = [
             # Coffee
@@ -131,6 +175,7 @@ async def seed():
                 name=name,
                 description=desc,
                 price=Decimal(str(price)),
+                icon=V1_ITEM_ICONS.get(name),
                 inventory_linked=False,
                 available=True,
                 display_order=i,

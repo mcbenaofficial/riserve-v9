@@ -20,6 +20,20 @@ router = APIRouter(tags=["Menu"])
 
 # ═══════ Pydantic Schemas ═══════
 
+class MenuCategoryCreate(BaseModel):
+    outlet_id: Optional[str] = None
+    name: str
+    icon: Optional[str] = None
+    display_order: int = 0
+
+
+class MenuCategoryUpdate(BaseModel):
+    name: Optional[str] = None
+    icon: Optional[str] = None
+    display_order: Optional[int] = None
+    active: Optional[bool] = None
+
+
 class MenuItemCreate(BaseModel):
     outlet_id: Optional[str] = None
     category: str = "General"
@@ -28,6 +42,7 @@ class MenuItemCreate(BaseModel):
     price: float = 0
     image_url: Optional[str] = None
     image_urls: Optional[List[str]] = None
+    icon: Optional[str] = None
     inventory_product_id: Optional[str] = None
     inventory_linked: bool = False
     display_order: int = 0
@@ -40,6 +55,7 @@ class MenuItemUpdate(BaseModel):
     price: Optional[float] = None
     image_url: Optional[str] = None
     image_urls: Optional[List[str]] = None
+    icon: Optional[str] = None
     inventory_product_id: Optional[str] = None
     inventory_linked: Optional[bool] = None
     available: Optional[bool] = None
@@ -64,6 +80,16 @@ class PaymentWebhook(BaseModel):
 
 # ═══════ Helpers ═══════
 
+def _serialize_category(cat):
+    return {
+        "id": cat.id,
+        "name": cat.name,
+        "icon": cat.icon,
+        "display_order": cat.display_order,
+        "active": cat.active,
+    }
+
+
 def _serialize_menu_item(item, stock_qty=None):
     d = {
         "id": item.id,
@@ -75,6 +101,7 @@ def _serialize_menu_item(item, stock_qty=None):
         "price": float(item.price or 0),
         "image_url": item.image_url,
         "image_urls": item.image_urls or [],
+        "icon": getattr(item, "icon", None),
         "inventory_product_id": item.inventory_product_id,
         "inventory_linked": item.inventory_linked,
         "available": item.available,
@@ -130,12 +157,22 @@ async def get_public_menu(outlet_id: str, db: AsyncSession = Depends(get_db)):
         select(models_pg.Company).where(models_pg.Company.id == outlet.company_id)
     )).scalar_one_or_none()
 
+    # Fetch user-defined category ordering + icons
+    cat_rows = (await db.execute(
+        select(models_pg.MenuCategory).where(
+            models_pg.MenuCategory.company_id == outlet.company_id,
+            models_pg.MenuCategory.active == True,
+        ).order_by(models_pg.MenuCategory.display_order)
+    )).scalars().all()
+    # Build lookup: name -> {icon, display_order}
+    cat_meta: Dict[str, Any] = {c.name: {"icon": c.icon, "display_order": c.display_order} for c in cat_rows}
+
     # Get active menu items for this outlet
     stmt = select(models_pg.MenuItem).where(
         models_pg.MenuItem.company_id == outlet.company_id,
         models_pg.MenuItem.active == True,
         (models_pg.MenuItem.outlet_id == outlet_id) | (models_pg.MenuItem.outlet_id == None),
-    ).order_by(models_pg.MenuItem.category, models_pg.MenuItem.display_order)
+    ).order_by(models_pg.MenuItem.display_order)
 
     items_result = await db.execute(stmt)
     items = items_result.scalars().all()
@@ -151,13 +188,30 @@ async def get_public_menu(outlet_id: str, db: AsyncSession = Depends(get_db)):
             stock_qty = product.stock_quantity if product else 0
         serialized.append(_serialize_menu_item(item, stock_qty))
 
-    # Group by category
-    categories = {}
+    # Group by category, sorted by user-defined category display_order
+    categories_grouped: Dict[str, List] = {}
     for s in serialized:
         cat = s["category"]
-        if cat not in categories:
-            categories[cat] = []
-        categories[cat].append(s)
+        if cat not in categories_grouped:
+            categories_grouped[cat] = []
+        categories_grouped[cat].append(s)
+
+    # Sort category keys by display_order (known categories first, then alphabetical for unknowns)
+    def _cat_sort_key(name: str):
+        if name in cat_meta:
+            return (0, cat_meta[name]["display_order"], name)
+        return (1, 999, name)
+
+    sorted_categories: Dict[str, List] = {
+        k: categories_grouped[k]
+        for k in sorted(categories_grouped.keys(), key=_cat_sort_key)
+    }
+
+    # Build category info list (icon + order) for the portal
+    category_info = []
+    for name in sorted_categories:
+        info = cat_meta.get(name, {})
+        category_info.append({"name": name, "icon": info.get("icon"), "display_order": info.get("display_order", 999)})
 
     return {
         "outlet": {
@@ -172,7 +226,8 @@ async def get_public_menu(outlet_id: str, db: AsyncSession = Depends(get_db)):
         "company": {
             "name": company.name if company else "Restaurant",
         },
-        "categories": categories,
+        "categories": sorted_categories,
+        "category_info": category_info,
         "items": serialized,
     }
 
@@ -366,6 +421,7 @@ async def create_menu_item(
         price=body.price,
         image_url=body.image_url,
         image_urls=body.image_urls or [],
+        icon=body.icon,
         inventory_product_id=inventory_product_id,
         inventory_linked=body.inventory_linked,
         display_order=body.display_order,
@@ -442,3 +498,89 @@ async def delete_menu_item(
     await db.delete(item)
     await db.commit()
     return {"message": "Menu item deleted"}
+
+
+# ═══════════════════════════════════════════════
+# MENU CATEGORY ENDPOINTS (Authenticated)
+# ═══════════════════════════════════════════════
+
+@router.get("/menu/categories")
+async def list_menu_categories(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """List all menu categories for the company, ordered by display_order."""
+    result = await db.execute(
+        select(models_pg.MenuCategory).where(
+            models_pg.MenuCategory.company_id == current_user.company_id,
+            models_pg.MenuCategory.active == True,
+        ).order_by(models_pg.MenuCategory.display_order)
+    )
+    cats = result.scalars().all()
+    return [_serialize_category(c) for c in cats]
+
+
+@router.post("/menu/categories")
+async def create_menu_category(
+    body: MenuCategoryCreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Create a new menu category."""
+    new_cat = models_pg.MenuCategory(
+        company_id=current_user.company_id,
+        outlet_id=body.outlet_id,
+        name=body.name,
+        icon=body.icon,
+        display_order=body.display_order,
+    )
+    db.add(new_cat)
+    await db.commit()
+    await db.refresh(new_cat)
+    return _serialize_category(new_cat)
+
+
+@router.put("/menu/categories/{category_id}")
+async def update_menu_category(
+    category_id: str,
+    body: MenuCategoryUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Update a menu category."""
+    cat = (await db.execute(
+        select(models_pg.MenuCategory).where(
+            models_pg.MenuCategory.id == category_id,
+            models_pg.MenuCategory.company_id == current_user.company_id,
+        )
+    )).scalar_one_or_none()
+    if not cat:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    for key, value in body.dict(exclude_unset=True).items():
+        setattr(cat, key, value)
+
+    await db.commit()
+    await db.refresh(cat)
+    return _serialize_category(cat)
+
+
+@router.delete("/menu/categories/{category_id}")
+async def delete_menu_category(
+    category_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Delete a menu category."""
+    cat = (await db.execute(
+        select(models_pg.MenuCategory).where(
+            models_pg.MenuCategory.id == category_id,
+            models_pg.MenuCategory.company_id == current_user.company_id,
+        )
+    )).scalar_one_or_none()
+    if not cat:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    await db.delete(cat)
+    await db.commit()
+    return {"message": "Category deleted"}

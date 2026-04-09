@@ -341,6 +341,10 @@ export const api = {
   getOrderStats: (outletId) => axios.get(`${API}/orders/stats${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
 
   // ── Menu Management ────────────────────────────────────────────────
+  getMenuCategories: () => axios.get(`${API}/menu/categories`, { headers: getHeaders() }),
+  createMenuCategory: (data) => axios.post(`${API}/menu/categories`, data, { headers: getHeaders() }),
+  updateMenuCategory: (id, data) => axios.put(`${API}/menu/categories/${id}`, data, { headers: getHeaders() }),
+  deleteMenuCategory: (id) => axios.delete(`${API}/menu/categories/${id}`, { headers: getHeaders() }),
   getMenuItems: (outletId) => axios.get(`${API}/menu/items${outletId ? `?outlet_id=${outletId}` : ''}`, { headers: getHeaders() }),
   createMenuItem: (data) => axios.post(`${API}/menu/items`, data, { headers: getHeaders() }),
   updateMenuItem: (id, data) => axios.put(`${API}/menu/items/${id}`, data, { headers: getHeaders() }),
