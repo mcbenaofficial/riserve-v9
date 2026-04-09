@@ -190,10 +190,17 @@ const GridTile = ({ item, qty, onAdd, onRemove, primaryColor, secondaryColor, te
 const AccordionCategory = ({ cat, catIcon, items, getCartQuantity, addToCart, removeFromCart, primaryColor, secondaryColor, textColor, defaultOpen }: any) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all">
+    <div
+      className="rounded-2xl overflow-hidden transition-all"
+      style={{
+        border: `1px solid ${open ? primaryColor + '40' : '#F3F4F6'}`,
+        boxShadow: open ? `0 4px 20px ${primaryColor}18` : 'none',
+      }}
+    >
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50/50 transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 transition-colors"
+        style={{ backgroundColor: open ? `${primaryColor}0D` : '#FFFFFF' }}
       >
         <div className="flex items-center gap-3">
           {catIcon ? (
@@ -201,23 +208,36 @@ const AccordionCategory = ({ cat, catIcon, items, getCartQuantity, addToCart, re
           ) : (
             <span className="w-1.5 h-6 rounded-full" style={{ backgroundColor: primaryColor }} />
           )}
-          <h2 className="font-black text-base" style={{ color: textColor }}>{cat}</h2>
-          <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{items.length}</span>
+          <h2 className="font-black text-base" style={{ color: open ? primaryColor : textColor }}>{cat}</h2>
+          <span
+            className="text-xs font-bold px-2 py-0.5 rounded-full transition-colors"
+            style={{
+              backgroundColor: open ? `${primaryColor}18` : '#F3F4F6',
+              color: open ? primaryColor : '#9CA3AF',
+            }}
+          >
+            {items.length}
+          </span>
         </div>
         <svg
-          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+          style={{ color: open ? primaryColor : '#9CA3AF' }}
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       {open && (
-        <div className="border-t border-gray-50">
+        <div style={{ borderTop: `1px solid ${primaryColor}20` }}>
           {items.map((item: MenuItem) => {
             const qty = getCartQuantity(item.id);
             const visual = resolveItemVisual(item, catIcon);
             return (
-              <div key={item.id} className="flex items-center justify-between px-5 py-3 border-b border-gray-50 last:border-b-0 hover:bg-gray-50/30 transition-colors">
+              <div
+                key={item.id}
+                className="flex items-center justify-between px-5 py-3 last:border-b-0 transition-colors"
+                style={{ borderBottom: `1px solid ${primaryColor}10`, backgroundColor: '#FFFFFF' }}
+              >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <VegBadge isVeg={item.is_veg} size="sm" />
                   {visual && <ItemVisual visual={visual} name={item.name} size="sm" />}
