@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Settings, Users, Store, Wrench, Mail, MessageSquare, MessageCircle,
   Webhook, Zap, Puzzle, ChevronRight, Shield, Calendar, Building2, Star, Package, UserCog, FileText,
-  UtensilsCrossed, Palette
+  UtensilsCrossed, Palette, Receipt
 } from 'lucide-react';
 import { api } from '../services/api';
 
@@ -24,6 +24,7 @@ import AdminPromotions from '../components/admin/AdminPromotions';
 import AdminBookingForm from '../components/admin/AdminBookingForm';
 import AdminMenuManagement from '../components/admin/AdminMenuManagement';
 import AdminPortalDesign from '../components/admin/AdminPortalDesign';
+import AdminInvoices from '../components/admin/AdminInvoices';
 
 
 const AdminConsole = () => {
@@ -56,6 +57,7 @@ const AdminConsole = () => {
     { id: 'promotions', label: 'Promotions', icon: Star, component: AdminPromotions },
     { id: 'outlets', label: 'Outlets / Locations', icon: Store, component: AdminOutlets },
     { id: 'feedback', label: 'Customer Feedback', icon: MessageSquare, component: AdminFeedback },
+    { id: 'invoices', label: 'Invoices', icon: Receipt, component: AdminInvoices },
   ];
 
   const featureTabs = [];

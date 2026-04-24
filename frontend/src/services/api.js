@@ -383,6 +383,22 @@ export const api = {
   updateSuperAdminRazorpayConfig: (companyId, data) => axios.put(`${API}/super-admin/razorpay/config/${companyId}`, data, { headers: getHeaders() }),
   superAdminCreateRazorpayAccount: (companyId) => axios.post(`${API}/super-admin/razorpay/create-account/${companyId}`, {}, { headers: getHeaders() }),
 
+  // ── Invoices ──────────────────────────────────────────────────────
+  getInvoices: (params) => axios.get(`${API}/invoices`, { headers: getHeaders(), params }),
+  getInvoice: (id) => axios.get(`${API}/invoices/${id}`, { headers: getHeaders() }),
+  getInvoiceStats: () => axios.get(`${API}/invoices/stats`, { headers: getHeaders() }),
+  getInvoiceSettings: () => axios.get(`${API}/invoices/settings`, { headers: getHeaders() }),
+  updateInvoiceSettings: (data) => axios.put(`${API}/invoices/settings`, data, { headers: getHeaders() }),
+  createInvoice: (data) => axios.post(`${API}/invoices`, data, { headers: getHeaders() }),
+  updateInvoice: (id, data) => axios.put(`${API}/invoices/${id}`, data, { headers: getHeaders() }),
+  deleteInvoice: (id) => axios.delete(`${API}/invoices/${id}`, { headers: getHeaders() }),
+  sendInvoice: (id) => axios.post(`${API}/invoices/${id}/send`, {}, { headers: getHeaders() }),
+  markInvoicePaid: (id) => axios.post(`${API}/invoices/${id}/mark-paid`, {}, { headers: getHeaders() }),
+  recordInvoicePayment: (id, data) => axios.post(`${API}/invoices/${id}/record-payment`, data, { headers: getHeaders() }),
+  voidInvoice: (id) => axios.post(`${API}/invoices/${id}/void`, {}, { headers: getHeaders() }),
+  cancelInvoice: (id) => axios.post(`${API}/invoices/${id}/cancel`, {}, { headers: getHeaders() }),
+  createInvoiceFromBooking: (bookingId) => axios.post(`${API}/invoices/from-booking/${bookingId}`, {}, { headers: getHeaders() }),
+
   // ── Super Admin: Partner Integrations ────────────────────────────
   getSuperAdminWhatsAppStats: (days) => axios.get(`${API}/super-admin/whatsapp/stats${days ? `?days=${days}` : ''}`, { headers: getHeaders() }),
   getSuperAdminWhatsAppConfig: (companyId) => axios.get(`${API}/super-admin/whatsapp/config/${companyId}`, { headers: getHeaders() }),

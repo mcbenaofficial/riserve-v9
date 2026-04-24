@@ -17,7 +17,7 @@ from database_pg import DATABASE_URL
 import models_pg
 
 # ─── CONFIG ──────────────────────────────────────────────────────────
-COMPANY_ID = "c4c35eb4-565d-4fc7-89be-0562ff79e8a4"
+COMPANY_ID = None  # Will be discovered at runtime
 ADMIN_USER_ID = None  # Will be discovered at runtime
 
 OUTLET_DEFS = [
@@ -126,6 +126,18 @@ async def seed():
     Session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with Session() as db:
+        # ── Discover company ──
+        company = (await db.execute(
+            select(models_pg.Company).where(models_pg.Company.name == "Simulated Salon")
+        )).scalar_one_or_none()
+        
+        if not company:
+            print("❌ Company 'Simulated Salon' not found. Please run restore_dev_account.py first.")
+            return
+            
+        COMPANY_ID = company.id
+        print(f"Using company: {company.name} ({COMPANY_ID})")
+
         # ── Discover admin user ──
         admin = (await db.execute(
             select(models_pg.User).where(

@@ -345,6 +345,8 @@ async def update_booking(
     if current_user.role in ["Manager", "User"]:
         enforce_outlet_access(current_user, booking.outlet_id)
 
+    old_status = booking.status
+
     # Apply updates for any provided fields
     if update_data.status is not None:
         booking.status = update_data.status
@@ -386,6 +388,10 @@ async def update_booking(
 
     await db_session.commit()
 
+    # Auto-generate invoice when booking transitions to Completed
+    if booking.status == "Completed" and old_status != "Completed":
+        await _auto_invoice_booking(booking, db_session)
+
     return {
         "id": booking.id,
         "status": booking.status,
@@ -398,6 +404,85 @@ async def update_booking(
         "amount": booking.amount,
         "notes": booking.notes
     }
+
+
+async def _auto_invoice_booking(booking: models_pg.Booking, db: AsyncSession) -> None:
+    """Create a draft invoice for a completed booking if the company setting is on."""
+    inv_settings = (await db.execute(
+        select(models_pg.InvoiceSettings).where(
+            models_pg.InvoiceSettings.company_id == booking.company_id
+        )
+    )).scalar_one_or_none()
+
+    if not inv_settings or not inv_settings.auto_generate_from_booking:
+        return
+
+    # Skip if invoice already exists for this booking
+    existing = (await db.execute(
+        select(models_pg.Invoice).where(
+            models_pg.Invoice.booking_id == booking.id,
+            models_pg.Invoice.status != "void",
+        )
+    )).scalar_one_or_none()
+    if existing:
+        return
+
+    customer_name = booking.customer_name or "Customer"
+    customer_email = booking.customer_email
+    customer_phone = booking.customer_phone
+
+    # Try to resolve a friendly service name
+    service_label = "Service"
+    if booking.service_id:
+        svc = (await db.execute(
+            select(models_pg.Service).where(models_pg.Service.id == booking.service_id)
+        )).scalar_one_or_none()
+        if svc:
+            service_label = svc.name
+
+    amount = float(booking.total_amount or booking.amount or 0)
+    tax_rate = float(inv_settings.default_tax_rate or 0)
+    tax_amount = round(amount * tax_rate / 100, 2)
+
+    # Increment invoice counter
+    number = inv_settings.next_number
+    invoice_number = f"{inv_settings.prefix}-{number:04d}"
+    inv_settings.next_number = number + 1
+
+    inv = models_pg.Invoice(
+        id=str(uuid.uuid4()),
+        company_id=booking.company_id,
+        booking_id=booking.id,
+        outlet_id=booking.outlet_id,
+        customer_id=booking.customer_id,
+        invoice_number=invoice_number,
+        customer_name=customer_name,
+        customer_email=customer_email,
+        customer_phone=customer_phone,
+        items=[{
+            "description": service_label,
+            "quantity": 1,
+            "unit_price": amount,
+            "tax_rate": tax_rate,
+            "discount": 0,
+            "amount": amount,
+        }],
+        subtotal=amount,
+        discount_amount=0,
+        tax_amount=tax_amount,
+        total_amount=amount + tax_amount,
+        paid_amount=0,
+        currency=inv_settings.currency,
+        currency_symbol=inv_settings.currency_symbol,
+        issue_date=date.today(),
+        payment_terms=inv_settings.default_payment_terms,
+        notes=inv_settings.default_notes,
+        footer=inv_settings.default_footer,
+        status="sent" if inv_settings.auto_send_on_generate else "draft",
+        sent_at=datetime.now(timezone.utc) if inv_settings.auto_send_on_generate else None,
+    )
+    db.add(inv)
+    await db.commit()
 
 
 @router.put("/{booking_id}/reschedule")

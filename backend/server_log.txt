@@ -1,0 +1,28 @@
+INFO:     Started server process [74731]
+INFO:     Waiting for application startup.
+2026-04-10 04:36:05,727 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-04-10 04:36:05,888 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-04-10 04:36:05,898 - server - INFO - No expired trials found
+INFO:     127.0.0.1:62213 - "GET /api/public/booking/6813b8dd-3bfc-4353-a0eb-d3e83c941874 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/public/booking/a04f0052-1f8d-4310-b9e8-60b6ec7da831 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62213 - "POST /api/public/booking/6813b8dd-3bfc-4353-a0eb-d3e83c941874 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "POST /api/public/booking/19a06fb9-bb38-40b9-82b4-5e6d3e49ada3 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62215 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/slot-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/slot-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/slot-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "PUT /api/slot-configs/17b637be-cd2a-46ed-a83c-d05063c04aee HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "POST /api/auth/login HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:62213 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/slot-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62213 - "GET /api/resource-bookings/f529e15e-72b1-437e-91af-9e573e86c402 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-04-10 04:36:10,657 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [74731]

@@ -77,7 +77,17 @@ async def get_slot_configs(
     res = await db_session.execute(stmt)
     configs = res.scalars().all()
     
-    return [c.configuration for c in configs if c.configuration]
+    output = []
+    for c in configs:
+        if not c.configuration: continue
+        # Ensure ID and Outlet ID are in the returned dict for frontend/test consistency
+        conf = c.configuration.copy()
+        conf["id"] = c.id
+        conf["outlet_id"] = c.outlet_id
+        conf["company_id"] = c.company_id
+        output.append(conf)
+        
+    return output
 
 
 @router.get("/{outlet_id}")
@@ -102,7 +112,13 @@ async def get_slot_config_by_outlet(
         if not (await db_session.execute(out_stmt)).scalar_one_or_none():
             raise HTTPException(status_code=404, detail="Outlet not found")
             
-    return config.configuration if config else None
+    if not config: return None
+    
+    conf = config.configuration.copy()
+    conf["id"] = config.id
+    conf["outlet_id"] = config.outlet_id
+    conf["company_id"] = config.company_id
+    return conf
 
 
 @router.post("")

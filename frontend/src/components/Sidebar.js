@@ -52,7 +52,8 @@ import {
   Palette,
   Settings2,
   MonitorPlay,
-  FileText
+  FileText,
+  Receipt
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -216,6 +217,7 @@ const Sidebar = () => {
       appId: 'inventory'
     },
     { key: 'finance', label: 'Finance', icon: DollarSign, path: '/finance', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
+    { key: 'invoices', label: 'Invoices', icon: Receipt, path: '/invoices', roles: ['Admin', 'Manager'], appId: 'core' },
     { key: 'customers', label: 'Customer Database', icon: Users, path: '/customers', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'crm' },
     { key: 'customer-segments', label: 'Segments', icon: User, path: '/customers/segments', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'crm' },
     {

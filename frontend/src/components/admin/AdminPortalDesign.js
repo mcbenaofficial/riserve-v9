@@ -71,6 +71,7 @@ const AdminPortalDesign = () => {
     primary: '#1A1A1A',
     secondary: '#F59E0B',
     bgColor: '#FAFAFA',
+    surfaceColor: '#FFFFFF',
     textColor: '#1A1A1A'
   });
 
@@ -83,6 +84,7 @@ const AdminPortalDesign = () => {
     { name: 'customer_phone', label: 'Mobile Number', required: true, enabled: true },
   ]);
   const [menuLayout, setMenuLayout] = useState('classic');
+  const [portalType, setPortalType] = useState('order'); // 'order' | 'booking' | 'both'
 
   useEffect(() => { fetchData(); }, []);
 
@@ -120,6 +122,7 @@ const AdminPortalDesign = () => {
         primary: config.primary || '#1A1A1A',
         secondary: config.secondary || '#F59E0B',
         bgColor: config.bgColor || '#FAFAFA',
+        surfaceColor: config.surfaceColor || '#FFFFFF',
         textColor: config.textColor || '#1A1A1A'
       });
       setPortalEnabled(config.portalEnabled !== false);
@@ -127,6 +130,14 @@ const AdminPortalDesign = () => {
       setWhatsappOptIn(config.whatsappOptIn !== false);
       if (config.identityFields) setIdentityFields(config.identityFields);
       setMenuLayout(config.menuLayout || 'classic');
+      // Default portalType from saved config, or infer from licensed modules
+      if (config.portalType) {
+        setPortalType(config.portalType);
+      } else {
+        const hasMenu = licensedModules.includes('restaurant_orders');
+        const hasBook = licensedModules.includes('booking');
+        setPortalType(hasMenu && hasBook ? 'both' : hasBook ? 'booking' : 'order');
+      }
     }
   };
 
@@ -170,6 +181,7 @@ const AdminPortalDesign = () => {
           whatsappOptIn,
           identityFields,
           menuLayout,
+          portalType,
         }
       };
 
@@ -192,15 +204,19 @@ const AdminPortalDesign = () => {
     }
   };
 
+  const portalPath = portalType === 'booking' ? `/book/${selectedOutletId}`
+    : portalType === 'both' ? `/p/${selectedOutletId}`
+    : `/menu/${selectedOutletId}`;
+
   const copyLink = () => {
-    const link = `${window.location.protocol}//${window.location.hostname}:3001/menu/${selectedOutletId}`;
+    const link = `${window.location.protocol}//${window.location.hostname}:3002${portalPath}`;
     navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   // Derived
-  const portalLink = `${window.location.protocol}//${window.location.hostname}:3001/menu/${selectedOutletId}`;
+  const portalLink = `${window.location.protocol}//${window.location.hostname}:3002${portalPath}`;
   const isRestaurant = licensedModules.includes('restaurant_orders');
   const isBooking = licensedModules.includes('booking');
   const portalTypeLabel = isRestaurant && isBooking ? 'Menu & Booking Portal'
@@ -295,7 +311,55 @@ const AdminPortalDesign = () => {
             </div>
           </Section>
 
-          {/* ── 2. Digital Access ──────────────────────────── */}
+          {/* ── 2. Portal Type Selector ───────────────────── */}
+          <Section
+            icon={LayoutGrid}
+            iconColor="text-indigo-500"
+            title="Portal Type"
+            subtitle="Choose what your customers can do on the portal"
+          >
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { id: 'order', icon: UtensilsCrossed, label: 'Order', desc: 'Menu & cart', color: 'amber', show: isRestaurant || (!isRestaurant && !isBooking) },
+                { id: 'booking', icon: CalendarCheck, label: 'Booking', desc: 'Appointments', color: 'teal', show: isBooking || (!isRestaurant && !isBooking) },
+                { id: 'both', icon: LayoutGrid, label: 'Both', desc: 'Landing page', color: 'indigo', show: isRestaurant && isBooking },
+              ].filter(opt => opt.show).map(opt => {
+                const active = portalType === opt.id;
+                const Icon = opt.icon;
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => setPortalType(opt.id)}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all font-medium text-sm
+                      ${active
+                        ? `border-${opt.color}-500 bg-${opt.color}-50 dark:bg-${opt.color}-500/10`
+                        : 'border-gray-200 dark:border-[#1F2630] hover:border-gray-300 dark:hover:border-white/10'
+                      }`}
+                  >
+                    <Icon
+                      size={22}
+                      className={active ? `text-${opt.color}-500` : 'text-gray-400 dark:text-[#7D8590]'}
+                    />
+                    <div>
+                      <div className={`font-bold text-xs ${active ? `text-${opt.color}-600 dark:text-${opt.color}-400` : 'text-gray-700 dark:text-[#E6E8EB]'}`}>
+                        {opt.label}
+                      </div>
+                      <div className="text-[10px] text-gray-400 dark:text-[#7D8590]">{opt.desc}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-gray-400 dark:text-[#7D8590] mt-1">
+              {portalType === 'both'
+                ? 'Customers see a branded landing page to choose between ordering and booking.'
+                : portalType === 'booking'
+                ? 'Customers land directly on the appointment booking flow.'
+                : 'Customers land directly on the menu and can add items to cart.'}
+            </p>
+          </Section>
+
+          {/* ── 3. Digital Access ──────────────────────────── */}
           <Section
             icon={QrCode}
             iconColor="text-blue-500"
@@ -306,7 +370,7 @@ const AdminPortalDesign = () => {
               {/* Public Link */}
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 dark:text-[#7D8590] uppercase tracking-wider mb-2">
-                  Public {isRestaurant ? 'Ordering' : 'Booking'} Link
+                  Public {portalType === 'both' ? 'Portal' : portalType === 'booking' ? 'Booking' : 'Ordering'} Link
                 </label>
                 <div className="flex gap-2">
                   <div className="flex-1 bg-gray-50 dark:bg-[#0B0D10] border border-gray-200 dark:border-[#1F2630] rounded-xl px-4 py-3 text-sm text-teal-600 dark:text-teal-400 truncate font-mono">
@@ -333,7 +397,7 @@ const AdminPortalDesign = () => {
                 <div className="flex-1">
                   <h5 className="text-sm font-bold text-gray-900 dark:text-[#E6E8EB] mb-1">Storefront QR Code</h5>
                   <p className="text-xs text-gray-500 dark:text-[#7D8590] mb-3">
-                    Display at your {isRestaurant ? 'tables or entrance' : 'reception desk'} for contactless {isRestaurant ? 'ordering' : 'booking'}.
+                    Display at your {portalType === 'booking' ? 'reception desk' : 'tables or entrance'} for contactless {portalType === 'booking' ? 'booking' : portalType === 'both' ? 'ordering & booking' : 'ordering'}.
                   </p>
                   <button
                     onClick={() => window.open(portalLink, '_blank')}
@@ -481,36 +545,59 @@ const AdminPortalDesign = () => {
             title="Color Palette"
             subtitle="Define your portal's visual identity"
           >
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                { key: 'primary', label: 'Primary Brand' },
-                { key: 'secondary', label: 'Accent / Actions' },
-                { key: 'bgColor', label: 'Background' },
-                { key: 'textColor', label: 'Text/Content' },
-              ].map(c => (
-                <div key={c.key}>
-                  <label className="block text-[10px] font-bold text-gray-500 dark:text-[#7D8590] uppercase tracking-wider mb-2">{c.label}</label>
-                  <div className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 dark:border-[#1F2630] bg-white dark:bg-black/20">
-                    <input
-                      type="color"
-                      value={colors[c.key]}
-                      onChange={(e) => setColors({ ...colors, [c.key]: e.target.value })}
-                      className="w-8 h-8 rounded border-0 p-0 cursor-pointer overflow-hidden"
-                    />
-                    <input
-                      type="text"
-                      value={colors[c.key].toUpperCase()}
-                      onChange={(e) => setColors({ ...colors, [c.key]: e.target.value })}
-                      className="w-full bg-transparent border-none text-sm text-gray-900 dark:text-[#E6E8EB] focus:ring-0 uppercase font-mono"
-                    />
-                  </div>
+            <div className="space-y-4">
+              {/* Brand colors */}
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 dark:text-[#7D8590] uppercase tracking-wider mb-2">Brand</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { key: 'primary', label: 'Primary', hint: 'Hero, buttons, active states' },
+                    { key: 'secondary', label: 'Accent', hint: 'Prices, highlights, badges' },
+                  ].map(c => (
+                    <div key={c.key}>
+                      <label className="block text-[10px] font-semibold text-gray-500 dark:text-[#7D8590] mb-1.5">{c.label} <span className="font-normal opacity-60">· {c.hint}</span></label>
+                      <div className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 dark:border-[#1F2630] bg-white dark:bg-black/20">
+                        <input type="color" value={colors[c.key]} onChange={(e) => setColors({ ...colors, [c.key]: e.target.value })} className="w-8 h-8 rounded border-0 p-0 cursor-pointer overflow-hidden" />
+                        <input type="text" value={colors[c.key].toUpperCase()} onChange={(e) => setColors({ ...colors, [c.key]: e.target.value })} className="w-full bg-transparent border-none text-sm text-gray-900 dark:text-[#E6E8EB] focus:ring-0 uppercase font-mono" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Layout colors */}
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 dark:text-[#7D8590] uppercase tracking-wider mb-2">Layout</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { key: 'bgColor', label: 'Page Background', hint: 'Page base' },
+                    { key: 'surfaceColor', label: 'Cards / Panels', hint: 'Cards, headers' },
+                    { key: 'textColor', label: 'Text', hint: 'Body text' },
+                  ].map(c => (
+                    <div key={c.key}>
+                      <label className="block text-[10px] font-semibold text-gray-500 dark:text-[#7D8590] mb-1.5">{c.label} <span className="font-normal opacity-60">· {c.hint}</span></label>
+                      <div className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 dark:border-[#1F2630] bg-white dark:bg-black/20">
+                        <input type="color" value={colors[c.key]} onChange={(e) => setColors({ ...colors, [c.key]: e.target.value })} className="w-8 h-8 rounded border-0 p-0 cursor-pointer overflow-hidden" />
+                        <input type="text" value={colors[c.key].toUpperCase()} onChange={(e) => setColors({ ...colors, [c.key]: e.target.value })} className="w-full bg-transparent border-none text-sm text-gray-900 dark:text-[#E6E8EB] focus:ring-0 uppercase font-mono" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Visual swatch strip */}
+              <div className="flex rounded-xl overflow-hidden h-6 mt-1 border border-black/5">
+                <div className="flex-1" style={{ backgroundColor: colors.bgColor }} title="Page Background" />
+                <div className="flex-1" style={{ backgroundColor: colors.surfaceColor }} title="Cards / Panels" />
+                <div className="flex-1" style={{ backgroundColor: colors.primary }} title="Primary" />
+                <div className="flex-1" style={{ backgroundColor: colors.secondary }} title="Accent" />
+                <div className="flex-1" style={{ backgroundColor: colors.textColor }} title="Text" />
+              </div>
             </div>
           </Section>
 
           {/* ── 7. Menu Layout ────────────────────────────── */}
-          {isRestaurant && (
+          {isRestaurant && portalType !== 'booking' && (
             <Section
               icon={LayoutGrid}
               iconColor="text-indigo-500"
@@ -604,7 +691,7 @@ const AdminPortalDesign = () => {
                     onClick={() => setPreviewScreen('portal')}
                     className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-all ${previewScreen === 'portal' ? 'bg-white dark:bg-teal-500/20 text-teal-700 dark:text-teal-300 shadow-sm' : 'text-gray-500'}`}
                   >
-                    {isRestaurant ? 'Menu' : 'Booking'}
+                    {portalType === 'booking' ? 'Booking' : portalType === 'both' ? 'Portal' : 'Menu'}
                   </button>
                 </div>
               )}
@@ -626,7 +713,7 @@ const AdminPortalDesign = () => {
                 <div className="h-full flex flex-col pt-10 px-5 pb-6">
                   {/* Logo */}
                   <div className="text-center mb-6">
-                    <div className="w-16 h-16 mx-auto rounded-2xl bg-white shadow-lg flex items-center justify-center p-2 border border-gray-100 mb-3">
+                    <div className="w-16 h-16 mx-auto rounded-2xl shadow-lg flex items-center justify-center p-2 mb-3" style={{ backgroundColor: colors.surfaceColor }}>
                       {logoUrl ? <img src={getImageUrl(logoUrl)} alt="Logo" className="max-w-full max-h-full object-contain" /> : <Palette size={24} className="opacity-20" />}
                     </div>
                     <h1 className="text-lg font-bold tracking-tight" style={{ color: colors.textColor }}>
@@ -687,7 +774,7 @@ const AdminPortalDesign = () => {
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-xs opacity-50" style={{ color: colors.textColor }}>Empty Hero Space</div>
                     )}
-                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-2xl bg-white shadow-xl flex items-center justify-center p-2 border border-gray-100 overflow-hidden z-10">
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-2xl shadow-xl flex items-center justify-center p-2 overflow-hidden z-10" style={{ backgroundColor: colors.surfaceColor }}>
                       {logoUrl ? <img src={getImageUrl(logoUrl)} alt="Logo" className="max-w-full max-h-full object-contain" /> : <Palette size={24} className="opacity-20" />}
                     </div>
                   </div>
@@ -698,18 +785,58 @@ const AdminPortalDesign = () => {
                         {selectedOutlet?.name || 'Your Business'}
                       </h1>
                       <p className="text-[10px] opacity-50 uppercase tracking-widest" style={{ color: colors.textColor }}>
-                        {isRestaurant ? 'Order & Dining' : 'Book Appointment'}
+                        {portalType === 'both' ? 'Order & Book' : portalType === 'booking' ? 'Book Appointment' : 'Order & Dining'}
                       </p>
                     </div>
 
+                    {/* Both Portal: show two CTAs */}
+                    {portalType === 'both' && (
+                      <div className="space-y-2 pt-2">
+                        <div className="rounded-2xl p-3 flex items-center gap-3 shadow-sm border border-black/5" style={{ backgroundColor: colors.surfaceColor }}>
+                          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: colors.primary }}>
+                            <UtensilsCrossed size={14} className="text-white" />
+                          </div>
+                          <div className="flex-1 text-left">
+                            <div className="font-bold text-xs" style={{ color: colors.textColor }}>Order Now</div>
+                            <div className="text-[9px] opacity-50" style={{ color: colors.textColor }}>Browse menu & cart</div>
+                          </div>
+                        </div>
+                        <div className="rounded-2xl p-3 flex items-center gap-3 shadow-sm border border-black/5" style={{ backgroundColor: colors.surfaceColor }}>
+                          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: colors.secondary }}>
+                            <CalendarCheck size={14} className="text-white" />
+                          </div>
+                          <div className="flex-1 text-left">
+                            <div className="font-bold text-xs" style={{ color: colors.textColor }}>Book Appointment</div>
+                            <div className="text-[9px] opacity-50" style={{ color: colors.textColor }}>Schedule a session</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Booking Portal: show service list */}
+                    {portalType === 'booking' && (
+                      <div className="space-y-2.5 pt-2 text-left">
+                        <div className="text-[10px] font-semibold uppercase tracking-widest opacity-50" style={{ color: colors.textColor }}>Services</div>
+                        {[{ name: 'Haircut & Style', dur: '45 min', price: '₹599' }, { name: 'Facial', dur: '60 min', price: '₹1,200' }].map(svc => (
+                          <div key={svc.name} className="rounded-2xl p-3 flex justify-between items-center shadow-sm border border-black/5" style={{ backgroundColor: colors.surfaceColor }}>
+                            <div>
+                              <div className="font-semibold text-xs" style={{ color: colors.textColor }}>{svc.name}</div>
+                              <div className="text-[9px] opacity-50" style={{ color: colors.textColor }}>{svc.dur}</div>
+                            </div>
+                            <div className="font-bold text-xs" style={{ color: colors.secondary }}>{svc.price}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="space-y-2.5 pt-2 text-left">
                       <div className="text-[10px] font-semibold uppercase tracking-widest opacity-50" style={{ color: colors.textColor }}>
-                        {isRestaurant ? `Menu · ${menuLayout}` : 'Services'}
+                        {portalType === 'booking' ? '' : `Menu · ${menuLayout}`}
                       </div>
 
                       {/* Classic layout preview */}
-                      {menuLayout === 'classic' && [1, 2].map(i => (
-                        <div key={i} className="rounded-2xl p-3 flex gap-3 shadow-sm border border-black/5" style={{ backgroundColor: theme === 'dark' ? '#ffffff05' : '#ffffff' }}>
+                      {portalType !== 'booking' && menuLayout === 'classic' && [1, 2].map(i => (
+                        <div key={i} className="rounded-2xl p-3 flex gap-3 shadow-sm border border-black/5" style={{ backgroundColor: colors.surfaceColor }}>
                           <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 opacity-20" style={{ backgroundColor: colors.secondary }} />
                           <div className="flex-1">
                             <div className="font-semibold text-xs mb-1" style={{ color: colors.textColor }}>Signature Item {i}</div>
@@ -720,7 +847,7 @@ const AdminPortalDesign = () => {
                       ))}
 
                       {/* Compact list preview */}
-                      {menuLayout === 'compact' && [1, 2, 3, 4].map(i => (
+                      {portalType !== 'booking' && menuLayout === 'compact' && [1, 2, 3, 4].map(i => (
                         <div key={i} className="flex items-center justify-between py-2 px-2 border-b border-black/5">
                           <div className="flex items-center gap-2">
                             <div className="w-3 h-3 border rounded-sm" style={{ borderColor: i % 2 === 0 ? '#dc2626' : '#16a34a' }}><div className="w-1.5 h-1.5 rounded-full m-[1px]" style={{ backgroundColor: i % 2 === 0 ? '#dc2626' : '#16a34a' }} /></div>
@@ -734,10 +861,10 @@ const AdminPortalDesign = () => {
                       ))}
 
                       {/* Photo grid preview */}
-                      {menuLayout === 'grid' && (
+                      {portalType !== 'booking' && menuLayout === 'grid' && (
                         <div className="grid grid-cols-2 gap-1.5">
                           {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="rounded-xl overflow-hidden shadow-sm border border-black/5" style={{ backgroundColor: theme === 'dark' ? '#ffffff05' : '#ffffff' }}>
+                            <div key={i} className="rounded-xl overflow-hidden shadow-sm border border-black/5" style={{ backgroundColor: colors.surfaceColor }}>
                               <div className="aspect-square opacity-15" style={{ backgroundColor: colors.secondary }} />
                               <div className="p-2">
                                 <div className="text-[9px] font-bold truncate" style={{ color: colors.textColor }}>Item {i}</div>
@@ -749,9 +876,9 @@ const AdminPortalDesign = () => {
                       )}
 
                       {/* Accordion preview */}
-                      {menuLayout === 'accordion' && (
+                      {portalType !== 'booking' && menuLayout === 'accordion' && (
                         <div className="space-y-1">
-                          <div className="rounded-xl p-2 border border-black/5" style={{ backgroundColor: theme === 'dark' ? '#ffffff05' : '#ffffff' }}>
+                          <div className="rounded-xl p-2 border border-black/5" style={{ backgroundColor: colors.surfaceColor }}>
                             <div className="flex justify-between items-center">
                               <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>☕ Coffee (4)</span>
                               <span className="text-[10px] opacity-40">▼</span>
@@ -765,13 +892,13 @@ const AdminPortalDesign = () => {
                               ))}
                             </div>
                           </div>
-                          <div className="rounded-xl p-2 border border-black/5 opacity-60" style={{ backgroundColor: theme === 'dark' ? '#ffffff05' : '#ffffff' }}>
+                          <div className="rounded-xl p-2 border border-black/5 opacity-60" style={{ backgroundColor: colors.surfaceColor }}>
                             <div className="flex justify-between items-center">
                               <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>🍔 Mains (6)</span>
                               <span className="text-[10px] opacity-40">►</span>
                             </div>
                           </div>
-                          <div className="rounded-xl p-2 border border-black/5 opacity-60" style={{ backgroundColor: theme === 'dark' ? '#ffffff05' : '#ffffff' }}>
+                          <div className="rounded-xl p-2 border border-black/5 opacity-60" style={{ backgroundColor: colors.surfaceColor }}>
                             <div className="flex justify-between items-center">
                               <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>🍰 Desserts (3)</span>
                               <span className="text-[10px] opacity-40">►</span>
@@ -783,7 +910,7 @@ const AdminPortalDesign = () => {
 
                     <div className="pt-4">
                       <div className="w-full py-2.5 rounded-xl font-bold text-xs text-white shadow-md" style={{ backgroundColor: colors.primary }}>
-                        {isRestaurant ? 'View Cart' : 'Book Now'}
+                        {portalType === 'booking' ? 'Book Now' : 'View Cart'}
                       </div>
                     </div>
                   </div>

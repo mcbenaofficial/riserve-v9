@@ -173,7 +173,7 @@ from routes import (
     auth, public, dashboard, bookings, services, outlets,
     staff, reports, feedback, assistant, onboarding,
     users, company, inventory, customers, slots, transactions, promotions, hitl, portal, suppliers, analytics, hq,
-    orders, menu, upload, omni, whatsapp, razorpay
+    orders, menu, upload, omni, whatsapp, razorpay, invoices
 )
 from routes.superadmin import router as superadmin
 
@@ -208,6 +208,7 @@ app.include_router(upload.router, prefix="/api")
 app.include_router(omni.router, prefix="/api")
 app.include_router(whatsapp.router, prefix="/api")
 app.include_router(razorpay.router, prefix="/api")
+app.include_router(invoices.router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

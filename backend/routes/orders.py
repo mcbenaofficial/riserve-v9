@@ -4,9 +4,9 @@ Restaurant Orders — Staff-side order management API.
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, desc, and_, or_
+from sqlalchemy import select, func, desc
 import uuid
 
 import models_pg
@@ -201,6 +201,10 @@ async def update_order_status(
 
     await db.commit()
     await db.refresh(order)
+
+    if body.status == "Completed":
+        await _auto_invoice_order(order, db)
+
     return _serialize_order(order)
 
 
@@ -231,6 +235,7 @@ async def verify_qr(
     order.status = "Completed"
     await db.commit()
     await db.refresh(order)
+    await _auto_invoice_order(order, db)
     return {"message": "Order completed successfully", "order": _serialize_order(order)}
 
 
@@ -306,3 +311,75 @@ async def get_order_stats(
         "total_revenue_today": total_revenue,
         "active_count": by_status.get("New", 0) + by_status.get("Preparing", 0) + by_status.get("ReadyToCollect", 0),
     }
+
+
+async def _auto_invoice_order(order: models_pg.RestaurantOrder, db: AsyncSession) -> None:
+    """Create a draft invoice for a completed restaurant order if the company setting is on."""
+    inv_settings = (await db.execute(
+        select(models_pg.InvoiceSettings).where(
+            models_pg.InvoiceSettings.company_id == order.company_id
+        )
+    )).scalar_one_or_none()
+
+    if not inv_settings or not inv_settings.auto_generate_from_order:
+        return
+
+    # Skip if invoice already exists for this order
+    existing = (await db.execute(
+        select(models_pg.Invoice).where(
+            models_pg.Invoice.order_id == order.id,
+            models_pg.Invoice.status != "void",
+        )
+    )).scalar_one_or_none()
+    if existing:
+        return
+
+    # Map order items → invoice line items
+    items = []
+    for oi in (order.items or []):
+        name = oi.get("name", "Item")
+        qty = float(oi.get("quantity", 1))
+        price = float(oi.get("price", 0))
+        items.append({
+            "description": name,
+            "quantity": qty,
+            "unit_price": price,
+            "tax_rate": float(inv_settings.default_tax_rate or 0),
+            "discount": 0,
+            "amount": qty * price,
+        })
+
+    subtotal = float(order.total_amount or 0)
+    tax_rate = float(inv_settings.default_tax_rate or 0)
+    tax_amount = round(subtotal * tax_rate / 100, 2)
+
+    number = inv_settings.next_number
+    invoice_number = f"{inv_settings.prefix}-{number:04d}"
+    inv_settings.next_number = number + 1
+
+    inv = models_pg.Invoice(
+        id=str(uuid.uuid4()),
+        company_id=order.company_id,
+        order_id=order.id,
+        outlet_id=order.outlet_id,
+        invoice_number=invoice_number,
+        customer_name=order.customer_name,
+        customer_phone=order.contact_number,
+        items=items or [{"description": f"Order {order.order_number}", "quantity": 1,
+                         "unit_price": subtotal, "tax_rate": tax_rate, "discount": 0, "amount": subtotal}],
+        subtotal=subtotal,
+        discount_amount=0,
+        tax_amount=tax_amount,
+        total_amount=subtotal + tax_amount,
+        paid_amount=0,
+        currency=inv_settings.currency,
+        currency_symbol=inv_settings.currency_symbol,
+        issue_date=date.today(),
+        payment_terms=inv_settings.default_payment_terms,
+        notes=inv_settings.default_notes,
+        footer=inv_settings.default_footer,
+        status="sent" if inv_settings.auto_send_on_generate else "draft",
+        sent_at=datetime.now(timezone.utc) if inv_settings.auto_send_on_generate else None,
+    )
+    db.add(inv)
+    await db.commit()

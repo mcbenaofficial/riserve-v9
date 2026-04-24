@@ -120,8 +120,71 @@ async def trial_signup(
 # ============ Public Booking ============
 
 
+@router.get("/book/{outlet_id}")
+async def get_booking_portal_data(outlet_id: str, db_session: AsyncSession = Depends(get_db)):
+    """Return outlet branding, services, and staff for the booking portal."""
+    outlet = (await db_session.execute(
+        select(models_pg.Outlet).where(models_pg.Outlet.id == outlet_id)
+    )).scalar_one_or_none()
+    if not outlet:
+        raise HTTPException(status_code=404, detail="Outlet not found")
+
+    company_id = outlet.company_id
+
+    services_res = await db_session.execute(
+        select(models_pg.Service).where(
+            models_pg.Service.company_id == company_id,
+            models_pg.Service.active == True
+        ).order_by(models_pg.Service.name)
+    )
+    services = services_res.scalars().all()
+
+    # Fetch resources for the outlet — these are what bookings.resource_id references (FK to resources.id)
+    resources_res = await db_session.execute(
+        select(models_pg.Resource, models_pg.User).outerjoin(
+            models_pg.User, models_pg.Resource.user_id == models_pg.User.id
+        ).where(
+            models_pg.Resource.outlet_id == outlet_id,
+            models_pg.Resource.active == True
+        ).order_by(models_pg.Resource.name)
+    )
+    resource_rows = resources_res.all()
+
+    staff_list = []
+    for r, u in resource_rows:
+        staff_list.append({
+            "id": r.id,          # real resource ID — safe to use as bookings.resource_id
+            "name": r.name,
+            "role": u.role if u else "Staff",
+            "photo": f"https://i.pravatar.cc/150?u={r.id}",
+        })
+
+    color_scheme = getattr(outlet, "portal_color_scheme", None) or {}
+
+    return {
+        "outlet": {
+            "id": outlet.id,
+            "name": outlet.name,
+            "portal_logo_url": getattr(outlet, "portal_logo_url", None),
+            "portal_color_scheme": color_scheme,
+            "portal_custom_colors": getattr(outlet, "portal_custom_colors", False),
+        },
+        "services": [
+            {
+                "id": str(s.id),
+                "name": s.name,
+                "price": float(s.price or 0),
+                "duration_minutes": s.duration or 30,
+                "description": s.description or "",
+            }
+            for s in services
+        ],
+        "staff": staff_list,
+    }
+
+
 class PublicBookingCreate(BaseModel):
-    outlet_id: str
+    outlet_id: Optional[str] = None
     resource_id: Optional[str] = None
     date: str
     time: str
@@ -137,6 +200,7 @@ class PublicBookingCreate(BaseModel):
 
 
 @router.get("/slot-config/{embed_token}")
+@router.get("/booking/{embed_token}")
 async def get_public_slot_config(embed_token: str, db_session: AsyncSession = Depends(get_db)):
     # Look for exact or partial token in configuration -> 'embed_token'
     from sqlalchemy.dialects.postgresql import JSONB
@@ -170,10 +234,38 @@ async def get_public_slot_config(embed_token: str, db_session: AsyncSession = De
     services = services_res.scalars().all()
     
     return {
-        "config": config_dict,
-        "outlet": {"id": outlet_rec.id, "name": outlet_rec.name} if outlet_rec else None,
+        "config": {**config_dict, "business_type": config_dict.get("business_type", "salon")},
+        "outlet": {
+            "id": outlet_rec.id, 
+            "name": outlet_rec.name,
+            "city": outlet_rec.location or "Bengaluru",
+            "address": outlet_rec.location or "Dev HQ"
+        } if outlet_rec else None,
         "services": [{"id": s.id, "name": s.name, "price": float(s.price), "duration_min": s.duration} for s in services]
     }
+    
+@router.post("/booking/{embed_token}")
+async def create_booking_with_token(
+    embed_token: str,
+    booking_input: PublicBookingCreate,
+    db_session: AsyncSession = Depends(get_db)
+):
+    """Alias for POST /book but takes token in URL to resolve outlet_id"""
+    stmt = select(models_pg.SlotConfig).where(
+        models_pg.SlotConfig.configuration["embed_token"].astext == embed_token
+    )
+    res = await db_session.execute(stmt)
+    config_rec = res.scalar_one_or_none()
+    
+    if not config_rec:
+        # Strict for POST
+        raise HTTPException(status_code=404, detail="Configuration not found")
+        
+    # Override/Set outlet_id from the found config
+    booking_input.outlet_id = config_rec.outlet_id
+    
+    # Delegate to the main booking logic
+    return await create_public_booking(booking_input, db_session)
 
 
 @router.get("/outlet/{outlet_id}")
@@ -196,8 +288,22 @@ async def get_public_outlet(outlet_id: str, db_session: AsyncSession = Depends(g
 async def create_public_booking(booking: PublicBookingCreate, db_session: AsyncSession = Depends(get_db)):
     stmt = select(models_pg.SlotConfig).where(models_pg.SlotConfig.outlet_id == booking.outlet_id)
     config_rec = (await db_session.execute(stmt)).scalar_one_or_none()
-    
-    if not config_rec or not config_rec.configuration or not config_rec.configuration.get("allow_online_booking", True):
+
+    # If no slot config exists, resolve company_id from outlet and allow booking without conflict checks
+    if not config_rec:
+        outlet_stmt = select(models_pg.Outlet).where(models_pg.Outlet.id == booking.outlet_id)
+        outlet_rec = (await db_session.execute(outlet_stmt)).scalar_one_or_none()
+        if not outlet_rec:
+            raise HTTPException(status_code=404, detail="Outlet not found")
+
+        # Create a minimal config_rec stand-in using a SimpleNamespace
+        import types
+        config_rec = types.SimpleNamespace(
+            company_id=outlet_rec.company_id,
+            outlet_id=booking.outlet_id,
+            configuration={"allow_online_booking": True, "allow_overlap": True},
+        )
+    elif not config_rec.configuration or not config_rec.configuration.get("allow_online_booking", True):
         raise HTTPException(status_code=400, detail="Online booking not available for this outlet")
     
     # Create or Find a guest customer
@@ -234,7 +340,7 @@ async def create_public_booking(booking: PublicBookingCreate, db_session: AsyncS
             service = (await db_session.execute(srv_stmt)).scalar_one_or_none()
             if service:
                 calculated_amount += float(service.price or 0)
-                calculated_duration += (service.duration_min or 30)
+                calculated_duration += (service.duration or 30)
         
         total_amount = total_amount or calculated_amount
         total_duration = booking.total_duration or calculated_duration

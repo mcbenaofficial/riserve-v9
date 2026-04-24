@@ -42,6 +42,23 @@ const Login = () => {
     }
   };
 
+  const handleDevBypass = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      const axios = (await import('axios')).default;
+      const API_BASE = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+      const response = await axios.post(`${API_BASE}/api/auth/dev-bypass`);
+      const { access_token, user: u } = response.data;
+      localStorage.setItem('ridn_token', access_token);
+      window.location.href = '/';
+    } catch (err) {
+      setError(err.response?.data?.detail || err.message || 'Dev bypass failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row relative bg-[#282524] overflow-hidden font-sans selection:bg-[#17A2B8]/30 selection:text-white dark">
       {/* 
@@ -179,6 +196,15 @@ const Login = () => {
               <span className="relative z-10 tracking-wide">{loading ? 'Authenticating...' : 'Sign in'}</span>
             </button>
           </form>
+
+          {/* Dev Bypass Button */}
+          <button
+            onClick={handleDevBypass}
+            disabled={loading}
+            className="w-full mt-4 py-3 rounded-xl text-xs font-medium text-[#D4AF37] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-[#D4AF37]/5 border border-[#D4AF37]/20 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/10 hover:shadow-[0_0_15px_rgba(212,175,55,0.1)] active:translate-y-0 relative overflow-hidden tracking-widest uppercase"
+          >
+            ⚡ Dev Login — admin@ridn.com
+          </button>
         </motion.div>
 
         {/* Footer Links outside the card */}

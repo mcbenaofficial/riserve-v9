@@ -23,6 +23,7 @@ import SlotManagement from './pages/SlotManagement';
 import Outlets from './pages/Outlets';
 import Services from './pages/Services';
 import Finance from './pages/Finance';
+import Invoices from './pages/Invoices';
 import Reports from './pages/Reports';
 import Users from './pages/Users';
 import Team from './pages/Team';
@@ -189,6 +190,7 @@ function MainLayout() {
               <Route path="/outlets" element={<Outlets />} />
               <Route path="/services" element={<Services />} />
               <Route path="/finance" element={<Finance />} />
+              <Route path="/invoices" element={<Invoices />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/users" element={<Users />} /> {/* Legacy Users page */}
               <Route path="/team" element={<Team />} /> {/* Unified Team (Users+Staff) */}

@@ -106,6 +106,103 @@ async def login(credentials: UserLogin, db_session: AsyncSession = Depends(get_d
     return Token(access_token=access_token, token_type="bearer", user=user)
 
 
+
+@router.post("/dev-bypass", response_model=Token)
+async def dev_bypass_login(db_session: AsyncSession = Depends(get_db)):
+    """
+    DEV-ONLY bypass: auto-provisions admin@ridn.com against the first
+    available company and returns a valid JWT — no password required.
+    """
+    try:
+        import uuid as _uuid
+        from sqlalchemy import delete
+
+        admin_email = "admin@ridn.com"
+        admin_password = "admin123"
+
+        # 1. Try to find the admin user (prioritize EXISTING users with data)
+        stmt = select(models_pg.User).where(models_pg.User.email == admin_email)
+        user_db = (await db_session.execute(stmt)).scalars().first()
+
+        # If user exists, we SHOULD keep it if it has a company
+        if not user_db or not user_db.company_id:
+            # 2. Find a company to attach to (prioritize Simulated Salon!)
+            company = None
+            for search_stmt in [
+                select(models_pg.Company).where(models_pg.Company.name == "Simulated Salon"),
+                select(models_pg.Company).where(models_pg.Company.name == "Urban Style Apparel"),
+                select(models_pg.Company).where(models_pg.Company.id == select(models_pg.HITLReport.company_id).limit(1).scalar_subquery()),
+                select(models_pg.Company).where(models_pg.Company.business_type == "salon"),
+                select(models_pg.Company).limit(1),
+            ]:
+                result = await db_session.execute(search_stmt)
+                company = result.scalars().first()
+                if company:
+                    break
+
+            if not company:
+                # Create if absolutely nothing exists
+                company = models_pg.Company(
+                    id=str(_uuid.uuid4()),
+                    name="Simulated Salon",
+                    business_type="salon",
+                    email="simulated@example.com",
+                    plan="pro",
+                    status="active",
+                    is_booking_enabled=True,
+                    enabled_features=["hq_intelligence", "inventory", "ai_flows", "crm"],
+                )
+                db_session.add(company)
+                await db_session.flush()
+
+            if not user_db:
+                # 3. Create the admin user if missing
+                user_db = models_pg.User(
+                    id=str(_uuid.uuid4()),
+                    company_id=company.id,
+                    email=admin_email,
+                    name="Ri'Serve Demo Admin",
+                    password_hash=hash_password(admin_password),
+                    role="Admin",
+                    phone="+919000000000",
+                    status="Active",
+                )
+                db_session.add(user_db)
+            else:
+                # Just link existing orphaned user
+                user_db.company_id = company.id
+            
+            await db_session.commit()
+            await db_session.refresh(user_db)
+
+        # 4. Build response
+        outlets_stmt = select(models_pg.user_outlets.c.outlet_id).where(
+            models_pg.user_outlets.c.user_id == user_db.id
+        )
+        outlets_list = [
+            row[0] for row in (await db_session.execute(outlets_stmt)).all()
+        ]
+
+        user = User(
+            id=user_db.id,
+            email=user_db.email,
+            name=user_db.name,
+            role=user_db.role,
+            status=user_db.status,
+            outlets=outlets_list,
+            company_id=user_db.company_id,
+        )
+
+        access_token = create_access_token({"sub": user.id})
+        return Token(access_token=access_token, token_type="bearer", user=user)
+
+    except Exception as e:
+        await db_session.rollback()
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Dev bypass error: {str(e)}")
+
+
 @router.get("/me", response_model=User)
 async def get_me(current_user: User = Depends(get_current_user)):
     return current_user

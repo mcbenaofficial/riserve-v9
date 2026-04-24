@@ -71,6 +71,8 @@ class Company(Base):
     menu_categories = relationship("MenuCategory", back_populates="company")
     menu_items = relationship("MenuItem", back_populates="company")
     restaurant_orders = relationship("RestaurantOrder", back_populates="company")
+    invoices = relationship("Invoice", back_populates="company")
+    invoice_settings = relationship("InvoiceSettings", back_populates="company", uselist=False)
 
 class User(Base):
     __tablename__ = "users"
@@ -1082,4 +1084,115 @@ class RazorpayConfig(Base):
                         onupdate=lambda: datetime.now(timezone.utc))
 
     company = relationship("Company", backref="razorpay_config", uselist=False)
+
+
+# ─── Invoices ─────────────────────────────────────────────────────────────────
+
+class InvoiceSettings(Base):
+    """Per-company invoice configuration and defaults."""
+    __tablename__ = "invoice_settings"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, unique=True)
+
+    prefix = Column(String(20), default="INV")
+    next_number = Column(Integer, default=1)
+    default_payment_terms = Column(String(50), default="net_30")  # due_on_receipt, net_7, net_15, net_30, net_45, net_60
+    tax_name = Column(String(50), default="GST")
+    default_tax_rate = Column(Numeric(5, 2), default=0)
+    show_tax_breakdown = Column(Boolean, default=True)
+    default_notes = Column(Text, nullable=True)
+    default_footer = Column(Text, nullable=True)
+    auto_generate_from_booking = Column(Boolean, default=False)
+    auto_generate_from_order = Column(Boolean, default=False)
+    auto_send_on_generate = Column(Boolean, default=False)
+    brand_color = Column(String(20), default="#5FA8D3")
+    email_subject = Column(String(255), default="Invoice {invoice_number} from {company_name}")
+    email_body = Column(Text, default="Dear {customer_name},\n\nPlease find your invoice {invoice_number} attached.\n\nAmount Due: {currency}{total_amount}\nDue Date: {due_date}\n\nThank you for your business.\n\n{company_name}")
+    # Company details override for invoice header
+    invoice_company_name = Column(String(255), nullable=True)
+    invoice_company_address = Column(Text, nullable=True)
+    invoice_company_phone = Column(String(50), nullable=True)
+    invoice_company_email = Column(String(255), nullable=True)
+    invoice_company_website = Column(String(255), nullable=True)
+    invoice_company_gstin = Column(String(50), nullable=True)
+    currency = Column(String(10), default="INR")
+    currency_symbol = Column(String(5), default="₹")
+
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", back_populates="invoice_settings")
+
+
+class Invoice(Base):
+    """Customer-facing invoice document."""
+    __tablename__ = "invoices"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='SET NULL'), nullable=True)
+    booking_id = Column(String, ForeignKey("bookings.id", ondelete='SET NULL'), nullable=True)
+    order_id = Column(String, ForeignKey("restaurant_orders.id", ondelete='SET NULL'), nullable=True)
+
+    invoice_number = Column(String(50), nullable=False, index=True)
+    status = Column(String(50), default="draft", index=True)
+    # draft | sent | paid | partially_paid | overdue | cancelled | void
+
+    # Customer snapshot (denormalized for portability)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete='SET NULL'), nullable=True)
+    customer_name = Column(String(255), nullable=False)
+    customer_email = Column(String(255), nullable=True)
+    customer_phone = Column(String(50), nullable=True)
+    billing_address = Column(JSONB, nullable=True)  # {line1, line2, city, state, zip, country}
+
+    # Line items: [{description, quantity, unit_price, tax_rate, discount, amount}]
+    items = Column(JSONB, default=list)
+
+    # Financials
+    subtotal = Column(Numeric(14, 2), default=0)
+    discount_amount = Column(Numeric(14, 2), default=0)
+    tax_amount = Column(Numeric(14, 2), default=0)
+    total_amount = Column(Numeric(14, 2), default=0)
+    paid_amount = Column(Numeric(14, 2), default=0)
+    currency = Column(String(10), default="INR")
+    currency_symbol = Column(String(5), default="₹")
+
+    # Dates & terms
+    issue_date = Column(Date, nullable=False)
+    due_date = Column(Date, nullable=True)
+    payment_terms = Column(String(50), default="net_30")
+    notes = Column(Text, nullable=True)
+    footer = Column(Text, nullable=True)
+
+    # Tracking
+    sent_at = Column(DateTime(timezone=True), nullable=True)
+    paid_at = Column(DateTime(timezone=True), nullable=True)
+    created_by = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", back_populates="invoices")
+    payments = relationship("InvoicePayment", back_populates="invoice", cascade="all, delete-orphan")
+
+
+class InvoicePayment(Base):
+    """Records partial or full payments against an invoice."""
+    __tablename__ = "invoice_payments"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    invoice_id = Column(String, ForeignKey("invoices.id", ondelete='CASCADE'), nullable=False)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False)
+
+    amount = Column(Numeric(14, 2), nullable=False)
+    payment_method = Column(String(50), default="cash")  # cash, card, bank_transfer, upi, cheque, other
+    reference = Column(String(255), nullable=True)  # transaction ref, cheque number, etc.
+    notes = Column(Text, nullable=True)
+    paid_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    created_by = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    invoice = relationship("Invoice", back_populates="payments")
 
