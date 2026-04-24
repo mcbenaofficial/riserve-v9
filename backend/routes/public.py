@@ -268,6 +268,90 @@ async def create_booking_with_token(
     return await create_public_booking(booking_input, db_session)
 
 
+@router.get("/available-slots/{outlet_id}")
+async def get_available_slots(
+    outlet_id: str,
+    date: str,
+    duration: int = 30,
+    resource_id: Optional[str] = None,
+    db_session: AsyncSession = Depends(get_db),
+):
+    """Return available time slots for a given outlet, date, service duration, and optional staff."""
+    from datetime import date as date_type
+
+    try:
+        book_date = date_type.fromisoformat(date)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+
+    # Load slot config for operating hours, slot step, breaks, and buffer
+    config_rec = (await db_session.execute(
+        select(models_pg.SlotConfig).where(models_pg.SlotConfig.outlet_id == outlet_id)
+    )).scalar_one_or_none()
+
+    rules = config_rec.configuration if config_rec else {}
+    slot_step = rules.get("slot_duration_min", 30)
+    if slot_step <= 0:
+        slot_step = 30
+    buffer_time = rules.get("buffer_time_minutes", 0)
+
+    def t_to_mins(t: str) -> int:
+        try:
+            h, m = map(int, t.split(":"))
+            return h * 60 + m
+        except Exception:
+            return 0
+
+    op_start = t_to_mins(rules.get("operating_hours_start", "09:00"))
+    op_end = t_to_mins(rules.get("operating_hours_end", "18:00"))
+
+    # Collect blocked intervals from existing bookings
+    overlap_stmt = select(models_pg.Booking).where(
+        models_pg.Booking.outlet_id == outlet_id,
+        models_pg.Booking.date == book_date,
+        models_pg.Booking.status.not_in(["Cancelled", "Declined"]),
+    )
+    if resource_id and resource_id != "any":
+        overlap_stmt = overlap_stmt.where(models_pg.Booking.resource_id == resource_id)
+
+    existing = (await db_session.execute(overlap_stmt)).scalars().all()
+    blocked: list[tuple[int, int]] = []
+    for b in existing:
+        if not b.time:
+            continue
+        s = t_to_mins(b.time)
+        e = s + (b.duration or slot_step) + buffer_time
+        blocked.append((s, e))
+
+    # Build break intervals from config
+    for brk in rules.get("breaks", []) or []:
+        bs = t_to_mins(brk.get("start", ""))
+        be = t_to_mins(brk.get("end", ""))
+        if be > bs:
+            blocked.append((bs, be))
+
+    now_mins: Optional[int] = None
+    from datetime import datetime as dt_cls
+    if book_date == dt_cls.now().date():
+        n = dt_cls.now()
+        now_mins = n.hour * 60 + n.minute
+
+    slots = []
+    cursor = op_start
+    while cursor + duration <= op_end:
+        end = cursor + duration + buffer_time
+        is_free = not any(cursor < be and end > bs for bs, be in blocked)
+        is_future = now_mins is None or cursor > now_mins
+        if is_free and is_future:
+            h, m = divmod(cursor, 60)
+            value = f"{h:02d}:{m:02d}"
+            label = dt_cls(2000, 1, 1, h, m).strftime("%I:%M %p").lstrip("0")
+            slots.append({"value": value, "label": label})
+        cursor += slot_step
+
+    return {"slots": slots}
+
+
 @router.get("/outlet/{outlet_id}")
 async def get_public_outlet(outlet_id: str, db_session: AsyncSession = Depends(get_db)):
     stmt = select(models_pg.Outlet).where(models_pg.Outlet.id == outlet_id)

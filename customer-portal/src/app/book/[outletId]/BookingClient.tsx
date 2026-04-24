@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { CheckCircle2, ChevronRight, Sparkles, Clock, User as UserIcon, ArrowLeft, Calendar as CalendarIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CheckCircle2, ChevronRight, Sparkles, Clock, User as UserIcon, ArrowLeft, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 
 const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
@@ -112,19 +112,28 @@ export default function BookingClient({ outletId, outlet, services, staff, initi
   const [loading, setLoading] = useState(false);
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [timeSlots, setTimeSlots] = useState<{ value: string; label: string }[]>([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
 
   const selectedService = services.find(s => s.id === serviceId);
   const selectedStaff = staff.find(s => s.id === staffId);
 
-  // Generate time slots from 09:00 to 18:30 in 30-min steps
-  const timeSlots = Array.from({ length: 20 }, (_, i) => {
-    const totalMins = 9 * 60 + i * 30;
-    const h = Math.floor(totalMins / 60);
-    const m = totalMins % 60;
-    const label = new Date(0, 0, 0, h, m).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-    const value = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-    return { label, value };
-  });
+  // Fetch available slots whenever date, staff, or service changes (and we're on step 3)
+  useEffect(() => {
+    if (!outletId || !serviceId) return;
+    const duration = selectedService?.duration_minutes || 30;
+    const dateStr = date.toISOString().split('T')[0];
+    const params = new URLSearchParams({ date: dateStr, duration: String(duration) });
+    if (staffId && staffId !== 'any') params.set('resource_id', staffId);
+
+    setSlotsLoading(true);
+    setTime(null);
+    fetch(`${BACKEND}/api/public/available-slots/${outletId}?${params}`)
+      .then(r => r.json())
+      .then(data => setTimeSlots(data.slots || []))
+      .catch(() => setTimeSlots([]))
+      .finally(() => setSlotsLoading(false));
+  }, [date, staffId, serviceId, outletId]);
 
   const handleBook = async () => {
     if (!customerName.trim() || !customerPhone.trim()) return;
@@ -301,22 +310,35 @@ export default function BookingClient({ outletId, outlet, services, staff, initi
                   <CalendarIcon className="w-4 h-4" style={{ color: 'var(--brand-primary)' }} />
                   {formatDate(date)}
                 </h4>
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                  {timeSlots.map(t => (
-                    <button
-                      key={t.value}
-                      onClick={() => setTime(t.value)}
-                      className="py-2.5 rounded-xl border-2 text-sm font-semibold transition-all"
-                      style={{
-                        borderColor: time === t.value ? 'var(--brand-primary)' : 'var(--brand-primary)20',
-                        backgroundColor: time === t.value ? 'var(--brand-primary)' : 'transparent',
-                        color: time === t.value ? '#fff' : 'var(--brand-text)',
-                      }}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
+                {slotsLoading ? (
+                  <div className="flex items-center justify-center py-10 gap-2" style={{ color: 'var(--brand-primary)' }}>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span className="text-sm font-medium">Checking availability…</span>
+                  </div>
+                ) : timeSlots.length === 0 ? (
+                  <div className="text-center py-10 rounded-2xl border-2 border-dashed" style={{ borderColor: 'var(--brand-primary)20', color: 'var(--brand-text)50' }}>
+                    <CalendarIcon className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                    <p className="text-sm font-medium">No available slots on this day.</p>
+                    <p className="text-xs mt-1">Try selecting a different date or professional.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {timeSlots.map(t => (
+                      <button
+                        key={t.value}
+                        onClick={() => setTime(t.value)}
+                        className="py-2.5 rounded-xl border-2 text-sm font-semibold transition-all"
+                        style={{
+                          borderColor: time === t.value ? 'var(--brand-primary)' : 'var(--brand-primary)20',
+                          backgroundColor: time === t.value ? 'var(--brand-primary)' : 'transparent',
+                          color: time === t.value ? '#fff' : 'var(--brand-text)',
+                        }}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setStep(2)} className="flex-none px-6 py-4 rounded-2xl border-2 font-bold text-sm"
@@ -324,7 +346,7 @@ export default function BookingClient({ outletId, outlet, services, staff, initi
                   <ArrowLeft className="w-4 h-4 inline mr-1" /> Back
                 </button>
                 <button
-                  disabled={!time}
+                  disabled={!time || slotsLoading}
                   onClick={() => setStep(4)}
                   className="flex-1 py-4 rounded-2xl font-bold text-lg text-white flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 disabled:opacity-40"
                   style={{ backgroundColor: 'var(--brand-primary)' }}

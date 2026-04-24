@@ -104,3 +104,12 @@
  GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 10ms (next.js: 653µs, application-code: 9ms)
  GET /book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb 200 in 980ms (next.js: 902ms, application-code: 78ms)
  GET /book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb 200 in 39ms (next.js: 3ms, application-code: 36ms)
+✓ Compiled in 99ms
+✓ Compiled in 125ms
+ GET /book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb 200 in 173ms (next.js: 85ms, application-code: 89ms)
+ GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 91ms (next.js: 14ms, application-code: 77ms)
+ GET /book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb 200 in 56ms (next.js: 4ms, application-code: 52ms)
+ GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 25ms (next.js: 4ms, application-code: 22ms)
+✓ Compiled in 30ms
+ GET /book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb 200 in 130ms (next.js: 21ms, application-code: 109ms)
+ GET /book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb 200 in 100ms (next.js: 14ms, application-code: 86ms)
