@@ -12,6 +12,7 @@ import AgentSidebar from './components/analytics/AgentSidebar'; // Reusing the A
 import { MessageSquare } from 'lucide-react';
 import AIAnalytics from './pages/AIAnalytics';
 import AIRecommendationHistory from './pages/AIRecommendationHistory';
+import AIInsightsPage from './pages/AIInsightsPage';
 import StaffScheduling from './pages/StaffScheduling';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -181,6 +182,7 @@ function MainLayout() {
               <Route path="/my-workspace" element={<ProtectedRoute><MyWorkspace /></ProtectedRoute>} />
               <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalytics /></ProtectedRoute>} />
               <Route path="/analytics/ai-reports" element={<ProtectedRoute><AIRecommendationHistory /></ProtectedRoute>} />
+              <Route path="/ai-insights" element={<ProtectedRoute><AIInsightsPage /></ProtectedRoute>} />
               <Route path="/analytics/staff-scheduling" element={<ProtectedRoute><StaffScheduling /></ProtectedRoute>} />
               <Route path="/slots" element={<SlotManagement />} />
               <Route path="/pos" element={<POS />} />

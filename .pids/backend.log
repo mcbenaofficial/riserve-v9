@@ -1,958 +1,555 @@
 INFO:     Will watch for changes in these directories: ['/Users/joshualawrence/Documents/riserve-v9/backend']
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [42281] using WatchFiles
-INFO:     Started server process [42284]
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [91913] using WatchFiles
+INFO:     Started server process [91955]
 INFO:     Waiting for application startup.
-2026-04-24 18:20:41,455 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:20:41,505 - server - INFO - No expired trials found
+2026-05-03 18:17:39,510 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-03 18:17:39,564 - server - INFO - No expired trials found
 INFO:     Application startup complete.
-2026-04-24 18:20:41,525 - server - INFO - No expired trials found
-INFO:     127.0.0.1:51339 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51363 - "GET /api/public/book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51692 - "GET /api/public/book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "OPTIONS /api/promotions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "OPTIONS /api/promotions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "GET /api/promotions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "GET /api/promotions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "OPTIONS /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "OPTIONS /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52255 - "OPTIONS /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52256 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52257 - "OPTIONS /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "GET /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "GET /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52257 - "GET /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "OPTIONS /api/inventory/products HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52257 - "OPTIONS /api/inventory/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "OPTIONS /api/inventory/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "OPTIONS /api/inventory/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52256 - "OPTIONS /api/inventory/categories HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52257 - "OPTIONS /api/suppliers HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52255 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52255 - "OPTIONS /api/suppliers HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/inventory/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "GET /api/inventory/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52255 - "GET /api/suppliers HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "GET /api/inventory/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/inventory/products HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52256 - "GET /api/inventory/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52257 - "GET /api/inventory/categories HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52255 - "GET /api/inventory/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52235 - "GET /api/suppliers HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52256 - "GET /api/inventory/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52236 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52238 - "GET /api/inventory/products HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52257 - "GET /api/inventory/categories HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52318 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52320 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52321 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52322 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52324 - "GET /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52324 - "GET /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52318 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52318 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52688 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:29:38,636 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [42284]
-INFO:     Started server process [43478]
-INFO:     Waiting for application startup.
-2026-04-24 18:29:40,038 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:29:40,059 - server - ERROR - Error checking expired trials: When initializing mapper Mapper[Company(companies)], expression 'Invoice' failed to locate a name ('Invoice'). If this is a class name, consider adding this relationship() to the <class 'models_pg.Company'> class after both dependent classes have been defined.
-2026-04-24 18:29:40,060 - server - ERROR - Error syncing slot config resources: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[Company(companies)]'. Original exception was: When initializing mapper Mapper[Company(companies)], expression 'Invoice' failed to locate a name ('Invoice'). If this is a class name, consider adding this relationship() to the <class 'models_pg.Company'> class after both dependent classes have been defined.
-INFO:     Application startup complete.
-2026-04-24 18:29:40,060 - server - ERROR - Error checking expired trials: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[Company(companies)]'. Original exception was: When initializing mapper Mapper[Company(companies)], expression 'Invoice' failed to locate a name ('Invoice'). If this is a class name, consider adding this relationship() to the <class 'models_pg.Company'> class after both dependent classes have been defined.
-WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:30:01,671 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43478]
-INFO:     Started server process [43527]
-INFO:     Waiting for application startup.
-2026-04-24 18:30:03,118 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:30:03,178 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:30:03,196 - server - INFO - No expired trials found
-INFO:     127.0.0.1:53989 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53989 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:31:25,698 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43527]
-INFO:     Started server process [43678]
-INFO:     Waiting for application startup.
-2026-04-24 18:31:27,056 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:31:27,110 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:31:27,128 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:31:39,045 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43678]
-INFO:     Started server process [43710]
-INFO:     Waiting for application startup.
-2026-04-24 18:31:40,439 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:31:40,494 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:31:40,510 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:31:43,943 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43710]
-INFO:     Started server process [43740]
-INFO:     Waiting for application startup.
-2026-04-24 18:31:44,959 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:31:45,006 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:31:45,024 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/a1b2c3d4e5f6_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:32:18,346 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43740]
-INFO:     Started server process [43812]
-INFO:     Waiting for application startup.
-2026-04-24 18:32:19,884 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:32:19,940 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:32:19,959 - server - INFO - No expired trials found
-INFO:     127.0.0.1:54500 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54504 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54504 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54506 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54504 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54502 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54500 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54511 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54511 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54511 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54511 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54500 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54511 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54511 - "GET /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54511 - "GET /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54502 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54506 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54504 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54506 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54510 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54502 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55805 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'alembic/versions/b9c8d7e6f5a4_add_invoice_tables.py', 'alembic/versions/a1b2c3d4e5f6_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:41:02,227 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43812]
-INFO:     Started server process [45049]
-INFO:     Waiting for application startup.
-2026-04-24 18:41:03,599 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:41:03,655 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:41:03,677 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/b9c8d7e6f5a4_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:41:10,445 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45049]
-INFO:     Started server process [45072]
-INFO:     Waiting for application startup.
-2026-04-24 18:41:11,469 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:41:11,533 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:41:11,548 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/b9c8d7e6f5a4_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:41:17,104 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45072]
-INFO:     Started server process [45094]
-INFO:     Waiting for application startup.
-2026-04-24 18:41:18,129 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:41:18,183 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:41:18,201 - server - INFO - No expired trials found
-INFO:     127.0.0.1:56912 - "OPTIONS /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56913 - "OPTIONS /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56912 - "GET /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56912 - "GET /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56915 - "OPTIONS /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57052 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57054 - "OPTIONS /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57056 - "OPTIONS /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57058 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57059 - "OPTIONS /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56915 - "GET /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56915 - "GET /api/feedback/config HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57052 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57054 - "GET /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57052 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56915 - "GET /api/feedback HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56915 - "GET /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56915 - "GET /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57144 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57144 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58450 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59728 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:52:52,571 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45094]
-INFO:     Started server process [46394]
-INFO:     Waiting for application startup.
-2026-04-24 18:52:53,944 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:52:54,020 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:52:54,038 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:52:56,662 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46394]
-INFO:     Started server process [46409]
-INFO:     Waiting for application startup.
-2026-04-24 18:52:57,676 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:52:57,725 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:52:57,741 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/c3d4e5f6a7b8_invoice_order_trigger_and_branding.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:08,147 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46409]
-INFO:     Started server process [46439]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:09,124 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:09,174 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:09,190 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:12,928 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46439]
-INFO:     Started server process [46455]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:13,899 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:13,948 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:13,964 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:17,803 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46455]
-INFO:     Started server process [46471]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:18,782 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:18,833 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:18,850 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:27,636 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46471]
-INFO:     Started server process [46495]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:28,767 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:28,816 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:28,833 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:33,884 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46495]
-INFO:     Started server process [46516]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:34,861 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:34,910 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:34,926 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:39,169 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46516]
-INFO:     Started server process [46532]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:40,147 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:40,209 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:40,226 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/bookings.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:51,038 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46532]
-INFO:     Started server process [46563]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:52,291 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:52,344 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:52,360 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/bookings.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:05,797 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46563]
-INFO:     Started server process [46594]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:06,817 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:06,872 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:06,889 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/bookings.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:30,737 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46594]
-INFO:     Started server process [46672]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:32,027 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:32,082 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:32,099 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:38,361 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46672]
-INFO:     Started server process [46695]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:39,343 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:39,393 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:39,410 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:54,363 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46695]
-INFO:     Started server process [46736]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:55,513 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:55,566 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:55,582 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:55:18,513 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46736]
-INFO:     Started server process [46788]
-INFO:     Waiting for application startup.
-2026-04-24 18:55:19,741 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:55:19,792 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:55:19,808 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:55:22,639 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46788]
-INFO:     Started server process [46803]
-INFO:     Waiting for application startup.
-2026-04-24 18:55:23,612 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:55:23,660 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:55:23,677 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:55:49,644 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46803]
-INFO:     Started server process [46857]
-INFO:     Waiting for application startup.
-2026-04-24 18:55:50,868 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:55:50,924 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:55:50,941 - server - INFO - No expired trials found
-INFO:     127.0.0.1:61058 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61058 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61058 - "OPTIONS /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61060 - "GET /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62339 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63164 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63166 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63167 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63168 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63164 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63168 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63166 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63166 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63170 - "GET /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63170 - "GET /api/invoices/settings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63615 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64916 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64916 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50125 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51435 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51435 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'routes/public.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 19:27:36,969 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46857]
-INFO:     Started server process [50795]
-INFO:     Waiting for application startup.
-2026-04-24 19:27:38,338 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 19:27:38,394 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 19:27:38,413 - server - INFO - No expired trials found
-INFO:     127.0.0.1:52567 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=30 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52567 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=30 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52567 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=30 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52760 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54038 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54674 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54677 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54674 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54682 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54677 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "OPTIONS /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "GET /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "GET /api/company/business-types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54677 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54674 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54682 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54672 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54677 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54674 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54678 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54674 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54674 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54680 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54766 - "GET /api/public/book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=30 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=60 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=120 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=60 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=90 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=90&resource_id=c5a8fd82-a78d-40b9-8d4a-92ee695080f3 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=90&resource_id=dcb14681-b9de-40f9-9666-672d88ae3b17 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-28&duration=90&resource_id=dcb14681-b9de-40f9-9666-672d88ae3b17 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-23&duration=90&resource_id=dcb14681-b9de-40f9-9666-672d88ae3b17 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=90&resource_id=dcb14681-b9de-40f9-9666-672d88ae3b17 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-23&duration=90&resource_id=dcb14681-b9de-40f9-9666-672d88ae3b17 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54778 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-26&duration=90&resource_id=dcb14681-b9de-40f9-9666-672d88ae3b17 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54916 - "OPTIONS /api/public/book HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54916 - "POST /api/public/book HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55189 - "OPTIONS /api/outlets/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55189 - "PUT /api/outlets/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55222 - "GET /api/public/book/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55191 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=30 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55256 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=180 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55256 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=180&resource_id=353d1040-ab1d-46eb-ab48-7fc67f6ead9f HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55256 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-24&duration=180&resource_id=27167479-a846-4f7a-9c80-f9ca76d2e501 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55256 - "GET /api/public/available-slots/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb?date=2026-04-26&duration=180&resource_id=27167479-a846-4f7a-9c80-f9ca76d2e501 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55385 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56009 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56664 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57279 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57279 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57927 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58556 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59206 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59822 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60499 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60499 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61112 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61771 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62381 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63051 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63051 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63682 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64345 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64962 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49223 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49838 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49838 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50489 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51098 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-2026-04-24 20:27:38,538 - server - INFO - No expired trials found
-INFO:     127.0.0.1:51753 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52368 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53042 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53042 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53658 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54317 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54934 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55583 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56191 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56191 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56846 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57593 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58108 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58908 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58908 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59419 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60183 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60691 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61570 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61570 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62294 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64169 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64255 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49157 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49157 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50357 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50465 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51107 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-2026-04-25 00:08:56,119 - server - INFO - No expired trials found
-INFO:     127.0.0.1:51745 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52452 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52452 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53016 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53801 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54313 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55091 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55091 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55591 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56336 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56828 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57590 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57590 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58086 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58824 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59321 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60074 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60074 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60571 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61325 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61830 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62607 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63091 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63091 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63851 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64352 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65107 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49220 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49967 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49967 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-2026-04-25 01:08:56,174 - server - INFO - No expired trials found
-INFO:     127.0.0.1:50471 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51232 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51729 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52500 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52500 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53003 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53767 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54267 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55027 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55527 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55527 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56291 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56792 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57548 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58047 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58047 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58814 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59314 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60070 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60584 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60584 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61384 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61890 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:29:38,524 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [41448]
-INFO:     Started server process [43477]
-INFO:     Waiting for application startup.
-2026-04-24 18:29:40,040 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:29:40,060 - server - ERROR - Error checking expired trials: When initializing mapper Mapper[Company(companies)], expression 'Invoice' failed to locate a name ('Invoice'). If this is a class name, consider adding this relationship() to the <class 'models_pg.Company'> class after both dependent classes have been defined.
-2026-04-24 18:29:40,060 - server - ERROR - Error syncing slot config resources: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[Company(companies)]'. Original exception was: When initializing mapper Mapper[Company(companies)], expression 'Invoice' failed to locate a name ('Invoice'). If this is a class name, consider adding this relationship() to the <class 'models_pg.Company'> class after both dependent classes have been defined.
-INFO:     Application startup complete.
-2026-04-24 18:29:40,061 - server - ERROR - Error checking expired trials: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[Company(companies)]'. Original exception was: When initializing mapper Mapper[Company(companies)], expression 'Invoice' failed to locate a name ('Invoice'). If this is a class name, consider adding this relationship() to the <class 'models_pg.Company'> class after both dependent classes have been defined.
-WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:30:01,668 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43477]
-INFO:     Started server process [43526]
-INFO:     Waiting for application startup.
-2026-04-24 18:30:03,119 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:30:03,178 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:30:03,196 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:31:25,696 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43526]
-INFO:     Started server process [43679]
-INFO:     Waiting for application startup.
-2026-04-24 18:31:27,056 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:31:27,109 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:31:27,127 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:31:39,046 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43679]
-INFO:     Started server process [43711]
-INFO:     Waiting for application startup.
-2026-04-24 18:31:40,440 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:31:40,495 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:31:40,511 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:31:43,942 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43711]
-INFO:     Started server process [43739]
-INFO:     Waiting for application startup.
-2026-04-24 18:31:44,958 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:31:45,006 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:31:45,024 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/a1b2c3d4e5f6_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:32:18,345 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43739]
-INFO:     Started server process [43811]
-INFO:     Waiting for application startup.
-2026-04-24 18:32:19,882 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:32:19,941 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:32:19,959 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/b9c8d7e6f5a4_add_invoice_tables.py', 'alembic/versions/a1b2c3d4e5f6_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:41:02,233 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [43811]
-INFO:     Started server process [45050]
-INFO:     Waiting for application startup.
-2026-04-24 18:41:03,598 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:41:03,655 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:41:03,677 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/b9c8d7e6f5a4_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:41:10,444 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45050]
-INFO:     Started server process [45071]
-INFO:     Waiting for application startup.
-2026-04-24 18:41:11,469 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:41:11,532 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:41:11,548 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/b9c8d7e6f5a4_add_invoice_tables.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:41:17,103 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45071]
-INFO:     Started server process [45093]
-INFO:     Waiting for application startup.
-2026-04-24 18:41:18,130 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:41:18,183 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:41:18,201 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:52:52,606 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45093]
-INFO:     Started server process [46395]
-INFO:     Waiting for application startup.
-2026-04-24 18:52:53,945 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:52:54,020 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:52:54,038 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:52:56,662 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46395]
-INFO:     Started server process [46410]
-INFO:     Waiting for application startup.
-2026-04-24 18:52:57,677 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:52:57,724 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:52:57,741 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'alembic/versions/c3d4e5f6a7b8_invoice_order_trigger_and_branding.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:08,147 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46410]
-INFO:     Started server process [46438]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:09,124 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:09,174 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:09,190 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:12,928 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46438]
-INFO:     Started server process [46456]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:13,899 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:13,951 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:13,967 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:17,805 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46456]
-INFO:     Started server process [46472]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:18,782 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:18,833 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:18,850 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:27,640 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46472]
-INFO:     Started server process [46496]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:28,769 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:28,816 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:28,833 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:33,881 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46496]
-INFO:     Started server process [46515]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:34,861 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:34,911 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:34,927 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/invoices.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:39,169 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46515]
-INFO:     Started server process [46533]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:40,148 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:40,209 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:40,226 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/bookings.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:53:51,039 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46533]
-INFO:     Started server process [46564]
-INFO:     Waiting for application startup.
-2026-04-24 18:53:52,291 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:53:52,344 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:53:52,360 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/bookings.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:05,897 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46564]
-INFO:     Started server process [46595]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:06,916 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:06,967 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:06,984 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/bookings.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:30,739 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46595]
-INFO:     Started server process [46673]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:32,027 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:32,082 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:32,099 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:38,364 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46673]
-INFO:     Started server process [46696]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:39,344 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:39,394 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:39,410 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:54:54,263 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46696]
-INFO:     Started server process [46735]
-INFO:     Waiting for application startup.
-2026-04-24 18:54:55,510 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:54:55,565 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:54:55,582 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:55:18,510 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46735]
-INFO:     Started server process [46787]
-INFO:     Waiting for application startup.
-2026-04-24 18:55:19,743 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:55:19,793 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:55:19,809 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:55:22,638 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46787]
-INFO:     Started server process [46802]
-INFO:     Waiting for application startup.
-2026-04-24 18:55:23,611 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:55:23,660 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:55:23,677 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/orders.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 18:55:49,545 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46802]
-INFO:     Started server process [46856]
-INFO:     Waiting for application startup.
-2026-04-24 18:55:50,868 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 18:55:50,924 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 18:55:50,941 - server - INFO - No expired trials found
-WARNING:  WatchFiles detected changes in 'routes/public.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-2026-04-24 19:27:37,077 - server - INFO - Shutting down Ri'Serve API...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [46856]
-INFO:     Started server process [50796]
-INFO:     Waiting for application startup.
-2026-04-24 19:27:38,339 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-04-24 19:27:38,394 - server - INFO - No expired trials found
-INFO:     Application startup complete.
-2026-04-24 19:27:38,412 - server - INFO - No expired trials found
-2026-04-24 20:27:38,552 - server - INFO - No expired trials found
-2026-04-25 00:08:56,129 - server - INFO - No expired trials found
-2026-04-25 01:08:56,197 - server - INFO - No expired trials found
+2026-05-03 18:17:39,589 - server - INFO - No expired trials found
+INFO:     127.0.0.1:64304 - "GET /api/reports HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64306 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64307 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64309 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64310 - "GET /api/services HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64304 - "GET /api/reports HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64306 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64312 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64307 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64309 - "GET /api/services HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:64380 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64393 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64392 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64382 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64396 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64499 - "OPTIONS /api/hq/copilot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64501 - "POST /api/hq/copilot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64499 - "POST /api/hq/copilot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64518 - "POST /api/hq/copilot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64545 - "POST /api/hq/copilot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64561 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64565 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64566 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64567 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64569 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64569 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64561 - "GET /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64561 - "GET /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64567 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64567 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64569 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64567 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64561 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64567 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64624 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64628 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64626 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64626 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64624 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64624 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64627 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64624 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64630 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64695 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64697 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64698 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64700 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64630 - "GET /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64700 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64698 - "GET /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64742 - "OPTIONS /api/hq/alerts?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64742 - "GET /api/hq/alerts?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64742 - "OPTIONS /api/hq/alerts?status=acknowledged HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64745 - "GET /api/hq/alerts?status=acknowledged HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64745 - "OPTIONS /api/hq/alerts?status=resolved HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64742 - "GET /api/hq/alerts?status=resolved HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64742 - "OPTIONS /api/hq/alerts?status=dismissed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64745 - "GET /api/hq/alerts?status=dismissed HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64745 - "GET /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64745 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64743 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64742 - "GET /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64743 - "GET /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64799 - "OPTIONS /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64800 - "OPTIONS /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64799 - "GET /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64799 - "GET /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64802 - "OPTIONS /api/hq/experiments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64832 - "OPTIONS /api/hq/experiments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64831 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64802 - "GET /api/hq/experiments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64832 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64802 - "GET /api/hq/experiments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "OPTIONS /api/hq/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64887 - "OPTIONS /api/hq/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "GET /api/hq/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64834 - "GET /api/hq/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64889 - "OPTIONS /api/hq/agent/rules HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64921 - "OPTIONS /api/hq/agent/queue HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64923 - "OPTIONS /api/hq/agent/log HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64925 - "OPTIONS /api/hq/agent/rules HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64927 - "OPTIONS /api/hq/agent/queue HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64928 - "OPTIONS /api/hq/agent/log HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64921 - "GET /api/hq/agent/queue HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64889 - "GET /api/hq/agent/rules HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64923 - "GET /api/hq/agent/log HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64921 - "GET /api/hq/agent/queue HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64889 - "GET /api/hq/agent/rules HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64923 - "GET /api/hq/agent/log HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64958 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64958 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65001 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65001 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65069 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65073 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65071 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65069 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65073 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65069 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65071 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65069 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65073 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65069 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65071 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65071 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65069 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65073 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65069 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65071 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65075 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65114 - "OPTIONS /api/customers?search= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65115 - "OPTIONS /api/customers?search= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65114 - "GET /api/customers?search= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65115 - "GET /api/customers?search= HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65175 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65175 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65174 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65175 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65117 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65175 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65247 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65247 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65246 - "GET /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65246 - "GET /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65323 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65323 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65322 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65321 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65323 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65322 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65322 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49196 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49199 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49196 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49199 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49201 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49192 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49192 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49196 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49199 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49192 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49196 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49201 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49195 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49199 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49192 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49196 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49201 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49192 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49237 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49238 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49237 - "GET /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49237 - "GET /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49240 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49258 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49261 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49240 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49238 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49260 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49258 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49237 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49261 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49240 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49237 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49258 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49238 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49260 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49258 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49261 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49237 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49240 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49260 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49258 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49261 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49238 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49305 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49304 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49305 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49304 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49304 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49305 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49307 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49305 - "OPTIONS /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49304 - "OPTIONS /api/portal/attendance/history?days=30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49310 - "OPTIONS /api/portal/leaves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49311 - "OPTIONS /api/portal/payslips HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49305 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49307 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49304 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49313 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49310 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49307 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49304 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49313 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49310 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49313 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49310 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49304 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49310 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49783 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49783 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51995 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52762 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52764 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52762 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52764 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52762 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52764 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52764 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52762 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52766 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52771 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52764 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52764 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53574 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54448 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54448 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55266 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56035 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56850 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56850 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57707 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+2026-05-03 22:57:18,921 - server - INFO - No expired trials found
+INFO:     127.0.0.1:58605 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58605 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59413 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60260 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61089 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61089 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62005 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62801 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63672 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63672 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64483 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65327 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65327 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49819 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51496 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51496 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+2026-05-03 23:57:19,012 - server - INFO - No expired trials found
+INFO:     127.0.0.1:52307 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52530 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52532 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52533 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52533 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52532 - "GET /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52532 - "GET /api/hq/briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52532 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52533 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/hq/network-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52533 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52527 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52532 - "GET /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52524 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52526 - "GET /api/hq/alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52588 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52589 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52588 - "GET /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52589 - "GET /api/hq/regions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52713 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52715 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52718 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52713 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52715 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52718 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52713 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52715 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52718 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52713 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52718 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52713 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52715 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52715 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52713 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52718 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52718 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52591 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52715 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52711 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52718 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52713 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53169 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54054 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54054 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54983 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55827 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56737 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56737 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57640 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58589 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58790 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58790 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58790 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58790 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58790 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58790 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/orders/active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/orders/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "GET /api/feedback/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58790 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58788 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58797 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/hitl/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59604 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60390 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60390 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61193 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61773 - "OPTIONS /api/hitl/confirm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61773 - "POST /api/hitl/confirm HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61993 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+2026-05-04 00:57:19,060 - server - INFO - No expired trials found
+INFO:     127.0.0.1:62764 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62764 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63553 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK

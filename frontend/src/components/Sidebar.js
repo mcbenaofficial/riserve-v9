@@ -53,7 +53,8 @@ import {
   Settings2,
   MonitorPlay,
   FileText,
-  Receipt
+  Receipt,
+  Sparkles
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -247,6 +248,7 @@ const Sidebar = () => {
       roles: ['SuperAdmin', 'Admin', 'Manager'],
       appId: 'reputation'
     },
+    { key: 'ai-insights', label: 'AI Insights', icon: Sparkles, path: '/ai-insights', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
     { key: 'smart-analytics', label: 'Smart Analytics', icon: SmartAnalyticsIcon, path: '/smart-analytics', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
     {
       key: 'hq-intelligence', label: 'HQ Intelligence', icon: Brain, path: '/hq', condition: (features) => features.includes('hq_intelligence'), roles: ['SuperAdmin', 'Admin'],
