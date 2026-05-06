@@ -278,6 +278,7 @@ const Sidebar = () => {
     { key: 'marketing-segments', label: 'Segments', icon: Users2, path: '/marketing/segments', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     { key: 'marketing-campaigns', label: 'Campaigns', icon: Megaphone, path: '/marketing/campaigns', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     { key: 'marketing-journeys', label: 'Journeys', icon: GitBranch, path: '/marketing/journeys', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
+    { key: 'marketing-settings', label: 'Settings', icon: Settings2, path: '/marketing/settings', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     // Omni Portal
     { key: 'omni-design', label: 'Design Studio', icon: Palette, path: '/omni/design', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-content', label: 'Content Manager', icon: FileText, path: '/omni/content', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },

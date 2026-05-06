@@ -72,6 +72,7 @@ import OmniContentManager from './pages/omni/OmniContentManager';
 import Segments from './pages/Conversations/Segments';
 import Campaigns from './pages/Conversations/Campaigns';
 import Journeys from './pages/Conversations/Journeys';
+import MarketingSettings from './pages/Conversations/MarketingSettings';
 import './App.css';
 
 function App() {
@@ -205,6 +206,7 @@ function MainLayout() {
               <Route path="/marketing/segments" element={<ProtectedRoute><Segments /></ProtectedRoute>} />
               <Route path="/marketing/campaigns" element={<ProtectedRoute><Campaigns /></ProtectedRoute>} />
               <Route path="/marketing/journeys" element={<ProtectedRoute><Journeys /></ProtectedRoute>} />
+              <Route path="/marketing/settings" element={<ProtectedRoute><MarketingSettings /></ProtectedRoute>} />
               <Route path="/admin" element={<AdminConsole />} />
               <Route path="/support" element={<Support />} />
               <Route path="/ai-agent" element={<AIAgent />} />

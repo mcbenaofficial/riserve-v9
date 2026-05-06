@@ -162,6 +162,127 @@ async def search_knowledge(
     ]
 
 
+class AgentConfigCreate(BaseModel):
+    agent_name: str
+    model: Optional[str] = "gpt-4o-mini"
+    allowed_tools: Optional[List[str]] = []
+    autonomy_level: Optional[str] = "L1"
+    confidence_threshold: Optional[float] = 0.75
+    is_active: Optional[bool] = True
+
+
+class AgentConfigUpdate(BaseModel):
+    agent_name: Optional[str] = None
+    model: Optional[str] = None
+    allowed_tools: Optional[List[str]] = None
+    autonomy_level: Optional[str] = None
+    confidence_threshold: Optional[float] = None
+    is_active: Optional[bool] = None
+
+
+def _serialize_agent_config(c):
+    return {
+        "id": c.id,
+        "agent_name": c.agent_name,
+        "model": c.model,
+        "allowed_tools": c.allowed_tools if isinstance(c.allowed_tools, list) else [],
+        "autonomy_level": c.autonomy_level,
+        "confidence_threshold": c.confidence_threshold,
+        "is_active": c.is_active,
+        "created_at": c.created_at,
+    }
+
+
+@router.get("/agent-config")
+async def list_agent_configs(
+    current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.AgentConfig)
+        .where(models_pg.AgentConfig.tenant_id == current_user.company_id)
+        .order_by(models_pg.AgentConfig.created_at)
+    )
+    return [_serialize_agent_config(c) for c in result.scalars().all()]
+
+
+@router.post("/agent-config", status_code=201)
+async def create_agent_config(
+    body: AgentConfigCreate,
+    current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    config = models_pg.AgentConfig(
+        id=str(uuid.uuid4()),
+        tenant_id=current_user.company_id,
+        agent_name=body.agent_name,
+        model=body.model or "gpt-4o-mini",
+        allowed_tools=body.allowed_tools or [],
+        autonomy_level=body.autonomy_level or "L1",
+        confidence_threshold=body.confidence_threshold if body.confidence_threshold is not None else 0.75,
+        is_active=body.is_active if body.is_active is not None else True,
+        created_at=datetime.now(timezone.utc),
+    )
+    db.add(config)
+    await db.commit()
+    await db.refresh(config)
+    return _serialize_agent_config(config)
+
+
+@router.put("/agent-config/{config_id}")
+async def update_agent_config(
+    config_id: str,
+    body: AgentConfigUpdate,
+    current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.AgentConfig).where(
+            models_pg.AgentConfig.id == config_id,
+            models_pg.AgentConfig.tenant_id == current_user.company_id,
+        )
+    )
+    config = result.scalar_one_or_none()
+    if not config:
+        raise HTTPException(status_code=404, detail="Agent config not found")
+
+    if body.agent_name is not None:
+        config.agent_name = body.agent_name
+    if body.model is not None:
+        config.model = body.model
+    if body.allowed_tools is not None:
+        config.allowed_tools = body.allowed_tools
+    if body.autonomy_level is not None:
+        config.autonomy_level = body.autonomy_level
+    if body.confidence_threshold is not None:
+        config.confidence_threshold = body.confidence_threshold
+    if body.is_active is not None:
+        config.is_active = body.is_active
+
+    await db.commit()
+    await db.refresh(config)
+    return _serialize_agent_config(config)
+
+
+@router.delete("/agent-config/{config_id}", status_code=204)
+async def delete_agent_config(
+    config_id: str,
+    current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.AgentConfig).where(
+            models_pg.AgentConfig.id == config_id,
+            models_pg.AgentConfig.tenant_id == current_user.company_id,
+        )
+    )
+    config = result.scalar_one_or_none()
+    if not config:
+        raise HTTPException(status_code=404, detail="Agent config not found")
+    await db.delete(config)
+    await db.commit()
+
+
 @router.get("/brand-voice")
 async def get_brand_voice(
     current_user=Depends(get_current_user),

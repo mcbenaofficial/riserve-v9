@@ -41,3 +41,19 @@ export const deleteJourney = (id) => request('DELETE', `${BASE}/journeys/${id}`)
 export const toggleJourney = (id) => request('PUT', `${BASE}/journeys/${id}/toggle`);
 export const enrollCustomer = (journeyId, customerId) => request('POST', `${BASE}/journeys/${journeyId}/enroll/${customerId}`);
 export const getEnrollments = (journeyId) => request('GET', `${BASE}/journeys/${journeyId}/enrollments`);
+
+// Knowledge Base
+const KB = `${BACKEND_URL}/api/knowledge`;
+export const getKnowledgeSources = () => request('GET', `${KB}/sources`);
+export const createKnowledgeSource = (data) => request('POST', `${KB}/sources`, data);
+export const ingestContent = (sourceId, items) => request('POST', `${KB}/sources/${sourceId}/ingest`, items);
+
+// Brand Voice
+export const getBrandVoice = () => request('GET', `${KB}/brand-voice`);
+export const saveBrandVoice = (data) => request('PUT', `${KB}/brand-voice`, data);
+
+// Agent Config
+export const getAgentConfigs = () => request('GET', `${KB}/agent-config`);
+export const createAgentConfig = (data) => request('POST', `${KB}/agent-config`, data);
+export const updateAgentConfig = (id, data) => request('PUT', `${KB}/agent-config/${id}`, data);
+export const deleteAgentConfig = (id) => request('DELETE', `${KB}/agent-config/${id}`);
