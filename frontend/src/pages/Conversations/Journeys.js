@@ -133,7 +133,7 @@ function AddStepMenu({ onAdd }) {
 
 // ─── Single flow node card ─────────────────────────────────────────────────────
 
-function FlowNodeCard({ node, triggerType, onChange, onRemove, inboxes }) {
+function FlowNodeCard({ node, triggerType, onChange, onRemove, inboxes, dragHandleProps }) {
   const s = NODE_STYLES[node.type] || NODE_STYLES.end;
   const isFixed = node.type === 'trigger' || node.type === 'end';
 
@@ -153,8 +153,19 @@ function FlowNodeCard({ node, triggerType, onChange, onRemove, inboxes }) {
         </button>
       )}
 
+      {/* Drag handle */}
+      {!isFixed && dragHandleProps && (
+        <div
+          {...dragHandleProps}
+          className="absolute left-1.5 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400 cursor-grab active:cursor-grabbing touch-none"
+          title="Drag to reorder"
+        >
+          <GripVertical size={14} />
+        </div>
+      )}
+
       {/* Card header */}
-      <div className="flex items-center gap-2 mb-2">
+      <div className={`flex items-center gap-2 mb-2 ${!isFixed ? 'pl-3' : ''}`}>
         <span className={`w-2 h-2 rounded-full flex-shrink-0 ${s.dot}`} />
         <span className={`text-xs font-semibold ${s.label}`}>
           {node.type === 'trigger'      && 'Trigger'}
@@ -215,9 +226,11 @@ function FlowNodeCard({ node, triggerType, onChange, onRemove, inboxes }) {
 
 // ─── Flow Canvas ───────────────────────────────────────────────────────────────
 
-function FlowCanvas({ allNodes, triggerType, onUpdateNode, onRemoveNode, onInsertAt, inboxes }) {
+function FlowCanvas({ allNodes, triggerType, onUpdateNode, onRemoveNode, onInsertAt, onReorder, inboxes }) {
   const canvasRef = useRef(null);
   const [canvasWidth, setCanvasWidth] = useState(CANVAS_W);
+  const [dragSrc, setDragSrc] = useState(null);   // allNodes index
+  const [dragOver, setDragOver] = useState(null);  // allNodes index
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -283,15 +296,59 @@ function FlowCanvas({ allNodes, triggerType, onUpdateNode, onRemoveNode, onInser
         {allNodes.map((node, i) => {
           const yPos = START_Y + i * STEP_Y;
           const showAddBelow = i < allNodes.length - 1;
-          // midpoint Y between this card's bottom and next card's top
           const addBtnY = yPos + CARD_H + (STEP_Y - CARD_H) / 2 - 12;
+          const isFixed = node.type === 'trigger' || node.type === 'end';
+          const isDragTarget = dragOver === i && dragSrc !== null && dragSrc !== i && !isFixed;
+
+          const dragHandleProps = !isFixed ? {
+            onMouseDown: (e) => e.stopPropagation(),
+          } : undefined;
 
           return (
             <React.Fragment key={node.id}>
+              {/* Drop indicator line above this node */}
+              {isDragTarget && (
+                <div
+                  className="absolute rounded-full bg-[var(--accent)]"
+                  style={{ left: nodeX, top: yPos - 6, width: CARD_W, height: 2, zIndex: 3 }}
+                />
+              )}
+
               {/* Node card */}
               <div
                 className="absolute"
-                style={{ left: nodeX, top: yPos, zIndex: 1 }}
+                style={{
+                  left: nodeX,
+                  top: yPos,
+                  zIndex: dragSrc === i ? 10 : 1,
+                  opacity: dragSrc === i ? 0.5 : 1,
+                  transition: dragSrc !== null ? 'none' : undefined,
+                }}
+                draggable={!isFixed}
+                onDragStart={!isFixed ? (e) => {
+                  e.dataTransfer.effectAllowed = 'move';
+                  setDragSrc(i);
+                } : undefined}
+                onDragEnd={!isFixed ? () => {
+                  setDragSrc(null);
+                  setDragOver(null);
+                } : undefined}
+                onDragOver={!isFixed ? (e) => {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'move';
+                  if (dragOver !== i) setDragOver(i);
+                } : undefined}
+                onDrop={!isFixed ? (e) => {
+                  e.preventDefault();
+                  if (dragSrc !== null && dragSrc !== i) {
+                    // Convert allNodes indices to stepNodes indices (subtract 1 for trigger)
+                    const from = dragSrc - 1;
+                    const to = i - 1;
+                    onReorder(from, to);
+                  }
+                  setDragSrc(null);
+                  setDragOver(null);
+                } : undefined}
               >
                 <FlowNodeCard
                   node={node}
@@ -299,6 +356,7 @@ function FlowCanvas({ allNodes, triggerType, onUpdateNode, onRemoveNode, onInser
                   onChange={updated => onUpdateNode(node.id, updated)}
                   onRemove={() => onRemoveNode(node.id)}
                   inboxes={inboxes}
+                  dragHandleProps={!isFixed ? dragHandleProps : undefined}
                 />
               </div>
 
@@ -359,6 +417,15 @@ function JourneyDrawer({ open, onClose, onSaved, editJourney, inboxes }) {
       // pos here refers to allNodes index; subtract 1 for trigger offset
       const stepPos = pos - 1;
       next.splice(Math.max(0, stepPos), 0, newNode);
+      return next;
+    });
+  }, []);
+
+  const reorderNodes = useCallback((from, to) => {
+    setStepNodes(prev => {
+      const next = [...prev];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
       return next;
     });
   }, []);
@@ -464,6 +531,7 @@ function JourneyDrawer({ open, onClose, onSaved, editJourney, inboxes }) {
               onUpdateNode={updateNode}
               onRemoveNode={removeNode}
               onInsertAt={insertAt}
+              onReorder={reorderNodes}
               inboxes={inboxes}
             />
           </div>
