@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 import uuid
+from pgvector.sqlalchemy import Vector
 
 from database_pg import Base
 
@@ -163,6 +164,9 @@ class Staff(Base):
     attendance_records = relationship("Attendance", back_populates="staff", cascade="all, delete-orphan")
     leave_requests = relationship("LeaveRequest", back_populates="staff", cascade="all, delete-orphan")
     payslips = relationship("Payslip", back_populates="staff", cascade="all, delete-orphan")
+    break_logs = relationship("BreakLog", back_populates="staff", cascade="all, delete-orphan")
+    tip_records = relationship("TipRecord", back_populates="staff", cascade="all, delete-orphan")
+    training_completions = relationship("TrainingCompletion", back_populates="staff", cascade="all, delete-orphan")
 
 
 class Attendance(Base):
@@ -244,6 +248,62 @@ class Payslip(Base):
     # Relationships
     staff = relationship("Staff", back_populates="payslips")
 
+
+class BreakLog(Base):
+    __tablename__ = "break_logs"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    date = Column(Date, nullable=False, index=True)
+    break_type = Column(String(50), default="short")   # meal, short, personal
+    started_at = Column(DateTime(timezone=True), nullable=False)
+    ended_at = Column(DateTime(timezone=True), nullable=True)
+    duration_minutes = Column(Integer, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    staff = relationship("Staff", back_populates="break_logs")
+
+
+class TipRecord(Base):
+    __tablename__ = "tip_records"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    date = Column(Date, nullable=False, index=True)
+    amount = Column(Numeric(10, 2), nullable=False, default=0)
+    source_notes = Column(String(255), nullable=True)   # e.g. "Table 3, 7"
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    staff = relationship("Staff", back_populates="tip_records")
+
+
+class TrainingModule(Base):
+    __tablename__ = "training_modules"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    title = Column(String(255), nullable=False)
+    category = Column(String(100), nullable=False)      # Compliance, Service, Safety, Sales, Operations
+    duration_minutes = Column(Integer, default=15)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    completions = relationship("TrainingCompletion", back_populates="module", cascade="all, delete-orphan")
+
+
+class TrainingCompletion(Base):
+    __tablename__ = "training_completions"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
+    module_id = Column(String, ForeignKey("training_modules.id", ondelete="CASCADE"), nullable=False)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    completed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    staff = relationship("Staff", back_populates="training_completions")
+    module = relationship("TrainingModule", back_populates="completions")
 
 
 class Customer(Base):
@@ -1195,4 +1255,518 @@ class InvoicePayment(Base):
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     invoice = relationship("Invoice", back_populates="payments")
+
+
+# ── Mobile Staff App Models ──────────────────────────────────────────────────
+
+class StaffTask(Base):
+    __tablename__ = "staff_tasks"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=True)
+    assigned_to = Column(String, ForeignKey("staff.id", ondelete="SET NULL"), nullable=True)
+    created_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    category = Column(String(50), default="general")  # opening, closing, cleaning, prep, general
+    priority = Column(String(20), default="normal")   # low, normal, high
+    status = Column(String(20), default="pending")    # pending, in_progress, done
+    due_date = Column(Date, nullable=True)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+
+class StaffMessage(Base):
+    __tablename__ = "staff_messages"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=True)
+    sender_id = Column(String, ForeignKey("staff.id", ondelete="SET NULL"), nullable=True)
+    sender_name = Column(String(255))
+    channel = Column(String(50), default="general")   # general, section-a, managers, etc.
+    content = Column(Text, nullable=False)
+    message_type = Column(String(20), default="text") # text, system
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class StaffIncident(Base):
+    __tablename__ = "staff_incidents"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=True)
+    reported_by = Column(String, ForeignKey("staff.id", ondelete="SET NULL"), nullable=True)
+    reporter_name = Column(String(255))
+    incident_type = Column(String(50), nullable=False)  # complaint, accident, theft, quality, other
+    severity = Column(String(20), default="medium")     # low, medium, high, critical
+    description = Column(Text, nullable=False)
+    table_ref = Column(String(50), nullable=True)       # table number if applicable
+    customer_ref = Column(String(255), nullable=True)
+    status = Column(String(20), default="open")         # open, under_review, resolved
+    manager_notes = Column(Text, nullable=True)
+    resolved_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+
+class ShiftNote(Base):
+    __tablename__ = "shift_notes"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=True)
+    author_id = Column(String, ForeignKey("staff.id", ondelete="SET NULL"), nullable=True)
+    author_name = Column(String(255))
+    content = Column(Text, nullable=False)
+    tags = Column(JSONB, default=list)  # ["vip", "pending", "urgent"]
+    shift_date = Column(Date, nullable=False)
+    shift_type = Column(String(20), default="day")  # morning, day, evening, night
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+# ============================================================
+# MARKETING & CONVERSATIONS MODULE
+# ============================================================
+
+class MktInbox(Base):
+    """A connected channel account (e.g. 'Riserve R WhatsApp')."""
+    __tablename__ = "mkt_inboxes"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    channel = Column(String(50), nullable=False)  # whatsapp | instagram | facebook | telegram | email | sms
+    credentials_ref = Column(Text)               # JSON blob with phone_number_id + access_token (never raw in prod)
+    webhook_secret = Column(String(255))
+    is_active = Column(Boolean, default=True)
+    auto_assignment_rule = Column(String(50), default="round_robin")  # round_robin | load_based | manual
+    business_hours = Column(JSONB, default=dict)
+    feature_flags = Column(JSONB, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+
+class MktCustomerIdentity(Base):
+    """Links a Customer to one channel-specific handle."""
+    __tablename__ = "mkt_customer_identities"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete="CASCADE"), nullable=False)
+    channel = Column(String(50), nullable=False)       # whatsapp | instagram | ...
+    external_id = Column(String(500), nullable=False)  # phone number, IG handle, PSID, etc.
+    verified = Column(Boolean, default=False)
+    source = Column(String(100))  # inbound_message | manual | import
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    # Unique constraint: one external_id per channel per company
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('company_id', 'channel', 'external_id',
+                                                  name='uq_mkt_identity_company_channel_external'),
+    )
+
+
+class MktConsentLedger(Base):
+    """Append-only opt-in / opt-out history. Never update rows — always insert."""
+    __tablename__ = "mkt_consent_ledger"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete="CASCADE"), nullable=False, index=True)
+    channel = Column(String(50), nullable=False)
+    purpose = Column(String(50), nullable=False)   # transactional | marketing
+    status = Column(String(20), nullable=False)    # granted | revoked
+    source = Column(String(100))                   # inbound_stop | manual | import | checkout_opt_in
+    evidence = Column(JSONB, default=dict)
+    occurred_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class MktConversation(Base):
+    """One conversation thread, scoped to a single channel."""
+    __tablename__ = "mkt_conversations"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    inbox_id = Column(String, ForeignKey("mkt_inboxes.id", ondelete="CASCADE"), nullable=False)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete="SET NULL"), nullable=True)
+    customer_identity_id = Column(String, ForeignKey("mkt_customer_identities.id", ondelete="SET NULL"), nullable=True)
+    status = Column(String(20), default="open", index=True)  # open | pending | resolved | snoozed
+    assignee_id = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    last_message_at = Column(DateTime(timezone=True), index=True)
+    last_customer_message_at = Column(DateTime(timezone=True))
+    unread_count = Column(Integer, default=0)
+    labels = Column(JSONB, default=list)
+    snooze_until = Column(DateTime(timezone=True), nullable=True)
+    # AI agent state: "ai_handling" | "escalated" | "human_takeover" | null
+    ai_handling_state = Column(String(50), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+
+class MktMessage(Base):
+    """A single message in a conversation."""
+    __tablename__ = "mkt_messages"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    conversation_id = Column(String, ForeignKey("mkt_conversations.id", ondelete="CASCADE"), nullable=False, index=True)
+    direction = Column(String(10), nullable=False)       # in | out
+    sender_type = Column(String(20), nullable=False)     # customer | agent | bot | system
+    sender_id = Column(String(255))
+    content_type = Column(String(50), default="text")   # text | image | audio | video | document | template
+    content_text = Column(Text)
+    attachments = Column(JSONB, default=list)
+    raw = Column(JSONB, default=dict)                    # channel-specific raw payload
+    channel_message_id = Column(String(500))
+    delivery_status = Column(String(20), default="sent")  # queued | sent | delivered | read | failed
+    error_code = Column(String(100))
+    sent_at = Column(DateTime(timezone=True))
+    delivered_at = Column(DateTime(timezone=True))
+    read_at = Column(DateTime(timezone=True))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class MktInternalNote(Base):
+    """Agent-only notes on a conversation (not sent to the customer)."""
+    __tablename__ = "mkt_internal_notes"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    conversation_id = Column(String, ForeignKey("mkt_conversations.id", ondelete="CASCADE"), nullable=False, index=True)
+    author_id = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    body = Column(Text, nullable=False)
+    mentions = Column(JSONB, default=list)  # list of user IDs @mentioned
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class MktTemplate(Base):
+    """Versioned message templates, per channel."""
+    __tablename__ = "mkt_templates"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    channel = Column(String(50), nullable=False)
+    name = Column(String(255), nullable=False)
+    locale = Column(String(20), default="en")
+    body = Column(Text, nullable=False)
+    variables = Column(JSONB, default=dict)            # variable schema / sample values
+    provider_status = Column(String(20))               # APPROVED | PENDING | REJECTED (WhatsApp)
+    provider_template_id = Column(String(255))
+    version = Column(Integer, default=1)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+
+class MktFrequencyCapConfig(Base):
+    """Per-company frequency cap + quiet-hours settings for marketing sends."""
+    __tablename__ = "mkt_frequency_cap_configs"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, unique=True)
+    max_per_day = Column(Integer, default=3)
+    max_per_week = Column(Integer, default=10)
+    quiet_hours_start = Column(String(5), default="22:00")   # HH:MM local time
+    quiet_hours_end = Column(String(5), default="08:00")
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+
+class MktMessageSendCount(Base):
+    """Daily per-customer per-channel marketing send counter for frequency cap enforcement."""
+    __tablename__ = "mkt_message_send_counts"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete="CASCADE"), nullable=False)
+    channel = Column(String(50), nullable=False)
+    date = Column(Date, nullable=False)
+    count = Column(Integer, default=0)
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('company_id', 'customer_id', 'channel', 'date',
+                                                  name='uq_mkt_send_count_day'),
+    )
+
+
+class MktWebhookRawEvent(Base):
+    """Raw inbound webhook payloads before processing (audit trail + retry safety)."""
+    __tablename__ = "mkt_webhook_raw_events"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    channel = Column(String(50), nullable=False)
+    inbox_id = Column(String(255))
+    payload = Column(JSONB, nullable=False)
+    received_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    processed = Column(Boolean, default=False)
+    processed_at = Column(DateTime(timezone=True))
+    error = Column(Text)
+
+
+class MktSegment(Base):
+    __tablename__ = "mkt_segments"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    description = Column(Text)
+    rules = Column(JSONB, default=list)
+    estimated_count = Column(Integer, default=0)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+class MktCampaign(Base):
+    __tablename__ = "mkt_campaigns"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    segment_id = Column(String, ForeignKey("mkt_segments.id", ondelete="SET NULL"), nullable=True)
+    inbox_id = Column(String, ForeignKey("mkt_inboxes.id", ondelete="SET NULL"), nullable=True)
+    template_id = Column(String, ForeignKey("mkt_templates.id", ondelete="SET NULL"), nullable=True)
+    content_type = Column(String(20), default="freeform")
+    content = Column(JSONB, default=dict)
+    scheduled_at = Column(DateTime(timezone=True), nullable=True)
+    status = Column(String(20), default="draft", index=True)
+    stats = Column(JSONB, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+class MktCampaignRecipient(Base):
+    __tablename__ = "mkt_campaign_recipients"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    campaign_id = Column(String, ForeignKey("mkt_campaigns.id", ondelete="CASCADE"), nullable=False, index=True)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete="CASCADE"), nullable=False)
+    identity_id = Column(String, ForeignKey("mkt_customer_identities.id", ondelete="SET NULL"), nullable=True)
+    status = Column(String(20), default="pending")
+    sent_at = Column(DateTime(timezone=True), nullable=True)
+    error = Column(Text)
+
+class MktJourney(Base):
+    __tablename__ = "mkt_journeys"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    description = Column(Text)
+    trigger_type = Column(String(50), nullable=False)
+    trigger_config = Column(JSONB, default=dict)
+    dag = Column(JSONB, default=dict)
+    is_active = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+class MktJourneyEnrollment(Base):
+    __tablename__ = "mkt_journey_enrollments"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    journey_id = Column(String, ForeignKey("mkt_journeys.id", ondelete="CASCADE"), nullable=False, index=True)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete="CASCADE"), nullable=False)
+    current_node_id = Column(String(255))
+    status = Column(String(20), default="active")
+    enrolled_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+
+class MktJourneyStepLog(Base):
+    __tablename__ = "mkt_journey_step_logs"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    enrollment_id = Column(String, ForeignKey("mkt_journey_enrollments.id", ondelete="CASCADE"), nullable=False, index=True)
+    node_id = Column(String(255), nullable=False)
+    executed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    result = Column(JSONB, default=dict)
+
+
+# ─── Agentic Marketing Layer ──────────────────────────────────────────────────
+
+class KnowledgeSource(Base):
+    __tablename__ = "knowledge_sources"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False)
+    type = Column(String(50), nullable=False)
+    source_ref = Column(Text, nullable=True)
+    status = Column(String(50), default="pending")
+    last_synced_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    chunks = relationship("KnowledgeChunk", back_populates="source", cascade="all, delete-orphan")
+
+
+class KnowledgeChunk(Base):
+    __tablename__ = "knowledge_chunks"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    source_id = Column(String(36), ForeignKey("knowledge_sources.id", ondelete="CASCADE"), nullable=True)
+    tenant_id = Column(String(36), nullable=False)
+    content = Column(Text, nullable=False)
+    embedding = Column(Vector(1536), nullable=True)
+    chunk_metadata = Column("metadata", JSONB, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    source = relationship("KnowledgeSource", back_populates="chunks")
+
+
+class BrandVoiceProfile(Base):
+    __tablename__ = "brand_voice_profiles"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, unique=True)
+    tone = Column(String(100), default="warm")
+    do_phrases = Column(JSONB, default=list)
+    dont_phrases = Column(JSONB, default=list)
+    required_disclosures = Column(JSONB, default=list)
+    example_messages = Column(JSONB, default=list)
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class AgentConfig(Base):
+    __tablename__ = "agents"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False)
+    agent_name = Column(String(100), nullable=False)
+    version = Column(String(50), default="v1")
+    system_prompt_id = Column(String(200), nullable=True)
+    model = Column(String(200), nullable=True)
+    allowed_tools = Column(JSONB, default=list)
+    autonomy_level = Column(String(10), default="L1")
+    confidence_threshold = Column(Float, default=0.75)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    runs = relationship("AgentRun", back_populates="agent")
+
+
+class AgentRun(Base):
+    __tablename__ = "agent_runs"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False)
+    agent_id = Column(String(36), ForeignKey("agents.id", ondelete="SET NULL"), nullable=True)
+    started_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    finished_at = Column(DateTime(timezone=True), nullable=True)
+    trigger_type = Column(String(100), nullable=True)
+    trigger_payload = Column(JSONB, nullable=True)
+    conversation_id = Column(String(36), ForeignKey("mkt_conversations.id", ondelete="SET NULL"), nullable=True)
+    campaign_id = Column(String(36), nullable=True)
+    total_tokens_in = Column(Integer, default=0)
+    total_tokens_out = Column(Integer, default=0)
+    total_cost_usd = Column(Numeric(10, 6), default=0)
+    final_state = Column(String(50), default="running")
+    confidence_score = Column(Float, nullable=True)
+    escalation_reason = Column(Text, nullable=True)
+
+    agent = relationship("AgentConfig", back_populates="runs")
+    steps = relationship("AgentStep", back_populates="run", cascade="all, delete-orphan")
+    tool_calls = relationship("ToolCallLog", back_populates="run")
+    policy_violations = relationship("PolicyViolation", back_populates="run")
+    escalations = relationship("Escalation", back_populates="run")
+
+
+class AgentStep(Base):
+    __tablename__ = "agent_steps"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    agent_run_id = Column(String(36), ForeignKey("agent_runs.id", ondelete="CASCADE"), nullable=False)
+    step_index = Column(Integer, nullable=False)
+    kind = Column(String(50), nullable=False)
+    input = Column("input", JSONB, nullable=True)
+    output = Column("output", JSONB, nullable=True)
+    latency_ms = Column(Integer, nullable=True)
+    error = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    run = relationship("AgentRun", back_populates="steps")
+
+
+class ToolCallLog(Base):
+    __tablename__ = "tool_call_log"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    agent_run_id = Column(String(36), ForeignKey("agent_runs.id", ondelete="SET NULL"), nullable=True)
+    tenant_id = Column(String(36), nullable=False)
+    tool_name = Column(String(200), nullable=False)
+    scopes = Column(JSONB, nullable=True)
+    input = Column("input", JSONB, nullable=True)
+    output = Column("output", JSONB, nullable=True)
+    duration_ms = Column(Integer, nullable=True)
+    idempotency_key = Column(String(200), nullable=True)
+    error = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    run = relationship("AgentRun", back_populates="tool_calls")
+
+
+class Prompt(Base):
+    __tablename__ = "prompts"
+
+    id = Column(String(200), primary_key=True)
+    agent_name = Column(String(100), nullable=False)
+    version = Column(String(50), nullable=False)
+    body = Column(Text, nullable=False)
+    created_by = Column(String(36), nullable=True)
+    is_active = Column(Boolean, default=True)
+    evaluation_score = Column(JSONB, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    eval_runs = relationship("EvalRun", back_populates="prompt")
+
+
+class EvalRun(Base):
+    __tablename__ = "eval_runs"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    prompt_id = Column(String(200), ForeignKey("prompts.id", ondelete="SET NULL"), nullable=True)
+    dataset_id = Column(String(200), nullable=True)
+    score = Column(JSONB, nullable=True)
+    regressions = Column(JSONB, nullable=True)
+    run_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    prompt = relationship("Prompt", back_populates="eval_runs")
+
+
+class PolicyViolation(Base):
+    __tablename__ = "policy_violations"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False)
+    agent_run_id = Column(String(36), ForeignKey("agent_runs.id", ondelete="SET NULL"), nullable=True)
+    kind = Column(String(100), nullable=True)
+    severity = Column(String(50), nullable=True)
+    blocked = Column(Boolean, default=False)
+    payload = Column(JSONB, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    run = relationship("AgentRun", back_populates="policy_violations")
+
+
+class Escalation(Base):
+    __tablename__ = "escalations"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False)
+    conversation_id = Column(String(36), ForeignKey("mkt_conversations.id", ondelete="SET NULL"), nullable=True)
+    agent_run_id = Column(String(36), ForeignKey("agent_runs.id", ondelete="SET NULL"), nullable=True)
+    reason = Column(Text, nullable=True)
+    opened_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    closed_at = Column(DateTime(timezone=True), nullable=True)
+    human_resolved_by = Column(String(36), nullable=True)
+    post_mortem = Column(JSONB, nullable=True)
+
+    run = relationship("AgentRun", back_populates="escalations")
+
+
+class AgentCostDaily(Base):
+    __tablename__ = "agent_cost_daily"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False)
+    agent_name = Column(String(100), nullable=False)
+    date = Column(Date, nullable=False)
+    tokens_in = Column(Integer, default=0)
+    tokens_out = Column(Integer, default=0)
+    cost_usd = Column(Numeric(10, 6), default=0)
 

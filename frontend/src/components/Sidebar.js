@@ -54,7 +54,10 @@ import {
   MonitorPlay,
   FileText,
   Receipt,
-  Sparkles
+  Sparkles,
+  Inbox,
+  Users2,
+  Megaphone
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -159,6 +162,7 @@ const Sidebar = () => {
     { id: 'restaurant', name: 'Restaurant Orders', icon: UtensilsCrossed, feature: 'restaurant_orders' },
     { id: 'hq', name: 'HQ Intelligence', icon: Brain, feature: 'hq_intelligence' },
     { id: 'reputation', name: 'Reputation Management', icon: MessageSquare, feature: 'reputation_management' },
+    { id: 'marketing', name: 'Marketing & Conversations', icon: Inbox, feature: 'marketing' },
     { id: 'portal', name: 'Omni Site Builder', icon: Globe },
   ];
 
@@ -172,6 +176,7 @@ const Sidebar = () => {
     if (path.startsWith('/customers')) return 'crm';
     if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling')) return 'staff';
     if (path.startsWith('/feedback') || path.startsWith('/reviews')) return 'reputation';
+    if (path.startsWith('/conversations') || path.startsWith('/marketing')) return 'marketing';
     return 'core';
   }, [location.pathname]);
 
@@ -269,6 +274,10 @@ const Sidebar = () => {
       ]
     },
     { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', condition: (features) => features.includes('ai_flows'), roles: ['SuperAdmin', 'Admin'], appId: 'flow' },
+    { key: 'conversations', label: 'Conversations', icon: Inbox, path: '/conversations', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'marketing' },
+    { key: 'marketing-segments', label: 'Segments', icon: Users2, path: '/marketing/segments', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
+    { key: 'marketing-campaigns', label: 'Campaigns', icon: Megaphone, path: '/marketing/campaigns', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
+    { key: 'marketing-journeys', label: 'Journeys', icon: GitBranch, path: '/marketing/journeys', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     // Omni Portal
     { key: 'omni-design', label: 'Design Studio', icon: Palette, path: '/omni/design', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-content', label: 'Content Manager', icon: FileText, path: '/omni/content', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
@@ -414,6 +423,7 @@ const Sidebar = () => {
                             else if (app.id === 'flow') navigate('/flow');
                             else if (app.id === 'staff') navigate('/team');
                             else if (app.id === 'reputation') navigate('/feedback');
+                            else if (app.id === 'marketing') navigate('/conversations');
                             else if (app.id === 'restaurant') navigate('/orders');
                             else if (app.id === 'portal') navigate('/omni/design');
                             else navigate('/');

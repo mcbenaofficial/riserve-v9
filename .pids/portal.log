@@ -2,8 +2,14 @@
 > customer-portal@0.1.0 dev
 > next dev
 
-▲ Next.js 16.2.1 (Turbopack)
-- Local:         http://localhost:3002
-- Network:       http://172.20.10.2:3002
-✓ Ready in 243ms
-
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3002
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3002)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3002
+}
+[?25h

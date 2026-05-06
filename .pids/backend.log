@@ -1,790 +1,1126 @@
 INFO:     Will watch for changes in these directories: ['/Users/joshualawrence/Documents/riserve-v9/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [91913] using WatchFiles
-INFO:     Started server process [91955]
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [51491] using WatchFiles
+INFO:     Started server process [51563]
 INFO:     Waiting for application startup.
-2026-05-03 18:17:39,510 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
-2026-05-03 18:17:39,564 - server - INFO - No expired trials found
+2026-05-06 15:46:15,730 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:46:15,989 - server - INFO - No expired trials found
 INFO:     Application startup complete.
-2026-05-03 18:17:39,589 - server - INFO - No expired trials found
-INFO:     127.0.0.1:64304 - "GET /api/reports HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64306 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64307 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64309 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64310 - "GET /api/services HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64304 - "GET /api/reports HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64306 - "GET /api/transactions HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64312 - "GET /api/bookings HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64307 - "GET /api/outlets HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64309 - "GET /api/services HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:64380 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "POST /api/auth/login HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64393 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64392 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64380 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64382 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64396 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64395 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64499 - "OPTIONS /api/hq/copilot HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64501 - "POST /api/hq/copilot HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64499 - "POST /api/hq/copilot HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64518 - "POST /api/hq/copilot HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64545 - "POST /api/hq/copilot HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64561 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64565 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64566 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64567 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64569 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64569 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64561 - "GET /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64561 - "GET /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64567 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64567 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64569 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64567 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64561 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64567 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64624 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64628 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64626 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64626 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64624 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64624 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64627 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64624 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64630 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64695 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64697 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64698 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64700 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64630 - "GET /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64700 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64698 - "GET /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64742 - "OPTIONS /api/hq/alerts?status=open HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64742 - "GET /api/hq/alerts?status=open HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64742 - "OPTIONS /api/hq/alerts?status=acknowledged HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64745 - "GET /api/hq/alerts?status=acknowledged HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64745 - "OPTIONS /api/hq/alerts?status=resolved HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64742 - "GET /api/hq/alerts?status=resolved HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64742 - "OPTIONS /api/hq/alerts?status=dismissed HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64745 - "GET /api/hq/alerts?status=dismissed HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64743 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64745 - "GET /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64745 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64743 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64742 - "GET /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64743 - "GET /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64799 - "OPTIONS /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64800 - "OPTIONS /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64799 - "GET /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64799 - "GET /api/hq/regions/Bengaluru HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64802 - "OPTIONS /api/hq/experiments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64832 - "OPTIONS /api/hq/experiments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64831 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64802 - "GET /api/hq/experiments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64832 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64802 - "GET /api/hq/experiments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64834 - "OPTIONS /api/hq/kpis HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64887 - "OPTIONS /api/hq/kpis HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64834 - "GET /api/hq/kpis HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64834 - "GET /api/hq/kpis HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64889 - "OPTIONS /api/hq/agent/rules HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64921 - "OPTIONS /api/hq/agent/queue HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64923 - "OPTIONS /api/hq/agent/log HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64925 - "OPTIONS /api/hq/agent/rules HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64927 - "OPTIONS /api/hq/agent/queue HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64928 - "OPTIONS /api/hq/agent/log HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64921 - "GET /api/hq/agent/queue HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64889 - "GET /api/hq/agent/rules HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64923 - "GET /api/hq/agent/log HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64921 - "GET /api/hq/agent/queue HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64889 - "GET /api/hq/agent/rules HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64923 - "GET /api/hq/agent/log HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64958 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64958 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65001 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65001 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65077 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65077 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65069 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65073 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65071 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65077 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65069 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65077 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65073 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65069 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65071 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65077 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65069 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65073 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65069 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65071 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65077 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65071 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65069 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65073 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65069 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65071 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65075 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65114 - "OPTIONS /api/customers?search= HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65115 - "OPTIONS /api/customers?search= HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65114 - "GET /api/customers?search= HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65115 - "GET /api/customers?search= HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65175 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65175 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65174 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65175 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65117 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65175 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65247 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65247 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65246 - "GET /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65246 - "GET /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65323 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65323 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65322 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65321 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65323 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65322 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65322 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49196 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49199 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49202 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49196 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49199 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49201 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49192 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49202 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49192 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49196 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49199 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49202 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49192 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49196 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49201 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49195 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49199 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49192 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49196 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49201 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49202 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49192 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49237 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49238 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49237 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49237 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49240 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49258 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49261 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49240 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49238 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49260 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49258 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49237 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49261 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49240 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49237 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49258 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49238 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49260 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49258 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49261 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49237 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49240 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49260 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49258 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49261 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49238 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49305 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49304 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49305 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49304 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49304 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49305 - "OPTIONS /api/portal/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49307 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49305 - "OPTIONS /api/portal/schedule?days=14 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49304 - "OPTIONS /api/portal/attendance/history?days=30 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49310 - "OPTIONS /api/portal/leaves HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49311 - "OPTIONS /api/portal/payslips HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49305 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49307 - "GET /api/portal/stats HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49304 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49313 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49310 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49307 - "GET /api/portal/schedule?days=14 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49304 - "GET /api/portal/attendance/history?days=30 HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49313 - "GET /api/portal/leaves HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49310 - "GET /api/portal/payslips HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:49313 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49310 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49304 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49310 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49783 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49783 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50760 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51995 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52762 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52764 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52762 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52768 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52768 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52768 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52764 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52762 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52764 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52768 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52764 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52768 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52768 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52762 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52766 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52771 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52764 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52768 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52764 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52769 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53574 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54448 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54448 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55266 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56035 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56850 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56850 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57707 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-2026-05-03 22:57:18,921 - server - INFO - No expired trials found
-INFO:     127.0.0.1:58605 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58605 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59413 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60260 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61089 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61089 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62005 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62801 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63672 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63672 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64483 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65327 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65327 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49819 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50704 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51496 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51496 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-2026-05-03 23:57:19,012 - server - INFO - No expired trials found
-INFO:     127.0.0.1:52307 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52530 - "OPTIONS /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52532 - "OPTIONS /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52533 - "OPTIONS /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52526 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/insights HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52533 - "OPTIONS /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/briefing/schedule HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52532 - "GET /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52532 - "GET /api/hq/briefing HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52532 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "GET /api/hq/playbooks HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "GET /api/hq/playbooks/deployments HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52533 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "GET /api/hq/network-health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52533 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52527 - "OPTIONS /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52526 - "OPTIONS /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52532 - "GET /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52524 - "GET /api/hq/alerts/summary HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52526 - "GET /api/hq/alerts HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52588 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52589 - "OPTIONS /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52588 - "GET /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52589 - "GET /api/hq/regions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52713 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52715 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52716 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52718 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52713 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52715 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52716 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52718 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52713 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52715 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52716 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52718 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52713 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52716 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52718 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52713 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52715 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52716 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52715 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52713 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52718 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52716 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52718 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52716 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52591 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52715 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52711 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52718 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52713 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53169 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54054 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54054 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54983 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55827 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56737 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56737 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57640 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58589 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58790 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58790 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58790 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58790 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58790 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58790 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58790 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58792 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58788 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58796 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58797 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58794 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59604 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60390 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60390 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61193 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61773 - "OPTIONS /api/hitl/confirm HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61773 - "POST /api/hitl/confirm HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61993 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-2026-05-04 00:57:19,060 - server - INFO - No expired trials found
-INFO:     127.0.0.1:62764 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62764 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63553 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64525 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64525 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65334 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49381 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49384 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49386 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49388 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49391 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49381 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49384 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49386 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49388 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49391 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49391 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49388 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49381 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49386 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49381 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49384 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49381 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49386 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49381 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49391 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49388 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49391 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49384 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49381 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49386 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49391 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49384 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49388 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49386 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49391 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49390 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49432 - "OPTIONS /api/hitl/confirm HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49432 - "POST /api/hitl/confirm HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50241 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50241 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51024 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51850 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51855 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51858 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51859 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51850 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51855 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51858 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51859 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51859 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51855 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51858 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51850 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51859 - "GET /api/auth/me HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51858 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51859 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51858 - "OPTIONS /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51855 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51855 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51859 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51858 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51850 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "GET /api/company HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51848 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51859 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51855 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51855 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52681 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52681 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53465 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "OPTIONS /api/inventory/products?active_only=true HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "GET /api/inventory/products?active_only=true HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "GET /api/inventory/products?active_only=true HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "OPTIONS /api/slot-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "OPTIONS /api/slot-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53960 - "GET /api/slot-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53964 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53958 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53956 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53965 - "GET /api/slot-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/inventory/products?active_only=true HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53962 - "GET /api/inventory/products?active_only=true HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54092 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54094 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54092 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54090 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54090 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54092 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54292 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54292 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55097 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55978 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55978 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-2026-05-04 01:57:19,098 - server - INFO - No expired trials found
-INFO:     127.0.0.1:56778 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57549 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57803 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57806 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57808 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57811 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57803 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57806 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57808 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57811 - "OPTIONS /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57803 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57806 - "OPTIONS /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57808 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "OPTIONS /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57811 - "OPTIONS /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57803 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "OPTIONS /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57806 - "OPTIONS /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57808 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57803 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57808 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57806 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57811 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57808 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57803 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57806 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "GET /api/services HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "GET /api/outlets HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57811 - "GET /api/feedback/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "GET /api/company/features HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "GET /api/orders/active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57808 - "GET /api/transactions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57803 - "GET /api/reports HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57806 - "GET /api/bookings HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57809 - "GET /api/dashboard-configs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57811 - "GET /api/orders/stats HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57804 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58362 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58364 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59152 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59991 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60815 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60815 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61605 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62396 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62396 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63194 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63996 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64793 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64793 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65080 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65082 - "OPTIONS /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65083 - "OPTIONS /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65085 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/hitl/pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65085 - "GET /api/hitl/history HTTP/1.1" 200 OK
-INFO:     127.0.0.1:65078 - "GET /api/hitl/pending HTTP/1.1" 200 OK
+2026-05-06 15:46:16,029 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'ai_runtime/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:46:18,248 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51563]
+INFO:     Started server process [51715]
+INFO:     Waiting for application startup.
+2026-05-06 15:46:19,584 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:46:19,675 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:46:19,690 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'ai_runtime/exceptions.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:46:21,509 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51715]
+INFO:     Started server process [51806]
+INFO:     Waiting for application startup.
+2026-05-06 15:46:22,880 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:46:22,979 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:46:22,995 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'ai_runtime/gateway.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:46:31,878 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51806]
+INFO:     Started server process [51930]
+INFO:     Waiting for application startup.
+2026-05-06 15:46:33,168 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:46:33,371 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:46:33,421 - server - INFO - No expired trials found
+INFO:     127.0.0.1:52704 - "GET /docs HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'ai_runtime/prompt_registry.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:46:43,009 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51930]
+INFO:     Started server process [52305]
+INFO:     Waiting for application startup.
+2026-05-06 15:46:44,463 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:46:44,574 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:46:44,591 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'ai_runtime/structured_output.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:46:52,465 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52305]
+INFO:     Started server process [52497]
+INFO:     Waiting for application startup.
+2026-05-06 15:46:53,842 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:46:53,952 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:46:53,982 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'tools/context.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:47:03,465 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52497]
+WARNING:  WatchFiles detected changes in 'ai_runtime/cost_ledger.py'. Reloading...
+INFO:     Started server process [52640]
+INFO:     Waiting for application startup.
+2026-05-06 15:47:05,000 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:47:05,098 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+INFO:     Started server process [52678]
+INFO:     Waiting for application startup.
+2026-05-06 15:47:06,168 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:47:06,274 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:47:06,289 - server - INFO - No expired trials found
+INFO:     127.0.0.1:52778 - "GET /docs HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'tools/base.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:47:17,502 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52678]
+INFO:     Started server process [52851]
+INFO:     Waiting for application startup.
+2026-05-06 15:47:19,012 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:47:19,128 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:47:19,144 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'tools/inbox_tools.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:47:40,858 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52851]
+INFO:     Started server process [53604]
+INFO:     Waiting for application startup.
+2026-05-06 15:47:42,501 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:47:42,600 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:47:42,616 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'ai_runtime/gateway.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:47:44,434 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [53604]
+INFO:     Started server process [53837]
+INFO:     Waiting for application startup.
+2026-05-06 15:47:45,589 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:47:45,683 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:47:45,700 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'tools/customer_tools.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:47:54,381 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [53837]
+INFO:     Started server process [54090]
+INFO:     Waiting for application startup.
+2026-05-06 15:47:55,898 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:47:56,020 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52880 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+2026-05-06 15:47:56,036 - server - INFO - No expired trials found
+INFO:     127.0.0.1:52880 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'tools/kb_tools.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:48:11,731 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [54090]
+INFO:     Started server process [54568]
+INFO:     Waiting for application startup.
+2026-05-06 15:48:13,348 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:48:13,463 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:48:13,477 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'tools/segment_tools.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:48:22,163 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [54568]
+INFO:     Started server process [54814]
+INFO:     Waiting for application startup.
+2026-05-06 15:48:23,960 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:48:24,078 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:48:24,102 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'knowledge/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:48:28,746 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [54814]
+INFO:     Started server process [54967]
+INFO:     Waiting for application startup.
+2026-05-06 15:48:30,127 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:48:30,236 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:48:30,252 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'tools/template_tools.py', 'knowledge/schema.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:48:32,674 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [54967]
+INFO:     Started server process [55030]
+INFO:     Waiting for application startup.
+2026-05-06 15:48:33,922 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:48:34,032 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:48:34,050 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'tools/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:48:36,476 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55030]
+INFO:     Started server process [55075]
+INFO:     Waiting for application startup.
+2026-05-06 15:48:37,840 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:48:37,955 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:48:37,970 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'knowledge/embedder.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:48:39,081 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55075]
+INFO:     Started server process [55113]
+INFO:     Waiting for application startup.
+2026-05-06 15:48:40,239 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:48:40,339 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:48:40,354 - server - INFO - No expired trials found
+INFO:     127.0.0.1:52984 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'knowledge/ingestion.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:49:06,103 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55113]
+INFO:     Started server process [55340]
+INFO:     Waiting for application startup.
+2026-05-06 15:49:07,555 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:49:07,649 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:49:07,666 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'knowledge/retriever.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:49:20,891 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55340]
+INFO:     Started server process [55409]
+INFO:     Waiting for application startup.
+2026-05-06 15:49:22,358 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:49:22,457 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:49:22,475 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'routes/knowledge.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:49:41,358 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55409]
+INFO:     Started server process [55584]
+INFO:     Waiting for application startup.
+2026-05-06 15:49:42,782 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:49:42,886 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:49:42,903 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'alembic/versions/b2c3d4e5f6a7_add_agentic_layer_tables.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:50:13,200 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55584]
+INFO:     Started server process [55709]
+INFO:     Waiting for application startup.
+2026-05-06 15:50:14,840 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:50:14,941 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:50:14,961 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'alembic/versions/b2c3d4e5f6a7_add_agentic_layer_tables.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:50:21,630 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55709]
+INFO:     Started server process [56008]
+INFO:     Waiting for application startup.
+2026-05-06 15:50:23,357 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 15:50:23,525 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 15:50:23,565 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 15:50:31,873 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [56008]
+Process SpawnProcess-24:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 2, in <module>
+    from routes.dependencies import get_current_user
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/__init__.py", line 2, in <module>
+    from .auth import router as auth_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/auth.py", line 9, in <module>
+    import models_pg
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/models_pg.py", line 6, in <module>
+    from pgvector.sqlalchemy import Vector
+ModuleNotFoundError: No module named 'pgvector'
+WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
+Process SpawnProcess-25:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 2, in <module>
+    from routes.dependencies import get_current_user
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/__init__.py", line 2, in <module>
+    from .auth import router as auth_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/auth.py", line 9, in <module>
+    import models_pg
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/models_pg.py", line 6, in <module>
+    from pgvector.sqlalchemy import Vector
+ModuleNotFoundError: No module named 'pgvector'
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+Process SpawnProcess-26:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 2, in <module>
+    from routes.dependencies import get_current_user
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/__init__.py", line 2, in <module>
+    from .auth import router as auth_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/auth.py", line 9, in <module>
+    import models_pg
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/models_pg.py", line 6, in <module>
+    from pgvector.sqlalchemy import Vector
+ModuleNotFoundError: No module named 'pgvector'
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+Process SpawnProcess-27:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 2, in <module>
+    from routes.dependencies import get_current_user
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/__init__.py", line 2, in <module>
+    from .auth import router as auth_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/auth.py", line 9, in <module>
+    import models_pg
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/models_pg.py", line 6, in <module>
+    from pgvector.sqlalchemy import Vector
+ModuleNotFoundError: No module named 'pgvector'
+WARNING:  WatchFiles detected changes in 'venv/lib/python3.9/site-packages/pgvector/psycopg2/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/django/bit.py', 'venv/lib/python3.9/site-packages/pgvector/sqlalchemy/functions.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg/sparsevec.py', 'venv/lib/python3.9/site-packages/pgvector/pg8000/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/sqlalchemy/bit.py', 'venv/lib/python3.9/site-packages/pgvector/django/functions.py', 'venv/lib/python3.9/site-packages/pgvector/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/peewee/bit.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg2/halfvec.py', 'venv/lib/python3.9/site-packages/pgvector/sqlalchemy/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/peewee/vector.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg/halfvec.py', 'venv/lib/python3.9/site-packages/pgvector/django/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/utils/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/halfvec.py', 'venv/lib/python3.9/site-packages/pgvector/django/extensions.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg2/sparsevec.py', 'venv/lib/python3.9/site-packages/pgvector/sparsevec.py', 'venv/lib/python3.9/site-packages/pgvector/sqlalchemy/halfvec.py', 'venv/lib/python3.9/site-packages/pgvector/peewee/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/django/indexes.py', 'venv/lib/python3.9/site-packages/pgvector/sqlalchemy/sparsevec.py', 'venv/lib/python3.9/site-packages/pgvector/django/halfvec.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg/bit.py', 'venv/lib/python3.9/site-packages/pgvector/django/sparsevec.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg/vector.py', 'venv/lib/python3.9/site-packages/pgvector/asyncpg/register.py', 'venv/lib/python3.9/site-packages/pgvector/peewee/halfvec.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg/register.py', 'venv/lib/python3.9/site-packages/pgvector/peewee/sparsevec.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg2/vector.py', 'venv/lib/python3.9/site-packages/pgvector/asyncpg/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg/__init__.py', 'venv/lib/python3.9/site-packages/pgvector/bit.py', 'venv/lib/python3.9/site-packages/pgvector/vector.py', 'venv/lib/python3.9/site-packages/pgvector/psycopg2/register.py', 'venv/lib/python3.9/site-packages/pgvector/sqlalchemy/vector.py', 'venv/lib/python3.9/site-packages/pgvector/pg8000/register.py', 'venv/lib/python3.9/site-packages/pgvector/django/vector.py'. Reloading...
+Process SpawnProcess-28:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 2, in <module>
+    from routes.dependencies import get_current_user
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/__init__.py", line 2, in <module>
+    from .auth import router as auth_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/auth.py", line 9, in <module>
+    import models_pg
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/models_pg.py", line 1596, in <module>
+    class KnowledgeChunk(Base):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/decl_api.py", line 199, in __init__
+    _as_declarative(reg, cls, dict_)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+    return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+    return _ClassScanMapperConfig(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+    self._extract_mappable_attributes()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/decl_base.py", line 1530, in _extract_mappable_attributes
+    raise exc.InvalidRequestError(
+sqlalchemy.exc.InvalidRequestError: Attribute name 'metadata' is reserved when using the Declarative API.
+WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
+INFO:     Started server process [62694]
+INFO:     Waiting for application startup.
+2026-05-06 16:01:25,543 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:01:25,721 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:01:25,740 - server - INFO - No expired trials found
+INFO:     127.0.0.1:53662 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53297 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53573 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53379 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53379 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53168 - "GET /api/mobile/me/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53761 - "GET /api/mobile/me/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53235 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53175 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53167 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53184 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53244 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53761 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53967 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54002 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'venv/lib/python3.9/site-packages/langdetect/detector_factory.py', 'venv/lib/python3.9/site-packages/langdetect/lang_detect_exception.py', 'venv/lib/python3.9/site-packages/langdetect/utils/__init__.py', 'venv/lib/python3.9/site-packages/langdetect/language.py', 'venv/lib/python3.9/site-packages/langdetect/tests/__init__.py', 'venv/lib/python3.9/site-packages/langdetect/tests/test_language.py', 'venv/lib/python3.9/site-packages/langdetect/utils/messages.py', 'venv/lib/python3.9/site-packages/langdetect/utils/ngram.py', 'venv/lib/python3.9/site-packages/langdetect/tests/test_detector.py', 'venv/lib/python3.9/site-packages/langdetect/utils/lang_profile.py', 'venv/lib/python3.9/site-packages/langdetect/detector.py', 'venv/lib/python3.9/site-packages/langdetect/__init__.py', 'venv/lib/python3.9/site-packages/langdetect/utils/unicode_block.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:05:15,188 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [62694]
+INFO:     Started server process [65098]
+INFO:     Waiting for application startup.
+2026-05-06 16:05:17,658 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:05:17,804 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:05:17,819 - server - INFO - No expired trials found
+INFO:     127.0.0.1:54118 - "GET /api/mobile/me/notifications HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'policy/violations.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:06:45,147 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65098]
+INFO:     Started server process [66179]
+INFO:     Waiting for application startup.
+2026-05-06 16:06:48,698 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:06:48,872 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:06:48,889 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'policy/engine.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:07:22,905 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66179]
+INFO:     Started server process [66367]
+INFO:     Waiting for application startup.
+2026-05-06 16:07:25,149 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:07:25,286 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:07:25,304 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'policy/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:07:27,224 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66367]
+INFO:     Started server process [66408]
+INFO:     Waiting for application startup.
+2026-05-06 16:07:29,118 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:07:29,242 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:07:29,260 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'tools/inbox_tools.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:07:49,664 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66408]
+INFO:     Started server process [66550]
+INFO:     Waiting for application startup.
+2026-05-06 16:07:52,050 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:07:52,176 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:07:52,199 - server - INFO - No expired trials found
+INFO:     127.0.0.1:54261 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "OPTIONS /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "OPTIONS /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "OPTIONS /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "OPTIONS /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54368 - "WebSocket /api/conversations/ws/3821aa11-8386-452d-b6be-174ef77d1970" [accepted]
+INFO:     connection closed
+INFO:     127.0.0.1:54370 - "WebSocket /api/conversations/ws/3821aa11-8386-452d-b6be-174ef77d1970" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:54352 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "GET /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "GET /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "GET /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "GET /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     127.0.0.1:54358 - "OPTIONS /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "OPTIONS /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "OPTIONS /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54359 - "OPTIONS /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "OPTIONS /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "OPTIONS /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54358 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54335 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "OPTIONS /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54352 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54485 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54488 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54485 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54488 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54706 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54706 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'agents/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:13:15,825 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66550]
+INFO:     Started server process [71247]
+INFO:     Waiting for application startup.
+2026-05-06 16:13:18,430 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:13:18,596 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:13:18,636 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'agents/runner.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:13:44,892 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [71247]
+INFO:     Started server process [71511]
+INFO:     Waiting for application startup.
+2026-05-06 16:13:47,769 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:13:47,910 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:13:47,927 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'agents/concierge.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:13:58,636 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [71511]
+INFO:     Started server process [71733]
+INFO:     Waiting for application startup.
+2026-05-06 16:14:01,641 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:14:01,858 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:14:01,887 - server - INFO - No expired trials found
+INFO:     127.0.0.1:54796 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'agents/trigger.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:14:09,984 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [71733]
+INFO:     Started server process [71863]
+INFO:     Waiting for application startup.
+2026-05-06 16:14:12,669 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:14:12,797 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:14:12,812 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'routes/webhooks_ingestion.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:14:23,621 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [71863]
+INFO:     Started server process [72089]
+INFO:     Waiting for application startup.
+2026-05-06 16:14:25,870 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:14:26,047 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:14:26,071 - server - INFO - No expired trials found
+INFO:     127.0.0.1:55131 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55210 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'evals/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:21:00,981 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [72089]
+INFO:     Started server process [75975]
+INFO:     Waiting for application startup.
+2026-05-06 16:21:03,348 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:21:03,476 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:21:03,497 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'evals/dataset.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:21:49,231 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [75975]
+INFO:     Started server process [76197]
+INFO:     Waiting for application startup.
+2026-05-06 16:21:51,935 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:21:52,073 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:21:52,092 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'evals/runner.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:22:17,977 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [76197]
+INFO:     Started server process [76355]
+INFO:     Waiting for application startup.
+2026-05-06 16:22:20,499 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:22:20,731 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:22:20,758 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'evals/runner.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:22:34,690 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [76355]
+INFO:     Started server process [76554]
+INFO:     Waiting for application startup.
+2026-05-06 16:22:38,344 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:22:38,475 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:22:38,490 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'evals/runner.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:22:44,647 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [76554]
+INFO:     Started server process [76713]
+INFO:     Waiting for application startup.
+2026-05-06 16:22:47,357 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:22:47,503 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:22:47,527 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'evals/runner.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:22:53,608 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [76713]
+INFO:     Started server process [76817]
+INFO:     Waiting for application startup.
+2026-05-06 16:22:56,724 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:22:56,865 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:22:56,888 - server - INFO - No expired trials found
+INFO:     127.0.0.1:55453 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'routes/evals.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:23:07,127 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [76817]
+INFO:     Started server process [76988]
+INFO:     Waiting for application startup.
+2026-05-06 16:23:09,939 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:23:10,092 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:23:10,181 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:23:18,241 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [76988]
+Process SpawnProcess-47:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 185, in <module>
+    from routes.evals import router as evals_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/evals.py", line 12, in <module>
+    from routes.dependencies import get_current_user_from_token, require_role
+ImportError: cannot import name 'get_current_user_from_token' from 'routes.dependencies' (/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py)
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+Process SpawnProcess-48:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 185, in <module>
+    from routes.evals import router as evals_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/evals.py", line 12, in <module>
+    from routes.dependencies import get_current_user_from_token, require_role
+ImportError: cannot import name 'get_current_user_from_token' from 'routes.dependencies' (/Users/joshualawrence/Documents/riserve-v9/backend/routes/dependencies.py)
+WARNING:  WatchFiles detected changes in 'routes/evals.py'. Reloading...
+Process SpawnProcess-49:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/server.py", line 185, in <module>
+    from routes.evals import router as evals_router
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/evals.py", line 33, in <module>
+    current_user=Depends(get_current_user_from_token),
+NameError: name 'get_current_user_from_token' is not defined
+WARNING:  WatchFiles detected changes in 'routes/evals.py'. Reloading...
+INFO:     Started server process [78533]
+INFO:     Waiting for application startup.
+2026-05-06 16:27:29,926 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:27:30,070 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+INFO:     127.0.0.1:55546 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+2026-05-06 16:27:30,090 - server - INFO - No expired trials found
+INFO:     127.0.0.1:55546 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56032 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'agents/shadow.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:28:12,912 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [78533]
+INFO:     Started server process [78869]
+INFO:     Waiting for application startup.
+2026-05-06 16:28:15,623 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:28:15,763 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:28:15,778 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'agents/diff_report.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:28:28,602 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [78869]
+INFO:     Started server process [78938]
+INFO:     Waiting for application startup.
+2026-05-06 16:28:31,674 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:28:31,829 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:28:31,855 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'agents/trigger.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:28:55,592 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [78938]
+INFO:     Started server process [79124]
+INFO:     Waiting for application startup.
+2026-05-06 16:28:58,429 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:28:58,584 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:28:58,599 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'agents/trigger.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:29:01,632 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [79124]
+INFO:     Started server process [79195]
+INFO:     Waiting for application startup.
+2026-05-06 16:29:04,184 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:29:04,363 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:29:04,379 - server - INFO - No expired trials found
+INFO:     127.0.0.1:56505 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'models_pg.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:32:49,938 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [79195]
+INFO:     Started server process [80858]
+INFO:     Waiting for application startup.
+2026-05-06 16:32:52,954 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:32:53,077 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:32:53,094 - server - INFO - No expired trials found
+INFO:     127.0.0.1:57644 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'agents/escalation.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:33:13,021 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [80858]
+INFO:     Started server process [80998]
+INFO:     Waiting for application startup.
+2026-05-06 16:33:15,883 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:33:16,051 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:33:16,073 - server - INFO - No expired trials found
+WARNING:  WatchFiles detected changes in 'routes/conversations.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-06 16:33:29,399 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [80998]
+INFO:     Started server process [81221]
+INFO:     Waiting for application startup.
+2026-05-06 16:33:31,924 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-06 16:33:32,050 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-06 16:33:32,065 - server - INFO - No expired trials found
+INFO:     127.0.0.1:58045 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "OPTIONS /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "OPTIONS /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "OPTIONS /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "OPTIONS /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59263 - "OPTIONS /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "OPTIONS /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "OPTIONS /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "OPTIONS /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59293 - "WebSocket /api/conversations/ws/3821aa11-8386-452d-b6be-174ef77d1970" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:59261 - "GET /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     127.0.0.1:59261 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59257 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59261 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59324 - "WebSocket /api/conversations/ws/3821aa11-8386-452d-b6be-174ef77d1970" [accepted]
+INFO:     connection closed
+INFO:     127.0.0.1:59258 - "GET /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59265 - "GET /api/conversations?status=open&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59326 - "WebSocket /api/conversations/ws/3821aa11-8386-452d-b6be-174ef77d1970" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:59258 - "GET /api/conversations/templates?channel=whatsapp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     127.0.0.1:59258 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59258 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59379 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59383 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59385 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /api/marketing/segments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59379 - "GET /api/marketing/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59383 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59385 - "GET /api/conversations/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59385 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59385 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59383 - "GET /api/marketing/journeys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59385 - "GET /api/conversations/inboxes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59586 - "GET /api/mobile/me/payslips HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59647 - "GET /api/mobile/me/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59647 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59647 - "GET /api/mobile/me/notifications HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59727 - "GET /api/mobile/me/attendance-today HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60752 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60794 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62177 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62177 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62179 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK

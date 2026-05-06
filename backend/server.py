@@ -173,9 +173,16 @@ from routes import (
     auth, public, dashboard, bookings, services, outlets,
     staff, reports, feedback, assistant, onboarding,
     users, company, inventory, customers, slots, transactions, promotions, hitl, portal, suppliers, analytics, hq,
-    orders, menu, upload, omni, whatsapp, razorpay, invoices
+    orders, menu, upload, omni, whatsapp, razorpay, invoices, mobile
 )
 from routes.superadmin import router as superadmin
+from routes.conversations import router as conversations_router
+from routes.webhooks_ingestion import router as webhooks_router
+from routes.segments import router as segments_router
+from routes.campaigns import router as campaigns_router
+from routes.journeys import router as journeys_router
+from routes.knowledge import router as knowledge_router
+from routes.evals import router as evals_router
 
 # Include Routers
 app.include_router(auth.router, prefix="/api")
@@ -209,6 +216,14 @@ app.include_router(omni.router, prefix="/api")
 app.include_router(whatsapp.router, prefix="/api")
 app.include_router(razorpay.router, prefix="/api")
 app.include_router(invoices.router, prefix="/api")
+app.include_router(mobile.router, prefix="/api")
+app.include_router(conversations_router, prefix="/api")
+app.include_router(webhooks_router, prefix="/api")
+app.include_router(segments_router, prefix="/api")
+app.include_router(campaigns_router, prefix="/api")
+app.include_router(journeys_router, prefix="/api")
+app.include_router(knowledge_router, prefix="/api")
+app.include_router(evals_router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

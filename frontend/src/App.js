@@ -38,6 +38,7 @@ import Suppliers from './pages/Suppliers';
 import SupplierDetail from './pages/SupplierDetail';
 import POS from './pages/POS';
 import CustomerFeedback from './pages/CustomerFeedback';
+import Conversations from './pages/Conversations';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import SuperAdminCompanies from './pages/SuperAdminCompanies';
 import SuperAdminUsers from './pages/SuperAdminUsers';
@@ -68,6 +69,9 @@ import OmniDesignStudio from './pages/omni/OmniDesignStudio';
 import OmniSiteConfig from './pages/omni/OmniSiteConfig';
 import OmniPreview from './pages/omni/OmniPreview';
 import OmniContentManager from './pages/omni/OmniContentManager';
+import Segments from './pages/Conversations/Segments';
+import Campaigns from './pages/Conversations/Campaigns';
+import Journeys from './pages/Conversations/Journeys';
 import './App.css';
 
 function App() {
@@ -197,6 +201,10 @@ function MainLayout() {
               <Route path="/users" element={<Users />} /> {/* Legacy Users page */}
               <Route path="/team" element={<Team />} /> {/* Unified Team (Users+Staff) */}
               <Route path="/customers" element={<Customers />} /> {/* SaaS Customers */}
+              <Route path="/conversations" element={<ProtectedRoute><Conversations /></ProtectedRoute>} />
+              <Route path="/marketing/segments" element={<ProtectedRoute><Segments /></ProtectedRoute>} />
+              <Route path="/marketing/campaigns" element={<ProtectedRoute><Campaigns /></ProtectedRoute>} />
+              <Route path="/marketing/journeys" element={<ProtectedRoute><Journeys /></ProtectedRoute>} />
               <Route path="/admin" element={<AdminConsole />} />
               <Route path="/support" element={<Support />} />
               <Route path="/ai-agent" element={<AIAgent />} />
