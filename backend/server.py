@@ -150,7 +150,7 @@ _cors_origins = [o.strip() for o in _cors_env.split(',') if o.strip()] if _cors_
 # Always include dev origins
 _dev_origins = [
     "http://localhost:3000",
-    "http://localhost:3001",
+    "http://localhost:3003",
     "http://localhost:3002",
     "http://127.0.0.1:3000",
 ]

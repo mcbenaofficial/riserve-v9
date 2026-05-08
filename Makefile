@@ -25,8 +25,8 @@ start:
 	 uvicorn server:app --host 0.0.0.0 --port 8000 --reload \
 	 > $(CURDIR)/$(PID_DIR)/backend.log 2>&1 & echo $$! > $(CURDIR)/$(PID_DIR)/backend.pid
 	@echo ""
-	@echo "Starting Frontend (port 3001)..."
-	@cd $(CURDIR)/$(FRONTEND_DIR) && PORT=3001 npm start \
+	@echo "Starting Frontend (port 3003)..."
+	@cd $(CURDIR)/$(FRONTEND_DIR) && PORT=3003 npm start \
 	 > $(CURDIR)/$(PID_DIR)/frontend.log 2>&1 & echo $$! > $(CURDIR)/$(PID_DIR)/frontend.pid
 	@echo ""
 	@echo "Starting Customer Portal (port 3002)..."
@@ -35,7 +35,7 @@ start:
 	@echo ""
 	@echo "All services started."
 	@echo "  Backend:         http://localhost:8000"
-	@echo "  Frontend:        http://localhost:3001"
+	@echo "  Frontend:        http://localhost:3003"
 	@echo "  Customer Portal: http://localhost:3002"
 	@echo ""
 	@echo "Run 'make logs' to tail all logs, or 'make stop' to stop everything."
@@ -47,8 +47,8 @@ backend: $(PID_DIR)
 	 uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 
 frontend:
-	@echo "Starting Frontend (port 3001)..."
-	@cd $(FRONTEND_DIR) && PORT=3001 npm start
+	@echo "Starting Frontend (port 3003)..."
+	@cd $(FRONTEND_DIR) && PORT=3003 npm start
 
 portal:
 	@echo "Starting Customer Portal (port 3002)..."
@@ -66,7 +66,7 @@ stop:
 	@if [ -f $(PID_DIR)/portal.pid ];   then kill $$(cat $(PID_DIR)/portal.pid)   2>/dev/null && rm $(PID_DIR)/portal.pid;   fi
 	@# Also kill any stragglers by port
 	@lsof -ti:8000 | xargs kill -9 2>/dev/null || true
-	@lsof -ti:3001 | xargs kill -9 2>/dev/null || true
+	@lsof -ti:3003 | xargs kill -9 2>/dev/null || true
 	@lsof -ti:3002 | xargs kill -9 2>/dev/null || true
 	@echo "Done."
 

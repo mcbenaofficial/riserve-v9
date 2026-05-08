@@ -44,7 +44,7 @@ export default function AccountPage() {
            <CardContent className="p-10 flex flex-col justify-center h-full relative z-10">
               <div className="flex items-start gap-6">
                  <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center shrink-0 shadow-xl border border-white/10">
-                    <span className="text-3xl">✨</span>
+                    <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
                  </div>
                  <div>
                     <h3 className="font-extrabold text-3xl mb-3 tracking-tight">Welcome back, Priya!</h3>

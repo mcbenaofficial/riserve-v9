@@ -66,6 +66,7 @@ import OrdersDashboard from './pages/OrdersDashboard';
 import KitchenDisplay from './pages/KitchenDisplay';
 import PickupDisplay from './pages/PickupDisplay';
 import OmniDesignStudio from './pages/omni/OmniDesignStudio';
+import AdminPortalDesignPlus from './components/admin/AdminPortalDesignPlus';
 import OmniSiteConfig from './pages/omni/OmniSiteConfig';
 import OmniPreview from './pages/omni/OmniPreview';
 import OmniContentManager from './pages/omni/OmniContentManager';
@@ -230,6 +231,7 @@ function MainLayout() {
               <Route path="/hq/experiments" element={<ProtectedRoute><HQExperiments /></ProtectedRoute>} />
               <Route path="/hq/agent" element={<ProtectedRoute><HQAgentWorkflows /></ProtectedRoute>} />
               {/* Omni Portal Routes */}
+              <Route path="/omni/portal-design-plus" element={<ProtectedRoute><AdminPortalDesignPlus /></ProtectedRoute>} />
               <Route path="/omni/design" element={<ProtectedRoute><OmniDesignStudio /></ProtectedRoute>} />
               <Route path="/omni/content" element={<ProtectedRoute><OmniContentManager /></ProtectedRoute>} />
               <Route path="/omni/config" element={<ProtectedRoute><OmniSiteConfig /></ProtectedRoute>} />

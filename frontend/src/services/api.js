@@ -349,6 +349,8 @@ export const api = {
   createMenuItem: (data) => axios.post(`${API}/menu/items`, data, { headers: getHeaders() }),
   updateMenuItem: (id, data) => axios.put(`${API}/menu/items/${id}`, data, { headers: getHeaders() }),
   deleteMenuItem: (id) => axios.delete(`${API}/menu/items/${id}`, { headers: getHeaders() }),
+  generateMenuDescription: (data) => axios.post(`${API}/menu/ai/description`, data, { headers: getHeaders() }),
+  generateMenuNutrition: (data) => axios.post(`${API}/menu/ai/nutrition`, data, { headers: getHeaders() }),
 
   // ── Public Order (no auth) ─────────────────────────────────────────
   getPublicOutletInfo: (outletId) => axios.get(`${API}/public/outlet/${outletId}`),

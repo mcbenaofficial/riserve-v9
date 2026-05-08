@@ -125,7 +125,7 @@ export default function CartPage({ params }: { params: Promise<{ outletId: strin
           <div className="absolute -top-[20%] -right-[10%] rounded-full" style={{ width: '60vw', height: '60vw', background: primaryColor, opacity: 0.12, filter: 'blur(90px)' }} />
           <div className="absolute bottom-[5%] left-[10%] rounded-full" style={{ width: '45vw', height: '45vw', background: secondaryColor, opacity: 0.09, filter: 'blur(80px)' }} />
         </div>
-        <div className="text-6xl mb-6" style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))' }}>🛒</div>
+        <svg className="w-16 h-16 mb-6 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
         <h1 className="text-2xl font-bold mb-2" style={{ color: textColor }}>Your cart is empty</h1>
         <p className="mb-8" style={{ color: textColor, opacity: 0.45 }}>Add some delicious items from the menu</p>
         <Link
@@ -250,8 +250,8 @@ export default function CartPage({ params }: { params: Promise<{ outletId: strin
           <h3 className="font-bold text-xs uppercase tracking-wider mb-4" style={{ color: textColor, opacity: 0.5 }}>Order Type</h3>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { key: 'dine_in', label: '🍽️ Dine-In', desc: 'Eat at the restaurant' },
-              { key: 'takeaway', label: '🥡 Takeaway', desc: 'Pick up your order' },
+              { key: 'dine_in', label: 'Dine-In', desc: 'Eat at the restaurant' },
+              { key: 'takeaway', label: 'Takeaway', desc: 'Pick up your order' },
             ].map((t) => (
               <button
                 key={t.key}

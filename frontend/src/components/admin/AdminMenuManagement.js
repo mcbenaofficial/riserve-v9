@@ -3,7 +3,7 @@ import { api, getImageUrl } from '../../services/api';
 import {
   Plus, Edit, Trash2, Search, Link as LinkIcon,
   Image as ImageIcon, Loader2, AlertCircle, Package, X, UploadCloud,
-  ChevronUp, ChevronDown, FolderOpen,
+  ChevronUp, ChevronDown, FolderOpen, Sparkles,
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -285,12 +285,14 @@ const AdminMenuManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({
-    name: '', description: '', category: '', price: '',
+    name: '', description: '', nutritional_value: '', category: '', price: '',
     image_url: '', image_urls: [], icon: '',
     available: true, is_veg: true,
     inventory_linked: false, inventory_product_id: 'auto_create',
   });
   const [saving, setSaving] = useState(false);
+  const [aiDescLoading, setAiDescLoading] = useState(false);
+  const [aiNutrLoading, setAiNutrLoading] = useState(false);
 
   useEffect(() => { fetchAll(); }, []);
 
@@ -397,6 +399,7 @@ const AdminMenuManagement = () => {
       setFormData({
         name: item.name || '',
         description: item.description || '',
+        nutritional_value: item.nutritional_value || '',
         category: item.category || (categoryNames[0] || ''),
         price: item.price || '',
         image_url: item.image_url || '',
@@ -410,7 +413,7 @@ const AdminMenuManagement = () => {
     } else {
       setEditingItem(null);
       setFormData({
-        name: '', description: '',
+        name: '', description: '', nutritional_value: '',
         category: categoryNames[0] || '',
         price: '', image_url: '', image_urls: [], icon: '',
         available: true, is_veg: true,
@@ -425,6 +428,34 @@ const AdminMenuManagement = () => {
     if (!file) return;
     setIconFile(file);
     setFormData(f => ({ ...f, icon: URL.createObjectURL(file) }));
+  };
+
+  const handleGenerateDescription = async () => {
+    if (!formData.name.trim()) return;
+    setAiDescLoading(true);
+    try {
+      const companyRes = await api.getCompanySettings().catch(() => null);
+      const businessType = companyRes?.data?.business_type || 'restaurant';
+      const res = await api.generateMenuDescription({ item_name: formData.name, business_type: businessType });
+      setFormData(f => ({ ...f, description: res.data.result }));
+    } catch (err) {
+      console.error('AI description failed:', err);
+    } finally {
+      setAiDescLoading(false);
+    }
+  };
+
+  const handleGenerateNutrition = async () => {
+    if (!formData.name.trim()) return;
+    setAiNutrLoading(true);
+    try {
+      const res = await api.generateMenuNutrition({ item_name: formData.name, serving_size: formData.price ? `priced at ${formData.price}` : undefined });
+      setFormData(f => ({ ...f, nutritional_value: res.data.result }));
+    } catch (err) {
+      console.error('AI nutrition failed:', err);
+    } finally {
+      setAiNutrLoading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -802,12 +833,46 @@ const AdminMenuManagement = () => {
             </div>
 
             <div className="space-y-2">
-              <Label>Description</Label>
-              <Input
+              <div className="flex items-center justify-between">
+                <Label>Description</Label>
+                <button
+                  type="button"
+                  onClick={handleGenerateDescription}
+                  disabled={aiDescLoading || !formData.name.trim()}
+                  className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-violet-50 text-violet-600 hover:bg-violet-100 dark:bg-violet-950/40 dark:text-violet-400 dark:hover:bg-violet-900/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  {aiDescLoading ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                  {aiDescLoading ? 'Writing…' : 'AI Write'}
+                </button>
+              </div>
+              <textarea
                 placeholder="Brief description for the customer"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="bg-gray-50 dark:bg-[#12161C] dark:border-[#1F2630]"
+                rows={3}
+                className="w-full rounded-md border border-input bg-gray-50 dark:bg-[#12161C] dark:border-[#1F2630] px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label>Nutritional Value</Label>
+                <button
+                  type="button"
+                  onClick={handleGenerateNutrition}
+                  disabled={aiNutrLoading || !formData.name.trim()}
+                  className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-400 dark:hover:bg-emerald-900/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  {aiNutrLoading ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                  {aiNutrLoading ? 'Calculating…' : 'AI Fill'}
+                </button>
+              </div>
+              <textarea
+                placeholder="e.g. Calories: 320 kcal | Protein: 18g | Carbs: 28g | Fat: 14g"
+                value={formData.nutritional_value}
+                onChange={(e) => setFormData({ ...formData, nutritional_value: e.target.value })}
+                rows={2}
+                className="w-full rounded-md border border-input bg-gray-50 dark:bg-[#12161C] dark:border-[#1F2630] px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
               />
             </div>
 

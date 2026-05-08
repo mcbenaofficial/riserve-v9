@@ -880,7 +880,7 @@ const AdminPortalDesign = () => {
                         <div className="space-y-1">
                           <div className="rounded-xl p-2 border border-black/5" style={{ backgroundColor: colors.surfaceColor }}>
                             <div className="flex justify-between items-center">
-                              <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>☕ Coffee (4)</span>
+                              <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>Coffee (4)</span>
                               <span className="text-[10px] opacity-40">▼</span>
                             </div>
                             <div className="mt-1.5 space-y-1">
@@ -894,13 +894,13 @@ const AdminPortalDesign = () => {
                           </div>
                           <div className="rounded-xl p-2 border border-black/5 opacity-60" style={{ backgroundColor: colors.surfaceColor }}>
                             <div className="flex justify-between items-center">
-                              <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>🍔 Mains (6)</span>
+                              <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>Mains (6)</span>
                               <span className="text-[10px] opacity-40">►</span>
                             </div>
                           </div>
                           <div className="rounded-xl p-2 border border-black/5 opacity-60" style={{ backgroundColor: colors.surfaceColor }}>
                             <div className="flex justify-between items-center">
-                              <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>🍰 Desserts (3)</span>
+                              <span className="text-[10px] font-bold" style={{ color: colors.textColor }}>Desserts (3)</span>
                               <span className="text-[10px] opacity-40">►</span>
                             </div>
                           </div>

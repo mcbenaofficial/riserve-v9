@@ -1031,6 +1031,9 @@ class MenuItem(Base):
     inventory_linked = Column(Boolean, default=False)
     available = Column(Boolean, default=True)
     is_veg = Column(Boolean, default=True)
+    nutritional_value = Column(Text, nullable=True)
+    is_bestseller = Column(Boolean, default=False)
+    tags = Column(JSONB, default=list)  # e.g. ["Spicy", "New", "Chef's Pick"]
     display_order = Column(Integer, default=0)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
@@ -1058,6 +1061,7 @@ class RestaurantOrder(Base):
     payment_status = Column(String(50), default="pending")  # pending, paid, failed
     payment_ref = Column(String(255), nullable=True)
     otp = Column(String(10), nullable=True)  # For home delivery verification
+    pickup_pin = Column(String(6), nullable=True)  # 4-digit PIN shown to customer for collection
     confirmation_token = Column(String(100), nullable=False, unique=True)  # UUID for QR / status link
     whatsapp_status = Column(String(50), nullable=True)  # sent, delivered, failed
     notes = Column(Text, nullable=True)

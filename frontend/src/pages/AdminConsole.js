@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Settings, Users, Store, Wrench, Mail, MessageSquare, MessageCircle,
   Webhook, Zap, Puzzle, ChevronRight, Shield, Calendar, Building2, Star, Package, UserCog, FileText,
@@ -23,12 +24,13 @@ import AdminStaff from '../components/admin/AdminStaff';
 import AdminPromotions from '../components/admin/AdminPromotions';
 import AdminBookingForm from '../components/admin/AdminBookingForm';
 import AdminMenuManagement from '../components/admin/AdminMenuManagement';
-import AdminPortalDesign from '../components/admin/AdminPortalDesign';
+import AdminPortalDesign from '../components/admin/AdminPortalDesignPlus';
 import AdminInvoices from '../components/admin/AdminInvoices';
 
 
 const AdminConsole = () => {
-  const [activeTab, setActiveTab] = useState('company');
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'company');
   const [enabledFeatures, setEnabledFeatures] = useState([]);
   const [licensedModules, setLicensedModules] = useState([]);
   const [loading, setLoading] = useState(true);

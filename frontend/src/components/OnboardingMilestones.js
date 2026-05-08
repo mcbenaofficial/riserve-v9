@@ -62,7 +62,7 @@ const OnboardingMilestones = ({ progress = {}, activeStep = null }) => {
                     color: isDark ? '#E6E8EB' : '#0E1116',
                     lineHeight: 1.2,
                 }}>
-                    {percentage >= 100 ? '🎉 All Set!' : `${percentage}% Complete`}
+                    {percentage >= 100 ? 'All Set!' : `${percentage}% Complete`}
                 </div>
 
                 {/* Progress bar */}

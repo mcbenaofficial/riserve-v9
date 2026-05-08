@@ -11,9 +11,14 @@ from decimal import Decimal
 import uuid
 import random
 import string
+import os
+import logging
+import httpx
 
 import models_pg
 from .dependencies import get_current_user, User, get_db
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["Menu"])
 
@@ -39,6 +44,7 @@ class MenuItemCreate(BaseModel):
     category: str = "General"
     name: str
     description: Optional[str] = None
+    nutritional_value: Optional[str] = None
     price: float = 0
     image_url: Optional[str] = None
     image_urls: Optional[List[str]] = None
@@ -52,6 +58,7 @@ class MenuItemUpdate(BaseModel):
     category: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
+    nutritional_value: Optional[str] = None
     price: Optional[float] = None
     image_url: Optional[str] = None
     image_urls: Optional[List[str]] = None
@@ -59,8 +66,15 @@ class MenuItemUpdate(BaseModel):
     inventory_product_id: Optional[str] = None
     inventory_linked: Optional[bool] = None
     available: Optional[bool] = None
+    is_veg: Optional[bool] = None
     display_order: Optional[int] = None
     active: Optional[bool] = None
+
+
+class AIMenuFieldRequest(BaseModel):
+    item_name: str
+    business_type: Optional[str] = None
+    serving_size: Optional[str] = None
 
 
 class PublicOrderCreate(BaseModel):
@@ -70,6 +84,11 @@ class PublicOrderCreate(BaseModel):
     order_type: str = "dine_in"
     items: List[Dict[str, Any]]  # [{itemId, name, quantity, price}]
     notes: Optional[str] = None
+
+
+class AISuggestRequest(BaseModel):
+    outlet_id: str
+    preference: str
 
 
 class PaymentWebhook(BaseModel):
@@ -108,6 +127,9 @@ def _serialize_menu_item(item, stock_qty=None):
         "display_order": item.display_order,
         "active": item.active,
         "is_veg": getattr(item, "is_veg", True),
+        "nutritional_value": getattr(item, "nutritional_value", None),
+        "is_bestseller": getattr(item, "is_bestseller", False),
+        "tags": getattr(item, "tags", []) or [],
     }
     if stock_qty is not None:
         d["stock_quantity"] = stock_qty
@@ -130,6 +152,7 @@ def _serialize_order(order):
         "status": order.status,
         "payment_status": order.payment_status,
         "payment_ref": order.payment_ref,
+        "pickup_pin": getattr(order, "pickup_pin", None),
         "confirmation_token": order.confirmation_token,
         "whatsapp_status": order.whatsapp_status,
         "notes": order.notes,
@@ -188,6 +211,27 @@ async def get_public_menu(outlet_id: str, db: AsyncSession = Depends(get_db)):
             stock_qty = product.stock_quantity if product else 0
         serialized.append(_serialize_menu_item(item, stock_qty))
 
+    # Aggregate order counts per item from recent orders (last 90 days)
+    from datetime import timedelta
+    cutoff = datetime.now(timezone.utc) - timedelta(days=90)
+    orders_result = await db.execute(
+        select(models_pg.RestaurantOrder.items).where(
+            models_pg.RestaurantOrder.outlet_id == outlet_id,
+            models_pg.RestaurantOrder.status != "Cancelled",
+            models_pg.RestaurantOrder.created_at >= cutoff,
+        )
+    )
+    order_counts: Dict[str, int] = {}
+    for (order_items,) in orders_result.fetchall():
+        for oi in (order_items or []):
+            iid = oi.get("itemId") or oi.get("id")
+            if iid:
+                order_counts[iid] = order_counts.get(iid, 0) + (oi.get("quantity", 1))
+
+    # Attach order_count to each serialized item
+    for s in serialized:
+        s["order_count"] = order_counts.get(s["id"], 0)
+
     # Group by category, sorted by user-defined category display_order
     categories_grouped: Dict[str, List] = {}
     for s in serialized:
@@ -213,6 +257,7 @@ async def get_public_menu(outlet_id: str, db: AsyncSession = Depends(get_db)):
         info = cat_meta.get(name, {})
         category_info.append({"name": name, "icon": info.get("icon"), "display_order": info.get("display_order", 999)})
 
+    cs = outlet.portal_color_scheme or {}
     return {
         "outlet": {
             "id": outlet.id,
@@ -220,8 +265,11 @@ async def get_public_menu(outlet_id: str, db: AsyncSession = Depends(get_db)):
             "location": outlet.location,
             "contact_phone": outlet.contact_phone,
             "portal_logo_url": getattr(outlet, "portal_logo_url", None),
-            "portal_color_scheme": getattr(outlet, "portal_color_scheme", None),
+            "portal_color_scheme": cs,
             "portal_custom_colors": getattr(outlet, "portal_custom_colors", False),
+            "cover_image_url": cs.get("coverImageUrl"),
+            "opening_hours": cs.get("openingHours"),
+            "cuisine_type": cs.get("cuisineType"),
         },
         "company": {
             "name": company.name if company else "Restaurant",
@@ -289,6 +337,8 @@ async def create_public_order(body: PublicOrderCreate, db: AsyncSession = Depend
     if body.order_type == "delivery":
         otp = ''.join(random.choices(string.digits, k=4))
 
+    # Always generate a 4-digit pickup PIN for collection verification
+    pickup_pin = ''.join(random.choices(string.digits, k=4))
     confirmation_token = str(uuid.uuid4())
 
     new_order = models_pg.RestaurantOrder(
@@ -303,6 +353,7 @@ async def create_public_order(body: PublicOrderCreate, db: AsyncSession = Depend
         status="New",
         payment_status="pending",  # Will be updated by payment webhook
         otp=otp,
+        pickup_pin=pickup_pin,
         confirmation_token=confirmation_token,
         notes=body.notes,
     )
@@ -343,6 +394,63 @@ async def get_order_status(confirmation_token: str, db: AsyncSession = Depends(g
             "portal_logo_url": outlet.portal_logo_url
         } if outlet else {}
     }
+
+
+@router.post("/public/menu/ai/suggest")
+async def suggest_dishes(body: AISuggestRequest, db: AsyncSession = Depends(get_db)):
+    """AI dish suggestion for the public ordering portal — no auth required."""
+    import json as _json
+
+    outlet = (await db.execute(
+        select(models_pg.Outlet).where(models_pg.Outlet.id == body.outlet_id)
+    )).scalar_one_or_none()
+    if not outlet:
+        raise HTTPException(status_code=404, detail="Outlet not found")
+
+    items = (await db.execute(
+        select(models_pg.MenuItem).where(
+            models_pg.MenuItem.company_id == outlet.company_id,
+            models_pg.MenuItem.active == True,
+            models_pg.MenuItem.available == True,
+            (models_pg.MenuItem.outlet_id == body.outlet_id) | (models_pg.MenuItem.outlet_id == None),
+        ).order_by(models_pg.MenuItem.display_order)
+    )).scalars().all()
+
+    if not items:
+        return {"suggestions": []}
+
+    items_list = "\n".join([
+        f"- {item.name} | Category: {item.category} | {'Veg' if item.is_veg else 'Non-Veg'}"
+        for item in items[:60]
+    ])
+
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are a helpful restaurant concierge. Given a menu and a customer's mood or craving, "
+                "suggest 4–5 dishes that best match. "
+                "Return ONLY a valid JSON array — no markdown, no explanation — in this exact format:\n"
+                '[{"item_name": "Exact Dish Name", "reason": "One sentence why it matches"}]\n'
+                "The item_name must exactly match a name from the provided menu list."
+            ),
+        },
+        {
+            "role": "user",
+            "content": f"Customer preference: {body.preference[:300]}\n\nMenu:\n{items_list}",
+        },
+    ]
+
+    try:
+        raw = await _openrouter_chat(messages)
+        raw = raw.strip()
+        start = raw.find('[')
+        end = raw.rfind(']') + 1
+        suggestions = _json.loads(raw[start:end]) if start >= 0 and end > start else []
+        return {"suggestions": suggestions[:5]}
+    except Exception as e:
+        logger.error(f"AI suggest failed: {e}")
+        return {"suggestions": []}
 
 
 @router.post("/public/order/payment-webhook")
@@ -584,3 +692,101 @@ async def delete_menu_category(
     await db.delete(cat)
     await db.commit()
     return {"message": "Category deleted"}
+
+
+# ═══════════════════════════════════════════════
+# AI GENERATION ENDPOINTS
+# ═══════════════════════════════════════════════
+
+_OPENROUTER_MODEL = "google/gemma-4-26b-a4b-it"
+_OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+
+async def _openrouter_chat(messages: list[dict]) -> str:
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="AI service not configured.")
+    async with httpx.AsyncClient(timeout=30) as client:
+        resp = await client.post(
+            _OPENROUTER_URL,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://riserve.app",
+                "X-Title": "Riserve",
+            },
+            json={"model": _OPENROUTER_MODEL, "messages": messages},
+        )
+    if resp.status_code != 200:
+        logger.error(f"OpenRouter error {resp.status_code}: {resp.text}")
+        raise HTTPException(status_code=502, detail=f"AI service error: {resp.text}")
+    return resp.json()["choices"][0]["message"]["content"].strip()
+
+
+@router.post("/menu/ai/description")
+async def generate_menu_description(
+    body: AIMenuFieldRequest,
+    current_user: User = Depends(get_current_user),
+):
+    """Generate a Ramsay-style menu description for an item."""
+    business_context = body.business_type or "restaurant"
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are Gordon Ramsay writing menu descriptions. "
+                "Your descriptions are vivid, sensory, and passionate — they make the dish irresistible. "
+                "Use evocative language about texture, aroma, and flavour. "
+                "Keep it to 1–2 punchy sentences. No fluff. Never mention Gordon Ramsay by name."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Write a menu description for '{body.item_name}' served at a {business_context}. "
+                "Make it mouth-watering and confident. Output only the description text, nothing else."
+            ),
+        },
+    ]
+    try:
+        result = await _openrouter_chat(messages)
+        return {"result": result}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"AI description generation failed: {e}")
+        raise HTTPException(status_code=500, detail="AI generation failed.")
+
+
+@router.post("/menu/ai/nutrition")
+async def generate_nutritional_value(
+    body: AIMenuFieldRequest,
+    current_user: User = Depends(get_current_user),
+):
+    """Generate estimated nutritional information for a menu item."""
+    serving_hint = f" (serving size: {body.serving_size})" if body.serving_size else ""
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are a certified nutritionist and food scientist. "
+                "Given a dish name and optional serving size, provide a realistic nutritional estimate. "
+                "Format your response EXACTLY as a compact single-line breakdown like this example: "
+                "Calories: 320 kcal | Protein: 18g | Carbs: 28g | Fat: 14g | Fibre: 3g | Sugar: 4g | Sodium: 480mg. "
+                "Base your estimates on standard recipes and typical restaurant portions. "
+                "Output only the nutritional line, nothing else."
+            ),
+        },
+        {
+            "role": "user",
+            "content": f"Provide nutritional estimates for '{body.item_name}'{serving_hint}.",
+        },
+    ]
+    try:
+        result = await _openrouter_chat(messages)
+        return {"result": result}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"AI nutrition generation failed: {e}")
+        raise HTTPException(status_code=500, detail="AI generation failed.")

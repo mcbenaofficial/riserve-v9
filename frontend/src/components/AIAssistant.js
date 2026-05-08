@@ -461,7 +461,7 @@ const AIAssistant = ({ isOpen, onClose, mode = 'assistant' }) => {
               <p className="text-sm text-[#4B5563] dark:text-[#A9AFB8]">
                 Stuck on something?<br />
                 Let me help, get a<br />
-                quick assist! 👋
+                quick assist!
               </p>
             </div>
           </div>

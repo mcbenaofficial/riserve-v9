@@ -39,7 +39,7 @@ export default function LoginPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-             <Button variant="outline" className="h-16 rounded-2xl text-md font-bold text-foreground/80 hover:text-foreground hover:bg-muted/40 border-border/70"><span className="mr-3 text-xl">✨</span> Magic Link</Button>
+             <Button variant="outline" className="h-16 rounded-2xl text-md font-bold text-foreground/80 hover:text-foreground hover:bg-muted/40 border-border/70"><svg className="mr-3 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Magic Link</Button>
              <Button variant="outline" className="h-16 rounded-2xl text-md font-bold text-foreground/80 hover:text-foreground hover:bg-muted/40 border-border/70">
                 <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24">
                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

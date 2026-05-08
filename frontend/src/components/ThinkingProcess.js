@@ -73,7 +73,7 @@ const ThinkingProcess = ({ steps, isDark, isStreaming }) => {
                                 <div className={`flex items-center gap-2 py-1.5 px-2 rounded-lg ${isDark
                                     ? isZen ? 'bg-[#687988]/10 text-stone-300' : 'bg-purple-500/10 text-purple-300'
                                     : isZen ? 'bg-stone-100 text-stone-700' : 'bg-purple-50 text-purple-700'}`}>
-                                    <span className="text-sm">🔀</span>
+                                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
                                     <span className="font-medium">Handed off to <span className="font-bold">{step.agent?.replace('Agent', ' Agent')}</span></span>
                                 </div>
                             ) : step.type === 'tool_call' ? (

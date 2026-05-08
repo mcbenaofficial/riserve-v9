@@ -28,10 +28,10 @@ async def seed():
     async with Session() as db:
         # ── Discover company + admin ──────────────────────────────────────────
         company = (await db.execute(
-            select(models_pg.Company).where(models_pg.Company.name == "Simulated Salon")
+            select(models_pg.Company).where(models_pg.Company.name == "Kosmo Cafe")
         )).scalar_one_or_none()
         if not company:
-            print("❌ 'Simulated Salon' not found. Run restore_dev_account.py first.")
+            print("❌ 'Kosmo Cafe' not found. Run restore_dev_account.py first.")
             return
         COMPANY_ID = company.id
         print(f"✓ Company: {company.name} ({COMPANY_ID})")

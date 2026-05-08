@@ -280,6 +280,7 @@ const Sidebar = () => {
     { key: 'marketing-journeys', label: 'Journeys', icon: GitBranch, path: '/marketing/journeys', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     { key: 'marketing-settings', label: 'Settings', icon: Settings2, path: '/marketing/settings', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     // Omni Portal
+    { key: 'omni-portal-design-plus', label: 'Portal Design +', icon: Sparkles, path: '/omni/portal-design-plus', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-design', label: 'Design Studio', icon: Palette, path: '/omni/design', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-content', label: 'Content Manager', icon: FileText, path: '/omni/content', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-config', label: 'Site Config & AI', icon: Settings2, path: '/omni/config', roles: ['SuperAdmin', 'Admin'], appId: 'portal' },
@@ -426,7 +427,7 @@ const Sidebar = () => {
                             else if (app.id === 'reputation') navigate('/feedback');
                             else if (app.id === 'marketing') navigate('/conversations');
                             else if (app.id === 'restaurant') navigate('/orders');
-                            else if (app.id === 'portal') navigate('/omni/design');
+                            else if (app.id === 'portal') navigate('/omni/portal-design-plus');
                             else navigate('/');
                           }
                         }}
