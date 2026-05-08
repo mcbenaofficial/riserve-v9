@@ -128,11 +128,8 @@ const Bookings = () => {
       filtered = filtered.filter(b => b.outlet_id === filterOutletId);
     }
 
-    // 4. Date Filter — timeline only, with normalised date comparison
-    if (viewMode === 'timeline') {
-      const dateStr = selectedDate.toISOString().split('T')[0];
-      filtered = filtered.filter(b => normalizeDate(b.date) === dateStr);
-    }
+    // Note: timeline date filtering is handled inside SlotTimelineView
+    // so it can support day/week/month views with the correct range.
 
     setFilteredBookings(filtered);
     setPage(1);

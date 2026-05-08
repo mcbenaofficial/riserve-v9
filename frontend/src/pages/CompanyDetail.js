@@ -580,6 +580,7 @@ const CompanyDetail = ({ theme }) => {
             { id: 'flow', label: 'Flow', color: 'cyan' },
             { id: 'smart_analytics', label: 'Smart Analytics', color: 'violet' },
             { id: 'hq_intelligence', label: 'HQ Intelligence', color: 'rose' },
+            { id: 'staff_management', label: 'Staff Management', color: 'sky' },
           ].map(mod => {
             const modules = company.licensed_modules || [];
             const isActive = modules.includes(mod.id);

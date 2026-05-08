@@ -625,6 +625,23 @@ async def get_booking(
     }
 
 
+@router.delete("/{booking_id}")
+async def delete_booking(
+    booking_id: str,
+    current_user: User = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db)
+):
+    stmt = select(models_pg.Booking).where(models_pg.Booking.id == booking_id)
+    if current_user.role != "SuperAdmin":
+        stmt = stmt.where(models_pg.Booking.company_id == current_user.company_id)
+    booking = (await db_session.execute(stmt)).scalar_one_or_none()
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    await db_session.execute(delete(models_pg.Booking).where(models_pg.Booking.id == booking_id))
+    await db_session.commit()
+    return {"message": "Booking deleted"}
+
+
 @router.post("/{booking_id}/items")
 async def add_items_to_booking(
     booking_id: str, 

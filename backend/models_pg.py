@@ -286,8 +286,19 @@ class TrainingModule(Base):
     company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
     title = Column(String(255), nullable=False)
     category = Column(String(100), nullable=False)      # Compliance, Service, Safety, Sales, Operations
+    description = Column(Text, nullable=True)
     duration_minutes = Column(Integer, default=15)
     is_active = Column(Boolean, default=True)
+    # Source material and AI-generated learning assets
+    content = Column(Text, nullable=True)
+    study_guide = Column(Text, nullable=True)
+    flashcards = Column(JSONB, nullable=True)            # [{question, answer}, ...]
+    quiz = Column(JSONB, nullable=True)                  # [{question, options, correct_index, explanation}, ...]
+    ai_generated = Column(Boolean, default=False)
+    # Audio dialogue
+    audio_script = Column(Text, nullable=True)
+    audio_url = Column(String(500), nullable=True)
+    audio_approved = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     completions = relationship("TrainingCompletion", back_populates="module", cascade="all, delete-orphan")
@@ -300,6 +311,8 @@ class TrainingCompletion(Base):
     staff_id = Column(String, ForeignKey("staff.id", ondelete="CASCADE"), nullable=False)
     module_id = Column(String, ForeignKey("training_modules.id", ondelete="CASCADE"), nullable=False)
     company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    score = Column(Integer, nullable=True)               # Quiz score 0-100
+    quiz_answers = Column(JSONB, nullable=True)          # Submitted answers
     completed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     staff = relationship("Staff", back_populates="training_completions")

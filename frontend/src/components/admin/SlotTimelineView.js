@@ -28,12 +28,52 @@ const SlotTimelineView = ({
     const [draggedBooking, setDraggedBooking] = useState(null);
     const [dragOverInfo, setDragOverInfo] = useState(null);
 
+    // Container dimensions — measured so rows and columns fill without scroll
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
     const date = externalDate || internalDate;
-    const bookings = externalBookings || internalBookings;
+
+    // When bookings come from the parent, filter them to the current view range
+    // so that week/month views don't receive stale single-day data.
+    const bookings = (() => {
+        const raw = externalBookings || internalBookings;
+        if (!externalBookings) return raw;
+        if (viewMode === 'day') {
+            const ds = date.toISOString().split('T')[0];
+            return raw.filter(b => (b.date || '').split('T')[0] === ds);
+        }
+        // Inline week/month range (mirrors getViewRange below)
+        const start = new Date(date);
+        const end = new Date(date);
+        if (viewMode === 'week') {
+            start.setDate(start.getDate() - start.getDay());
+            end.setDate(start.getDate() + 6);
+        } else {
+            start.setDate(1);
+            end.setMonth(end.getMonth() + 1);
+            end.setDate(0);
+        }
+        const s = start.toISOString().split('T')[0];
+        const e = end.toISOString().split('T')[0];
+        return raw.filter(b => {
+            const d = (b.date || '').split('T')[0];
+            return d >= s && d <= e;
+        });
+    })();
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
         return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const ro = new ResizeObserver(([entry]) => {
+            const { width, height } = entry.contentRect;
+            setDimensions({ width, height });
+        });
+        ro.observe(containerRef.current);
+        return () => ro.disconnect();
     }, []);
 
     useEffect(() => {
@@ -85,8 +125,8 @@ const SlotTimelineView = ({
     // --- Columns ---
     const generateColumns = () => {
         if (viewMode === 'day') {
-            const [startHour] = config.operating_hours_start.split(':').map(Number);
-            const [endHour] = config.operating_hours_end.split(':').map(Number);
+            const [startHour] = (config.operating_hours_start || '09:00').split(':').map(Number);
+            const [endHour] = (config.operating_hours_end || '21:00').split(':').map(Number);
             const cols = [];
             for (let i = startHour; i <= endHour; i++) {
                 cols.push({ id: i, label: i === 12 ? '12 PM' : i > 12 ? `${i - 12} PM` : `${i} AM`, type: 'hour' });
@@ -113,8 +153,12 @@ const SlotTimelineView = ({
     };
 
     const columns = generateColumns();
-    const columnWidth = viewMode === 'day' ? 140 : viewMode === 'week' ? 200 : 100;
-    const totalWidth = columns.length * columnWidth;
+    const LABEL_W = 224; // w-56 sticky resource label
+    // Fill the container exactly — no horizontal scroll
+    const totalWidth = dimensions.width > 0
+        ? dimensions.width - LABEL_W
+        : columns.length * (viewMode === 'day' ? 140 : viewMode === 'week' ? 200 : 100);
+    const columnWidth = columns.length > 0 ? totalWidth / columns.length : 140;
     const startHour = viewMode === 'day' ? columns[0]?.id || 8 : 0;
     const endHour = viewMode === 'day' ? columns[columns.length - 1]?.id || 20 : 0;
 
@@ -130,6 +174,15 @@ const SlotTimelineView = ({
     // Separate bookings: assigned to a known resource vs unassigned
     const assignedBookings = bookings.filter(b => b.resource_id && resourceIds.has(b.resource_id));
     const unassignedBookings = bookings.filter(b => !b.resource_id || !resourceIds.has(b.resource_id));
+
+    // Dynamic row height: up to 7 rows fill the container, fewer rows get taller
+    const TIMESCALE_H = 56; // h-14 sticky time-scale header
+    const MAX_VISIBLE_ROWS = 7;
+    const totalRowCount = resources.length + (unassignedBookings.length > 0 ? 1 : 0);
+    const visibleRowCount = Math.min(Math.max(totalRowCount, 1), MAX_VISIBLE_ROWS);
+    const rowHeight = dimensions.height > 0
+        ? Math.max(52, Math.floor((dimensions.height - TIMESCALE_H) / visibleRowCount))
+        : 128;
 
     // --- Booking style ---
     const getBookingStyle = (booking) => {
@@ -315,8 +368,8 @@ const SlotTimelineView = ({
 
             {/* Timeline Lane */}
             <div
-                className="relative h-32 cursor-pointer"
-                style={{ width: totalWidth }}
+                className="relative cursor-pointer"
+                style={{ width: totalWidth, height: rowHeight }}
                 onClick={(e) => !isUnassigned && handleTimelineClick(e, resource)}
                 onDragOver={(e) => !isUnassigned && handleDragOver(e, resource)}
                 onDrop={(e) => !isUnassigned && handleDrop(e, resource)}
@@ -381,8 +434,8 @@ const SlotTimelineView = ({
             )}
 
             {/* Timeline Content */}
-            <div className="flex-1 overflow-auto relative bg-white dark:bg-transparent" ref={containerRef}>
-                <div className="min-w-max">
+            <div className="flex-1 overflow-x-hidden overflow-y-auto relative bg-white dark:bg-transparent" ref={containerRef}>
+                <div className="w-full">
                     {/* Sticky Header Row */}
                     <div className="flex sticky top-0 z-30 bg-white/95 dark:bg-[#12161C]/95 backdrop-blur-md border-b border-gray-200 dark:border-white/5">
                         {/* Corner */}

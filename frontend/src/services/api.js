@@ -38,6 +38,7 @@ export const api = {
   getBookings: () => axios.get(`${API}/bookings`, { headers: getHeaders() }),
   createBooking: (data) => axios.post(`${API}/bookings`, data, { headers: getHeaders() }),
   updateBooking: (id, data) => axios.put(`${API}/bookings/${id}`, typeof data === 'string' ? { status: data } : data, { headers: getHeaders() }),
+  deleteBooking: (id) => axios.delete(`${API}/bookings/${id}`, { headers: getHeaders() }),
   rescheduleBooking: (id, time, date, resource_id) => axios.put(`${API}/bookings/${id}/reschedule`, { time, date, resource_id }, { headers: getHeaders() }),
 
   // Transactions
@@ -400,6 +401,19 @@ export const api = {
   voidInvoice: (id) => axios.post(`${API}/invoices/${id}/void`, {}, { headers: getHeaders() }),
   cancelInvoice: (id) => axios.post(`${API}/invoices/${id}/cancel`, {}, { headers: getHeaders() }),
   createInvoiceFromBooking: (bookingId) => axios.post(`${API}/invoices/from-booking/${bookingId}`, {}, { headers: getHeaders() }),
+
+  // ── Training Modules ─────────────────────────────────────────────
+  getTrainingModules: () => axios.get(`${API}/staff/training/modules`, { headers: getHeaders() }),
+  createTrainingModule: (data) => axios.post(`${API}/staff/training/modules`, data, { headers: getHeaders() }),
+  updateTrainingModule: (id, data) => axios.put(`${API}/staff/training/modules/${id}`, data, { headers: getHeaders() }),
+  deleteTrainingModule: (id) => axios.delete(`${API}/staff/training/modules/${id}`, { headers: getHeaders() }),
+  aiGenerateTrainingContent: (id) => axios.post(`${API}/staff/training/modules/${id}/generate`, {}, { headers: getHeaders() }),
+  getTrainingOverview: () => axios.get(`${API}/staff/training/overview`, { headers: getHeaders() }),
+  assignTraining: (data) => axios.post(`${API}/staff/training/assign`, data, { headers: getHeaders() }),
+  getModuleCompletions: (moduleId) => axios.get(`${API}/staff/training/modules/${moduleId}/completions`, { headers: getHeaders() }),
+  getStaffTraining: (staffId) => axios.get(`${API}/staff/training/staff/${staffId}`, { headers: getHeaders() }),
+  generateTrainingAudio: (id) => axios.post(`${API}/staff/training/modules/${id}/generate-audio`, {}, { headers: getHeaders() }),
+  approveTrainingAudio: (id) => axios.post(`${API}/staff/training/modules/${id}/approve-audio`, {}, { headers: getHeaders() }),
 
   // ── Super Admin: Partner Integrations ────────────────────────────
   getSuperAdminWhatsAppStats: (days) => axios.get(`${API}/super-admin/whatsapp/stats${days ? `?days=${days}` : ''}`, { headers: getHeaders() }),

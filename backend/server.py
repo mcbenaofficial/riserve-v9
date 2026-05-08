@@ -150,9 +150,11 @@ _cors_origins = [o.strip() for o in _cors_env.split(',') if o.strip()] if _cors_
 # Always include dev origins
 _dev_origins = [
     "http://localhost:3000",
-    "http://localhost:3003",
+    "http://localhost:3001",
     "http://localhost:3002",
+    "http://localhost:3003",
     "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
 ]
 _allowed_origins = list(set(_cors_origins + _dev_origins))
 
@@ -183,6 +185,7 @@ from routes.campaigns import router as campaigns_router
 from routes.journeys import router as journeys_router
 from routes.knowledge import router as knowledge_router
 from routes.evals import router as evals_router
+from routes.booking_portal import router as booking_portal_router
 
 # Include Routers
 app.include_router(auth.router, prefix="/api")
@@ -224,6 +227,7 @@ app.include_router(campaigns_router, prefix="/api")
 app.include_router(journeys_router, prefix="/api")
 app.include_router(knowledge_router, prefix="/api")
 app.include_router(evals_router, prefix="/api")
+app.include_router(booking_portal_router)
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

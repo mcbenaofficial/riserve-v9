@@ -4,15 +4,103 @@ from typing import Optional, List
 from datetime import datetime, timezone, date
 from bson import ObjectId
 import uuid
+import os
+import logging
 
+import asyncio
+import struct
+import httpx
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, update, delete, func
 
 import models_pg
 from .dependencies import get_current_user, User, get_db, require_feature
 
+logger = logging.getLogger(__name__)
+
+_OPENROUTER_MODEL = "google/gemma-4-26b-a4b-it"
+_OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+_TTS_MODEL = "openai/gpt-audio-mini"
+
+
+async def _openrouter_chat(messages: list[dict], timeout: int = 60) -> str:
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="AI service not configured.")
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.post(
+            _OPENROUTER_URL,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://riserve.app",
+                "X-Title": "Riserve",
+            },
+            json={"model": _OPENROUTER_MODEL, "messages": messages},
+        )
+    if resp.status_code != 200:
+        logger.error(f"OpenRouter error {resp.status_code}: {resp.text}")
+        raise HTTPException(status_code=502, detail="AI service error.")
+    return resp.json()["choices"][0]["message"]["content"].strip()
+
+def _raw_pcm_to_wav(pcm_data: bytes, sample_rate: int = 24000, channels: int = 1, bits: int = 16) -> bytes:
+    """Wrap raw signed 16-bit PCM samples in a WAV/RIFF container."""
+    byte_rate = sample_rate * channels * bits // 8
+    block_align = channels * bits // 8
+    header = struct.pack(
+        "<4sI4s4sIHHIIHH4sI",
+        b"RIFF", 36 + len(pcm_data), b"WAVE",
+        b"fmt ", 16, 1, channels, sample_rate, byte_rate, block_align, bits,
+        b"data", len(pcm_data),
+    )
+    return header + pcm_data
+
+
+def _is_known_audio(data: bytes) -> bool:
+    """Return True if data already has a recognised audio container header."""
+    if len(data) < 4:
+        return False
+    return (
+        data[:3] == b"ID3"
+        or (data[0] == 0xFF and (data[1] & 0xE0) == 0xE0)  # MPEG sync word
+        or data[:4] == b"RIFF"
+        or data[:4] == b"OggS"
+        or data[:4] == b"fLaC"
+    )
+
+
+async def _tts_line(api_key: str, text: str, voice: str, sem: asyncio.Semaphore) -> bytes:
+    """Call OpenRouter gpt-audio-mini TTS for a single dialogue line via chat completions audio modality."""
+    import base64
+    async with sem:
+        async with httpx.AsyncClient(timeout=90) as client:
+            resp = await client.post(
+                _OPENROUTER_URL,
+                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json",
+                         "HTTP-Referer": "https://riserve.app", "X-Title": "Riserve"},
+                json={
+                    "model": _TTS_MODEL,
+                    "modalities": ["text", "audio"],
+                    "audio": {"voice": voice, "format": "mp3"},
+                    "messages": [
+                        {"role": "system", "content": "Read the following text aloud exactly as written. Do not add, change, or omit any words."},
+                        {"role": "user", "content": text},
+                    ],
+                },
+            )
+        if resp.status_code != 200:
+            logger.warning("TTS line error %s (text: %.60s...): %s", resp.status_code, text, resp.text[:200])
+            return b""
+        try:
+            audio_b64 = resp.json()["choices"][0]["message"]["audio"]["data"]
+            return base64.b64decode(audio_b64)
+        except Exception as e:
+            logger.warning("TTS response parse error: %s | resp: %.200s", e, resp.text)
+            return b""
+
+
 router = APIRouter(
-    prefix="/staff", 
+    prefix="/staff",
     tags=["Staff Management"],
     dependencies=[Depends(require_feature("staff_management"))]
 )
@@ -1787,4 +1875,521 @@ async def get_attendance_report(
             "total_overtime": round(sum(r.get("overtime_hours", 0) or 0 for r in records), 2)
         }
     }
+
+
+# ============================================================
+# TRAINING MODULES
+# ============================================================
+
+class TrainingModuleCreate(BaseModel):
+    title: str
+    category: str   # Compliance, Service, Safety, Sales, Operations
+    description: Optional[str] = None
+    duration_minutes: int = 15
+    content: Optional[str] = None
+
+
+class TrainingModuleUpdate(BaseModel):
+    title: Optional[str] = None
+    category: Optional[str] = None
+    description: Optional[str] = None
+    duration_minutes: Optional[int] = None
+    is_active: Optional[bool] = None
+    content: Optional[str] = None
+
+
+class TrainingAssignRequest(BaseModel):
+    module_id: str
+    staff_ids: List[str]
+
+
+class TrainingCompleteRequest(BaseModel):
+    score: Optional[int] = None
+    quiz_answers: Optional[list] = None
+
+
+def _serialize_module(m: models_pg.TrainingModule) -> dict:
+    return {
+        "id": m.id,
+        "title": m.title,
+        "category": m.category,
+        "description": m.description,
+        "duration_minutes": m.duration_minutes,
+        "is_active": m.is_active,
+        "ai_generated": m.ai_generated,
+        "has_study_guide": bool(m.study_guide),
+        "has_flashcards": bool(m.flashcards),
+        "has_quiz": bool(m.quiz),
+        "has_audio": bool(m.audio_url),
+        "audio_url": m.audio_url,
+        "audio_script": m.audio_script,
+        "audio_approved": m.audio_approved,
+        "content": m.content,
+        "study_guide": m.study_guide,
+        "flashcards": m.flashcards,
+        "quiz": m.quiz,
+        "created_at": m.created_at.isoformat() if m.created_at else None,
+    }
+
+
+@router.get("/training/modules")
+async def list_training_modules(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.TrainingModule)
+        .where(models_pg.TrainingModule.company_id == current_user.company_id)
+        .order_by(models_pg.TrainingModule.created_at.desc())
+    )
+    modules = result.scalars().all()
+
+    # Attach completion count to each module
+    completion_counts = {}
+    if modules:
+        ids = [m.id for m in modules]
+        count_result = await db.execute(
+            select(
+                models_pg.TrainingCompletion.module_id,
+                func.count(models_pg.TrainingCompletion.id).label("count"),
+            )
+            .where(models_pg.TrainingCompletion.module_id.in_(ids))
+            .group_by(models_pg.TrainingCompletion.module_id)
+        )
+        completion_counts = {row.module_id: row.count for row in count_result}
+
+    out = []
+    for m in modules:
+        d = _serialize_module(m)
+        d["completion_count"] = completion_counts.get(m.id, 0)
+        out.append(d)
+    return out
+
+
+@router.post("/training/modules")
+async def create_training_module(
+    body: TrainingModuleCreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    module = models_pg.TrainingModule(
+        company_id=current_user.company_id,
+        title=body.title,
+        category=body.category,
+        description=body.description,
+        duration_minutes=body.duration_minutes,
+        content=body.content,
+    )
+    db.add(module)
+    await db.commit()
+    await db.refresh(module)
+    d = _serialize_module(module)
+    d["completion_count"] = 0
+    return d
+
+
+@router.put("/training/modules/{module_id}")
+async def update_training_module(
+    module_id: str,
+    body: TrainingModuleUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.TrainingModule).where(
+            models_pg.TrainingModule.id == module_id,
+            models_pg.TrainingModule.company_id == current_user.company_id,
+        )
+    )
+    module = result.scalar_one_or_none()
+    if not module:
+        raise HTTPException(status_code=404, detail="Module not found.")
+
+    for field, value in body.model_dump(exclude_unset=True).items():
+        setattr(module, field, value)
+    await db.commit()
+    await db.refresh(module)
+    return _serialize_module(module)
+
+
+@router.delete("/training/modules/{module_id}")
+async def delete_training_module(
+    module_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.TrainingModule).where(
+            models_pg.TrainingModule.id == module_id,
+            models_pg.TrainingModule.company_id == current_user.company_id,
+        )
+    )
+    module = result.scalar_one_or_none()
+    if not module:
+        raise HTTPException(status_code=404, detail="Module not found.")
+    await db.delete(module)
+    await db.commit()
+    return {"ok": True}
+
+
+@router.post("/training/modules/{module_id}/generate")
+async def ai_generate_training_content(
+    module_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Use AI to generate study guide, flashcards, and quiz from module content."""
+    result = await db.execute(
+        select(models_pg.TrainingModule).where(
+            models_pg.TrainingModule.id == module_id,
+            models_pg.TrainingModule.company_id == current_user.company_id,
+        )
+    )
+    module = result.scalar_one_or_none()
+    if not module:
+        raise HTTPException(status_code=404, detail="Module not found.")
+    if not module.content:
+        raise HTTPException(status_code=400, detail="Module has no source content to generate from.")
+
+    prompt = f"""You are a professional training content developer.
+Given the following training material, generate three learning assets.
+
+Return ONLY a valid JSON object — no markdown fences, no extra text — in this exact shape:
+{{
+  "study_guide": "<markdown string with ## headers, bullet points, and key concepts>",
+  "flashcards": [
+    {{"question": "...", "answer": "..."}},
+    ...
+  ],
+  "quiz": [
+    {{
+      "question": "...",
+      "options": ["A", "B", "C", "D"],
+      "correct_index": 0,
+      "explanation": "..."
+    }},
+    ...
+  ]
+}}
+
+Rules:
+- study_guide: comprehensive markdown, 300-500 words, use ## sections and bullet lists
+- flashcards: exactly 8 Q&A pairs, answers 1-2 sentences each
+- quiz: exactly 5 multiple-choice questions, 4 options each, test understanding not memorization
+
+Training material:
+\"\"\"
+{module.content}
+\"\"\"
+"""
+
+    raw = await _openrouter_chat([{"role": "user", "content": prompt}])
+
+    # Strip markdown fences if model wrapped the JSON anyway
+    clean = raw.strip()
+    if clean.startswith("```"):
+        clean = clean.split("```")[1]
+        if clean.startswith("json"):
+            clean = clean[4:]
+        clean = clean.strip()
+
+    try:
+        import json as _json
+        generated = _json.loads(clean)
+    except Exception:
+        raise HTTPException(status_code=502, detail="AI returned malformed JSON. Try again.")
+
+    module.study_guide = generated.get("study_guide")
+    module.flashcards = generated.get("flashcards")
+    module.quiz = generated.get("quiz")
+    module.ai_generated = True
+    await db.commit()
+    await db.refresh(module)
+    return _serialize_module(module)
+
+
+@router.post("/training/modules/{module_id}/generate-audio")
+async def generate_training_audio(
+    module_id: str,
+    current_user: User = Depends(require_feature("staff_management")),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate an audio dialogue for a training module using OpenRouter TTS (sesame/csm-1b)."""
+    import uuid as _uuid
+    result = await db.execute(
+        select(models_pg.TrainingModule).where(
+            models_pg.TrainingModule.id == module_id,
+            models_pg.TrainingModule.company_id == current_user.company_id,
+        )
+    )
+    module = result.scalar_one_or_none()
+    if not module:
+        raise HTTPException(status_code=404, detail="Module not found.")
+
+    source = module.content or module.study_guide
+    if not source:
+        raise HTTPException(status_code=400, detail="Module has no content to generate audio from. Add source content or generate study materials first.")
+
+    # Step 1: Generate a 2-speaker training dialogue script via Gemma
+    # ~130 words per minute at natural spoken pace
+    target_words = max(400, module.duration_minutes * 130)
+    target_turns = max(16, module.duration_minutes * 6)
+
+    script_prompt = f"""You are a training content writer. Write a natural, engaging audio dialogue between two speakers for a staff training module.
+
+Module title: {module.title}
+Category: {module.category}
+Target audio length: {module.duration_minutes} minutes (~{target_words} spoken words, {target_turns} turns)
+
+Source material:
+{source[:4000]}
+
+Write the dialogue as a conversation between:
+- TRAINER: an experienced, friendly coach who explains and reinforces concepts
+- STAFF: a new team member who asks questions, shares observations, and demonstrates understanding
+
+Rules:
+- Use natural spoken language — contractions, short affirmations, follow-up questions
+- Cover ALL key concepts from the source material in depth
+- Each speaker turn should be 3-5 sentences
+- Write EXACTLY {target_turns} turns total (alternating TRAINER / STAFF)
+- The dialogue must reach approximately {target_words} words
+- Format each line exactly as: TRAINER: <text> or STAFF: <text>
+- Do not include any other formatting, headers, stage directions, or labels
+
+Output only the dialogue lines."""
+
+    script = await _openrouter_chat([{"role": "user", "content": script_prompt}], timeout=120)
+
+    # Step 2: Split script into individual spoken turns and generate TTS per-line.
+    # CSM-1B has a ~10s output cap per call, so we call once per dialogue line and
+    # concatenate the raw PCM chunks to produce full-length audio.
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="AI service not configured.")
+
+    # Extract spoken text; assign voice per speaker for a two-voice dialogue
+    # alloy = TRAINER (knowledgeable, warm), nova = STAFF (curious, engaged)
+    spoken_lines: list[tuple[str, str]] = []
+    for raw_line in script.splitlines():
+        raw_line = raw_line.strip()
+        if not raw_line:
+            continue
+        voice = "nova" if raw_line.upper().startswith("STAFF:") else "alloy"
+        text = raw_line.split(":", 1)[1].strip() if ":" in raw_line else raw_line
+        if text:
+            spoken_lines.append((text, voice))
+
+    if not spoken_lines:
+        raise HTTPException(status_code=500, detail="Script generation did not produce any dialogue lines.")
+
+    # Run TTS in parallel with max 5 concurrent calls
+    sem = asyncio.Semaphore(5)
+    chunks: list[bytes] = await asyncio.gather(*[_tts_line(api_key, text, voice, sem) for text, voice in spoken_lines])
+
+    raw_audio = b"".join(c for c in chunks if c)
+    if not raw_audio:
+        raise HTTPException(status_code=502, detail="TTS generation returned no audio data.")
+
+    # Wrap raw PCM in WAV container if needed (CSM-1B returns raw 16-bit PCM at 24kHz)
+    if _is_known_audio(raw_audio):
+        audio_bytes = raw_audio
+        ext = "mp3" if raw_audio[:3] == b"ID3" or (raw_audio[0] == 0xFF and (raw_audio[1] & 0xE0) == 0xE0) else "wav"
+    else:
+        audio_bytes = _raw_pcm_to_wav(raw_audio, sample_rate=24000)
+        ext = "wav"
+
+    # Step 3: Save audio file
+    audio_dir = os.path.join(os.path.dirname(__file__), "..", "uploads", "training_audio")
+    os.makedirs(audio_dir, exist_ok=True)
+    filename = f"{module_id}.{ext}"
+    filepath = os.path.join(audio_dir, filename)
+    with open(filepath, "wb") as f:
+        f.write(audio_bytes)
+
+    module.audio_script = script
+    module.audio_url = f"/uploads/training_audio/{filename}"
+    module.audio_approved = False
+    await db.commit()
+    await db.refresh(module)
+    return _serialize_module(module)
+
+
+@router.post("/training/modules/{module_id}/approve-audio")
+async def approve_training_audio(
+    module_id: str,
+    current_user: User = Depends(require_feature("staff_management")),
+    db: AsyncSession = Depends(get_db),
+):
+    """Toggle audio approval status for a training module."""
+    result = await db.execute(
+        select(models_pg.TrainingModule).where(
+            models_pg.TrainingModule.id == module_id,
+            models_pg.TrainingModule.company_id == current_user.company_id,
+        )
+    )
+    module = result.scalar_one_or_none()
+    if not module:
+        raise HTTPException(status_code=404, detail="Module not found.")
+    if not module.audio_url:
+        raise HTTPException(status_code=400, detail="No audio generated for this module yet.")
+    module.audio_approved = not module.audio_approved
+    await db.commit()
+    await db.refresh(module)
+    return _serialize_module(module)
+
+
+@router.get("/training/overview")
+async def get_training_overview(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Return per-module completion stats and overall summary."""
+    modules_result = await db.execute(
+        select(models_pg.TrainingModule).where(
+            models_pg.TrainingModule.company_id == current_user.company_id,
+            models_pg.TrainingModule.is_active == True,
+        )
+    )
+    modules = modules_result.scalars().all()
+
+    staff_result = await db.execute(
+        select(func.count(models_pg.Staff.id)).where(
+            models_pg.Staff.company_id == current_user.company_id,
+            models_pg.Staff.status == "active",
+        )
+    )
+    total_staff = staff_result.scalar() or 0
+
+    completions_result = await db.execute(
+        select(
+            models_pg.TrainingCompletion.module_id,
+            func.count(models_pg.TrainingCompletion.id).label("count"),
+            func.avg(models_pg.TrainingCompletion.score).label("avg_score"),
+        )
+        .where(models_pg.TrainingCompletion.company_id == current_user.company_id)
+        .group_by(models_pg.TrainingCompletion.module_id)
+    )
+    stats_by_module = {row.module_id: {"count": row.count, "avg_score": row.avg_score} for row in completions_result}
+
+    module_stats = []
+    for m in modules:
+        s = stats_by_module.get(m.id, {"count": 0, "avg_score": None})
+        completion_rate = round((s["count"] / total_staff * 100), 1) if total_staff > 0 else 0
+        module_stats.append({
+            "module_id": m.id,
+            "title": m.title,
+            "category": m.category,
+            "duration_minutes": m.duration_minutes,
+            "ai_generated": m.ai_generated,
+            "completion_count": s["count"],
+            "completion_rate": completion_rate,
+            "avg_score": round(float(s["avg_score"]), 1) if s["avg_score"] is not None else None,
+        })
+
+    total_completions = sum(s["count"] for s in stats_by_module.values())
+    return {
+        "total_staff": total_staff,
+        "total_modules": len(modules),
+        "total_completions": total_completions,
+        "modules": module_stats,
+    }
+
+
+@router.post("/training/assign")
+async def assign_training(
+    body: TrainingAssignRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Assign a training module to one or more staff members (idempotent)."""
+    module_result = await db.execute(
+        select(models_pg.TrainingModule).where(
+            models_pg.TrainingModule.id == body.module_id,
+            models_pg.TrainingModule.company_id == current_user.company_id,
+        )
+    )
+    if not module_result.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Module not found.")
+
+    # Find already-completed staff to avoid duplicates
+    existing_result = await db.execute(
+        select(models_pg.TrainingCompletion.staff_id).where(
+            models_pg.TrainingCompletion.module_id == body.module_id,
+            models_pg.TrainingCompletion.staff_id.in_(body.staff_ids),
+        )
+    )
+    already_assigned = {row.staff_id for row in existing_result}
+
+    assigned = []
+    for staff_id in body.staff_ids:
+        if staff_id in already_assigned:
+            continue
+        completion = models_pg.TrainingCompletion(
+            staff_id=staff_id,
+            module_id=body.module_id,
+            company_id=current_user.company_id,
+        )
+        db.add(completion)
+        assigned.append(staff_id)
+
+    await db.commit()
+    return {"assigned": len(assigned), "already_assigned": len(already_assigned)}
+
+
+@router.get("/training/modules/{module_id}/completions")
+async def get_module_completions(
+    module_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.TrainingCompletion, models_pg.Staff)
+        .join(models_pg.Staff, models_pg.TrainingCompletion.staff_id == models_pg.Staff.id)
+        .where(
+            models_pg.TrainingCompletion.module_id == module_id,
+            models_pg.TrainingCompletion.company_id == current_user.company_id,
+        )
+        .order_by(models_pg.TrainingCompletion.completed_at.desc())
+    )
+    rows = result.all()
+    return [
+        {
+            "completion_id": c.id,
+            "staff_id": c.staff_id,
+            "staff_name": f"{s.first_name} {s.last_name}",
+            "score": c.score,
+            "completed_at": c.completed_at.isoformat() if c.completed_at else None,
+        }
+        for c, s in rows
+    ]
+
+
+@router.get("/training/staff/{staff_id}")
+async def get_staff_training(
+    staff_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(models_pg.TrainingCompletion, models_pg.TrainingModule)
+        .join(models_pg.TrainingModule, models_pg.TrainingCompletion.module_id == models_pg.TrainingModule.id)
+        .where(
+            models_pg.TrainingCompletion.staff_id == staff_id,
+            models_pg.TrainingCompletion.company_id == current_user.company_id,
+        )
+        .order_by(models_pg.TrainingCompletion.completed_at.desc())
+    )
+    rows = result.all()
+    return [
+        {
+            "completion_id": c.id,
+            "module_id": m.id,
+            "module_title": m.title,
+            "category": m.category,
+            "score": c.score,
+            "completed_at": c.completed_at.isoformat() if c.completed_at else None,
+        }
+        for c, m in rows
+    ]
 

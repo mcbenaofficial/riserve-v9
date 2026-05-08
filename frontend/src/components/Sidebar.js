@@ -109,7 +109,9 @@ const Sidebar = () => {
           api.getCompanyFeatures(),
           api.getCompanySettings()
         ]);
-        setEnabledFeatures(featuresRes.data.features || []);
+        const features = featuresRes.data.features || [];
+        const licensed = featuresRes.data.licensed_modules || [];
+        setEnabledFeatures([...new Set([...features, ...licensed])]);
         setCompanySettings(settingsRes.data || null);
       } catch (error) {
         console.error('Failed to fetch company data:', error);

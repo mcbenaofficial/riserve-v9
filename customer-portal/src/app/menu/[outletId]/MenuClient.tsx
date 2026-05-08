@@ -28,6 +28,18 @@ type Tab = 'menu' | 'ai' | 'cart';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(true); // SSR-safe default
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return mobile;
+}
+
 const MOOD_CHIPS = [
   { label: 'Comfort Food' },
   { label: 'Light Bites' },
@@ -56,8 +68,8 @@ function resolveEmoji(item: MenuItem, catIcon?: string | null): string | null {
 
 const glass = (color: string, opacity = 'CC', blur = '16px'): React.CSSProperties => ({
   backgroundColor: `${color}${opacity}`,
-  backdropFilter: `blur(${blur})`,
-  WebkitBackdropFilter: `blur(${blur})`,
+  backdropFilter: `blur(${blur}) saturate(180%)`,
+  WebkitBackdropFilter: `blur(${blur}) saturate(180%)`,
 });
 
 function isOpenNow(openingHours?: string | null): boolean | null {
@@ -111,14 +123,71 @@ const ItemImage = ({ item, catIcon, size = 'md', className = '' }: {
 };
 
 // ─── BG Blobs ─────────────────────────────────────────────────────────────────
-const BgBlobs = ({ primary, secondary, bg }: { primary: string; secondary: string; bg: string }) => (
-  <div className="fixed inset-0 -z-10 overflow-hidden" style={{ backgroundColor: bg }}>
-    <div className="absolute -top-1/4 -right-1/4 rounded-full pointer-events-none"
-      style={{ width: '70vw', height: '70vw', background: primary, opacity: 0.12, filter: 'blur(100px)' }} />
-    <div className="absolute top-1/3 -left-1/4 rounded-full pointer-events-none"
-      style={{ width: '55vw', height: '55vw', background: secondary, opacity: 0.09, filter: 'blur(90px)' }} />
-  </div>
-);
+function hexLuminance(hex: string): number {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.slice(0, 2), 16) / 255;
+  const g = parseInt(h.slice(2, 4), 16) / 255;
+  const b = parseInt(h.slice(4, 6), 16) / 255;
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+// For light themes, boost blob saturation so they're visible against light bg
+function blobColor(color: string, isDarkBg: boolean): string {
+  if (isDarkBg) return color;
+  // Parse and boost saturation via HSL
+  try {
+    const h = color.replace('#', '');
+    const r = parseInt(h.slice(0, 2), 16) / 255;
+    const g = parseInt(h.slice(2, 4), 16) / 255;
+    const b = parseInt(h.slice(4, 6), 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let hue = 0, sat = 0;
+    const lum = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      sat = lum > 0.5 ? d / (2 - max - min) : d / (max + min);
+      if (max === r) hue = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      else if (max === g) hue = ((b - r) / d + 2) / 6;
+      else hue = ((r - g) / d + 4) / 6;
+    }
+    // If near-neutral (low saturation), shift to a warm amber
+    if (sat < 0.25) return '#F59E0B';
+    // Otherwise boost saturation and use a lighter value
+    const boostedSat = Math.min(1, sat * 2.5);
+    const boostedLum = 0.55;
+    const hDeg = Math.round(hue * 360);
+    return `hsl(${hDeg}, ${Math.round(boostedSat * 100)}%, ${Math.round(boostedLum * 100)}%)`;
+  } catch { return color; }
+}
+
+const BgBlobs = ({ primary, secondary, bg }: { primary: string; secondary: string; bg: string }) => {
+  const isDark = hexLuminance(bg) < 0.3;
+  const blob1 = blobColor(primary, isDark);
+  const blob2 = blobColor(secondary, isDark);
+  return (
+    <div className="fixed inset-0 -z-10 overflow-hidden" style={{ backgroundColor: bg }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes glassBreath { 0%,100% { opacity:.55; transform:scale(1) } 50% { opacity:.80; transform:scale(1.06) } }
+        @keyframes glassFloat  { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-7px) } }
+        .glass-breath { animation: glassBreath 4s ease-in-out infinite }
+        .glass-float  { animation: glassFloat 3.2s ease-in-out infinite }
+      `}} />
+      <div className="absolute -top-1/4 -right-1/4 rounded-full pointer-events-none glass-breath"
+        style={{ width: '80vw', height: '80vw', background: blob1, filter: 'blur(80px)', opacity: isDark ? 1 : 0.45 }} />
+      <div className="absolute top-1/3 -left-1/4 rounded-full pointer-events-none"
+        style={{ width: '65vw', height: '65vw', background: blob2, opacity: isDark ? 0.55 : 0.35, filter: 'blur(70px)' }} />
+      <div className="absolute bottom-0 left-1/3 rounded-full pointer-events-none"
+        style={{ width: '50vw', height: '50vw', background: blob1, opacity: isDark ? 0.40 : 0.25, filter: 'blur(60px)' }} />
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.045, pointerEvents: 'none' }}>
+        <filter id="menu-grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#menu-grain)" />
+      </svg>
+    </div>
+  );
+};
 
 // ─── Item Detail Bottom Sheet ─────────────────────────────────────────────────
 function ItemDetailSheet({ item, qty, catIcon, onAdd, onRemove, onClose, colors }: {
@@ -145,7 +214,7 @@ function ItemDetailSheet({ item, qty, catIcon, onAdd, onRemove, onClose, colors 
 
       {/* Sheet */}
       <div className="fixed bottom-0 left-0 right-0 z-50 max-h-[92dvh] flex flex-col rounded-t-3xl overflow-hidden shadow-2xl"
-        style={{ backgroundColor: surfaceColor }}>
+        style={{ backgroundColor: `${surfaceColor}AA`, backdropFilter: 'blur(32px) saturate(180%)', WebkitBackdropFilter: 'blur(32px) saturate(180%)' }}>
 
         {/* Hero image */}
         <div className="relative w-full h-56 shrink-0 bg-gray-100">
@@ -284,7 +353,7 @@ function IdentityGate({ onSubmit, canSkip, colors, logoUrl, restaurantName, outl
   };
 
   return (
-    <div className="min-h-dvh flex flex-col" style={{ fontFamily: `${fontFamily}, system-ui, sans-serif` }}>
+    <div className="fixed inset-0 flex flex-col overflow-y-auto" style={{ fontFamily: `${fontFamily}, system-ui, sans-serif` }}>
       <style dangerouslySetInnerHTML={{ __html: `@import url('https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}:wght@300;400;500;600;700;900&display=swap');` }} />
       <BgBlobs primary={primary} secondary={colors.secondary || primary} bg={bgColor} />
 
@@ -311,7 +380,7 @@ function IdentityGate({ onSubmit, canSkip, colors, logoUrl, restaurantName, outl
 
       <div className="flex-1 flex flex-col px-5 -mt-6 pb-8 max-w-sm mx-auto w-full">
         <div className="rounded-3xl p-6 space-y-4 shadow-2xl"
-          style={{ ...glass(surfaceColor, 'F0', '24px'), border: '1px solid rgba(255,255,255,0.35)' }}>
+          style={{ ...glass(surfaceColor, '99', '28px'), border: '1px solid rgba(255,255,255,0.25)', boxShadow: '0 24px 64px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.35)' }}>
           <div className="text-center mb-5">
             <p className="font-bold text-base" style={{ color: textColor }}>Quick check-in</p>
             <p className="text-xs mt-1" style={{ color: textColor, opacity: 0.5 }}>So we can personalise your experience</p>
@@ -381,9 +450,10 @@ function BottomNav({ activeTab, onTabChange, cartCount, primary, surface, text }
   primary: string; surface: string; text: string;
 }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 flex items-end justify-center pb-safe px-4 pb-3">
-      <div className="w-full max-w-sm flex items-center justify-around rounded-3xl px-2 py-2 shadow-2xl"
-        style={{ ...glass(surface, 'F5', '24px'), border: '1px solid rgba(255,255,255,0.3)', boxShadow: `0 -4px 40px rgba(0,0,0,0.12), 0 8px 40px rgba(0,0,0,0.2)` }}>
+    <div className="fixed bottom-0 left-0 right-0 z-40 flex items-end justify-center px-4"
+      style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+      <div className="w-full max-w-md flex items-center justify-around rounded-3xl px-2 py-2 shadow-2xl"
+        style={{ ...glass(surface, '88', '28px'), border: '1px solid rgba(255,255,255,0.22)', boxShadow: `0 -2px 32px rgba(0,0,0,0.18), 0 8px 40px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.28)` }}>
 
         <button onClick={() => onTabChange('menu')}
           className="flex flex-col items-center gap-1 px-5 py-2 rounded-2xl transition-all active:scale-95"
@@ -442,7 +512,8 @@ function FloatingCartPill({ cart, primary, surface, text, onViewCart }: {
   if (totalItems === 0) return null;
 
   return (
-    <div className="fixed bottom-[80px] left-0 right-0 z-40 flex justify-center px-4 pointer-events-none">
+    <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pointer-events-none"
+      style={{ paddingBottom: 'calc(max(12px, env(safe-area-inset-bottom)) + 72px)' }}>
       <button onClick={onViewCart}
         className="pointer-events-auto flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl transition-all active:scale-[0.97] hover:brightness-105"
         style={{
@@ -567,7 +638,7 @@ function GridTile({ item, qty, catIcon, onAdd, onRemove, onTap, primary, seconda
   const emoji = resolveEmoji(item, catIcon);
   return (
     <div className="rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer"
-      style={{ ...glass(surfaceColor, 'D8'), border: '1px solid rgba(255,255,255,0.25)' }} onClick={onTap}>
+      style={{ ...glass(surfaceColor, '90'), border: '1px solid rgba(255,255,255,0.18)' }} onClick={onTap}>
       <div className="aspect-square relative overflow-hidden" style={{ background: 'rgba(128,128,128,0.10)' }}>
         {img ? <img src={img} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
           : emoji ? <div className="w-full h-full flex items-center justify-center text-6xl">{emoji}</div>
@@ -645,9 +716,9 @@ function AccordionCategory({ cat, catIcon, items, getQty, addToCart, removeFromC
   return (
     <div className="rounded-2xl overflow-hidden transition-all duration-300"
       style={{
-        ...(open ? glass(surfaceColor, 'E0', '16px') : glass(bgColor, 'A0', '8px')),
+        ...(open ? glass(surfaceColor, '88', '16px') : glass(bgColor, '60', '8px')),
         border: `1px solid ${open ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.12)'}`,
-        boxShadow: open ? `0 8px 32px ${primary}15` : 'none',
+        boxShadow: open ? `0 8px 32px ${primary}15, inset 0 1px 0 rgba(255,255,255,0.22)` : 'none',
       }}>
       <button onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-4 transition-all"
@@ -686,12 +757,12 @@ function AccordionCategory({ cat, catIcon, items, getQty, addToCart, removeFromC
 }
 
 // ═══════════════════════════════ MENU TAB ════════════════════════════════════
-function MenuTab({ outlet, company, categories, category_info, allItems, getQty, addToCart, removeFromCart, colors, menuLayout }: {
+function MenuTab({ outlet, company, categories, category_info, allItems, getQty, addToCart, removeFromCart, colors, menuLayout, isMobile }: {
   outlet: any; company: any;
   categories: Record<string, MenuItem[]>; category_info?: CategoryInfo[];
   allItems: MenuItem[]; getQty: (id: string) => number;
   addToCart: (item: MenuItem, instructions?: string) => void; removeFromCart: (id: string) => void;
-  colors: Record<string, string>; menuLayout: string;
+  colors: Record<string, string>; menuLayout: string; isMobile: boolean;
 }) {
   const [search, setSearch] = useState('');
   const [vegFilter, setVegFilter] = useState<'all' | 'veg' | 'nonveg'>('all');
@@ -700,6 +771,8 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const categoryStripRef = useRef<HTMLDivElement>(null);
   const catBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isProgrammaticScroll = useRef(false);
 
   const primary = colors.primary || '#1A1A1A';
   const secondary = colors.secondary || primary;
@@ -739,34 +812,48 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
     .sort((a, b) => (b.order_count ?? 0) - (a.order_count ?? 0))
     .slice(0, 8);
 
-  // Scroll-spy
+  // Scroll-spy: on mobile use the internal scroll div as root; on desktop use the viewport
   useEffect(() => {
     if (menuLayout === 'accordion') return;
+    const container = isMobile ? scrollContainerRef.current : null;
+    if (isMobile && !container) return;
     const observer = new IntersectionObserver(
       entries => {
+        if (isProgrammaticScroll.current) return;
         for (const e of entries) {
           if (e.isIntersecting) {
             const cat = e.target.getAttribute('data-category') || '';
             setActiveCategory(cat);
-            // Scroll category pill into view
             const btn = catBtnRefs.current[cat];
             btn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
           }
         }
       },
-      { rootMargin: '-120px 0px -55% 0px', threshold: 0.1 }
+      { root: container, rootMargin: '-80px 0px -50% 0px', threshold: 0.1 }
     );
     for (const ref of Object.values(categoryRefs.current)) { if (ref) observer.observe(ref); }
     return () => observer.disconnect();
-  }, [filteredCategories, menuLayout]);
+  }, [filteredCategories, menuLayout, isMobile]);
 
   const scrollToCategory = (cat: string) => {
     setActiveCategory(cat);
-    categoryRefs.current[cat]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const target = categoryRefs.current[cat];
+    if (!target) return;
+    const stripHeight = categoryStripRef.current?.offsetHeight ?? 48;
+    isProgrammaticScroll.current = true;
+    if (isMobile) {
+      const container = scrollContainerRef.current;
+      if (!container) return;
+      container.scrollTo({ top: target.offsetTop - stripHeight - 8, behavior: 'smooth' });
+    } else {
+      const targetTop = window.scrollY + target.getBoundingClientRect().top - stripHeight - 8;
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    }
+    setTimeout(() => { isProgrammaticScroll.current = false; }, 700);
   };
 
   return (
-    <div className="flex-1 overflow-y-auto pb-36" style={{ fontFamily: `${fontFamily}, system-ui, sans-serif` }}>
+    <div ref={scrollContainerRef} className={isMobile ? 'flex-1 overflow-y-auto' : 'w-full'} style={{ fontFamily: `${fontFamily}, system-ui, sans-serif`, paddingBottom: isMobile ? 'calc(max(12px, env(safe-area-inset-bottom)) + 140px)' : '120px' }}>
 
       {/* ── Hero ── */}
       <div className="relative w-full" style={{ minHeight: coverImageUrl ? 220 : 140 }}>
@@ -838,7 +925,7 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
       {menuLayout !== 'accordion' && catNames.length > 0 && (
         <div ref={categoryStripRef}
           className="sticky top-0 z-30 flex gap-2 px-4 py-3 overflow-x-auto"
-          style={{ scrollbarWidth: 'none', backgroundColor: surfaceColor, borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+          style={{ scrollbarWidth: 'none', backgroundColor: `${surfaceColor}80`, backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
           {catNames.map(cat => {
             const icon = catIconMap[cat];
             const isActive = activeCategory === cat;
@@ -878,7 +965,7 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
               const qty = getQty(item.id);
               return (
                 <div key={item.id} className="shrink-0 w-36 rounded-2xl overflow-hidden cursor-pointer"
-                  style={{ backgroundColor: surfaceColor, border: '1px solid rgba(0,0,0,0.08)' }}
+                  style={{ ...glass(surfaceColor, '88'), border: '1px solid rgba(255,255,255,0.18)', boxShadow: '0 4px 16px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.20)' }}
                   onClick={() => setSelectedItem({ item, catIcon: catIconMap[item.category] })}>
                   <div className="w-full h-28 relative" style={{ background: 'rgba(128,128,128,0.10)' }}>
                     {img
@@ -963,7 +1050,7 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
                   : <span>{catIconMap[cat]}</span>)}
                 {cat}
               </h2>
-              <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: surfaceColor, border: '1px solid rgba(0,0,0,0.07)' }}>
+              <div className="rounded-2xl overflow-hidden" style={{ ...glass(surfaceColor, '88'), border: '1px solid rgba(255,255,255,0.16)', boxShadow: '0 4px 24px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.18)' }}>
                 {filteredCategories[cat].map(item => (
                   <CompactRow key={item.id} item={item} qty={getQty(item.id)} catIcon={catIconMap[cat] ?? null}
                     onAdd={() => addToCart(item)} onRemove={() => removeFromCart(item.id)}
@@ -977,10 +1064,10 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
           // Default: Zomato-style classic
           catNames.map(cat => (
             <div key={cat} ref={el => { categoryRefs.current[cat] = el; }} data-category={cat} className="scroll-mt-16">
-              <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: surfaceColor, border: '1px solid rgba(0,0,0,0.07)' }}>
+              <div className="rounded-2xl overflow-hidden" style={{ ...glass(surfaceColor, '88'), border: '1px solid rgba(255,255,255,0.16)', boxShadow: '0 4px 24px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.18)' }}>
                 {/* Category header */}
                 <div className="flex items-center gap-2 px-4 py-3"
-                  style={{ borderBottom: '1px solid rgba(0,0,0,0.06)', backgroundColor: 'rgba(0,0,0,0.02)' }}>
+                  style={{ borderBottom: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.06)' }}>
                   {catIconMap[cat] && (catIconMap[cat]!.startsWith('/') || catIconMap[cat]!.startsWith('http')
                     ? <img src={catIconMap[cat]!.startsWith('/') ? `${BACKEND_URL}${catIconMap[cat]}` : catIconMap[cat]!} alt="" className="w-5 h-5 rounded object-cover" />
                     : <span className="text-base">{catIconMap[cat]}</span>)}
@@ -1021,10 +1108,10 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
 }
 
 // ═══════════════════════════════ AI TAB ══════════════════════════════════════
-function AITab({ outletId, allItems, getQty, addToCart, removeFromCart, colors }: {
+function AITab({ outletId, allItems, getQty, addToCart, removeFromCart, colors, isMobile }: {
   outletId: string; allItems: MenuItem[]; getQty: (id: string) => number;
   addToCart: (item: MenuItem) => void; removeFromCart: (id: string) => void;
-  colors: Record<string, string>;
+  colors: Record<string, string>; isMobile: boolean;
 }) {
   const [selectedMood, setSelectedMood] = useState('');
   const [customText, setCustomText] = useState('');
@@ -1078,10 +1165,10 @@ function AITab({ outletId, allItems, getQty, addToCart, removeFromCart, colors }
   }, [outletId, allItems]);
 
   return (
-    <div className="flex-1 overflow-y-auto pb-36 px-4 pt-4">
+    <div className={isMobile ? 'flex-1 overflow-y-auto px-4 pt-4' : 'w-full px-4 pt-4'} style={{ paddingBottom: isMobile ? 'calc(max(12px, env(safe-area-inset-bottom)) + 140px)' : '120px' }}>
       <div className="text-center mb-6">
-        <div className="w-16 h-16 rounded-2xl mx-auto mb-3 flex items-center justify-center shadow-lg"
-          style={{ background: `linear-gradient(135deg, ${primary}EE, ${primary}AA)`, boxShadow: `0 8px 24px ${primary}40` }}>
+        <div className="w-16 h-16 rounded-2xl mx-auto mb-3 flex items-center justify-center glass-float"
+          style={{ background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.35) 0%, transparent 55%), linear-gradient(145deg, ${primary}F0, ${primary}A8)`, boxShadow: `0 8px 32px ${primary}50, inset 0 1px 0 rgba(255,255,255,0.32)` }}>
           <svg className="w-9 h-9 text-white" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
           </svg>
@@ -1133,7 +1220,7 @@ function AITab({ outletId, allItems, getQty, addToCart, removeFromCart, colors }
             const emoji = resolveEmoji(item);
             return (
               <div key={item.id} className="rounded-2xl overflow-hidden"
-                style={{ backgroundColor: surfaceColor, border: `1.5px solid ${primary}25`, boxShadow: `0 4px 20px ${primary}10` }}>
+                style={{ ...glass(surfaceColor, '88'), border: `1.5px solid ${primary}50`, boxShadow: `0 4px 20px ${primary}25, inset 0 1px 0 rgba(255,255,255,0.22)` }}>
                 {img && <img src={img} alt={item.name} className="w-full h-36 object-cover" loading="lazy" />}
                 {!img && emoji && <div className="w-full h-24 flex items-center justify-center text-6xl" style={{ backgroundColor: `${primary}10` }}>{emoji}</div>}
                 <div className="p-4">
@@ -1185,11 +1272,11 @@ function AITab({ outletId, allItems, getQty, addToCart, removeFromCart, colors }
 }
 
 // ═══════════════════════════════ CART TAB ════════════════════════════════════
-function CartTab({ cart, outletId, identity, onUpdateQuantity, allItems, addToCart, colors }: {
+function CartTab({ cart, outletId, identity, onUpdateQuantity, allItems, addToCart, colors, isMobile }: {
   cart: CartItem[]; outletId: string; identity: Identity | null;
   onUpdateQuantity: (id: string, delta: number) => void;
   allItems: MenuItem[]; addToCart: (item: MenuItem) => void;
-  colors: Record<string, string>;
+  colors: Record<string, string>; isMobile: boolean;
 }) {
   const router = useRouter();
   const [name, setName] = useState(identity?.name || '');
@@ -1226,9 +1313,12 @@ function CartTab({ cart, outletId, identity, onUpdateQuantity, allItems, addToCa
   }, [orderSuccess, router]);
 
   const cardStyle: React.CSSProperties = {
-    backgroundColor: surfaceColor,
-    border: '1px solid rgba(0,0,0,0.08)',
+    backgroundColor: `${surfaceColor}88`,
+    backdropFilter: 'blur(24px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+    border: '1px solid rgba(255,255,255,0.16)',
     borderRadius: 20,
+    boxShadow: '0 4px 24px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.20)',
   };
   const inputStyle: React.CSSProperties = {
     backgroundColor: 'rgba(0,0,0,0.04)',
@@ -1275,8 +1365,8 @@ function CartTab({ cart, outletId, identity, onUpdateQuantity, allItems, addToCa
     return (
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center"
         style={{ backgroundColor: surfaceColor }}>
-        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6 shadow-2xl"
-          style={{ background: `linear-gradient(135deg, ${primary}EE, ${primary}AA)`, boxShadow: `0 12px 40px ${primary}50` }}>
+        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6 glass-float"
+          style={{ background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.35) 0%, transparent 55%), linear-gradient(135deg, ${primary}EE, ${primary}AA)`, boxShadow: `0 12px 48px ${primary}55, inset 0 1px 0 rgba(255,255,255,0.38)` }}>
           <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -1304,7 +1394,7 @@ function CartTab({ cart, outletId, identity, onUpdateQuantity, allItems, addToCa
   }
 
   return (
-    <div className="flex-1 overflow-y-auto pb-36 px-4 pt-4 space-y-4">
+    <div className={isMobile ? 'flex-1 overflow-y-auto px-4 pt-4 space-y-4' : 'w-full px-4 pt-4 space-y-4'} style={{ paddingBottom: isMobile ? 'calc(max(12px, env(safe-area-inset-bottom)) + 140px)' : '120px' }}>
       <h2 className="text-xl font-black" style={{ color: textColor }}>Your Order</h2>
 
       {/* Cart items */}
@@ -1482,6 +1572,7 @@ export default function MenuClient({ outletId, outlet, company, categories, cate
   outletId: string; outlet: any; company: any;
   categories: Record<string, MenuItem[]>; category_info?: CategoryInfo[]; items: MenuItem[];
 }) {
+  const isMobile = useIsMobile();
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [showGate, setShowGate] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('menu');
@@ -1558,25 +1649,32 @@ export default function MenuClient({ outletId, outlet, company, categories, cate
     );
   }
 
+  const shellClass = isMobile
+    ? 'fixed inset-0 flex flex-col'
+    : 'min-h-screen flex flex-col';
+
+  const contentClass = isMobile
+    ? 'flex-1 flex flex-col overflow-hidden w-full max-w-sm mx-auto'
+    : 'w-full max-w-sm mx-auto flex flex-col';
+
   return (
-    <div className="min-h-dvh flex flex-col" style={{ fontFamily: `${fontFamily}, system-ui, sans-serif`, backgroundColor: bgColor }}>
+    <div className={shellClass} style={{ fontFamily: `${fontFamily}, system-ui, sans-serif`, backgroundColor: bgColor }}>
       <style dangerouslySetInnerHTML={{ __html: `@import url('https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}:wght@300;400;500;600;700;900&display=swap');` }} />
       <BgBlobs primary={primary} secondary={secondary} bg={bgColor} />
 
-      {/* Tab content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className={contentClass}>
         {activeTab === 'menu' && (
           <MenuTab
             outlet={outlet} company={company}
             categories={categories} category_info={category_info} allItems={items}
             getQty={getQty} addToCart={addToCart} removeFromCart={removeFromCart}
-            colors={colors} menuLayout={menuLayout}
+            colors={colors} menuLayout={menuLayout} isMobile={isMobile}
           />
         )}
         {activeTab === 'ai' && (
           <AITab
             outletId={outletId} allItems={items} getQty={getQty}
-            addToCart={addToCart} removeFromCart={removeFromCart} colors={colors}
+            addToCart={addToCart} removeFromCart={removeFromCart} colors={colors} isMobile={isMobile}
           />
         )}
         {activeTab === 'cart' && (
@@ -1584,12 +1682,11 @@ export default function MenuClient({ outletId, outlet, company, categories, cate
             cart={cart} outletId={outletId} identity={identity}
             onUpdateQuantity={updateQuantity}
             allItems={items} addToCart={addToCart}
-            colors={colors}
+            colors={colors} isMobile={isMobile}
           />
         )}
       </div>
 
-      {/* Floating cart pill — only on menu/AI tabs */}
       {activeTab !== 'cart' && (
         <FloatingCartPill
           cart={cart} primary={primary} surface={surfaceColor} text={textColor}
