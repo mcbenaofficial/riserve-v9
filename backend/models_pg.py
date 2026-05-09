@@ -1787,3 +1787,203 @@ class AgentCostDaily(Base):
     tokens_out = Column(Integer, default=0)
     cost_usd = Column(Numeric(10, 6), default=0)
 
+
+# ---------------------------------------------------------------------------
+# Acquisition Module — Instagram Publishing & Lead Capture
+# ---------------------------------------------------------------------------
+
+class SocialAccount(Base):
+    __tablename__ = "social_accounts"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    platform = Column(String(50), nullable=False)  # instagram|facebook|linkedin|tiktok|youtube
+    external_id = Column(String(200), nullable=False)
+    handle = Column(String(200), nullable=True)
+    display_name = Column(String(200), nullable=True)
+    access_token_ref = Column(Text, nullable=True)
+    refresh_token_ref = Column(Text, nullable=True)
+    scopes = Column(JSONB, default=list)
+    connected_by = Column(String(36), nullable=True)
+    status = Column(String(50), default="active")  # active|expired|revoked
+    last_synced_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    posts = relationship("SocialPost", back_populates="account")
+
+
+class MediaAsset(Base):
+    __tablename__ = "media_assets"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    kind = Column(String(50), nullable=False)  # image|video
+    storage_url = Column(Text, nullable=False)
+    storage_path = Column(Text, nullable=True)       # relative path for deletion
+    storage_backend = Column(String(20), default='local')  # local|s3
+    thumbnail_url = Column(Text, nullable=True)
+    file_size = Column(Integer, nullable=True)        # bytes
+    mime_type = Column(String(100), nullable=True)
+    duration_seconds = Column(Float, nullable=True)
+    dimensions = Column(JSONB, nullable=True)
+    alt_text = Column(Text, nullable=True)
+    tags = Column(JSONB, default=list)
+    used_in_post_ids = Column(JSONB, default=list)
+    expires_at = Column(DateTime(timezone=True), nullable=True, index=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class SocialPost(Base):
+    __tablename__ = "social_posts"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    social_account_id = Column(String(36), ForeignKey("social_accounts.id", ondelete="CASCADE"), nullable=False)
+    kind = Column(String(50), nullable=False)  # feed|reel|story|carousel
+    status = Column(String(50), default="draft")  # draft|scheduled|publishing|published|failed|archived
+    scheduled_for = Column(DateTime(timezone=True), nullable=True)
+    published_at = Column(DateTime(timezone=True), nullable=True)
+    caption = Column(Text, nullable=True)
+    hashtags = Column(JSONB, default=list)
+    media_asset_ids = Column(JSONB, default=list)
+    external_post_id = Column(String(200), nullable=True)
+    external_permalink = Column(Text, nullable=True)
+    paid_partnership = Column(JSONB, nullable=True)
+    publish_error = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    account = relationship("SocialAccount", back_populates="posts")
+    metrics = relationship("PostMetric", back_populates="post")
+
+
+class PostMetric(Base):
+    __tablename__ = "post_metrics"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    social_post_id = Column(String(36), ForeignKey("social_posts.id", ondelete="CASCADE"), nullable=False)
+    tenant_id = Column(String(36), nullable=False)
+    captured_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    impressions = Column(Integer, default=0)
+    reach = Column(Integer, default=0)
+    likes = Column(Integer, default=0)
+    comments = Column(Integer, default=0)
+    saves = Column(Integer, default=0)
+    shares = Column(Integer, default=0)
+    video_views = Column(Integer, default=0)
+    video_completion_rate = Column(Float, nullable=True)
+    profile_visits = Column(Integer, default=0)
+    follows_attributed = Column(Integer, default=0)
+
+    post = relationship("SocialPost", back_populates="metrics")
+
+
+class LeadTrigger(Base):
+    __tablename__ = "lead_triggers"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    name = Column(String(200), nullable=False)
+    source_post_id = Column(String(36), nullable=True)
+    trigger_type = Column(String(100), nullable=False)  # comment_keyword|story_reply|story_mention|dm_keyword|dm_default|referral_link
+    match_rules = Column(JSONB, default=dict)
+    flow_id = Column(String(36), ForeignKey("lead_flows.id", ondelete="SET NULL"), nullable=True)
+    is_active = Column(Boolean, default=True)
+    daily_cap = Column(Integer, nullable=True)
+    hourly_cap = Column(Integer, nullable=True)
+    applies_to = Column(String(50), default="all_posts")  # specific_post|all_posts|specific_stories
+    specific_post_ids = Column(JSONB, default=list)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    flow = relationship("LeadFlow", back_populates="triggers")
+
+
+class LeadFlow(Base):
+    __tablename__ = "lead_flows"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    name = Column(String(200), nullable=False)
+    version = Column(Integer, default=1)
+    graph = Column(JSONB, default=dict)
+    is_active = Column(Boolean, default=True)
+    lead_magnet = Column(JSONB, nullable=True)
+    qualification_threshold = Column(Integer, default=50)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    triggers = relationship("LeadTrigger", back_populates="flow")
+    leads = relationship("Lead", back_populates="current_flow")
+
+
+class Lead(Base):
+    __tablename__ = "leads"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    source_platform = Column(String(50), nullable=False, default="instagram")
+    source_account_id = Column(String(36), ForeignKey("social_accounts.id", ondelete="SET NULL"), nullable=True)
+    source_handle = Column(String(200), nullable=True)
+    source_external_user_id = Column(String(200), nullable=True)
+    source_post_id = Column(String(36), nullable=True)
+    source_trigger_id = Column(String(36), ForeignKey("lead_triggers.id", ondelete="SET NULL"), nullable=True)
+    captured_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    status = Column(String(50), default="new")  # new|engaging|qualified|converted|lost|blocked
+    score = Column(Integer, default=0)
+    score_breakdown = Column(JSONB, default=dict)
+    current_flow_id = Column(String(36), ForeignKey("lead_flows.id", ondelete="SET NULL"), nullable=True)
+    current_node_id = Column(String(200), nullable=True)
+    flow_state = Column(JSONB, default=dict)
+    owner_type = Column(String(50), default="bot")  # bot|human|none
+    owner_id = Column(String(36), nullable=True)
+    expires_at = Column(DateTime(timezone=True), nullable=True)
+    attributes = Column(JSONB, default=dict)
+    captured_phone = Column(String(50), nullable=True)
+    captured_email = Column(String(200), nullable=True)
+    captured_name = Column(String(200), nullable=True)
+    phone_verified = Column(Boolean, default=False)
+    email_verified = Column(Boolean, default=False)
+    promoted_to_customer_id = Column(String(36), ForeignKey("customers.id", ondelete="SET NULL"), nullable=True)
+    promoted_at = Column(DateTime(timezone=True), nullable=True)
+    conversation_id = Column(String(36), ForeignKey("mkt_conversations.id", ondelete="SET NULL"), nullable=True)
+
+    current_flow = relationship("LeadFlow", back_populates="leads")
+    events = relationship("LeadEvent", back_populates="lead")
+
+
+class LeadEvent(Base):
+    __tablename__ = "lead_events"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    lead_id = Column(String(36), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
+    tenant_id = Column(String(36), nullable=False)
+    kind = Column(String(100), nullable=False)
+    payload = Column(JSONB, default=dict)
+    occurred_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    lead = relationship("Lead", back_populates="events")
+
+
+class LeadQualificationRule(Base):
+    __tablename__ = "lead_qualification_rules"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    rule = Column(JSONB, nullable=False, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class AttributionLink(Base):
+    __tablename__ = "attribution_links"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    slug = Column(String(100), nullable=False, unique=True)
+    target_url = Column(Text, nullable=False)
+    source_post_id = Column(String(36), nullable=True)
+    source_lead_flow_id = Column(String(36), ForeignKey("lead_flows.id", ondelete="SET NULL"), nullable=True)
+    total_clicks = Column(Integer, default=0)
+    unique_clicks = Column(Integer, default=0)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+

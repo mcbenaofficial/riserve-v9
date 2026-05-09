@@ -251,6 +251,9 @@ async def _process_instagram(inbox_id: str, raw_event_id: str, payload: dict) ->
             if not inbox:
                 return
 
+            # --- Lead trigger evaluation for comments/story events ---
+            await _evaluate_ig_triggers(db, inbox, payload)
+
             events = await _IG_ADAPTER.parse_inbound(
                 inbox=inbox, payload=payload, signature=None
             )
@@ -265,6 +268,175 @@ async def _process_instagram(inbox_id: str, raw_event_id: str, payload: dict) ->
                 await _mark_processed(db, raw_event_id, error=str(exc))
             except Exception:
                 pass
+
+
+async def _evaluate_ig_triggers(db, inbox, payload: dict) -> None:
+    """
+    Evaluate active LeadTriggers against an incoming Instagram webhook payload.
+    Creates Lead rows on match, idempotent by (tenant_id, source_external_user_id, source_trigger_id).
+    """
+    import re
+    import uuid as _uuid
+    from datetime import datetime, timezone
+
+    tenant_id = inbox.company_id
+
+    # Fetch all active triggers for this tenant
+    triggers_result = await db.execute(
+        select(models_pg.LeadTrigger).where(
+            models_pg.LeadTrigger.tenant_id == tenant_id,
+            models_pg.LeadTrigger.is_active == True,  # noqa: E712
+        )
+    )
+    triggers = triggers_result.scalars().all()
+    if not triggers:
+        return
+
+    entries = payload.get("entry", [])
+    for entry in entries:
+        # --- Comment events ---
+        for change in entry.get("changes", []):
+            if change.get("field") != "comments":
+                continue
+            value = change.get("value", {})
+            comment_text = value.get("text", "")
+            media_id = value.get("media", {}).get("id") or value.get("media_id")
+            commenter_id = value.get("from", {}).get("id")
+            commenter_name = value.get("from", {}).get("name")
+            platform_event_id = value.get("id", "")
+
+            for trigger in triggers:
+                if trigger.trigger_type != "comment_keyword":
+                    continue
+                if trigger.applies_to == "specific_post" and media_id not in (trigger.specific_post_ids or []):
+                    continue
+                if trigger.source_post_id and trigger.source_post_id != media_id:
+                    continue
+
+                keywords = (trigger.match_rules or {}).get("keywords", [])
+                if keywords and not any(
+                    re.search(rf"\b{re.escape(kw.lower())}\b", comment_text.lower())
+                    for kw in keywords
+                ):
+                    continue
+
+                await _upsert_lead_from_trigger(
+                    db, tenant_id, trigger, commenter_id, commenter_name,
+                    source_post_id=media_id, platform_event_id=platform_event_id,
+                )
+
+        # --- Story reply / mention events ---
+        for change in entry.get("changes", []):
+            field = change.get("field", "")
+            if field not in ("mentions", "story_mentions"):
+                continue
+            value = change.get("value", {})
+            user_id = value.get("mentioned_profile", {}).get("id") or value.get("from", {}).get("id")
+            story_id = value.get("media_id") or value.get("id")
+
+            for trigger in triggers:
+                if trigger.trigger_type not in ("story_reply", "story_mention"):
+                    continue
+                await _upsert_lead_from_trigger(
+                    db, tenant_id, trigger, user_id, None,
+                    source_post_id=story_id, platform_event_id=story_id or "",
+                )
+
+        # --- DM keyword events ---
+        for messaging in entry.get("messaging", []):
+            msg_text = (messaging.get("message") or {}).get("text", "")
+            sender_id = (messaging.get("sender") or {}).get("id")
+            platform_event_id = messaging.get("mid") or messaging.get("message", {}).get("mid", "")
+
+            for trigger in triggers:
+                if trigger.trigger_type not in ("dm_keyword", "dm_default"):
+                    continue
+                if trigger.trigger_type == "dm_keyword":
+                    keywords = (trigger.match_rules or {}).get("keywords", [])
+                    if keywords and not any(
+                        re.search(rf"\b{re.escape(kw.lower())}\b", msg_text.lower())
+                        for kw in keywords
+                    ):
+                        continue
+
+                await _upsert_lead_from_trigger(
+                    db, tenant_id, trigger, sender_id, None,
+                    source_post_id=None, platform_event_id=platform_event_id,
+                )
+
+
+async def _upsert_lead_from_trigger(
+    db,
+    tenant_id: str,
+    trigger: models_pg.LeadTrigger,
+    external_user_id: str,
+    display_name,
+    source_post_id,
+    platform_event_id: str,
+) -> None:
+    """Create or find the Lead for this trigger+user combination."""
+    import uuid as _uuid
+    from datetime import datetime, timezone
+
+    if not external_user_id:
+        return
+
+    # Idempotency: one lead per (tenant, trigger, external_user)
+    existing = (await db.execute(
+        select(models_pg.Lead).where(
+            models_pg.Lead.tenant_id == tenant_id,
+            models_pg.Lead.source_trigger_id == trigger.id,
+            models_pg.Lead.source_external_user_id == external_user_id,
+        )
+    )).scalar_one_or_none()
+
+    if existing:
+        # Don't re-trigger for already-blocked/converted leads
+        if existing.status in ("blocked", "converted"):
+            return
+        # Record the re-engagement event
+        db.add(models_pg.LeadEvent(
+            id=str(_uuid.uuid4()),
+            lead_id=existing.id,
+            tenant_id=tenant_id,
+            kind="re_triggered",
+            payload={"platform_event_id": platform_event_id, "trigger_id": trigger.id},
+        ))
+        await db.commit()
+        return
+
+    lead = models_pg.Lead(
+        id=str(_uuid.uuid4()),
+        tenant_id=tenant_id,
+        source_platform="instagram",
+        source_external_user_id=external_user_id,
+        source_handle=display_name,
+        source_post_id=source_post_id,
+        source_trigger_id=trigger.id,
+        current_flow_id=trigger.flow_id,
+        status="new",
+        score=0,
+        score_breakdown={},
+        attributes={},
+        owner_type="bot",
+    )
+    db.add(lead)
+    await db.flush()
+
+    db.add(models_pg.LeadEvent(
+        id=str(_uuid.uuid4()),
+        lead_id=lead.id,
+        tenant_id=tenant_id,
+        kind="lead_created",
+        payload={
+            "trigger_id": trigger.id,
+            "trigger_type": trigger.trigger_type,
+            "platform_event_id": platform_event_id,
+            "source_post_id": source_post_id,
+        },
+    ))
+    await db.commit()
+    logger.info("Lead created: %s from trigger %s for user %s", lead.id, trigger.id, external_user_id)
 
 
 # ------------------------------------------------------------------

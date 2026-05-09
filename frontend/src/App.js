@@ -74,6 +74,9 @@ import Segments from './pages/Conversations/Segments';
 import Campaigns from './pages/Conversations/Campaigns';
 import Journeys from './pages/Conversations/Journeys';
 import MarketingSettings from './pages/Conversations/MarketingSettings';
+import ContentStudio from './pages/Acquisition/ContentStudio';
+import LeadsPipeline from './pages/Acquisition/LeadsPipeline';
+import TriggersFlows from './pages/Acquisition/TriggersFlows';
 import './App.css';
 
 function App() {
@@ -208,6 +211,10 @@ function MainLayout() {
               <Route path="/marketing/campaigns" element={<ProtectedRoute><Campaigns /></ProtectedRoute>} />
               <Route path="/marketing/journeys" element={<ProtectedRoute><Journeys /></ProtectedRoute>} />
               <Route path="/marketing/settings" element={<ProtectedRoute><MarketingSettings /></ProtectedRoute>} />
+              {/* Acquisition — Instagram publishing & lead capture */}
+              <Route path="/acquisition/content" element={<ProtectedRoute><ContentStudio /></ProtectedRoute>} />
+              <Route path="/acquisition/leads" element={<ProtectedRoute><LeadsPipeline /></ProtectedRoute>} />
+              <Route path="/acquisition/triggers" element={<ProtectedRoute><TriggersFlows /></ProtectedRoute>} />
               <Route path="/admin" element={<AdminConsole />} />
               <Route path="/support" element={<Support />} />
               <Route path="/ai-agent" element={<AIAgent />} />

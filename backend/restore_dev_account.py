@@ -39,7 +39,7 @@ async def restore_dev_account():
                 is_booking_enabled=True,
                 is_retail_enabled=True,
                 is_workplace_enabled=True,
-                enabled_features=["hq_intelligence", "inventory", "ai_flows", "crm"]
+                enabled_features=["hq_intelligence", "inventory", "ai_flows", "crm", "acquisition"]
             )
             session.add(company)
             await session.flush()

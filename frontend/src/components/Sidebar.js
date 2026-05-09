@@ -57,7 +57,11 @@ import {
   Sparkles,
   Inbox,
   Users2,
-  Megaphone
+  Megaphone,
+  Instagram,
+  Camera,
+  Zap,
+  UserPlus
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -165,6 +169,7 @@ const Sidebar = () => {
     { id: 'hq', name: 'HQ Intelligence', icon: Brain, feature: 'hq_intelligence' },
     { id: 'reputation', name: 'Reputation Management', icon: MessageSquare, feature: 'reputation_management' },
     { id: 'marketing', name: 'Marketing & Conversations', icon: Inbox, feature: 'marketing' },
+    { id: 'acquisition', name: 'Instagram Acquisition', icon: Instagram, feature: 'acquisition' },
     { id: 'portal', name: 'Omni Site Builder', icon: Globe },
   ];
 
@@ -179,6 +184,7 @@ const Sidebar = () => {
     if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling')) return 'staff';
     if (path.startsWith('/feedback') || path.startsWith('/reviews')) return 'reputation';
     if (path.startsWith('/conversations') || path.startsWith('/marketing')) return 'marketing';
+    if (path.startsWith('/acquisition')) return 'acquisition';
     return 'core';
   }, [location.pathname]);
 
@@ -281,6 +287,9 @@ const Sidebar = () => {
     { key: 'marketing-campaigns', label: 'Campaigns', icon: Megaphone, path: '/marketing/campaigns', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     { key: 'marketing-journeys', label: 'Journeys', icon: GitBranch, path: '/marketing/journeys', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     { key: 'marketing-settings', label: 'Settings', icon: Settings2, path: '/marketing/settings', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
+    { key: 'acq-content', label: 'Content Studio', icon: Camera, path: '/acquisition/content', condition: (features) => features.includes('acquisition'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'acquisition' },
+    { key: 'acq-leads', label: 'Leads Pipeline', icon: UserPlus, path: '/acquisition/leads', condition: (features) => features.includes('acquisition'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'acquisition' },
+    { key: 'acq-triggers', label: 'Triggers & Flows', icon: Zap, path: '/acquisition/triggers', condition: (features) => features.includes('acquisition'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'acquisition' },
     // Omni Portal
     { key: 'omni-portal-design-plus', label: 'Portal Design +', icon: Sparkles, path: '/omni/portal-design-plus', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-design', label: 'Design Studio', icon: Palette, path: '/omni/design', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
@@ -428,6 +437,7 @@ const Sidebar = () => {
                             else if (app.id === 'staff') navigate('/team');
                             else if (app.id === 'reputation') navigate('/feedback');
                             else if (app.id === 'marketing') navigate('/conversations');
+                            else if (app.id === 'acquisition') navigate('/acquisition/content');
                             else if (app.id === 'restaurant') navigate('/orders');
                             else if (app.id === 'portal') navigate('/omni/portal-design-plus');
                             else navigate('/');

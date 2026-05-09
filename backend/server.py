@@ -116,25 +116,55 @@ async def sync_slot_config_resources_to_db():
         logger.error(f"Error syncing slot config resources: {e}")
 
 
+async def media_cleanup_background_task():
+    """Purge expired media assets from local storage every hour."""
+    while True:
+        await asyncio.sleep(3600)
+        try:
+            from services.storage import StorageService
+            async with AsyncSession(engine) as db:
+                now = datetime.now(timezone.utc)
+                result = await db.execute(
+                    select(models_pg.MediaAsset).where(
+                        models_pg.MediaAsset.expires_at.isnot(None),
+                        models_pg.MediaAsset.expires_at < now,
+                    )
+                )
+                assets = result.scalars().all()
+                count = 0
+                for asset in assets:
+                    if asset.storage_path:
+                        StorageService.delete(asset.storage_path)
+                    await db.delete(asset)
+                    count += 1
+                if count:
+                    await db.commit()
+                    logger.info(f"Media cleanup: purged {count} expired asset(s)")
+        except Exception as e:
+            logger.error(f"Media cleanup error: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     # Startup
     logger.info("Starting Ri'Serve API (PostgreSQL Mode)...")
-    
+
     # Run initial trial check
     await check_and_downgrade_expired_trials()
-    
+
     # Sync SlotConfig JSONB resources → resources DB table (one-time retroactive migration)
     await sync_slot_config_resources_to_db()
-    
-    # Start background task for periodic checks
-    task = asyncio.create_task(trial_check_background_task())
-    
+
+    # Start background tasks
+    trial_task = asyncio.create_task(trial_check_background_task())
+    media_task = asyncio.create_task(media_cleanup_background_task())
+
     yield
-    
+
     # Shutdown
-    task.cancel()
+    trial_task.cancel()
+    media_task.cancel()
     logger.info("Shutting down Ri'Serve API...")
 
 
@@ -186,6 +216,9 @@ from routes.journeys import router as journeys_router
 from routes.knowledge import router as knowledge_router
 from routes.evals import router as evals_router
 from routes.booking_portal import router as booking_portal_router
+from routes.acquisition import router as acquisition_router
+from routes.leads import router as leads_router
+from routes.lead_flows import router as lead_flows_router
 
 # Include Routers
 app.include_router(auth.router, prefix="/api")
@@ -228,6 +261,9 @@ app.include_router(journeys_router, prefix="/api")
 app.include_router(knowledge_router, prefix="/api")
 app.include_router(evals_router, prefix="/api")
 app.include_router(booking_portal_router)
+app.include_router(acquisition_router, prefix="/api")
+app.include_router(leads_router, prefix="/api")
+app.include_router(lead_flows_router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

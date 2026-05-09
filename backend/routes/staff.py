@@ -70,33 +70,49 @@ def _is_known_audio(data: bytes) -> bool:
 
 
 async def _tts_line(api_key: str, text: str, voice: str, sem: asyncio.Semaphore) -> bytes:
-    """Call OpenRouter gpt-audio-mini TTS for a single dialogue line via chat completions audio modality."""
-    import base64
+    """Call OpenRouter gpt-audio-mini TTS for a single dialogue line.
+    The model requires stream=True; audio arrives as base64 chunks in the SSE stream."""
+    import base64, json as _json
     async with sem:
         async with httpx.AsyncClient(timeout=90) as client:
-            resp = await client.post(
+            async with client.stream(
+                "POST",
                 _OPENROUTER_URL,
                 headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json",
                          "HTTP-Referer": "https://riserve.app", "X-Title": "Riserve"},
                 json={
                     "model": _TTS_MODEL,
                     "modalities": ["text", "audio"],
-                    "audio": {"voice": voice, "format": "mp3"},
+                    "audio": {"voice": voice, "format": "pcm16"},
+                    "stream": True,
                     "messages": [
                         {"role": "system", "content": "Read the following text aloud exactly as written. Do not add, change, or omit any words."},
                         {"role": "user", "content": text},
                     ],
                 },
-            )
-        if resp.status_code != 200:
-            logger.warning("TTS line error %s (text: %.60s...): %s", resp.status_code, text, resp.text[:200])
-            return b""
-        try:
-            audio_b64 = resp.json()["choices"][0]["message"]["audio"]["data"]
-            return base64.b64decode(audio_b64)
-        except Exception as e:
-            logger.warning("TTS response parse error: %s | resp: %.200s", e, resp.text)
-            return b""
+            ) as resp:
+                if resp.status_code != 200:
+                    body = await resp.aread()
+                    logger.warning("TTS line error %s (text: %.60s...): %s", resp.status_code, text, body[:200])
+                    return b""
+                audio_chunks: list[str] = []
+                async for line in resp.aiter_lines():
+                    if not line.startswith("data: "):
+                        continue
+                    payload = line[6:]
+                    if payload.strip() == "[DONE]":
+                        break
+                    try:
+                        delta = _json.loads(payload)["choices"][0]["delta"]
+                        chunk_b64 = delta.get("audio", {}).get("data")
+                        if chunk_b64:
+                            audio_chunks.append(chunk_b64)
+                    except Exception:
+                        pass
+                if not audio_chunks:
+                    logger.warning("TTS line returned no audio chunks (text: %.60s...)", text)
+                    return b""
+                return base64.b64decode("".join(audio_chunks))
 
 
 router = APIRouter(
@@ -2191,10 +2207,10 @@ Output only the dialogue lines."""
     if not raw_audio:
         raise HTTPException(status_code=502, detail="TTS generation returned no audio data.")
 
-    # Wrap raw PCM in WAV container if needed (CSM-1B returns raw 16-bit PCM at 24kHz)
+    # gpt-audio-mini streams pcm16 (raw 16-bit signed PCM at 24kHz); wrap in WAV so browsers can play it
     if _is_known_audio(raw_audio):
         audio_bytes = raw_audio
-        ext = "mp3" if raw_audio[:3] == b"ID3" or (raw_audio[0] == 0xFF and (raw_audio[1] & 0xE0) == 0xE0) else "wav"
+        ext = "mp3" if (raw_audio[:3] == b"ID3" or (raw_audio[0] == 0xFF and (raw_audio[1] & 0xE0) == 0xE0)) else "wav"
     else:
         audio_bytes = _raw_pcm_to_wav(raw_audio, sample_rate=24000)
         ext = "wav"
