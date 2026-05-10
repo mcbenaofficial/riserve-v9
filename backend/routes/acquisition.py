@@ -14,10 +14,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
 from pydantic import BaseModel
 
+import os
 from database_pg import get_db
 from routes.dependencies import get_current_user
 from services.storage import StorageService
 import models_pg
+
+_LLM_MODEL = os.environ.get("LITELLM_MODEL", "openrouter/openai/gpt-4o")
 
 # ---------------------------------------------------------------------------
 # Media validation rules
@@ -670,6 +673,62 @@ async def create_link(
     await db.commit()
     await db.refresh(link)
     return _ser_link(link)
+
+
+class CaptionGenerateBody(BaseModel):
+    theme: str
+    ideas: Optional[str] = None
+    length: str = "short"  # short | medium | long | mix
+
+
+_CAPTION_LENGTHS = {
+    "short":  "under 125 characters (punchy, hook-first)",
+    "medium": "150–300 characters (one key idea plus a call-to-action)",
+    "long":   "700 or more characters (storytelling, detailed value, strong close)",
+    "mix":    "three variants: one short (< 125 chars), one medium (150–300 chars), one long (700+ chars)",
+}
+
+
+@router.post("/posts/generate-caption")
+async def generate_caption(
+    body: CaptionGenerateBody,
+    current_user=Depends(get_current_user),
+):
+    import litellm
+
+    length_desc = _CAPTION_LENGTHS.get(body.length, _CAPTION_LENGTHS["short"])
+    ideas_clause = f"\n\nKey ideas / notes from the creator:\n{body.ideas}" if body.ideas else ""
+
+    system = (
+        "You are an expert Instagram copywriter who specialises in high-engagement captions. "
+        "Write in a natural, brand-authentic tone. No hashtags — those are added separately."
+    )
+    user_prompt = (
+        f"Write an Instagram caption for this content theme: {body.theme}.{ideas_clause}\n\n"
+        f"Length requirement: {length_desc}.\n\n"
+        + (
+            "Return exactly three labelled variants:\n"
+            "SHORT:\n<text>\n\nMEDIUM:\n<text>\n\nLONG:\n<text>"
+            if body.length == "mix"
+            else "Return only the caption text, nothing else."
+        )
+    )
+
+    try:
+        response = await litellm.acompletion(
+            model=_LLM_MODEL,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user_prompt},
+            ],
+            max_tokens=600,
+            temperature=0.8,
+        )
+        text = response.choices[0].message.content.strip()
+    except Exception as e:
+        raise HTTPException(502, f"Caption generation failed: {e}")
+
+    return {"caption": text, "length": body.length}
 
 
 @router.get("/go/{slug}")

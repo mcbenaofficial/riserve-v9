@@ -4,11 +4,11 @@ import {
   Calendar, Grid, Plus, Image, Film, AlignLeft, Upload,
   Clock, Loader2, ChevronLeft, ChevronRight, X, Hash,
   Link2, Trash2, Send, Edit2, AlertCircle, CheckCircle2,
-  Play, ImageIcon,
+  Play, ImageIcon, Sparkles, ChevronDown, ChevronUp, Lightbulb,
 } from 'lucide-react';
 import {
   getPosts, createPost, updatePost, deletePost, publishPost,
-  getAccounts, getMedia, deleteMedia, uploadMedia,
+  getAccounts, getMedia, deleteMedia, uploadMedia, generateCaption,
 } from '../../services/acquisitionApi';
 
 const STATUS_COLOR = {
@@ -32,6 +32,96 @@ const KIND_RULES = {
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = ['January','February','March','April','May','June',
                 'July','August','September','October','November','December'];
+
+const GROWTH_TIPS = [
+  {
+    category: 'Content Strategy',
+    tips: [
+      'Post 3–5 times weekly — Reels drive 36% more reach, carousels 12% more engagement.',
+      'Define 3–5 content pillars (e.g. behind-the-scenes, offers, lifestyle) and stick to them.',
+      'Lead with a hook in the first line — viewers scroll fast.',
+      'Add 3–5 niche hashtags per post (not 30 generic ones).',
+    ],
+  },
+  {
+    category: 'Best Days & Times',
+    tips: [
+      'Reels: Wed–Thu, 9–11 AM or 6–8 PM for highest discovery.',
+      'Stories: Tue–Wed midday or evening; post daily for recency signals.',
+      'Feed & Carousels: Mon–Thu, 2–4 PM; mornings work well for education content.',
+      'Avoid weekends for feed posts; Friday early AM for promos.',
+    ],
+  },
+  {
+    category: 'Engagement Tactics',
+    tips: [
+      'Reply to every comment — each reply adds ~21% engagement lift.',
+      'Use Stories polls and questions daily to stay top-of-feed.',
+      'DM shares (sends per reach) are the strongest algorithm signal — create share-worthy content.',
+      'Cross-promote on LinkedIn and Twitter for a quick follower boost.',
+    ],
+  },
+  {
+    category: 'Algorithm Rules',
+    tips: [
+      'Longer Reels (up to 3 min) now qualify for Explore — don\'t cut short artificially.',
+      'Repeat views count — create content worth rewatching (tutorials, reveals).',
+      'Maintain niche consistency in your last 9–12 posts for category recognition.',
+      'Avoid follow-unfollow tactics — they trigger penalties that suppress reach.',
+    ],
+  },
+];
+
+function GrowthTipsPanel({ isDark }) {
+  const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+
+  return (
+    <div className={`rounded-2xl border overflow-hidden ${isDark ? 'bg-[#13161D] border-white/8' : 'bg-white border-gray-200'}`}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className={`w-full flex items-center justify-between px-5 py-3.5 text-sm font-medium transition-colors ${isDark ? 'hover:bg-white/3' : 'hover:bg-gray-50'}`}
+      >
+        <span className="flex items-center gap-2">
+          <Lightbulb size={14} className="text-amber-400" />
+          Growth Tips
+          <span className="text-xs text-gray-500 font-normal">Instagram 2025 best practices</span>
+        </span>
+        {open ? <ChevronUp size={15} className="text-gray-500" /> : <ChevronDown size={15} className="text-gray-500" />}
+      </button>
+
+      {open && (
+        <div className={`border-t ${isDark ? 'border-white/8' : 'border-gray-100'}`}>
+          {/* Tab strip */}
+          <div className={`flex overflow-x-auto gap-1 px-4 py-2 border-b ${isDark ? 'border-white/8' : 'border-gray-100'}`}>
+            {GROWTH_TIPS.map((section, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveTab(i)}
+                className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  activeTab === i
+                    ? 'bg-[var(--accent)] text-white'
+                    : isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-800'
+                }`}
+              >
+                {section.category}
+              </button>
+            ))}
+          </div>
+          {/* Tips list */}
+          <ul className="px-5 py-4 flex flex-col gap-2.5">
+            {GROWTH_TIPS[activeTab].tips.map((tip, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-sm text-gray-400">
+                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" />
+                {tip}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function fmtBytes(n) {
   if (!n) return '';
@@ -278,6 +368,118 @@ function PostCard({ post, assets, onEdit, onDelete, onPublish, theme }) {
 // ---------------------------------------------------------------------------
 // ComposerDrawer
 // ---------------------------------------------------------------------------
+const CAPTION_LENGTHS = [
+  { value: 'short',  label: 'Short',  desc: '< 125 chars' },
+  { value: 'medium', label: 'Medium', desc: '150–300 chars' },
+  { value: 'long',   label: 'Long',   desc: '700+ chars' },
+  { value: 'mix',    label: 'Recommended Mix', desc: '3 variants · 60/30/10%' },
+];
+
+function AiWritePanel({ onInsert, theme }) {
+  const isDark = theme === 'dark';
+  const [theme_input, setThemeInput] = useState('');
+  const [ideas, setIdeas] = useState('');
+  const [length, setLength] = useState('short');
+  const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState('');
+  const [result, setResult] = useState('');
+
+  const generate = async () => {
+    if (!theme_input.trim()) { setError('Enter a content theme.'); return; }
+    setGenerating(true);
+    setError('');
+    setResult('');
+    try {
+      const data = await generateCaption({ theme: theme_input, ideas, length });
+      setResult(data.caption);
+    } catch (e) {
+      let msg = e.message;
+      try { msg = JSON.parse(msg)?.detail || msg; } catch {}
+      setError(msg);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  return (
+    <div className={`rounded-xl border p-4 flex flex-col gap-3 ${isDark ? 'bg-[var(--accent)]/5 border-[var(--accent)]/20' : 'bg-violet-50 border-violet-200'}`}>
+      <div className="flex items-center gap-2">
+        <Sparkles size={13} className="text-[var(--accent)]" />
+        <span className="text-xs font-medium text-[var(--accent)]">AI Write</span>
+      </div>
+
+      <div>
+        <label className="text-xs text-gray-500 mb-1 block">Content theme *</label>
+        <input
+          type="text"
+          value={theme_input}
+          onChange={(e) => setThemeInput(e.target.value)}
+          placeholder="e.g. Sunday brunch specials at our rooftop…"
+          className={`w-full rounded-xl px-3 py-2 text-sm border ${isDark ? 'bg-[#0B0D10] border-white/10 text-white placeholder-gray-600' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'}`}
+        />
+      </div>
+
+      <div>
+        <label className="text-xs text-gray-500 mb-1 block">Key ideas / notes (optional)</label>
+        <textarea
+          rows={2}
+          value={ideas}
+          onChange={(e) => setIdeas(e.target.value)}
+          placeholder="Mention the deal, the mood, a quote…"
+          className={`w-full rounded-xl px-3 py-2 text-sm border resize-none ${isDark ? 'bg-[#0B0D10] border-white/10 text-white placeholder-gray-600' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'}`}
+        />
+      </div>
+
+      <div>
+        <label className="text-xs text-gray-500 mb-1.5 block">Caption length</label>
+        <div className="grid grid-cols-2 gap-1.5">
+          {CAPTION_LENGTHS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => setLength(opt.value)}
+              className={`text-left px-3 py-2 rounded-xl border text-xs transition-colors ${
+                length === opt.value
+                  ? 'border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]'
+                  : isDark ? 'border-white/10 text-gray-400 hover:border-white/20' : 'border-gray-200 text-gray-500 hover:border-gray-300'
+              }`}
+            >
+              <span className="font-medium">{opt.label}</span>
+              <span className={`block text-[10px] mt-0.5 ${length === opt.value ? 'text-[var(--accent)]/70' : 'text-gray-500'}`}>{opt.desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {error && (
+        <p className="text-red-400 text-xs flex items-center gap-1.5 bg-red-500/10 px-3 py-2 rounded-xl">
+          <AlertCircle size={11} /> {error}
+        </p>
+      )}
+
+      {result && (
+        <div className={`rounded-xl border p-3 text-sm whitespace-pre-wrap ${isDark ? 'bg-[#0B0D10] border-white/10 text-gray-300' : 'bg-white border-gray-200 text-gray-700'}`}>
+          {result}
+          <button
+            onClick={() => onInsert(result)}
+            className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent)] text-white hover:opacity-90 transition-opacity"
+          >
+            Use this caption
+          </button>
+        </div>
+      )}
+
+      <button
+        onClick={generate}
+        disabled={generating}
+        className="flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-medium bg-[var(--accent)] text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+      >
+        {generating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+        {generating ? 'Generating…' : 'Generate caption'}
+      </button>
+    </div>
+  );
+}
+
 function ComposerDrawer({ open, post, accounts, allAssets, onClose, onSaved, onAssetCreated, theme }) {
   const isDark = theme === 'dark';
   const [form, setForm] = useState({
@@ -292,6 +494,7 @@ function ComposerDrawer({ open, post, accounts, allAssets, onClose, onSaved, onA
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
+  const [aiWriteOpen, setAiWriteOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -452,8 +655,30 @@ function ComposerDrawer({ open, post, accounts, allAssets, onClose, onSaved, onA
           />
 
           {/* Caption */}
-          <div>
-            <label className="text-xs text-gray-500 mb-1.5 block">Caption</label>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs text-gray-500">Caption</label>
+              <button
+                onClick={() => setAiWriteOpen((v) => !v)}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  aiWriteOpen
+                    ? 'bg-[var(--accent)] text-white'
+                    : isDark ? 'bg-white/8 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-800'
+                }`}
+              >
+                <Sparkles size={11} /> AI Write
+                {aiWriteOpen ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
+              </button>
+            </div>
+            {aiWriteOpen && (
+              <AiWritePanel
+                theme={theme}
+                onInsert={(text) => {
+                  setForm((f) => ({ ...f, caption: text }));
+                  setAiWriteOpen(false);
+                }}
+              />
+            )}
             <textarea
               rows={5}
               value={form.caption}
@@ -462,7 +687,7 @@ function ComposerDrawer({ open, post, accounts, allAssets, onClose, onSaved, onA
               placeholder="Write your caption…"
               className={`w-full rounded-xl px-3 py-2.5 text-sm border resize-none ${isDark ? 'bg-[#0B0D10] border-white/10 text-white placeholder-gray-600' : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400'}`}
             />
-            <p className={`text-xs mt-1 text-right ${form.caption.length > 2000 ? 'text-amber-400' : 'text-gray-600'}`}>
+            <p className={`text-xs text-right ${form.caption.length > 2000 ? 'text-amber-400' : 'text-gray-600'}`}>
               {form.caption.length}/2200
             </p>
           </div>
@@ -642,6 +867,7 @@ export default function ContentStudio() {
           <Loader2 size={28} className="animate-spin text-gray-500" />
         </div>
       ) : view === 'calendar' ? (
+        <>
         <div className={`rounded-3xl border ${isDark ? 'bg-[#13161D] border-white/8' : 'bg-white border-gray-200'}`}>
           <div className={`flex items-center justify-between px-6 py-4 border-b ${isDark ? 'border-white/8' : 'border-gray-100'}`}>
             <button onClick={prevMonth} className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors">
@@ -688,6 +914,8 @@ export default function ContentStudio() {
             })}
           </div>
         </div>
+        <GrowthTipsPanel isDark={isDark} />
+        </>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {posts.length === 0 ? (

@@ -19,6 +19,10 @@ async function request(method, url, body) {
   return res.json();
 }
 
+// Caption AI
+export const generateCaption = (data) =>
+  request('POST', `${BASE}/acquisition/posts/generate-caption`, data);
+
 // Social Accounts
 export const getAccounts = () => request('GET', `${BASE}/acquisition/accounts`);
 export const createAccount = (data) => request('POST', `${BASE}/acquisition/accounts`, data);

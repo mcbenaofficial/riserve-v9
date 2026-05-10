@@ -2113,3 +2113,62 @@ class AggregatorOrder(Base):
     connection = relationship("AggregatorConnection", back_populates="orders")
     resolved_customer = relationship("Customer", back_populates="aggregator_orders", foreign_keys=[resolved_customer_id])
 
+
+class WhatsAppSubscriber(Base):
+    __tablename__ = "whatsapp_subscribers"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='SET NULL'), nullable=True, index=True)
+    phone = Column(String(50), nullable=False)   # E.164 normalized
+    name = Column(String(255), nullable=True)
+    source = Column(String(50), default='organic')  # organic, import, aggregator, referral, widget
+    tags = Column(JSONB, default=list)
+    opted_in_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    opted_out_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    campaign_messages = relationship("WhatsAppCampaignMessage", back_populates="subscriber")
+
+
+class WhatsAppCampaign(Base):
+    __tablename__ = "whatsapp_campaigns"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    template_name = Column(String(255), nullable=False)
+    template_params = Column(JSONB, default=list)   # list of variable values
+    segment_tags = Column(JSONB, default=list)       # filter subscribers by tags (empty = all)
+    status = Column(String(50), default='draft')     # draft, scheduled, sending, sent, failed
+    scheduled_at = Column(DateTime(timezone=True), nullable=True)
+    sent_at = Column(DateTime(timezone=True), nullable=True)
+    total_recipients = Column(Integer, default=0)
+    sent_count = Column(Integer, default=0)
+    delivered_count = Column(Integer, default=0)
+    read_count = Column(Integer, default=0)
+    failed_count = Column(Integer, default=0)
+    cta_button_text = Column(String(255), nullable=True)
+    cta_button_url = Column(String(500), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    messages = relationship("WhatsAppCampaignMessage", back_populates="campaign", cascade="all, delete-orphan")
+
+
+class WhatsAppCampaignMessage(Base):
+    __tablename__ = "whatsapp_campaign_messages"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    campaign_id = Column(String, ForeignKey("whatsapp_campaigns.id", ondelete='CASCADE'), nullable=False, index=True)
+    subscriber_id = Column(String, ForeignKey("whatsapp_subscribers.id", ondelete='SET NULL'), nullable=True, index=True)
+    phone = Column(String(50), nullable=False)   # denormalized — survives subscriber deletion
+    status = Column(String(50), default='pending')  # pending, sent, delivered, read, failed
+    wa_message_id = Column(String(255), nullable=True)
+    sent_at = Column(DateTime(timezone=True), nullable=True)
+    error = Column(String(500), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    campaign = relationship("WhatsAppCampaign", back_populates="messages")
+    subscriber = relationship("WhatsAppSubscriber", back_populates="campaign_messages")
+

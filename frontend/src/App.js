@@ -86,6 +86,7 @@ import ContentStudio from './pages/Acquisition/ContentStudio';
 import LeadsPipeline from './pages/Acquisition/LeadsPipeline';
 import TriggersFlows from './pages/Acquisition/TriggersFlows';
 import AggregatorChannels from './pages/Acquisition/AggregatorChannels';
+import WhatsAppAcquisition from './pages/Acquisition/WhatsAppAcquisition';
 import VisibilityOverview from './pages/Visibility/VisibilityOverview';
 import VisibilityListings from './pages/Visibility/VisibilityListings';
 import VisibilityReviews from './pages/Visibility/VisibilityReviews';
@@ -238,6 +239,7 @@ function MainLayout() {
               <Route path="/acquisition/leads" element={<ProtectedRoute><LeadsPipeline /></ProtectedRoute>} />
               <Route path="/acquisition/triggers" element={<ProtectedRoute><TriggersFlows /></ProtectedRoute>} />
               <Route path="/acquisition/aggregators" element={<ProtectedRoute><AggregatorChannels /></ProtectedRoute>} />
+              <Route path="/acquisition/whatsapp" element={<ProtectedRoute><WhatsAppAcquisition /></ProtectedRoute>} />
               {/* Visibility & SEO */}
               <Route path="/visibility" element={<ProtectedRoute><VisibilityOverview /></ProtectedRoute>} />
               <Route path="/visibility/listings" element={<ProtectedRoute><VisibilityListings /></ProtectedRoute>} />

@@ -308,6 +308,15 @@ const Sidebar = () => {
       appId: 'acquisition',
     },
     {
+      key: 'whatsapp-acquisition',
+      label: 'WhatsApp Acquisition',
+      icon: MessageCircle,
+      path: '/acquisition/whatsapp',
+      condition: (features) => features.includes('acquisition'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'acquisition',
+    },
+    {
       key: 'visibility',
       label: 'Visibility & SEO',
       icon: Search,
