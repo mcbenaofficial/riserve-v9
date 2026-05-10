@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "audience_spec_v1",
+  "title": "Campaign Audience Spec v1",
+  "description": "Validates the audience_spec field of a campaign document",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "geo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "radius_km": {
+          "type": "number",
+          "minimum": 1
+        },
+        "cities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "countries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "description": "ISO 3166-1 alpha-2 country code"
+          }
+        }
+      }
+    },
+    "people": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "age_min": {
+          "type": "integer",
+          "minimum": 18,
+          "maximum": 65
+        },
+        "age_max": {
+          "type": "integer",
+          "minimum": 18,
+          "maximum": 65
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "interests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "behaviors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "demographics": {
+          "type": "object"
+        }
+      }
+    },
+    "audiences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "custom_segments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Segment IDs"
+        },
+        "lookalike_seed_id": {
+          "type": "string"
+        },
+        "lookalike_size_percent": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10
+        }
+      }
+    }
+  }
+}

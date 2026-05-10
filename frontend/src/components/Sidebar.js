@@ -299,6 +299,24 @@ const Sidebar = () => {
       ]
     },
     {
+      key: 'campaigns',
+      label: 'Campaigns',
+      icon: Target,
+      path: '/acquisition/campaigns',
+      condition: (features) => features.includes('acquisition'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'acquisition',
+    },
+    {
+      key: 'submissions',
+      label: 'Submissions',
+      icon: UserPlus,
+      path: '/acquisition/submissions',
+      condition: (features) => features.includes('acquisition'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'acquisition',
+    },
+    {
       key: 'aggregators',
       label: 'Aggregator Channels',
       icon: TrendingUp,

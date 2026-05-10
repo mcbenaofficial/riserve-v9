@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "form_schema_v1",
+  "title": "Campaign Form Schema v1",
+  "description": "Validates the form_schema field of a campaign document",
+  "type": "object",
+  "required": ["version", "title", "fields"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intro": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/field"
+      }
+    },
+    "qualification_threshold": {
+      "type": "integer"
+    },
+    "submit_action": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "deliver_message",
+            "redirect",
+            "book_meeting",
+            "deliver_document"
+          ]
+        },
+        "payload": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "field": {
+      "type": "object",
+      "required": ["id", "label", "type", "required"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "help_text": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "long_text",
+            "number",
+            "email",
+            "phone",
+            "date",
+            "time",
+            "currency_band",
+            "single_choice",
+            "multi_choice",
+            "address",
+            "geo_point",
+            "document",
+            "consent"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "default_value": {},
+        "validation": {
+          "type": "object"
+        },
+        "is_pii": {
+          "type": "boolean",
+          "default": false
+        },
+        "is_sensitive": {
+          "type": "boolean",
+          "default": false
+        },
+        "scoring": {
+          "type": "object"
+        },
+        "common_field": {
+          "type": "string",
+          "enum": [
+            "name",
+            "phone",
+            "email",
+            "city",
+            "pincode",
+            "country"
+          ]
+        },
+        "conditional": {
+          "type": "object"
+        },
+        "vault_storage": {
+          "type": "boolean"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "type": {
+            "enum": ["single_choice", "multi_choice"]
+          }
+        }
+      },
+      "then": {
+        "required": ["options"],
+        "properties": {
+          "options": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  }
+}

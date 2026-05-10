@@ -134,7 +134,27 @@ USER_ROLES = {
         "name": "User",
         "description": "Limited access - can only view and manage bookings/orders assigned to them",
         "permissions": ["view_own_bookings", "update_own_bookings"]
-    }
+    },
+    "outlet_staff": {
+        "name": "Outlet Staff",
+        "description": "Frontline staff at assigned outlets — view and submit entries for their outlet's campaigns",
+        "permissions": ["view_submissions", "create_submissions"],
+    },
+    "recruiter": {
+        "name": "Recruiter",
+        "description": "Talent acquisition — can manage talent_acquisition campaign submissions only",
+        "permissions": ["view_submissions", "manage_submissions"],
+    },
+    "franchise_lead": {
+        "name": "Franchise Lead",
+        "description": "Franchise development — can manage franchise_development campaign submissions only",
+        "permissions": ["view_submissions", "manage_submissions"],
+    },
+    "analyst": {
+        "name": "Analyst",
+        "description": "Read-only across all campaign types; sensitive PII fields are redacted",
+        "permissions": ["view_submissions", "view_reports"],
+    },
 }
 
 
@@ -373,6 +393,65 @@ def require_feature(feature_name: str):
             )
             
         return current_user
-        
+
     return feature_dependency
+
+
+# ---------------------------------------------------------------------------
+# Campaign / submission RBAC
+# ---------------------------------------------------------------------------
+
+# Roles allowed to read submissions at all
+_SUBMISSIONS_READ_ROLES: frozenset[str] = frozenset({
+    "SuperAdmin", "Admin", "Manager",
+    "outlet_staff", "recruiter", "franchise_lead", "analyst",
+})
+
+# Roles allowed to create / mutate submissions (analyst is read-only)
+_SUBMISSIONS_WRITE_ROLES: frozenset[str] = frozenset({
+    "SuperAdmin", "Admin", "Manager",
+    "outlet_staff", "recruiter", "franchise_lead",
+})
+
+# Per-role campaign type restrictions; roles absent from this map are unrestricted
+_ROLE_CAMPAIGN_TYPE_SCOPE: Dict[str, List[str]] = {
+    "recruiter": ["talent_acquisition"],
+    "franchise_lead": ["franchise_development"],
+}
+
+
+def get_campaign_type_scope(role: str) -> Optional[List[str]]:
+    """Return the campaign type keys this role may access, or None for unrestricted."""
+    return _ROLE_CAMPAIGN_TYPE_SCOPE.get(role)
+
+
+async def require_submissions_read(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role not in _SUBMISSIONS_READ_ROLES:
+        raise HTTPException(status_code=403, detail="Insufficient permissions to view submissions")
+    return current_user
+
+
+async def require_submissions_write(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role not in _SUBMISSIONS_WRITE_ROLES:
+        raise HTTPException(status_code=403, detail="Insufficient permissions to modify submissions")
+    return current_user
+
+
+def redact_sensitive_submission(user: User, sub_dict: dict) -> dict:
+    """Null out PII fields on sensitive-class submissions for non-admin roles."""
+    if sub_dict.get("retention_class_snapshot") != "sensitive":
+        return sub_dict
+    if user.role in {"SuperAdmin", "Admin"}:
+        return sub_dict
+    redacted = sub_dict.copy()
+    redacted["common_name"] = None
+    redacted["common_phone"] = None
+    redacted["common_email"] = None
+    redacted["common_city"] = None
+    redacted["common_pincode"] = None
+    redacted["submitter_handle"] = None
+    redacted["responses"] = {"_redacted": True}
+    redacted["pii_field_names"] = []
+    redacted["_pii_redacted"] = True
+    return redacted
 

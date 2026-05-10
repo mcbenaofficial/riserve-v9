@@ -2172,3 +2172,168 @@ class WhatsAppCampaignMessage(Base):
     campaign = relationship("WhatsAppCampaign", back_populates="messages")
     subscriber = relationship("WhatsAppSubscriber", back_populates="campaign_messages")
 
+
+# ---------------------------------------------------------------------------
+# Unified Campaign Model (Addendum 6.2)
+# ---------------------------------------------------------------------------
+
+class CampaignType(Base):
+    __tablename__ = "campaign_types"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    key = Column(String(100), unique=True, nullable=False)
+    display_name = Column(String(200), nullable=False)
+    description = Column(Text, nullable=True)
+    default_stage_set = Column(JSONB, default=dict)
+    default_promotion_target = Column(String(100), nullable=True)
+    default_retention_class = Column(String(50), default='standard')
+    meta_ad_category = Column(String(50), default='none')
+    default_agent_persona_id = Column(String(36), nullable=True)
+    requires_legal_disclosure = Column(Boolean, default=False)
+
+
+class CampaignTagGroup(Base):
+    __tablename__ = "campaign_tag_groups"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    name = Column(String(200), nullable=False)
+    description = Column(Text, nullable=True)
+    color_hex = Column(String(7), nullable=True)
+    created_by = Column(String(36), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    tags = relationship("Campaign", back_populates="tag_group")
+
+
+class Campaign(Base):
+    __tablename__ = "campaigns"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    name = Column(String(200), nullable=False)
+    description = Column(Text, nullable=True)
+    internal_notes = Column(Text, nullable=True)
+    campaign_type_id = Column(String(36), ForeignKey('campaign_types.id', ondelete='RESTRICT'), nullable=False)
+    tag_group_id = Column(String(36), ForeignKey('campaign_tag_groups.id', ondelete='SET NULL'), nullable=True)
+    tags = Column(JSONB, default=list)
+    status = Column(String(50), default='draft', index=True)
+    form_schema = Column(JSONB, default=dict)
+    audience_spec = Column(JSONB, default=dict)
+    creative_refs = Column(JSONB, default=dict)
+    lifecycle_stages_override = Column(JSONB, nullable=True)
+    qualification_threshold = Column(Integer, default=40)
+    qualification_rules = Column(JSONB, default=dict)
+    promotion_rules = Column(JSONB, default=dict)
+    retention_class = Column(String(50), default='standard')
+    disclosure_footer = Column(Text, nullable=True)
+    agent_persona_id = Column(String(36), nullable=True)
+    agent_autonomy_level = Column(String(10), default='L1')
+    start_at = Column(DateTime(timezone=True), nullable=True)
+    end_at = Column(DateTime(timezone=True), nullable=True)
+    daily_submission_cap = Column(Integer, nullable=True)
+    total_submission_cap = Column(Integer, nullable=True)
+    created_by = Column(String(36), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    campaign_type = relationship("CampaignType")
+    tag_group = relationship("CampaignTagGroup", back_populates="tags")
+    submissions = relationship("Submission", back_populates="campaign")
+
+
+class CampaignTemplate(Base):
+    __tablename__ = "campaign_templates"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=True, index=True)
+    name = Column(String(200), nullable=False)
+    description = Column(Text, nullable=True)
+    campaign_type_id = Column(String(36), ForeignKey('campaign_types.id', ondelete='CASCADE'), nullable=False)
+    form_schema = Column(JSONB, default=dict)
+    audience_spec = Column(JSONB, default=dict)
+    default_creative_pattern = Column(JSONB, default=dict)
+    is_built_in = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    campaign_type = relationship("CampaignType")
+
+
+class Submission(Base):
+    __tablename__ = "submissions"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    tenant_id = Column(String(36), nullable=False, index=True)
+    campaign_id = Column(String(36), ForeignKey('campaigns.id', ondelete='CASCADE'), nullable=False, index=True)
+    campaign_type_snapshot = Column(String(100), nullable=True)
+    tag_group_id_snapshot = Column(String(36), nullable=True)
+    tags_snapshot = Column(JSONB, default=list)
+    source_channel = Column(String(50), default='instagram')
+    source_ad_id = Column(String(36), nullable=True)
+    source_attribution_code = Column(String(200), nullable=True)
+    submitter_handle = Column(String(200), nullable=True)
+    responses = Column(JSONB, default=dict)
+    pii_field_names = Column(JSONB, default=list)
+    attachments = Column(JSONB, default=dict)
+    common_name = Column(String(500), nullable=True)
+    common_phone = Column(String(50), nullable=True, index=True)
+    common_email = Column(String(200), nullable=True, index=True)
+    common_city = Column(String(200), nullable=True)
+    common_pincode = Column(String(20), nullable=True)
+    common_country = Column(String(2), nullable=True)
+    score = Column(Integer, default=0)
+    score_breakdown = Column(JSONB, default=dict)
+    stage = Column(String(100), default='new', index=True)
+    stage_entered_at = Column(DateTime(timezone=True), nullable=True)
+    assigned_to_user_id = Column(String(36), nullable=True)
+    assigned_to_agent_run_id = Column(String(36), nullable=True)
+    promoted_to_table = Column(String(100), nullable=True)
+    promoted_to_id = Column(String(36), nullable=True)
+    promoted_at = Column(DateTime(timezone=True), nullable=True)
+    lost_reason = Column(Text, nullable=True)
+    lost_at = Column(DateTime(timezone=True), nullable=True)
+    retention_class_snapshot = Column(String(50), default='standard')
+    expires_at = Column(DateTime(timezone=True), nullable=True, index=True)
+    consent_snapshot = Column(JSONB, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True)
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    campaign = relationship("Campaign", back_populates="submissions")
+    events = relationship("SubmissionEvent", back_populates="submission")
+    attachments_vault = relationship("SubmissionAttachment", back_populates="submission")
+
+
+class SubmissionEvent(Base):
+    __tablename__ = "submission_events"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    submission_id = Column(String(36), ForeignKey('submissions.id', ondelete='CASCADE'), nullable=False, index=True)
+    tenant_id = Column(String(36), nullable=False)
+    kind = Column(String(100), nullable=False)
+    payload = Column(JSONB, default=dict)
+    actor_id = Column(String(36), nullable=True)
+    actor_type = Column(String(50), nullable=True)
+    occurred_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    submission = relationship("Submission", back_populates="events")
+
+
+class SubmissionAttachment(Base):
+    __tablename__ = "submission_attachments_vault"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    submission_id = Column(String(36), ForeignKey('submissions.id', ondelete='CASCADE'), nullable=False, index=True)
+    tenant_id = Column(String(36), nullable=False)
+    field_id = Column(String(100), nullable=True)
+    storage_url = Column(Text, nullable=False)
+    filename = Column(String(500), nullable=True)
+    mime_type = Column(String(100), nullable=True)
+    size_bytes = Column(Integer, nullable=True)
+    sensitivity = Column(String(50), default='standard')
+    access_log_count = Column(Integer, default=0)
+    expires_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    submission = relationship("Submission", back_populates="attachments_vault")
+

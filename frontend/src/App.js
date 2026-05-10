@@ -87,6 +87,9 @@ import LeadsPipeline from './pages/Acquisition/LeadsPipeline';
 import TriggersFlows from './pages/Acquisition/TriggersFlows';
 import AggregatorChannels from './pages/Acquisition/AggregatorChannels';
 import WhatsAppAcquisition from './pages/Acquisition/WhatsAppAcquisition';
+import CampaignsList from './pages/Acquisition/CampaignsList';
+import CampaignWizard from './pages/Acquisition/CampaignWizard';
+import SubmissionsView from './pages/Acquisition/SubmissionsView';
 import VisibilityOverview from './pages/Visibility/VisibilityOverview';
 import VisibilityListings from './pages/Visibility/VisibilityListings';
 import VisibilityReviews from './pages/Visibility/VisibilityReviews';
@@ -240,6 +243,10 @@ function MainLayout() {
               <Route path="/acquisition/triggers" element={<ProtectedRoute><TriggersFlows /></ProtectedRoute>} />
               <Route path="/acquisition/aggregators" element={<ProtectedRoute><AggregatorChannels /></ProtectedRoute>} />
               <Route path="/acquisition/whatsapp" element={<ProtectedRoute><WhatsAppAcquisition /></ProtectedRoute>} />
+              <Route path="/acquisition/campaigns" element={<ProtectedRoute><CampaignsList /></ProtectedRoute>} />
+              <Route path="/acquisition/campaigns/new" element={<ProtectedRoute><CampaignWizard /></ProtectedRoute>} />
+              <Route path="/acquisition/campaigns/:id/edit" element={<ProtectedRoute><CampaignWizard /></ProtectedRoute>} />
+              <Route path="/acquisition/submissions" element={<ProtectedRoute><SubmissionsView /></ProtectedRoute>} />
               {/* Visibility & SEO */}
               <Route path="/visibility" element={<ProtectedRoute><VisibilityOverview /></ProtectedRoute>} />
               <Route path="/visibility/listings" element={<ProtectedRoute><VisibilityListings /></ProtectedRoute>} />
