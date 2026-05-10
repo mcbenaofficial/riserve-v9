@@ -28,6 +28,14 @@ import Invoices from './pages/Invoices';
 import Reports from './pages/Reports';
 import Users from './pages/Users';
 import Team from './pages/Team';
+import StaffDirectoryPage from './pages/staff/StaffDirectory';
+import StaffAttendancePage from './pages/staff/StaffAttendance';
+import StaffLeavePoliciesPage from './pages/staff/StaffLeavePolicies';
+import StaffLeaveRequestsPage from './pages/staff/StaffLeaveRequests';
+import StaffShiftsPage from './pages/staff/StaffShifts';
+import StaffSchedulesPage from './pages/staff/StaffSchedulesPage';
+import StaffHolidaysPage from './pages/staff/StaffHolidays';
+import StaffTrainingPage from './pages/staff/StaffTraining';
 import Customers from './pages/Customers';
 import Support from './pages/Support';
 import AdminConsole from './pages/AdminConsole';
@@ -77,6 +85,12 @@ import MarketingSettings from './pages/Conversations/MarketingSettings';
 import ContentStudio from './pages/Acquisition/ContentStudio';
 import LeadsPipeline from './pages/Acquisition/LeadsPipeline';
 import TriggersFlows from './pages/Acquisition/TriggersFlows';
+import AggregatorChannels from './pages/Acquisition/AggregatorChannels';
+import VisibilityOverview from './pages/Visibility/VisibilityOverview';
+import VisibilityListings from './pages/Visibility/VisibilityListings';
+import VisibilityReviews from './pages/Visibility/VisibilityReviews';
+import VisibilityGEO from './pages/Visibility/VisibilityGEO';
+import VisibilityKnowledge from './pages/Visibility/VisibilityKnowledge';
 import './App.css';
 
 function App() {
@@ -205,6 +219,14 @@ function MainLayout() {
               <Route path="/reports" element={<Reports />} />
               <Route path="/users" element={<Users />} /> {/* Legacy Users page */}
               <Route path="/team" element={<Team />} /> {/* Unified Team (Users+Staff) */}
+              <Route path="/staff/directory" element={<ProtectedRoute><StaffDirectoryPage /></ProtectedRoute>} />
+              <Route path="/staff/attendance" element={<ProtectedRoute><StaffAttendancePage /></ProtectedRoute>} />
+              <Route path="/staff/leave-policies" element={<ProtectedRoute><StaffLeavePoliciesPage /></ProtectedRoute>} />
+              <Route path="/staff/leave-requests" element={<ProtectedRoute><StaffLeaveRequestsPage /></ProtectedRoute>} />
+              <Route path="/staff/shifts" element={<ProtectedRoute><StaffShiftsPage /></ProtectedRoute>} />
+              <Route path="/staff/schedules" element={<ProtectedRoute><StaffSchedulesPage /></ProtectedRoute>} />
+              <Route path="/staff/holidays" element={<ProtectedRoute><StaffHolidaysPage /></ProtectedRoute>} />
+              <Route path="/staff/training" element={<ProtectedRoute><StaffTrainingPage /></ProtectedRoute>} />
               <Route path="/customers" element={<Customers />} /> {/* SaaS Customers */}
               <Route path="/conversations" element={<ProtectedRoute><Conversations /></ProtectedRoute>} />
               <Route path="/marketing/segments" element={<ProtectedRoute><Segments /></ProtectedRoute>} />
@@ -215,6 +237,13 @@ function MainLayout() {
               <Route path="/acquisition/content" element={<ProtectedRoute><ContentStudio /></ProtectedRoute>} />
               <Route path="/acquisition/leads" element={<ProtectedRoute><LeadsPipeline /></ProtectedRoute>} />
               <Route path="/acquisition/triggers" element={<ProtectedRoute><TriggersFlows /></ProtectedRoute>} />
+              <Route path="/acquisition/aggregators" element={<ProtectedRoute><AggregatorChannels /></ProtectedRoute>} />
+              {/* Visibility & SEO */}
+              <Route path="/visibility" element={<ProtectedRoute><VisibilityOverview /></ProtectedRoute>} />
+              <Route path="/visibility/listings" element={<ProtectedRoute><VisibilityListings /></ProtectedRoute>} />
+              <Route path="/visibility/reviews" element={<ProtectedRoute><VisibilityReviews /></ProtectedRoute>} />
+              <Route path="/visibility/geo" element={<ProtectedRoute><VisibilityGEO /></ProtectedRoute>} />
+              <Route path="/visibility/knowledge" element={<ProtectedRoute><VisibilityKnowledge /></ProtectedRoute>} />
               <Route path="/admin" element={<AdminConsole />} />
               <Route path="/support" element={<Support />} />
               <Route path="/ai-agent" element={<AIAgent />} />

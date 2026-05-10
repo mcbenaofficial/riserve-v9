@@ -61,7 +61,13 @@ import {
   Instagram,
   Camera,
   Zap,
-  UserPlus
+  UserPlus,
+  UserCog,
+  Search,
+  Star,
+  Timer,
+  CalendarDays,
+  Gift
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -74,7 +80,7 @@ const Sidebar = () => {
   const [enabledFeatures, setEnabledFeatures] = useState([]);
   const [companySettings, setCompanySettings] = useState(null);
   const [lowStockCount, setLowStockCount] = useState(0);
-  const [hqExpanded, setHqExpanded] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({});
   const [showAppSwitcher, setShowAppSwitcher] = useState(false);
   const appSwitcherRef = React.useRef(null);
 
@@ -169,7 +175,7 @@ const Sidebar = () => {
     { id: 'hq', name: 'HQ Intelligence', icon: Brain, feature: 'hq_intelligence' },
     { id: 'reputation', name: 'Reputation Management', icon: MessageSquare, feature: 'reputation_management' },
     { id: 'marketing', name: 'Marketing & Conversations', icon: Inbox, feature: 'marketing' },
-    { id: 'acquisition', name: 'Instagram Acquisition', icon: Instagram, feature: 'acquisition' },
+    { id: 'acquisition', name: 'Acquisition', icon: Target, feature: 'acquisition' },
     { id: 'portal', name: 'Omni Site Builder', icon: Globe },
   ];
 
@@ -181,10 +187,10 @@ const Sidebar = () => {
     if (path.startsWith('/orders')) return 'restaurant';
     if (path.startsWith('/inventory') || path.startsWith('/suppliers')) return 'inventory';
     if (path.startsWith('/customers')) return 'crm';
-    if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling')) return 'staff';
+    if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling') || path.startsWith('/staff')) return 'staff';
     if (path.startsWith('/feedback') || path.startsWith('/reviews')) return 'reputation';
     if (path.startsWith('/conversations') || path.startsWith('/marketing')) return 'marketing';
-    if (path.startsWith('/acquisition')) return 'acquisition';
+    if (path.startsWith('/acquisition') || path.startsWith('/visibility')) return 'acquisition';
     return 'core';
   }, [location.pathname]);
 
@@ -234,24 +240,15 @@ const Sidebar = () => {
     { key: 'invoices', label: 'Invoices', icon: Receipt, path: '/invoices', roles: ['Admin', 'Manager'], appId: 'core' },
     { key: 'customers', label: 'Customer Database', icon: Users, path: '/customers', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'crm' },
     { key: 'customer-segments', label: 'Segments', icon: User, path: '/customers/segments', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'crm' },
-    {
-      key: 'team',
-      label: 'Staff Roster',
-      icon: Users,
-      path: '/team',
-      condition: (features) => features.includes('staff_management'),
-      roles: ['SuperAdmin', 'Admin', 'Manager'],
-      appId: 'staff'
-    },
-    {
-      key: 'staff-scheduling',
-      label: 'Performance & Schedules',
-      icon: Clock,
-      path: '/analytics/staff-scheduling',
-      condition: (features) => features.includes('staff_management'),
-      roles: ['SuperAdmin', 'Admin', 'Manager'],
-      appId: 'staff'
-    },
+    { key: 'staff-directory', label: 'Staff Directory', icon: Users, path: '/staff/directory', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-attendance', label: 'Attendance', icon: Timer, path: '/staff/attendance', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-leave-policies', label: 'Leave Policies', icon: FileText, path: '/staff/leave-policies', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-leave-requests', label: 'Leave Requests', icon: CalendarDays, path: '/staff/leave-requests', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-shifts', label: 'Shift Templates', icon: Clock, path: '/staff/shifts', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-schedules', label: 'Schedules', icon: Calendar, path: '/staff/schedules', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-holidays', label: 'Holidays', icon: Gift, path: '/staff/holidays', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-training', label: 'Training', icon: BookOpen, path: '/staff/training', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
+    { key: 'staff-insights', label: 'AI Workforce Insights', icon: TrendingUp, path: '/analytics/staff-scheduling', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
     {
       key: 'feedback',
       label: 'Feedback Collections',
@@ -287,9 +284,45 @@ const Sidebar = () => {
     { key: 'marketing-campaigns', label: 'Campaigns', icon: Megaphone, path: '/marketing/campaigns', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     { key: 'marketing-journeys', label: 'Journeys', icon: GitBranch, path: '/marketing/journeys', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
     { key: 'marketing-settings', label: 'Settings', icon: Settings2, path: '/marketing/settings', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
-    { key: 'acq-content', label: 'Content Studio', icon: Camera, path: '/acquisition/content', condition: (features) => features.includes('acquisition'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'acquisition' },
-    { key: 'acq-leads', label: 'Leads Pipeline', icon: UserPlus, path: '/acquisition/leads', condition: (features) => features.includes('acquisition'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'acquisition' },
-    { key: 'acq-triggers', label: 'Triggers & Flows', icon: Zap, path: '/acquisition/triggers', condition: (features) => features.includes('acquisition'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'acquisition' },
+    {
+      key: 'instagram',
+      label: 'Instagram',
+      icon: Instagram,
+      path: '/acquisition/content',
+      condition: (features) => features.includes('acquisition'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'acquisition',
+      subItems: [
+        { key: 'acq-content', label: 'Content Studio', icon: Camera, path: '/acquisition/content' },
+        { key: 'acq-leads', label: 'Leads Pipeline', icon: UserPlus, path: '/acquisition/leads' },
+        { key: 'acq-triggers', label: 'Triggers & Flows', icon: Zap, path: '/acquisition/triggers' },
+      ]
+    },
+    {
+      key: 'aggregators',
+      label: 'Aggregator Channels',
+      icon: TrendingUp,
+      path: '/acquisition/aggregators',
+      condition: (features) => features.includes('acquisition'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'acquisition',
+    },
+    {
+      key: 'visibility',
+      label: 'Visibility & SEO',
+      icon: Search,
+      path: '/visibility',
+      condition: (features) => features.includes('visibility') || features.includes('acquisition'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'acquisition',
+      subItems: [
+        { key: 'visibility-overview', label: 'Overview', icon: Gauge, path: '/visibility' },
+        { key: 'visibility-listings', label: 'Listings', icon: MapPin, path: '/visibility/listings' },
+        { key: 'visibility-reviews', label: 'Reviews', icon: Star, path: '/visibility/reviews' },
+        { key: 'visibility-geo', label: 'AI & Search', icon: Search, path: '/visibility/geo' },
+        { key: 'visibility-knowledge', label: 'Knowledge Pages', icon: BookOpen, path: '/visibility/knowledge' },
+      ]
+    },
     // Omni Portal
     { key: 'omni-portal-design-plus', label: 'Portal Design +', icon: Sparkles, path: '/omni/portal-design-plus', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-design', label: 'Design Studio', icon: Palette, path: '/omni/design', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
@@ -350,11 +383,21 @@ const Sidebar = () => {
 
   const isActive = (path) => location.pathname === path;
   const isHqPath = location.pathname.startsWith('/hq');
+  const isAcqPath = location.pathname.startsWith('/acquisition');
+  const isVisibilityPath = location.pathname.startsWith('/visibility');
 
-  // Auto-expand HQ sub-menu if on an HQ page
+  // Auto-expand sub-menus when on matching paths
   React.useEffect(() => {
-    if (isHqPath) setHqExpanded(true);
+    if (isHqPath) setExpandedSections(prev => ({ ...prev, 'hq-intelligence': true }));
   }, [isHqPath]);
+
+  React.useEffect(() => {
+    if (isAcqPath) setExpandedSections(prev => ({ ...prev, instagram: true }));
+  }, [isAcqPath]);
+
+  React.useEffect(() => {
+    if (isVisibilityPath) setExpandedSections(prev => ({ ...prev, visibility: true }));
+  }, [isVisibilityPath]);
 
   return (
     <aside className={`${collapsed ? 'w-20' : 'w-72'} min-w-[5rem] ${collapsed ? 'max-w-[5rem]' : 'max-w-[18rem]'} flex-shrink-0 bg-white/70 dark:bg-[#0B0D10]/80 backdrop-blur-xl border-r border-white/50 dark:border-[#1F2630] p-4 flex flex-col h-screen sticky top-0 transition-all duration-300 z-50 shadow-xl dark:shadow-none`}>
@@ -434,7 +477,7 @@ const Sidebar = () => {
                             else if (app.id === 'crm') navigate('/customers');
                             else if (app.id === 'inventory') navigate('/inventory');
                             else if (app.id === 'flow') navigate('/flow');
-                            else if (app.id === 'staff') navigate('/team');
+                            else if (app.id === 'staff') navigate('/staff/directory');
                             else if (app.id === 'reputation') navigate('/feedback');
                             else if (app.id === 'marketing') navigate('/conversations');
                             else if (app.id === 'acquisition') navigate('/acquisition/content');
@@ -483,9 +526,9 @@ const Sidebar = () => {
         {nav.map((n) => {
           const IconComponent = n.icon;
           const hasSubItems = n.subItems && n.subItems.length > 0;
-          const isExpanded = hasSubItems && hqExpanded;
+          const isExpanded = hasSubItems && !!expandedSections[n.key];
           const isParentActive = hasSubItems
-            ? isHqPath
+            ? n.subItems.some(sub => location.pathname === sub.path || location.pathname.startsWith(sub.path + '/'))
             : isActive(n.path);
 
           return (
@@ -494,7 +537,7 @@ const Sidebar = () => {
                 onClick={() => {
                   if (hasSubItems) {
                     if (collapsed) { navigate(n.path); }
-                    else { setHqExpanded(!hqExpanded); }
+                    else { setExpandedSections(prev => ({ ...prev, [n.key]: !prev[n.key] })); }
                   } else {
                     navigate(n.path);
                   }

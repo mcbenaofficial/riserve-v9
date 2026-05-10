@@ -219,6 +219,8 @@ from routes.booking_portal import router as booking_portal_router
 from routes.acquisition import router as acquisition_router
 from routes.leads import router as leads_router
 from routes.lead_flows import router as lead_flows_router
+from routes.visibility import router as visibility_router
+from routes.aggregators import router as aggregators_router
 
 # Include Routers
 app.include_router(auth.router, prefix="/api")
@@ -264,6 +266,8 @@ app.include_router(booking_portal_router)
 app.include_router(acquisition_router, prefix="/api")
 app.include_router(leads_router, prefix="/api")
 app.include_router(lead_flows_router, prefix="/api")
+app.include_router(visibility_router, prefix="/api")
+app.include_router(aggregators_router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

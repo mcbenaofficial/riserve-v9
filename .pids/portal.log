@@ -2,28 +2,14 @@
 > customer-portal@0.1.0 dev
 > next dev
 
-▲ Next.js 16.2.1 (Turbopack)
-- Local:         http://localhost:3002
-- Network:       http://192.168.88.6:3002
-✓ Ready in 268ms
-
- GET /order/1fde7ad0-6524-473c-8653-84efd4a0714e 200 in 347ms (next.js: 264ms, application-code: 83ms)
- GET /booking/7ad1e0d2-5ee7-4920-9b0b-86ca49a0b9eb 200 in 4.6s (next.js: 318ms, application-code: 4.3s)
- GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 4.8s (next.js: 365ms, application-code: 4.4s)
- GET /order/1fde7ad0-6524-473c-8653-84efd4a0714e 200 in 74ms (next.js: 9ms, application-code: 65ms)
- GET /order/1fde7ad0-6524-473c-8653-84efd4a0714e 200 in 56ms (next.js: 9ms, application-code: 47ms)
- GET /order/1fde7ad0-6524-473c-8653-84efd4a0714e 200 in 26ms (next.js: 5ms, application-code: 20ms)
- GET /order/1fde7ad0-6524-473c-8653-84efd4a0714e 200 in 63ms (next.js: 6ms, application-code: 57ms)
- GET /order/1fde7ad0-6524-473c-8653-84efd4a0714e 200 in 23ms (next.js: 1133µs, application-code: 22ms)
- GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 111ms (next.js: 14ms, application-code: 97ms)
- GET /apple-touch-icon-precomposed.png 404 in 923ms (next.js: 342ms, application-code: 581ms)
- GET /apple-touch-icon.png 404 in 876ms (next.js: 247ms, application-code: 629ms)
- GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 1091ms (next.js: 161ms, application-code: 929ms)
- GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 1087ms (next.js: 33ms, application-code: 1055ms)
- GET /apple-touch-icon-120x120-precomposed.png 404 in 48ms (next.js: 3ms, application-code: 45ms)
- GET /apple-touch-icon-120x120.png 404 in 31ms (next.js: 4ms, application-code: 27ms)
- GET /apple-touch-icon-precomposed.png 404 in 38ms (next.js: 3ms, application-code: 35ms)
- GET /apple-touch-icon.png 404 in 52ms (next.js: 8ms, application-code: 44ms)
- GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 218ms (next.js: 24ms, application-code: 194ms)
- GET /order/16da4c73-c640-431c-9198-f57d884c212a 200 in 54ms (next.js: 12ms, application-code: 42ms)
- GET /menu/36e8bc27-f972-4859-9f99-459ecece81fc 200 in 259ms (next.js: 13ms, application-code: 246ms)
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3002
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3002)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3002
+}
+[?25h

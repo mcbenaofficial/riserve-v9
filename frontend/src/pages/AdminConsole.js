@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   Settings, Users, Store, Wrench, Mail, MessageSquare, MessageCircle,
-  Webhook, Zap, Puzzle, ChevronRight, Shield, Calendar, Building2, Star, Package, UserCog, FileText,
+  Webhook, Zap, Puzzle, ChevronRight, Shield, Calendar, Building2, Star, Package, FileText,
   UtensilsCrossed, Palette, Receipt
 } from 'lucide-react';
 import { api } from '../services/api';
@@ -20,7 +20,6 @@ import AdminSlotBooking from '../components/admin/AdminSlotBooking';
 import AdminCompanySettings from '../components/admin/AdminCompanySettings';
 import AdminFeedback from '../components/admin/AdminFeedback';
 import AdminInventory from '../components/admin/AdminInventory';
-import AdminStaff from '../components/admin/AdminStaff';
 import AdminPromotions from '../components/admin/AdminPromotions';
 import AdminBookingForm from '../components/admin/AdminBookingForm';
 import AdminMenuManagement from '../components/admin/AdminMenuManagement';
@@ -55,7 +54,6 @@ const AdminConsole = () => {
     { id: 'company', label: 'Company Settings', icon: Building2, component: AdminCompanySettings },
     { id: 'portal-design', label: 'Portal Design', icon: Palette, component: AdminPortalDesign },
     { id: 'users', label: 'User Management', icon: Users, component: AdminUsers },
-    { id: 'staff', label: 'Staff Management', icon: UserCog, component: AdminStaff },
     { id: 'promotions', label: 'Promotions', icon: Star, component: AdminPromotions },
     { id: 'outlets', label: 'Outlets / Locations', icon: Store, component: AdminOutlets },
     { id: 'feedback', label: 'Customer Feedback', icon: MessageSquare, component: AdminFeedback },

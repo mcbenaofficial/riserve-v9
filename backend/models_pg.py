@@ -332,12 +332,15 @@ class Customer(Base):
     total_revenue = Column(Numeric(10, 2), default=0)
     total_bookings = Column(Integer, default=0)
     last_visit = Column(Date)       # Native date type
+    # aggregator_handles: {"zomato": "user_id", "swiggy": "proxy_phone"}
+    aggregator_handles = Column(JSONB, default=dict)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationships
     company = relationship("Company", back_populates="customers")
     bookings = relationship("Booking", back_populates="customer_rep")
+    aggregator_orders = relationship("AggregatorOrder", back_populates="resolved_customer", foreign_keys="AggregatorOrder.resolved_customer_id")
 
 class ServiceCategory(Base):
     __tablename__ = "service_categories"
@@ -1986,4 +1989,127 @@ class AttributionLink(Base):
     total_clicks = Column(Integer, default=0)
     unique_clicks = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='SET NULL'), nullable=True, index=True)
+    source = Column(String(50), default='manual')  # google, zomato, justdial, tripadvisor, manual
+    source_review_id = Column(String(255), nullable=True)
+    author_name = Column(String(255), nullable=True)
+    author_avatar_url = Column(String(500), nullable=True)
+    rating = Column(Integer, nullable=False)
+    content = Column(Text, nullable=True)
+    reviewed_at = Column(DateTime(timezone=True), nullable=True, default=lambda: datetime.now(timezone.utc))
+    reply_content = Column(Text, nullable=True)
+    reply_status = Column(String(50), default='none')  # none, drafted, approved, published
+    ai_draft = Column(Text, nullable=True)
+    sentiment = Column(String(20), nullable=True)  # positive, neutral, negative
+    topics = Column(JSONB, default=list)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class ListingProfile(Base):
+    __tablename__ = "listing_profiles"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='SET NULL'), nullable=True, index=True)
+    platform = Column(String(50), nullable=False)  # google, zomato, justdial, tripadvisor
+    status = Column(String(50), default='not_connected')  # connected, not_connected, pending
+    listing_url = Column(String(500), nullable=True)
+    external_id = Column(String(255), nullable=True)
+    last_synced_at = Column(DateTime(timezone=True), nullable=True)
+    meta = Column(JSONB, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class GEOQuery(Base):
+    __tablename__ = "geo_queries"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    query_text = Column(Text, nullable=False)
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class GEOCheck(Base):
+    __tablename__ = "geo_checks"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    query_id = Column(String, ForeignKey("geo_queries.id", ondelete='CASCADE'), nullable=False, index=True)
+    platform = Column(String(50), nullable=False)  # chatgpt, perplexity, google_ai
+    simulated_response = Column(Text, nullable=True)
+    cited = Column(Boolean, default=False)
+    citation_excerpt = Column(Text, nullable=True)
+    competitors_cited = Column(JSONB, default=list)
+    checked_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class KnowledgeEntry(Base):
+    __tablename__ = "knowledge_entries"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='SET NULL'), nullable=True, index=True)
+    category = Column(String(50), nullable=False)  # faq, highlight
+    title = Column(Text, nullable=False)   # question text for FAQ, item name for highlights
+    body = Column(Text, nullable=True)     # answer for FAQ, description for highlights
+    sort_order = Column(Integer, default=0)
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class AggregatorConnection(Base):
+    __tablename__ = "aggregator_connections"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='SET NULL'), nullable=True, index=True)
+    platform = Column(String(50), nullable=False)  # zomato, swiggy, justdial, practo, urban_company, tripadvisor
+    status = Column(String(50), default='manual')  # active, manual, inactive, error
+    # api_key stored here until secrets management is wired
+    api_key = Column(String(500), nullable=True)
+    meta = Column(JSONB, default=dict)      # platform-specific config
+    last_sync_at = Column(DateTime(timezone=True), nullable=True)
+    order_count = Column(Integer, default=0)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    orders = relationship("AggregatorOrder", back_populates="connection", cascade="all, delete-orphan")
+
+
+class AggregatorOrder(Base):
+    __tablename__ = "aggregator_orders"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete='CASCADE'), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete='SET NULL'), nullable=True, index=True)
+    connection_id = Column(String, ForeignKey("aggregator_connections.id", ondelete='SET NULL'), nullable=True, index=True)
+    platform = Column(String(50), nullable=False, index=True)
+    external_order_id = Column(String(200), nullable=False)
+    external_customer_id = Column(String(200), nullable=True)
+    customer_name = Column(String(255), nullable=True)
+    customer_phone = Column(String(50), nullable=True)   # may be masked/proxy
+    customer_email = Column(String(255), nullable=True)
+    amount = Column(Numeric(10, 2), nullable=True)
+    items = Column(JSONB, default=list)     # [{name, quantity, price}]
+    status = Column(String(50), default='delivered')  # placed, confirmed, delivered, cancelled
+    ordered_at = Column(DateTime(timezone=True), nullable=True)
+    # Customer identity resolution
+    resolved_customer_id = Column(String, ForeignKey("customers.id", ondelete='SET NULL'), nullable=True, index=True)
+    resolution_confidence = Column(Numeric(3, 2), nullable=True)  # 0.00–1.00
+    first_party_bridge_sent = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    connection = relationship("AggregatorConnection", back_populates="orders")
+    resolved_customer = relationship("Customer", back_populates="aggregator_orders", foreign_keys=[resolved_customer_id])
 
