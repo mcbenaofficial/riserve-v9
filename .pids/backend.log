@@ -2484,3 +2484,1514 @@ INFO:     127.0.0.1:59986 - "GET /api/campaigns HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59984 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59998 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59998 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60018 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60018 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60031 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60031 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60043 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60043 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60047 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60047 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60047 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60047 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60051 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60051 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60051 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60045 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60059 - "OPTIONS /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60061 - "OPTIONS /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60059 - "GET /api/visibility/score HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 304, in get_visibility_score
+    cid = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60061 - "GET /api/visibility/score HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 304, in get_visibility_score
+    cid = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60065 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60065 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60063 - "OPTIONS /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60063 - "GET /api/visibility/listings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 245, in list_listings
+    models_pg.ListingProfile.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60069 - "GET /api/visibility/listings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 245, in list_listings
+    models_pg.ListingProfile.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60071 - "OPTIONS /api/visibility/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60073 - "OPTIONS /api/visibility/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60071 - "GET /api/visibility/reviews HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 95, in list_reviews
+    .where(models_pg.Review.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60073 - "GET /api/visibility/reviews HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 95, in list_reviews
+    .where(models_pg.Review.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60075 - "OPTIONS /api/visibility/geo/queries HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60075 - "GET /api/visibility/geo/queries HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 491, in list_geo_queries
+    .where(models_pg.GEOQuery.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60078 - "OPTIONS /api/visibility/geo/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60081 - "OPTIONS /api/visibility/geo/checks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60085 - "OPTIONS /api/visibility/geo/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60086 - "OPTIONS /api/visibility/geo/checks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60081 - "GET /api/visibility/geo/checks HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 591, in list_geo_checks
+    .where(models_pg.GEOCheck.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60078 - "GET /api/visibility/geo/summary HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 610, in geo_summary
+    models_pg.GEOCheck.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60083 - "GET /api/visibility/geo/queries HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 491, in list_geo_queries
+    .where(models_pg.GEOQuery.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60085 - "GET /api/visibility/geo/summary HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 610, in geo_summary
+    models_pg.GEOCheck.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60086 - "GET /api/visibility/geo/checks HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 591, in list_geo_checks
+    .where(models_pg.GEOCheck.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60089 - "OPTIONS /api/visibility/knowledge HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60093 - "OPTIONS /api/visibility/knowledge HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60089 - "GET /api/visibility/knowledge HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 695, in list_knowledge_entries
+    .where(models_pg.KnowledgeEntry.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60093 - "GET /api/visibility/knowledge HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 695, in list_knowledge_entries
+    .where(models_pg.KnowledgeEntry.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60102 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60102 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60095 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60114 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60114 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60123 - "GET /api/visibility/geo/summary HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 610, in geo_summary
+    models_pg.GEOCheck.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60120 - "GET /api/visibility/geo/queries HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 491, in list_geo_queries
+    .where(models_pg.GEOQuery.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60124 - "GET /api/visibility/geo/checks HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 591, in list_geo_checks
+    .where(models_pg.GEOCheck.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60128 - "GET /api/visibility/geo/summary HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 610, in geo_summary
+    models_pg.GEOCheck.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60131 - "GET /api/visibility/geo/queries HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 491, in list_geo_queries
+    .where(models_pg.GEOQuery.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60132 - "GET /api/visibility/geo/checks HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 591, in list_geo_checks
+    .where(models_pg.GEOCheck.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60135 - "GET /api/visibility/reviews HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 95, in list_reviews
+    .where(models_pg.Review.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60137 - "GET /api/visibility/reviews HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 95, in list_reviews
+    .where(models_pg.Review.company_id == current_user["company_id"])
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60139 - "GET /api/visibility/listings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 245, in list_listings
+    models_pg.ListingProfile.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60141 - "GET /api/visibility/listings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 245, in list_listings
+    models_pg.ListingProfile.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60146 - "GET /api/visibility/score HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 304, in get_visibility_score
+    cid = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60148 - "GET /api/visibility/score HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 304, in get_visibility_score
+    cid = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60151 - "GET /api/visibility/listings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 245, in list_listings
+    models_pg.ListingProfile.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60153 - "GET /api/visibility/listings HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/visibility.py", line 245, in list_listings
+    models_pg.ListingProfile.company_id == current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:60155 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60155 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60169 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60169 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60180 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60180 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60204 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60204 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60228 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60228 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60257 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60257 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60272 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60272 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60276 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60276 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'routes/visibility.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-11 07:06:52,234 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [35352]
+INFO:     Started server process [39803]
+INFO:     Waiting for application startup.
+2026-05-11 07:06:55,136 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-11 07:06:55,224 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-11 07:06:55,239 - server - INFO - No expired trials found
+INFO:     127.0.0.1:60297 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60297 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60317 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60317 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60331 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60331 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60341 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60352 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60352 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60372 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60381 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60381 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60395 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60395 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60407 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60407 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60414 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60414 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60424 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60424 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60437 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60437 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60461 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60461 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60494 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60494 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60518 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60518 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60548 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60548 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60558 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60560 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60562 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60564 - "GET /api/visibility/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60572 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60572 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60586 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60586 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60598 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60598 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60607 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60607 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60616 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60616 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60625 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60625 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60636 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60636 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60618 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60618 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60618 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60618 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60618 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60618 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/geo/queries HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60663 - "GET /api/visibility/geo/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60663 - "GET /api/visibility/geo/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60668 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60664 - "GET /api/visibility/geo/checks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/geo/queries HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60664 - "GET /api/visibility/geo/checks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60668 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60664 - "GET /api/visibility/knowledge HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60664 - "GET /api/visibility/knowledge HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60664 - "GET /api/visibility/geo/queries HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/geo/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60663 - "GET /api/visibility/geo/checks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60664 - "GET /api/visibility/geo/queries HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60656 - "GET /api/visibility/geo/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60663 - "GET /api/visibility/geo/checks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60678 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60678 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60670 - "GET /api/visibility/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60670 - "GET /api/visibility/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60670 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60670 - "GET /api/visibility/listings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60670 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60670 - "GET /api/visibility/score HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60689 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60689 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK

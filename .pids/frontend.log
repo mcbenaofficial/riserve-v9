@@ -2682,3 +2682,895 @@ src/pages/staff/StaffSchedulesPage.js
   Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/AIAssistant.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/BookingDetailModal.js
+  Line 15:8:  React Hook useEffect has a missing dependency: 'fetchCustomerDetails'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/SlotBookingModal.js
+  Line 91:6:   React Hook useEffect has a missing dependency: 'selectedOutlet'. Either include it or remove the dependency array                                  react-hooks/exhaustive-deps
+  Line 137:6:  React Hook useEffect has missing dependencies: 'effectiveOutlet?.id' and 'effectiveResources'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ThinkingProcess.js
+  Line 17:8:  React Hook React.useEffect has a missing dependency: 'steps'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminOutlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminPortalDesignPlus.js
+  Line 253:37:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminServices.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'filterItems'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminSlotBooking.js
+  Line 479:6:  React Hook useEffect has missing dependencies: 'existingConfig?.weekly_schedule', 'formData.operating_hours_end', 'formData.operating_hours_start', and 'formData.weekly_schedule'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/AdminUsers.js
+  Line 53:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/admin/SlotTimelineView.js
+  Line 83:8:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/map.jsx
+  Line 123:6:   React Hook useEffect has missing dependencies: 'resolvedAttribution' and 'resolvedUrl'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  Line 537:41:  React Hook useEffect has a missing dependency: 'stopLocating'. Either include it or remove the dependency array                                         react-hooks/exhaustive-deps
+  Line 616:6:   React Hook useEffect has missing dependencies: 'handleDrawCreated' and 'handleDrawEditedOrDeleted'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 822:6:   React Hook useEffect has a missing dependency: 'controlRef'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+  Line 876:6:   React Hook useEffect has a missing dependency: 'L'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+
+src/contexts/AuthContext.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Bookings.js
+  Line 48:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  Line 52:6:  React Hook useEffect has a missing dependency: 'filterBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/CustomerFeedback.js
+  Line 78:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Customers.js
+  Line 24:8:  React Hook useEffect has a missing dependency: 'fetchCustomers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Finance.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterTransactions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQAlerts.js
+  Line 171:39:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQBenchmark.js
+  Line 47:8:  React Hook useEffect has a missing dependency: 'loadBenchmark'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQCopilot.js
+  Line 220:8:  React Hook useEffect has missing dependencies: 'initialQuery', 'outletContext', and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/HQPredictions.js
+  Line 53:60:  React Hook useEffect has a missing dependency: 'loadChurn'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  Line 54:80:  React Hook useEffect has a missing dependency: 'loadDemand'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/MyWorkspace.js
+  Line 346:47:  React Hook useEffect has a missing dependency: 'loadAll'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Onboarding.js
+  Line 231:8:  React Hook useEffect has missing dependencies: 'messages.length' and 'sendMessage'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Outlets.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterOutlets'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicBooking.js
+  Line 35:6:  React Hook useEffect has a missing dependency: 'fetchBookingInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Services.js
+  Line 23:6:  React Hook useEffect has a missing dependency: 'filterServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SlotManagement.js
+  Line 33:6:  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/SupplierDetail.js
+  Line 28:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Suppliers.js
+  Line 31:8:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Users.js
+  Line 20:6:  React Hook useEffect has a missing dependency: 'filterUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/omni/OmniSiteConfig.js
+  Line 21:6:  React Hook useEffect has a missing dependency: 'fetchSettings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffAttendance.js
+  Line 237:6:  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 393:6:  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+
+src/pages/staff/StaffLeaveRequests.js
+  Line 13:6:  React Hook useEffect has a missing dependency: 'fetchRequests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/staff/StaffSchedulesPage.js
+  Line 18:6:  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning

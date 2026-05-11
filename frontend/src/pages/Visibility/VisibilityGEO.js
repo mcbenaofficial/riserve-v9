@@ -10,22 +10,22 @@ import {
 } from '../../services/visibilityApi';
 
 const PLATFORMS = [
-  { id: 'chatgpt', label: 'ChatGPT', color: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300' },
-  { id: 'perplexity', label: 'Perplexity', color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300' },
-  { id: 'google_ai', label: 'Google AI', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' },
+  { id: 'chatgpt', label: 'ChatGPT', color: 'bg-emerald-500/15 text-emerald-400' },
+  { id: 'perplexity', label: 'Perplexity', color: 'bg-purple-500/15 text-purple-400' },
+  { id: 'google_ai', label: 'Google AI', color: 'bg-blue-500/15 text-blue-400' },
 ];
 
 function PlatformBadge({ platform }) {
   const cfg = PLATFORMS.find(p => p.id === platform);
   return (
-    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${cfg?.color || 'bg-muted text-muted-foreground'}`}>
+    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${cfg?.color || 'bg-white/8 text-gray-500'}`}>
       {cfg?.label || platform}
     </span>
   );
 }
 
 function CitationRate({ rate, size = 'md' }) {
-  const color = rate >= 66 ? 'text-emerald-600 dark:text-emerald-400'
+  const color = rate >= 66 ? 'text-emerald-400'
     : rate >= 33 ? 'text-amber-500'
     : 'text-red-500';
   const textSize = size === 'lg' ? 'text-3xl' : 'text-xl';
@@ -53,23 +53,23 @@ function QueryCard({ query, onDelete, onRun, latestChecks }) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-2xl overflow-hidden">
+    <div className="bg-[#13161D] border border-white/8 rounded-2xl overflow-hidden">
       <div className="flex items-center gap-3 p-4">
-        <Search size={15} className="text-muted-foreground shrink-0" />
-        <span className="text-sm text-foreground flex-1 font-medium">{query.query_text}</span>
+        <Search size={15} className="text-gray-500 shrink-0" />
+        <span className="text-sm text-white flex-1 font-medium">{query.query_text}</span>
 
         <div className="flex items-center gap-3 shrink-0">
           {rate !== null && (
             <div className="text-right">
               <CitationRate rate={rate} size="sm" />
-              <div className="text-xs text-muted-foreground">cited</div>
+              <div className="text-xs text-gray-500">cited</div>
             </div>
           )}
 
           {checks.length > 0 && (
             <button
               onClick={() => setExpanded(e => !e)}
-              className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-150"
+              className="p-1.5 rounded-lg hover:bg-white/8 text-gray-500 hover:text-white transition-colors duration-150"
             >
               {expanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
@@ -78,7 +78,7 @@ function QueryCard({ query, onDelete, onRun, latestChecks }) {
           <button
             onClick={handleRun}
             disabled={running}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-150 disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-white/8 text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-150 disabled:opacity-50"
           >
             {running ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} />}
             {running ? 'Running…' : 'Run'}
@@ -86,7 +86,7 @@ function QueryCard({ query, onDelete, onRun, latestChecks }) {
 
           <button
             onClick={() => onDelete(query.id)}
-            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-muted-foreground hover:text-red-500 transition-colors duration-150"
+            className="p-1.5 rounded-lg hover:bg-red-500/10 text-gray-500 hover:text-red-500 transition-colors duration-150"
           >
             <Trash2 size={13} />
           </button>
@@ -94,7 +94,7 @@ function QueryCard({ query, onDelete, onRun, latestChecks }) {
       </div>
 
       {expanded && checks.length > 0 && (
-        <div className="border-t border-border divide-y divide-border">
+        <div className="border-t border-white/8 divide-y divide-border">
           {checks.map(check => (
             <div key={check.id} className="p-4 space-y-2">
               <div className="flex items-center justify-between">
@@ -103,33 +103,33 @@ function QueryCard({ query, onDelete, onRun, latestChecks }) {
                   {check.cited
                     ? <CheckCircle size={13} className="text-emerald-500" />
                     : <XCircle size={13} className="text-red-400" />}
-                  <span className={`text-xs font-medium ${check.cited ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
+                  <span className={`text-xs font-medium ${check.cited ? 'text-emerald-400' : 'text-red-500'}`}>
                     {check.cited ? 'Cited' : 'Not cited'}
                   </span>
-                  <span className="text-xs text-muted-foreground ml-1">
+                  <span className="text-xs text-gray-500 ml-1">
                     {new Date(check.checked_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                   </span>
                 </div>
               </div>
 
               {check.simulated_response && (
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 bg-muted/50 rounded-lg p-2.5">
+                <p className="text-xs text-gray-500 leading-relaxed line-clamp-3 bg-white/8/50 rounded-lg p-2.5">
                   {check.simulated_response}
                 </p>
               )}
 
               {check.cited && check.citation_excerpt && (
-                <div className="flex items-start gap-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-2.5">
+                <div className="flex items-start gap-2 bg-emerald-500/10 rounded-lg p-2.5">
                   <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
-                  <p className="text-xs text-emerald-800 dark:text-emerald-300 italic">"{check.citation_excerpt}"</p>
+                  <p className="text-xs text-emerald-400 italic">"{check.citation_excerpt}"</p>
                 </div>
               )}
 
               {check.competitors_cited?.length > 0 && (
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-xs text-muted-foreground">Also cited:</span>
+                  <span className="text-xs text-gray-500">Also cited:</span>
                   {check.competitors_cited.map((comp, i) => (
-                    <span key={i} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{comp}</span>
+                    <span key={i} className="text-xs px-2 py-0.5 rounded-full bg-white/8 text-gray-500">{comp}</span>
                   ))}
                 </div>
               )}
@@ -166,45 +166,45 @@ function AddQueryModal({ onSave, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[59] flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-3xl shadow-2xl w-full max-w-lg z-[60]">
-        <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="font-semibold text-foreground">Add GEO Query</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-150">
+      <div className="bg-[#13161D] border border-white/8 rounded-3xl shadow-2xl w-full max-w-lg z-[60]">
+        <div className="flex items-center justify-between p-6 border-b border-white/8">
+          <h2 className="font-semibold text-white">Add GEO Query</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/8 text-gray-500 hover:text-white transition-colors duration-150">
             <X size={16} />
           </button>
         </div>
         <div className="p-6 space-y-4">
           <div>
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">Search Query</label>
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5 block">Search Query</label>
             <input
               autoFocus
               value={text}
               onChange={e => setText(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave()}
               placeholder="e.g. best salons in Indiranagar Bangalore"
-              className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-muted-foreground"
+              className="w-full px-3 py-2 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-gray-500"
             />
           </div>
           <div>
-            <p className="text-xs text-muted-foreground mb-2">Suggestions</p>
+            <p className="text-xs text-gray-500 mb-2">Suggestions</p>
             <div className="flex flex-wrap gap-2">
               {SUGGESTIONS.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => setText(s)}
-                  className="text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-150"
+                  className="text-xs px-2.5 py-1 rounded-full border border-white/8 text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-150"
                 >
                   {s}
                 </button>
               ))}
             </div>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-500">
             Each run sends this query to ChatGPT, Perplexity, and Google AI simultaneously and records whether your business is cited.
           </p>
         </div>
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-border">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-150">
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-white/8">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-150">
             Cancel
           </button>
           <button
@@ -302,18 +302,18 @@ const VisibilityGEO = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6 space-y-6">
+    <div className="min-h-screen bg-[#0D0F17] p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">AI & Search</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Track your citation share across ChatGPT, Perplexity, and Google AI</p>
+          <h1 className="text-2xl font-bold text-white">AI & Search</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Track your citation share across ChatGPT, Perplexity, and Google AI</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={load}
             disabled={loading}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/8 text-sm text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-200"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
@@ -321,7 +321,7 @@ const VisibilityGEO = () => {
             <button
               onClick={handleRunAll}
               disabled={runningAll}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200 disabled:opacity-50"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/8 text-sm text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-200 disabled:opacity-50"
             >
               {runningAll ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />}
               Run All
@@ -338,7 +338,7 @@ const VisibilityGEO = () => {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-sm">
           <AlertCircle size={16} />
           {error}
         </div>
@@ -348,17 +348,17 @@ const VisibilityGEO = () => {
       {summary && summary.total_checks > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Overall + Per-platform */}
-          <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
+          <div className="bg-[#13161D] border border-white/8 rounded-2xl p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-foreground">Citation Share</h2>
-              <span className="text-xs text-muted-foreground">{summary.total_checks} checks run</span>
+              <h2 className="text-sm font-semibold text-white">Citation Share</h2>
+              <span className="text-xs text-gray-500">{summary.total_checks} checks run</span>
             </div>
-            <div className="flex items-center gap-3 pb-3 border-b border-border">
+            <div className="flex items-center gap-3 pb-3 border-b border-white/8">
               <div className="p-2.5 rounded-xl accent-gradient-bg">
                 <Brain size={18} className="text-white" />
               </div>
               <div>
-                <div className="text-xs text-muted-foreground">Overall citation rate</div>
+                <div className="text-xs text-gray-500">Overall citation rate</div>
                 <CitationRate rate={summary.overall_citation_rate} size="lg" />
               </div>
             </div>
@@ -369,12 +369,12 @@ const VisibilityGEO = () => {
                   <div key={p.id}>
                     <div className="flex items-center justify-between mb-1">
                       <PlatformBadge platform={p.id} />
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
                         <span>{stats.cited}/{stats.checks} checks</span>
                         <CitationRate rate={stats.rate} size="sm" />
                       </div>
                     </div>
-                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                    <div className="h-1.5 rounded-full bg-white/8 overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-700 ${stats.rate >= 66 ? 'bg-emerald-500' : stats.rate >= 33 ? 'bg-amber-500' : 'bg-red-400'}`}
                         style={{ width: `${stats.rate}%` }}
@@ -387,22 +387,22 @@ const VisibilityGEO = () => {
           </div>
 
           {/* Top Competitors */}
-          <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
+          <div className="bg-[#13161D] border border-white/8 rounded-2xl p-5 space-y-4">
             <div className="flex items-center gap-2">
-              <Users size={15} className="text-muted-foreground" />
-              <h2 className="text-sm font-semibold text-foreground">Competitors in AI Results</h2>
+              <Users size={15} className="text-gray-500" />
+              <h2 className="text-sm font-semibold text-white">Competitors in AI Results</h2>
             </div>
             {summary.top_competitors.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No competitor mentions found yet.</p>
+              <p className="text-sm text-gray-500">No competitor mentions found yet.</p>
             ) : (
               <div className="space-y-2">
                 {summary.top_competitors.map((comp, i) => (
-                  <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <div key={i} className="flex items-center justify-between py-2 border-b border-white/8 last:border-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-muted-foreground w-4">{i + 1}</span>
-                      <span className="text-sm text-foreground">{comp.name}</span>
+                      <span className="text-xs font-bold text-gray-500 w-4">{i + 1}</span>
+                      <span className="text-sm text-white">{comp.name}</span>
                     </div>
-                    <span className="text-xs text-muted-foreground">{comp.mentions} mention{comp.mentions !== 1 ? 's' : ''}</span>
+                    <span className="text-xs text-gray-500">{comp.mentions} mention{comp.mentions !== 1 ? 's' : ''}</span>
                   </div>
                 ))}
               </div>
@@ -414,15 +414,15 @@ const VisibilityGEO = () => {
       {/* Query list */}
       {loading && queries.length === 0 ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 rounded-full border-2 border-border border-t-transparent animate-spin" />
+          <div className="w-8 h-8 rounded-full border-2 border-white/8 border-t-transparent animate-spin" />
         </div>
       ) : queries.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="p-4 rounded-2xl accent-gradient-bg mb-4">
             <Brain size={28} className="text-white" />
           </div>
-          <p className="text-foreground font-medium">No queries yet</p>
-          <p className="text-sm text-muted-foreground mt-1 max-w-xs">
+          <p className="text-white font-medium">No queries yet</p>
+          <p className="text-sm text-gray-500 mt-1 max-w-xs">
             Add the search queries your customers use. Ri'Serve will simulate how ChatGPT, Perplexity, and Google AI respond — and track whether your business is cited.
           </p>
           <button
@@ -435,7 +435,7 @@ const VisibilityGEO = () => {
         </div>
       ) : (
         <div className="space-y-3">
-          <h2 className="text-sm font-semibold text-foreground">Tracked Queries</h2>
+          <h2 className="text-sm font-semibold text-white">Tracked Queries</h2>
           {queries.map(q => (
             <QueryCard
               key={q.id}

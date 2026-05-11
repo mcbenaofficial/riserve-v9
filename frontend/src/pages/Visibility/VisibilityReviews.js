@@ -9,24 +9,24 @@ const SOURCES = ['all', 'google', 'zomato', 'justdial', 'tripadvisor', 'manual']
 const REPLY_STATUSES = ['all', 'none', 'drafted', 'approved', 'published'];
 
 const SOURCE_COLORS = {
-  google: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  zomato: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  justdial: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300',
-  tripadvisor: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
-  manual: 'bg-muted text-muted-foreground',
+  google: 'bg-blue-500/15 text-blue-400',
+  zomato: 'bg-red-500/15 text-red-400',
+  justdial: 'bg-yellow-500/15 text-yellow-400',
+  tripadvisor: 'bg-green-500/15 text-green-400',
+  manual: 'bg-white/8 text-gray-500',
 };
 
 const SENTIMENT_COLORS = {
-  positive: 'text-emerald-600 dark:text-emerald-400',
+  positive: 'text-emerald-400',
   neutral: 'text-amber-500',
   negative: 'text-red-500',
 };
 
 const REPLY_STATUS_CONFIG = {
-  none: { label: 'No Reply', cls: 'bg-muted text-muted-foreground' },
-  drafted: { label: 'Draft Ready', cls: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' },
-  approved: { label: 'Approved', cls: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' },
-  published: { label: 'Published', cls: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' },
+  none: { label: 'No Reply', cls: 'bg-white/8 text-gray-500' },
+  drafted: { label: 'Draft Ready', cls: 'bg-amber-500/15 text-amber-400' },
+  approved: { label: 'Approved', cls: 'bg-blue-500/15 text-blue-400' },
+  published: { label: 'Published', cls: 'bg-green-500/15 text-green-400' },
 };
 
 function StarRow({ rating, size = 14 }) {
@@ -36,7 +36,7 @@ function StarRow({ rating, size = 14 }) {
         <Star
           key={n}
           size={size}
-          className={n <= rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground'}
+          className={n <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-500'}
         />
       ))}
     </div>
@@ -62,30 +62,30 @@ function AddReviewModal({ onSave, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[59] flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-3xl shadow-2xl w-full max-w-lg z-[60]">
-        <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="font-semibold text-foreground">Add Review</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-150">
+      <div className="bg-[#13161D] border border-white/8 rounded-3xl shadow-2xl w-full max-w-lg z-[60]">
+        <div className="flex items-center justify-between p-6 border-b border-white/8">
+          <h2 className="font-semibold text-white">Add Review</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/8 text-gray-500 hover:text-white transition-colors duration-150">
             <X size={16} />
           </button>
         </div>
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">Author Name</label>
+              <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5 block">Author Name</label>
               <input
                 value={form.author_name}
                 onChange={e => set('author_name', e.target.value)}
                 placeholder="Customer name"
-                className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-muted-foreground"
+                className="w-full px-3 py-2 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-gray-500"
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">Source</label>
+              <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5 block">Source</label>
               <select
                 value={form.source}
                 onChange={e => set('source', e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 {SOURCES.filter(s => s !== 'all').map(s => (
                   <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
@@ -94,32 +94,32 @@ function AddReviewModal({ onSave, onClose }) {
             </div>
           </div>
           <div>
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">Rating</label>
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5 block">Rating</label>
             <div className="flex items-center gap-2">
               {[1, 2, 3, 4, 5].map(n => (
                 <button key={n} onClick={() => set('rating', n)}>
                   <Star
                     size={24}
-                    className={n <= form.rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground hover:text-amber-300 transition-colors'}
+                    className={n <= form.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-500 hover:text-amber-300 transition-colors'}
                   />
                 </button>
               ))}
-              <span className="text-sm text-muted-foreground ml-1">{form.rating}/5</span>
+              <span className="text-sm text-gray-500 ml-1">{form.rating}/5</span>
             </div>
           </div>
           <div>
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">Review Content</label>
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5 block">Review Content</label>
             <textarea
               value={form.content}
               onChange={e => set('content', e.target.value)}
               placeholder="What did the customer say?"
               rows={4}
-              className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-muted-foreground resize-none"
+              className="w-full px-3 py-2 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-gray-500 resize-none"
             />
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-border">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-150">
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-white/8">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-150">
             Cancel
           </button>
           <button
@@ -174,14 +174,14 @@ function ReviewCard({ review, onDraft, onApprove, onPublish, onDelete }) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-5 space-y-3">
+    <div className="bg-[#13161D] border border-white/8 rounded-2xl p-5 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <div className="w-9 h-9 rounded-full accent-gradient-bg flex items-center justify-center text-white text-sm font-semibold shrink-0">
             {(review.author_name || '?')[0].toUpperCase()}
           </div>
           <div>
-            <div className="font-medium text-foreground text-sm">{review.author_name || 'Anonymous'}</div>
+            <div className="font-medium text-white text-sm">{review.author_name || 'Anonymous'}</div>
             <div className="flex items-center gap-2 mt-0.5">
               <StarRow rating={review.rating} />
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${SOURCE_COLORS[review.source] || SOURCE_COLORS.manual}`}>
@@ -199,7 +199,7 @@ function ReviewCard({ review, onDraft, onApprove, onPublish, onDelete }) {
           <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${cfg.cls}`}>{cfg.label}</span>
           <button
             onClick={() => onDelete(review.id)}
-            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-muted-foreground hover:text-red-500 transition-colors duration-150"
+            className="p-1.5 rounded-lg hover:bg-red-500/10 text-gray-500 hover:text-red-500 transition-colors duration-150"
           >
             <Trash2 size={13} />
           </button>
@@ -207,36 +207,36 @@ function ReviewCard({ review, onDraft, onApprove, onPublish, onDelete }) {
       </div>
 
       {review.content && (
-        <p className="text-sm text-foreground leading-relaxed">{review.content}</p>
+        <p className="text-sm text-white leading-relaxed">{review.content}</p>
       )}
 
       {review.reviewed_at && (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-gray-500">
           {new Date(review.reviewed_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
         </p>
       )}
 
       {/* Reply section */}
       {showReply && (
-        <div className="pt-3 border-t border-border space-y-2">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Reply</label>
+        <div className="pt-3 border-t border-white/8 space-y-2">
+          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Reply</label>
           <textarea
             value={replyText}
             onChange={e => setReplyText(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent resize-none"
+            className="w-full px-3 py-2 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent resize-none"
           />
           <div className="flex items-center justify-end gap-2">
             {review.reply_status !== 'published' && (
               <button
                 onClick={() => setShowReply(false)}
-                className="px-3 py-1.5 rounded-lg text-xs text-muted-foreground hover:bg-muted transition-colors duration-150"
+                className="px-3 py-1.5 rounded-lg text-xs text-gray-500 hover:bg-white/8 transition-colors duration-150"
               >
                 Hide
               </button>
             )}
             {review.reply_status === 'published' ? (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-emerald-400 font-medium">
                 <CheckCircle size={12} />
                 Reply published
               </div>
@@ -268,7 +268,7 @@ function ReviewCard({ review, onDraft, onApprove, onPublish, onDelete }) {
         <button
           onClick={handleDraft}
           disabled={drafting}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-150 disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-white/8 text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-150 disabled:opacity-50"
         >
           <Wand2 size={12} className={drafting ? 'animate-pulse' : ''} />
           {drafting ? 'Drafting…' : 'AI Draft Reply'}
@@ -276,7 +276,7 @@ function ReviewCard({ review, onDraft, onApprove, onPublish, onDelete }) {
         {!showReply && review.reply_status !== 'published' && (
           <button
             onClick={() => { setReplyText(''); setShowReply(true); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-150"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-white/8 text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-150"
           >
             <Edit3 size={12} />
             Write Reply
@@ -347,18 +347,18 @@ const VisibilityReviews = () => {
   const unreplied = reviews.filter(r => r.reply_status === 'none').length;
 
   return (
-    <div className="min-h-screen bg-background p-6 space-y-6">
+    <div className="min-h-screen bg-[#0D0F17] p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Reviews</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">All your reviews in one inbox</p>
+          <h1 className="text-2xl font-bold text-white">Reviews</h1>
+          <p className="text-sm text-gray-500 mt-0.5">All your reviews in one inbox</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={load}
             disabled={loading}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/8 text-sm text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-200"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
@@ -373,7 +373,7 @@ const VisibilityReviews = () => {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-sm">
           <AlertCircle size={16} />
           {error}
         </div>
@@ -386,27 +386,27 @@ const VisibilityReviews = () => {
           { label: 'Avg Rating', value: avgRating },
           { label: 'Awaiting Reply', value: unreplied },
         ].map(({ label, value }) => (
-          <div key={label} className="bg-card border border-border rounded-2xl p-4 text-center">
-            <div className="text-2xl font-bold text-foreground">{value}</div>
-            <div className="text-xs text-muted-foreground mt-1">{label}</div>
+          <div key={label} className="bg-[#13161D] border border-white/8 rounded-2xl p-4 text-center">
+            <div className="text-2xl font-bold text-white">{value}</div>
+            <div className="text-xs text-gray-500 mt-1">{label}</div>
           </div>
         ))}
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
-        <Filter size={14} className="text-muted-foreground" />
+        <Filter size={14} className="text-gray-500" />
         <select
           value={filterSource}
           onChange={e => setFilterSource(e.target.value)}
-          className="px-3 py-1.5 rounded-xl border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-accent"
+          className="px-3 py-1.5 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-xs focus:outline-none focus:ring-2 focus:ring-accent"
         >
           {SOURCES.map(s => <option key={s} value={s}>{s === 'all' ? 'All Sources' : s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
         </select>
         <select
           value={filterRating}
           onChange={e => setFilterRating(e.target.value)}
-          className="px-3 py-1.5 rounded-xl border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-accent"
+          className="px-3 py-1.5 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-xs focus:outline-none focus:ring-2 focus:ring-accent"
         >
           <option value="all">All Ratings</option>
           {[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} Star{n !== 1 ? 's' : ''}</option>)}
@@ -414,7 +414,7 @@ const VisibilityReviews = () => {
         <select
           value={filterReplyStatus}
           onChange={e => setFilterReplyStatus(e.target.value)}
-          className="px-3 py-1.5 rounded-xl border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-2 focus:ring-accent"
+          className="px-3 py-1.5 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-xs focus:outline-none focus:ring-2 focus:ring-accent"
         >
           {REPLY_STATUSES.map(s => (
             <option key={s} value={s}>
@@ -427,13 +427,13 @@ const VisibilityReviews = () => {
       {/* Review List */}
       {loading && reviews.length === 0 ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 rounded-full border-2 border-border border-t-transparent animate-spin" />
+          <div className="w-8 h-8 rounded-full border-2 border-white/8 border-t-transparent animate-spin" />
         </div>
       ) : reviews.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Star size={32} className="text-muted-foreground mb-3" />
-          <p className="text-foreground font-medium">No reviews yet</p>
-          <p className="text-sm text-muted-foreground mt-1">Add your first review or connect a platform to import</p>
+          <Star size={32} className="text-gray-500 mb-3" />
+          <p className="text-white font-medium">No reviews yet</p>
+          <p className="text-sm text-gray-500 mt-1">Add your first review or connect a platform to import</p>
         </div>
       ) : (
         <div className="space-y-4">

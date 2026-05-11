@@ -29,42 +29,42 @@ function EntryCard({ entry, onEdit, onDelete, onMove, isFirst, isLast }) {
   };
 
   return (
-    <div className={`bg-card border border-border rounded-2xl p-4 space-y-2 ${!entry.active ? 'opacity-60' : ''}`}>
+    <div className={`bg-[#13161D] border border-white/8 rounded-2xl p-4 space-y-2 ${!entry.active ? 'opacity-60' : ''}`}>
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground leading-snug">{entry.title}</p>
+          <p className="text-sm font-medium text-white leading-snug">{entry.title}</p>
           {entry.body && (
-            <p className="text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-3">{entry.body}</p>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-3">{entry.body}</p>
           )}
         </div>
         <div className="flex items-center gap-1 shrink-0 ml-2">
           {!entry.active && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border mr-1">Hidden</span>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-white/8 text-gray-500 border border-white/8 mr-1">Hidden</span>
           )}
           <button
             onClick={() => onMove(entry.id, 'up')}
             disabled={isFirst}
-            className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-150 disabled:opacity-30"
+            className="p-1.5 rounded-lg hover:bg-white/8 text-gray-500 hover:text-white transition-colors duration-150 disabled:opacity-30"
           >
             <ChevronUp size={13} />
           </button>
           <button
             onClick={() => onMove(entry.id, 'down')}
             disabled={isLast}
-            className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-150 disabled:opacity-30"
+            className="p-1.5 rounded-lg hover:bg-white/8 text-gray-500 hover:text-white transition-colors duration-150 disabled:opacity-30"
           >
             <ChevronDown size={13} />
           </button>
           <button
             onClick={() => onEdit(entry)}
-            className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-150"
+            className="p-1.5 rounded-lg hover:bg-white/8 text-gray-500 hover:text-white transition-colors duration-150"
           >
             <Pencil size={13} />
           </button>
           <button
             onClick={handleDelete}
             disabled={deleting}
-            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-muted-foreground hover:text-red-500 transition-colors duration-150"
+            className="p-1.5 rounded-lg hover:bg-red-500/10 text-gray-500 hover:text-red-500 transition-colors duration-150"
           >
             {deleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
           </button>
@@ -99,25 +99,25 @@ function EntryModal({ entry, category, onSave, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[59] flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-3xl shadow-2xl w-full max-w-lg z-[60]">
-        <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="font-semibold text-foreground">
+      <div className="bg-[#13161D] border border-white/8 rounded-3xl shadow-2xl w-full max-w-lg z-[60]">
+        <div className="flex items-center justify-between p-6 border-b border-white/8">
+          <h2 className="font-semibold text-white">
             {isEdit ? 'Edit' : 'Add'} {isFaq ? 'FAQ' : 'Highlight'}
           </h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors duration-150">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/8 text-gray-500 hover:text-white transition-colors duration-150">
             <X size={16} />
           </button>
         </div>
 
         <div className="p-6 space-y-4">
           {error && (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-xs">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-xs">
               <AlertCircle size={13} />
               {error}
             </div>
           )}
           <div>
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5 block">
               {isFaq ? 'Question' : 'Title'}
             </label>
             <input
@@ -125,11 +125,11 @@ function EntryModal({ entry, category, onSave, onClose }) {
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder={isFaq ? 'e.g. What are your opening hours?' : 'e.g. Signature Lamb Biryani'}
-              className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-muted-foreground"
+              className="w-full px-3 py-2 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-gray-500"
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5 block">
               {isFaq ? 'Answer' : 'Description'}
             </label>
             <textarea
@@ -141,22 +141,22 @@ function EntryModal({ entry, category, onSave, onClose }) {
                   ? 'e.g. We are open Monday–Saturday, 11am–10pm and Sunday 12pm–9pm.'
                   : 'e.g. Slow-cooked with saffron and whole spices, our signature lamb biryani has been on the menu since day one.'
               }
-              className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-muted-foreground resize-none"
+              className="w-full px-3 py-2 rounded-xl border border-white/8 bg-[#0D0F17] text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent placeholder:text-gray-500 resize-none"
             />
           </div>
           <label className="flex items-center gap-2.5 cursor-pointer select-none">
             <div
               onClick={() => setActive(v => !v)}
-              className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${active ? 'accent-gradient-bg' : 'bg-muted'}`}
+              className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${active ? 'accent-gradient-bg' : 'bg-white/8'}`}
             >
               <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${active ? 'translate-x-4' : 'translate-x-0.5'}`} />
             </div>
-            <span className="text-sm text-foreground">Visible on knowledge page</span>
+            <span className="text-sm text-white">Visible on knowledge page</span>
           </label>
         </div>
 
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-border">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-150">
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-white/8">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-150">
             Cancel
           </button>
           <button
@@ -175,24 +175,24 @@ function EntryModal({ entry, category, onSave, onClose }) {
 
 function PreviewPanel({ faqs, highlights, businessName }) {
   return (
-    <div className="bg-muted/40 border border-border rounded-2xl p-5 space-y-5">
+    <div className="bg-white/8/40 border border-white/8 rounded-2xl p-5 space-y-5">
       <div className="flex items-center gap-2 mb-1">
-        <ExternalLink size={13} className="text-muted-foreground" />
-        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">AI Crawler Preview</span>
+        <ExternalLink size={13} className="text-gray-500" />
+        <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">AI Crawler Preview</span>
       </div>
 
       <div>
-        <h3 className="text-base font-bold text-foreground mb-0.5">{businessName || 'Your Business'}</h3>
-        <p className="text-xs text-muted-foreground">Schema.org JSON-LD · FAQPage · LocalBusiness</p>
+        <h3 className="text-base font-bold text-white mb-0.5">{businessName || 'Your Business'}</h3>
+        <p className="text-xs text-gray-500">Schema.org JSON-LD · FAQPage · LocalBusiness</p>
       </div>
 
       {faqs.filter(e => e.active).length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-foreground">Frequently Asked Questions</p>
+          <p className="text-xs font-semibold text-white">Frequently Asked Questions</p>
           {faqs.filter(e => e.active).map(e => (
-            <div key={e.id} className="pl-3 border-l-2 border-border space-y-0.5">
-              <p className="text-xs font-medium text-foreground">{e.title}</p>
-              {e.body && <p className="text-xs text-muted-foreground">{e.body}</p>}
+            <div key={e.id} className="pl-3 border-l-2 border-white/8 space-y-0.5">
+              <p className="text-xs font-medium text-white">{e.title}</p>
+              {e.body && <p className="text-xs text-gray-500">{e.body}</p>}
             </div>
           ))}
         </div>
@@ -200,10 +200,10 @@ function PreviewPanel({ faqs, highlights, businessName }) {
 
       {highlights.filter(e => e.active).length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-foreground">Highlights</p>
+          <p className="text-xs font-semibold text-white">Highlights</p>
           <div className="flex flex-wrap gap-1.5">
             {highlights.filter(e => e.active).map(e => (
-              <span key={e.id} className="text-xs px-2.5 py-1 rounded-full bg-card border border-border text-foreground">
+              <span key={e.id} className="text-xs px-2.5 py-1 rounded-full bg-[#13161D] border border-white/8 text-white">
                 {e.title}
               </span>
             ))}
@@ -212,7 +212,7 @@ function PreviewPanel({ faqs, highlights, businessName }) {
       )}
 
       {faqs.filter(e => e.active).length === 0 && highlights.filter(e => e.active).length === 0 && (
-        <p className="text-xs text-muted-foreground italic">Add FAQ entries and highlights to see how your knowledge page will appear to AI crawlers.</p>
+        <p className="text-xs text-gray-500 italic">Add FAQ entries and highlights to see how your knowledge page will appear to AI crawlers.</p>
       )}
     </div>
   );
@@ -296,26 +296,26 @@ const VisibilityKnowledge = () => {
   const TabIcon = tab?.icon;
 
   return (
-    <div className="min-h-screen bg-background p-6 space-y-6">
+    <div className="min-h-screen bg-[#0D0F17] p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Knowledge Pages</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Structured content served at <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">/info/[outlet]</span> — cited by ChatGPT, Perplexity, and Google AI
+          <h1 className="text-2xl font-bold text-white">Knowledge Pages</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
+            Structured content served at <span className="font-mono text-xs bg-white/8 px-1.5 py-0.5 rounded">/info/[outlet]</span> — cited by ChatGPT, Perplexity, and Google AI
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={load}
             disabled={loading}
-            className="p-2 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
+            className="p-2 rounded-xl border border-white/8 text-gray-500 hover:text-white hover:bg-white/8 transition-colors duration-200"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
           <button
             onClick={() => setShowPreview(v => !v)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-xl border border-border text-sm transition-colors duration-200 ${showPreview ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl border border-white/8 text-sm transition-colors duration-200 ${showPreview ? 'bg-white/8 text-white' : 'text-gray-500 hover:text-white hover:bg-white/8'}`}
           >
             {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
             Preview
@@ -331,7 +331,7 @@ const VisibilityKnowledge = () => {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-sm">
           <AlertCircle size={16} />
           {error}
         </div>
@@ -340,7 +340,7 @@ const VisibilityKnowledge = () => {
       <div className={`${showPreview ? 'grid grid-cols-1 lg:grid-cols-3 gap-6' : ''}`}>
         <div className={`${showPreview ? 'lg:col-span-2' : ''} space-y-4`}>
           {/* Tabs */}
-          <div className="flex gap-1 p-1 bg-muted rounded-xl w-fit">
+          <div className="flex gap-1 p-1 bg-white/8 rounded-xl w-fit">
             {TABS.map(t => {
               const Icon = t.icon;
               const count = entries.filter(e => e.category === t.id).length;
@@ -350,14 +350,14 @@ const VisibilityKnowledge = () => {
                   onClick={() => setActiveTab(t.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
                     activeTab === t.id
-                      ? 'bg-card text-foreground shadow-sm border border-border'
-                      : 'text-muted-foreground hover:text-foreground'
+                      ? 'bg-[#13161D] text-white shadow-sm border border-white/8'
+                      : 'text-gray-500 hover:text-white'
                   }`}
                 >
                   <Icon size={14} />
                   {t.label}
                   {count > 0 && (
-                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeTab === t.id ? 'bg-muted text-muted-foreground' : 'bg-card text-muted-foreground'}`}>
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeTab === t.id ? 'bg-white/8 text-gray-500' : 'bg-[#13161D] text-gray-500'}`}>
                       {count}
                     </span>
                   )}
@@ -367,22 +367,22 @@ const VisibilityKnowledge = () => {
           </div>
 
           {/* Tab hint */}
-          <p className="text-xs text-muted-foreground">{tab?.hint}</p>
+          <p className="text-xs text-gray-500">{tab?.hint}</p>
 
           {/* Entry list */}
           {loading && entries.length === 0 ? (
             <div className="flex items-center justify-center py-16">
-              <div className="w-8 h-8 rounded-full border-2 border-border border-t-transparent animate-spin" />
+              <div className="w-8 h-8 rounded-full border-2 border-white/8 border-t-transparent animate-spin" />
             </div>
           ) : tabEntries.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="p-4 rounded-2xl accent-gradient-bg mb-4">
                 {TabIcon && <TabIcon size={24} className="text-white" />}
               </div>
-              <p className="text-foreground font-medium">
+              <p className="text-white font-medium">
                 No {activeTab === 'faq' ? 'FAQ entries' : 'highlights'} yet
               </p>
-              <p className="text-sm text-muted-foreground mt-1 max-w-xs">
+              <p className="text-sm text-gray-500 mt-1 max-w-xs">
                 {activeTab === 'faq'
                   ? 'Add questions your customers frequently ask. Each Q&A becomes a structured data entry that AI crawlers can cite directly.'
                   : 'Add your standout dishes, services, or achievements. These appear as named highlights in AI-generated responses about your business.'}
@@ -413,16 +413,16 @@ const VisibilityKnowledge = () => {
 
           {/* Stats footer */}
           {(entries.length > 0) && (
-            <div className="flex items-center gap-4 pt-2 border-t border-border">
-              <div className="text-xs text-muted-foreground">
-                <span className="font-medium text-foreground">{faqs.filter(e => e.active).length}</span> active FAQ{faqs.filter(e => e.active).length !== 1 ? 's' : ''}
+            <div className="flex items-center gap-4 pt-2 border-t border-white/8">
+              <div className="text-xs text-gray-500">
+                <span className="font-medium text-white">{faqs.filter(e => e.active).length}</span> active FAQ{faqs.filter(e => e.active).length !== 1 ? 's' : ''}
               </div>
-              <div className="text-xs text-muted-foreground">
-                <span className="font-medium text-foreground">{highlights.filter(e => e.active).length}</span> active highlight{highlights.filter(e => e.active).length !== 1 ? 's' : ''}
+              <div className="text-xs text-gray-500">
+                <span className="font-medium text-white">{highlights.filter(e => e.active).length}</span> active highlight{highlights.filter(e => e.active).length !== 1 ? 's' : ''}
               </div>
               <div className="flex items-center gap-1 ml-auto">
-                <div className={`w-2 h-2 rounded-full ${(faqs.length + highlights.length) > 0 ? 'bg-emerald-500' : 'bg-muted-foreground'}`} />
-                <span className="text-xs text-muted-foreground">
+                <div className={`w-2 h-2 rounded-full ${(faqs.length + highlights.length) > 0 ? 'bg-emerald-500' : 'bg-white/8-foreground'}`} />
+                <span className="text-xs text-gray-500">
                   {(faqs.length + highlights.length) > 0 ? 'Knowledge page live' : 'No content yet'}
                 </span>
               </div>

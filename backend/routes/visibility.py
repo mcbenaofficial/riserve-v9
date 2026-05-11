@@ -92,7 +92,7 @@ async def list_reviews(
 ):
     stmt = (
         select(models_pg.Review)
-        .where(models_pg.Review.company_id == current_user["company_id"])
+        .where(models_pg.Review.company_id == current_user.company_id)
         .order_by(desc(models_pg.Review.reviewed_at))
     )
     if outlet_id:
@@ -119,7 +119,7 @@ async def create_review(
         else "neutral"
     )
     review = models_pg.Review(
-        company_id=current_user["company_id"],
+        company_id=current_user.company_id,
         outlet_id=body.outlet_id,
         source=body.source,
         author_name=body.author_name,
@@ -144,7 +144,7 @@ async def delete_review(
     result = await db.execute(
         select(models_pg.Review).where(
             models_pg.Review.id == review_id,
-            models_pg.Review.company_id == current_user["company_id"],
+            models_pg.Review.company_id == current_user.company_id,
         )
     )
     review = result.scalar_one_or_none()
@@ -163,7 +163,7 @@ async def draft_reply(
     result = await db.execute(
         select(models_pg.Review).where(
             models_pg.Review.id == review_id,
-            models_pg.Review.company_id == current_user["company_id"],
+            models_pg.Review.company_id == current_user.company_id,
         )
     )
     review = result.scalar_one_or_none()
@@ -219,7 +219,7 @@ async def set_reply(
     result = await db.execute(
         select(models_pg.Review).where(
             models_pg.Review.id == review_id,
-            models_pg.Review.company_id == current_user["company_id"],
+            models_pg.Review.company_id == current_user.company_id,
         )
     )
     review = result.scalar_one_or_none()
@@ -242,7 +242,7 @@ async def list_listings(
     db: AsyncSession = Depends(get_db),
 ):
     stmt = select(models_pg.ListingProfile).where(
-        models_pg.ListingProfile.company_id == current_user["company_id"]
+        models_pg.ListingProfile.company_id == current_user.company_id
     )
     if outlet_id:
         stmt = stmt.where(models_pg.ListingProfile.outlet_id == outlet_id)
@@ -258,7 +258,7 @@ async def upsert_listing(
 ):
     """Create or update a listing profile for a platform+outlet combo."""
     stmt = select(models_pg.ListingProfile).where(
-        models_pg.ListingProfile.company_id == current_user["company_id"],
+        models_pg.ListingProfile.company_id == current_user.company_id,
         models_pg.ListingProfile.platform == body.platform,
     )
     if body.outlet_id:
@@ -277,7 +277,7 @@ async def upsert_listing(
             listing.last_synced_at = now
     else:
         listing = models_pg.ListingProfile(
-            company_id=current_user["company_id"],
+            company_id=current_user.company_id,
             outlet_id=body.outlet_id,
             platform=body.platform,
             status=body.status,
@@ -301,7 +301,7 @@ async def get_visibility_score(
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    cid = current_user["company_id"]
+    cid = current_user.company_id
     now = datetime.now(timezone.utc)
     thirty_days_ago = now - timedelta(days=30)
 
@@ -488,7 +488,7 @@ async def list_geo_queries(
 ):
     result = await db.execute(
         select(models_pg.GEOQuery)
-        .where(models_pg.GEOQuery.company_id == current_user["company_id"])
+        .where(models_pg.GEOQuery.company_id == current_user.company_id)
         .order_by(models_pg.GEOQuery.created_at)
     )
     return [_geo_query_out(q) for q in result.scalars().all()]
@@ -501,7 +501,7 @@ async def create_geo_query(
     db: AsyncSession = Depends(get_db),
 ):
     q = models_pg.GEOQuery(
-        company_id=current_user["company_id"],
+        company_id=current_user.company_id,
         query_text=body.query_text.strip(),
     )
     db.add(q)
@@ -519,7 +519,7 @@ async def delete_geo_query(
     result = await db.execute(
         select(models_pg.GEOQuery).where(
             models_pg.GEOQuery.id == query_id,
-            models_pg.GEOQuery.company_id == current_user["company_id"],
+            models_pg.GEOQuery.company_id == current_user.company_id,
         )
     )
     q = result.scalar_one_or_none()
@@ -539,7 +539,7 @@ async def run_geo_query(
     q_result = await db.execute(
         select(models_pg.GEOQuery).where(
             models_pg.GEOQuery.id == query_id,
-            models_pg.GEOQuery.company_id == current_user["company_id"],
+            models_pg.GEOQuery.company_id == current_user.company_id,
         )
     )
     query = q_result.scalar_one_or_none()
@@ -548,7 +548,7 @@ async def run_geo_query(
 
     # Fetch company name + location for grounding
     company_result = await db.execute(
-        select(models_pg.Company).where(models_pg.Company.id == current_user["company_id"])
+        select(models_pg.Company).where(models_pg.Company.id == current_user.company_id)
     )
     company = company_result.scalar_one_or_none()
     business_name = company.name if company else "the business"
@@ -559,7 +559,7 @@ async def run_geo_query(
         try:
             data = await _run_geo_check(query.query_text, platform, business_name, business_location)
             check = models_pg.GEOCheck(
-                company_id=current_user["company_id"],
+                company_id=current_user.company_id,
                 query_id=query_id,
                 platform=platform,
                 simulated_response=data.get("simulated_response"),
@@ -588,7 +588,7 @@ async def list_geo_checks(
 ):
     stmt = (
         select(models_pg.GEOCheck)
-        .where(models_pg.GEOCheck.company_id == current_user["company_id"])
+        .where(models_pg.GEOCheck.company_id == current_user.company_id)
         .order_by(desc(models_pg.GEOCheck.checked_at))
     )
     if query_id:
@@ -607,7 +607,7 @@ async def geo_summary(
     """Citation share % per platform + overall, based on all checks."""
     result = await db.execute(
         select(models_pg.GEOCheck).where(
-            models_pg.GEOCheck.company_id == current_user["company_id"]
+            models_pg.GEOCheck.company_id == current_user.company_id
         )
     )
     checks = result.scalars().all()
@@ -692,7 +692,7 @@ async def list_knowledge_entries(
     from sqlalchemy import asc
     stmt = (
         select(models_pg.KnowledgeEntry)
-        .where(models_pg.KnowledgeEntry.company_id == current_user["company_id"])
+        .where(models_pg.KnowledgeEntry.company_id == current_user.company_id)
         .order_by(models_pg.KnowledgeEntry.category, asc(models_pg.KnowledgeEntry.sort_order))
     )
     if outlet_id:
@@ -712,7 +712,7 @@ async def create_knowledge_entry(
     if body.category not in KNOWLEDGE_CATEGORIES:
         raise HTTPException(400, f"category must be one of {KNOWLEDGE_CATEGORIES}")
     entry = models_pg.KnowledgeEntry(
-        company_id=current_user["company_id"],
+        company_id=current_user.company_id,
         outlet_id=body.outlet_id,
         category=body.category,
         title=body.title.strip(),
@@ -736,7 +736,7 @@ async def update_knowledge_entry(
     result = await db.execute(
         select(models_pg.KnowledgeEntry).where(
             models_pg.KnowledgeEntry.id == entry_id,
-            models_pg.KnowledgeEntry.company_id == current_user["company_id"],
+            models_pg.KnowledgeEntry.company_id == current_user.company_id,
         )
     )
     entry = result.scalar_one_or_none()
@@ -765,7 +765,7 @@ async def delete_knowledge_entry(
     result = await db.execute(
         select(models_pg.KnowledgeEntry).where(
             models_pg.KnowledgeEntry.id == entry_id,
-            models_pg.KnowledgeEntry.company_id == current_user["company_id"],
+            models_pg.KnowledgeEntry.company_id == current_user.company_id,
         )
     )
     entry = result.scalar_one_or_none()
