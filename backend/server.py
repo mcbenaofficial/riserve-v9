@@ -160,6 +160,7 @@ async def lifespan(app: FastAPI):
     trial_task = asyncio.create_task(trial_check_background_task())
     media_task = asyncio.create_task(media_cleanup_background_task())
     wa_scheduler_task = asyncio.create_task(acquisition_scheduler_background_task())
+    petpooja_task = asyncio.create_task(petpooja_polling_background_task())
 
     yield
 
@@ -167,6 +168,7 @@ async def lifespan(app: FastAPI):
     trial_task.cancel()
     media_task.cancel()
     wa_scheduler_task.cancel()
+    petpooja_task.cancel()
     logger.info("Shutting down Ri'Serve API...")
 
 
@@ -226,6 +228,7 @@ from routes.visibility import router as visibility_router
 from routes.aggregators import router as aggregators_router
 from routes.whatsapp_acquisition import router as wa_acquisition_router, acquisition_scheduler_background_task
 from routes.submissions import router as submissions_router
+from routes.petpooja import router as petpooja_router, petpooja_polling_background_task
 
 # Include Routers
 app.include_router(auth.router, prefix="/api")
@@ -276,6 +279,7 @@ app.include_router(visibility_router, prefix="/api")
 app.include_router(aggregators_router, prefix="/api")
 app.include_router(wa_acquisition_router, prefix="/api")
 app.include_router(submissions_router, prefix="/api")
+app.include_router(petpooja_router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

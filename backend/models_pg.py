@@ -2337,3 +2337,109 @@ class SubmissionAttachment(Base):
 
     submission = relationship("Submission", back_populates="attachments_vault")
 
+
+# ── PetPooja POS Integration ──────────────────────────────────────────────────
+
+class PetPoojaConfig(Base):
+    __tablename__ = "petpooja_configs"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, unique=True)
+    app_key = Column(String(255), nullable=True)
+    app_secret = Column(String(255), nullable=True)
+    access_token = Column(String(255), nullable=True)
+    pos_restaurant_id = Column(String(255), nullable=True)
+    base_url = Column(String(255), default="https://api.petpooja.com")
+    sync_enabled = Column(Boolean, default=False)
+    sync_orders = Column(Boolean, default=True)
+    sync_menu = Column(Boolean, default=True)
+    poll_interval_seconds = Column(Integer, default=30)
+    last_order_state_version = Column(Integer, default=0)
+    last_menu_sync_at = Column(DateTime(timezone=True), nullable=True)
+    last_order_sync_at = Column(DateTime(timezone=True), nullable=True)
+    status = Column(String(50), default="disconnected")
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class PetPoojaSyncLog(Base):
+    __tablename__ = "petpooja_sync_logs"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, index=True)
+    sync_type = Column(String(50), nullable=False)  # menu | orders
+    status = Column(String(50), nullable=False)  # running | success | failed | noop
+    items_processed = Column(Integer, default=0)
+    items_upserted = Column(Integer, default=0)
+    items_skipped = Column(Integer, default=0)
+    error = Column(Text, nullable=True)
+    started_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+
+
+class PetPoojaOrder(Base):
+    __tablename__ = "petpooja_orders"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, index=True)
+    external_id = Column(String(255), nullable=False)
+    state = Column(String(50), nullable=False)
+    state_version = Column(Integer, default=0)
+    table_external_id = Column(String(255), nullable=True)
+    sub_total = Column(Numeric(10, 2), default=0)
+    tax_total = Column(Numeric(10, 2), default=0)
+    discount_total = Column(Numeric(10, 2), default=0)
+    grand_total = Column(Numeric(10, 2), default=0)
+    source_fingerprint = Column(String(64), nullable=True)
+    placed_at = Column(DateTime(timezone=True), nullable=True)
+    last_updated_at = Column(DateTime(timezone=True), nullable=True)
+    raw_payload = Column(JSONB, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    items = relationship("PetPoojaOrderItem", back_populates="order", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('outlet_id', 'external_id', name='uq_petpooja_orders_outlet_external'),
+    )
+
+
+class PetPoojaOrderItem(Base):
+    __tablename__ = "petpooja_order_items"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    order_id = Column(String, ForeignKey("petpooja_orders.id", ondelete="CASCADE"), nullable=False, index=True)
+    external_id = Column(String(255), nullable=True)
+    name = Column(String(255), nullable=False)
+    quantity = Column(Integer, default=1)
+    unit_price = Column(Numeric(10, 2), default=0)
+    line_total = Column(Numeric(10, 2), default=0)
+    notes = Column(Text, nullable=True)
+
+    order = relationship("PetPoojaOrder", back_populates="items")
+
+
+class PetPoojaMenuItem(Base):
+    __tablename__ = "petpooja_menu_items"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, index=True)
+    external_id = Column(String(255), nullable=False)
+    name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    price = Column(Numeric(10, 2), default=0)
+    category_name = Column(String(255), nullable=True)
+    item_type = Column(String(50), nullable=True)  # veg | non-veg | egg
+    is_active = Column(Boolean, default=True)
+    raw_payload = Column(JSONB, default=dict)
+    synced_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('outlet_id', 'external_id', name='uq_petpooja_menu_items_outlet_external'),
+    )
+

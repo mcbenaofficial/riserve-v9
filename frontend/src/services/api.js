@@ -420,4 +420,17 @@ export const api = {
   getSuperAdminWhatsAppConfig: (companyId) => axios.get(`${API}/super-admin/whatsapp/config/${companyId}`, { headers: getHeaders() }),
   updateSuperAdminWhatsAppConfig: (companyId, data) => axios.put(`${API}/super-admin/whatsapp/config/${companyId}`, data, { headers: getHeaders() }),
   superAdminSendWhatsAppTest: (companyId, data) => axios.post(`${API}/super-admin/whatsapp/test/${companyId}`, data, { headers: getHeaders() }),
+
+  // ── PetPooja POS Integration ──────────────────────────────────────────
+  getPetPoojaConfigs: () => axios.get(`${API}/petpooja/config`, { headers: getHeaders() }),
+  getPetPoojaConfig: (outletId) => axios.get(`${API}/petpooja/config/${outletId}`, { headers: getHeaders() }),
+  savePetPoojaConfig: (outletId, data) => axios.put(`${API}/petpooja/config/${outletId}`, data, { headers: getHeaders() }),
+  testPetPoojaConnection: (outletId) => axios.post(`${API}/petpooja/test/${outletId}`, {}, { headers: getHeaders() }),
+  syncPetPoojaMenu: (outletId) => axios.post(`${API}/petpooja/sync/menu/${outletId}`, {}, { headers: getHeaders() }),
+  syncPetPoojaOrders: (outletId) => axios.post(`${API}/petpooja/sync/orders/${outletId}`, {}, { headers: getHeaders() }),
+  getPetPoojaSyncLogs: (outletId, limit) => axios.get(`${API}/petpooja/sync/logs`, { headers: getHeaders(), params: { outlet_id: outletId, limit } }),
+  getPetPoojaOrders: (outletId, state, limit) => axios.get(`${API}/petpooja/orders`, { headers: getHeaders(), params: { outlet_id: outletId, state, limit } }),
+  getPetPoojaMenuItems: (outletId, search, category, activeOnly) => axios.get(`${API}/petpooja/menu-items`, { headers: getHeaders(), params: { outlet_id: outletId, search, category, active_only: activeOnly } }),
+  getPetPoojaOrder: (orderId) => axios.get(`${API}/petpooja/orders/${orderId}`, { headers: getHeaders() }),
+  deletePetPoojaConfig: (outletId) => axios.delete(`${API}/petpooja/config/${outletId}`, { headers: getHeaders() }),
 };
