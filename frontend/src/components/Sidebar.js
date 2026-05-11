@@ -67,7 +67,8 @@ import {
   Star,
   Timer,
   CalendarDays,
-  Gift
+  Gift,
+  AlertTriangle
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -312,6 +313,15 @@ const Sidebar = () => {
       label: 'Submissions',
       icon: UserPlus,
       path: '/acquisition/submissions',
+      condition: (features) => features.includes('acquisition'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'acquisition',
+    },
+    {
+      key: 'stuck-submissions',
+      label: 'Stuck Submissions',
+      icon: AlertTriangle,
+      path: '/acquisition/stuck',
       condition: (features) => features.includes('acquisition'),
       roles: ['SuperAdmin', 'Admin', 'Manager'],
       appId: 'acquisition',

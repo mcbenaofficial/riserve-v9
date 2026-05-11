@@ -90,6 +90,7 @@ import WhatsAppAcquisition from './pages/Acquisition/WhatsAppAcquisition';
 import CampaignsList from './pages/Acquisition/CampaignsList';
 import CampaignWizard from './pages/Acquisition/CampaignWizard';
 import SubmissionsView from './pages/Acquisition/SubmissionsView';
+import StuckSubmissions from './pages/Acquisition/StuckSubmissions';
 import VisibilityOverview from './pages/Visibility/VisibilityOverview';
 import VisibilityListings from './pages/Visibility/VisibilityListings';
 import VisibilityReviews from './pages/Visibility/VisibilityReviews';
@@ -247,6 +248,7 @@ function MainLayout() {
               <Route path="/acquisition/campaigns/new" element={<ProtectedRoute><CampaignWizard /></ProtectedRoute>} />
               <Route path="/acquisition/campaigns/:id/edit" element={<ProtectedRoute><CampaignWizard /></ProtectedRoute>} />
               <Route path="/acquisition/submissions" element={<ProtectedRoute><SubmissionsView /></ProtectedRoute>} />
+              <Route path="/acquisition/stuck" element={<ProtectedRoute><StuckSubmissions /></ProtectedRoute>} />
               {/* Visibility & SEO */}
               <Route path="/visibility" element={<ProtectedRoute><VisibilityOverview /></ProtectedRoute>} />
               <Route path="/visibility/listings" element={<ProtectedRoute><VisibilityListings /></ProtectedRoute>} />

@@ -338,7 +338,7 @@ export default function CampaignsList() {
               campaign={c}
               typeMap={typeMap}
               onAction={handleAction}
-              onClick={() => navigate(`/acquisition/campaigns/${c.id}/edit`)}
+              onClick={() => navigate(`/acquisition/submissions?campaign_id=${c.id}`)}
             />
           ))
         )}

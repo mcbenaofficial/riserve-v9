@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Filter, ChevronDown, X, User, Phone, Mail, MapPin, Star,
   AlertCircle, Clock, CheckCircle2,
@@ -10,6 +11,7 @@ import {
   addNote,
   promoteSubmission,
   loseSubmission,
+  getCampaigns,
 } from '../../services/campaignsApi';
 
 const PAGE_SIZE = 50;
@@ -31,6 +33,25 @@ const STAGE_TRANSITIONS = {
   converted: [],
   lost:      [],
 };
+
+function getValidTransitions(stageSet, fromStage) {
+  if (!stageSet) return STAGE_TRANSITIONS[fromStage] || [];
+  const transitions = stageSet.transitions || [];
+  if (transitions.length === 0) {
+    return (stageSet.stages || [])
+      .filter((s) => !s.is_terminal && s.key !== fromStage)
+      .map((s) => s.key);
+  }
+  return transitions.filter((t) => t.from === fromStage).map((t) => t.to);
+}
+
+function stageDisplayLabel(key, stageSet) {
+  if (stageSet?.stages) {
+    const s = stageSet.stages.find((st) => st.key === key);
+    if (s?.label) return s.label;
+  }
+  return STAGE_STYLES[key]?.label || key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 const SOURCE_CHANNELS = ['organic', 'paid', 'referral', 'social', 'email', 'cold_outreach', 'event', 'other'];
 
@@ -59,7 +80,7 @@ function StageBadge({ stage }) {
 }
 
 // ─── Detail panel ────────────────────────────────────────────────────────────
-function DetailPanel({ submission, onClose, onUpdated }) {
+function DetailPanel({ submission, onClose, onUpdated, campaigns }) {
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [noteText, setNoteText] = useState('');
@@ -72,7 +93,9 @@ function DetailPanel({ submission, onClose, onUpdated }) {
   const [showPromoteInput, setShowPromoteInput] = useState(false);
   const [showLoseInput, setShowLoseInput] = useState(false);
 
-  const transitions = STAGE_TRANSITIONS[submission.stage] || [];
+  const campaign = campaigns?.find((c) => c.id === submission.campaign_id);
+  const stageSet = campaign?.lifecycle_stages_override || null;
+  const transitions = getValidTransitions(stageSet, submission.stage);
 
   useEffect(() => {
     setEventsLoading(true);
@@ -225,7 +248,7 @@ function DetailPanel({ submission, onClose, onUpdated }) {
                 >
                   {transitions.map((s) => (
                     <option key={s} value={s} className="bg-[#1C1F2A]">
-                      {STAGE_STYLES[s]?.label || s}
+                      {stageDisplayLabel(s, stageSet)}
                     </option>
                   ))}
                 </select>
@@ -404,17 +427,26 @@ function DetailPanel({ submission, onClose, onUpdated }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function SubmissionsView() {
+  const [searchParams] = useSearchParams();
   const [submissions, setSubmissions] = useState([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [campaigns, setCampaigns] = useState([]);
 
-  // Filters
+  // Filters — seed campaign filter from ?campaign_id= query param
   const [filterStage, setFilterStage] = useState('');
   const [filterChannel, setFilterChannel] = useState('');
   const [filterMinScore, setFilterMinScore] = useState('');
-  const [filterCampaign, setFilterCampaign] = useState('');
+  const [filterCampaign, setFilterCampaign] = useState(searchParams.get('campaign_id') || '');
+
+  // Load campaign list for filter dropdown
+  useEffect(() => {
+    getCampaigns().then((data) => {
+      setCampaigns(Array.isArray(data) ? data : (data?.items ?? []));
+    }).catch(() => {});
+  }, []);
 
   // Detail panel
   const [selected, setSelected] = useState(null);
@@ -446,7 +478,7 @@ export default function SubmissionsView() {
       const data = await getAllSubmissions(params);
       if (Array.isArray(data)) {
         setSubmissions(data);
-        setTotal(data.length + off); // fallback when no total field
+        setTotal(data.length);
       } else {
         setSubmissions(data?.items ?? []);
         setTotal(data?.total ?? 0);
@@ -579,14 +611,17 @@ export default function SubmissionsView() {
             className="w-28 bg-white/8 border border-white/10 rounded-xl px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-indigo-500/50"
           />
 
-          {/* Campaign search */}
-          <input
-            type="text"
+          {/* Campaign filter */}
+          <select
             value={filterCampaign}
             onChange={(e) => setFilterCampaign(e.target.value)}
-            placeholder="Campaign ID…"
-            className="w-36 bg-white/8 border border-white/10 rounded-xl px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-indigo-500/50"
-          />
+            className="bg-white/8 border border-white/10 rounded-xl px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-indigo-500/50 max-w-[200px]"
+          >
+            <option value="">All Campaigns</option>
+            {campaigns.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -707,6 +742,7 @@ export default function SubmissionsView() {
           submission={selected}
           onClose={() => setSelected(null)}
           onUpdated={handleUpdated}
+          campaigns={campaigns}
         />
       )}
     </div>

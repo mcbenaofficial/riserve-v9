@@ -77,3 +77,6 @@ export const promoteSubmission = (submissionId, data) =>
   request('POST', `${BASE}/submissions/${submissionId}/promote`, data);
 export const loseSubmission = (submissionId, data) =>
   request('POST', `${BASE}/submissions/${submissionId}/lose`, data);
+
+export const getStuckSubmissions = (params = {}) =>
+  request('GET', `${BASE}/submissions/stuck${qs(params)}`);

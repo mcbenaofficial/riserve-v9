@@ -198,13 +198,15 @@ function TemplatePicker({ campaignTypes, selectedTypeId, onApply }) {
   const [open, setOpen] = useState(false);
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
 
   useEffect(() => {
     if (!open) return;
     setLoading(true);
+    setFetchError(null);
     getCampaignTemplates({ is_active: true })
       .then((res) => setTemplates(Array.isArray(res) ? res : (res?.items ?? [])))
-      .catch(() => {})
+      .catch((err) => setFetchError(err.message || 'Failed to load templates'))
       .finally(() => setLoading(false));
   }, [open]);
 
@@ -228,7 +230,9 @@ function TemplatePicker({ campaignTypes, selectedTypeId, onApply }) {
 
       {open && (
         <div className="border-t border-white/8 px-5 pb-4 pt-4">
-          {loading ? (
+          {fetchError ? (
+            <p className="text-xs text-red-400">{fetchError}</p>
+          ) : loading ? (
             <div className="flex gap-3">
               {[0, 1].map((i) => (
                 <div key={i} className="flex-1 h-24 rounded-xl bg-white/5 animate-pulse" />

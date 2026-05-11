@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Megaphone, Plus, Trash2, X, Play, BarChart2, Clock } from 'lucide-react';
 import * as api from '../../services/marketingApi';
-import { getSegments, getTemplates } from '../../services/marketingApi';
-import { getInboxes } from '../../services/conversationsApi';
+import { getSegments } from '../../services/marketingApi';
+import { getInboxes, getTemplates } from '../../services/conversationsApi';
 
 const STATUS_STYLES = {
   draft:     'bg-gray-500/20 text-gray-400 border border-gray-500/30',
@@ -312,10 +312,7 @@ export default function Campaigns() {
     }).catch(console.error).finally(() => setLoading(false));
 
     // Load templates separately (may fail if no inboxes)
-    import('../../services/conversationsApi')
-      .then(m => m.getTemplates())
-      .then(setTemplates)
-      .catch(() => {});
+    getTemplates().then(setTemplates).catch(() => {});
   }, []);
 
   const handleSaved = (campaign) => {

@@ -64,6 +64,7 @@ def _ser_campaign(
     c: models_pg.Campaign,
     type_key: Optional[str] = None,
     type_display: Optional[str] = None,
+    submission_count: int = 0,
 ) -> dict:
     return {
         "id": c.id,
@@ -92,6 +93,7 @@ def _ser_campaign(
         "created_by": c.created_by,
         "created_at": c.created_at.isoformat(),
         "updated_at": c.updated_at.isoformat(),
+        "submission_count": submission_count,
     }
 
 
@@ -382,11 +384,27 @@ async def list_campaigns(
         for ct in t_result.scalars().all():
             types_by_id[ct.id] = ct
 
+    # Bulk submission counts
+    campaign_ids = [c.id for c in campaigns]
+    counts_by_id: dict[str, int] = {}
+    if campaign_ids:
+        counts_result = await db.execute(
+            select(
+                models_pg.Submission.campaign_id,
+                func.count(models_pg.Submission.id).label("cnt"),
+            )
+            .where(models_pg.Submission.campaign_id.in_(campaign_ids))
+            .group_by(models_pg.Submission.campaign_id)
+        )
+        for row in counts_result.all():
+            counts_by_id[row[0]] = row[1]
+
     return [
         _ser_campaign(
             c,
             type_key=types_by_id.get(c.campaign_type_id, None) and types_by_id[c.campaign_type_id].key,
             type_display=types_by_id.get(c.campaign_type_id, None) and types_by_id[c.campaign_type_id].display_name,
+            submission_count=counts_by_id.get(c.id, 0),
         )
         for c in campaigns
     ]

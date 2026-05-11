@@ -15,6 +15,7 @@ from dateutil.relativedelta import relativedelta
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import desc, func, select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import models_pg
@@ -169,9 +170,11 @@ async def _get_campaign(
     tenant_id: str,
     db: AsyncSession,
 ) -> models_pg.Campaign:
-    """Fetch a campaign with its campaign_type joined, scoped to tenant."""
+    """Fetch a campaign with its campaign_type eagerly loaded, scoped to tenant."""
     result = await db.execute(
-        select(models_pg.Campaign).where(
+        select(models_pg.Campaign)
+        .options(selectinload(models_pg.Campaign.campaign_type))
+        .where(
             models_pg.Campaign.id == campaign_id,
             models_pg.Campaign.tenant_id == tenant_id,
         )
@@ -179,14 +182,6 @@ async def _get_campaign(
     campaign = result.scalar_one_or_none()
     if not campaign:
         raise HTTPException(404, "Campaign not found")
-    # Eagerly load campaign_type if not already loaded
-    if campaign.campaign_type is None:
-        ct_result = await db.execute(
-            select(models_pg.CampaignType).where(
-                models_pg.CampaignType.id == campaign.campaign_type_id
-            )
-        )
-        campaign.campaign_type = ct_result.scalar_one_or_none()
     return campaign
 
 
