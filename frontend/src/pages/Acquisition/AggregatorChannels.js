@@ -14,49 +14,37 @@ import {
 // ---------------------------------------------------------------------------
 const PLATFORMS = [
   {
-    id: 'zomato', name: 'Zomato', color: '#E23744', bgClass: 'bg-red-50 dark:bg-red-950/30',
-    borderClass: 'border-red-200 dark:border-red-800',
-    textClass: 'text-red-600 dark:text-red-400',
+    id: 'zomato', name: 'Zomato', color: '#E23744',
     verticals: ['restaurant'], apiStatus: 'partner_gated',
     supports: { orders: true, reviews: true, menu: true },
     description: 'India\'s largest food delivery platform.',
   },
   {
-    id: 'swiggy', name: 'Swiggy', color: '#FC8019', bgClass: 'bg-orange-50 dark:bg-orange-950/30',
-    borderClass: 'border-orange-200 dark:border-orange-800',
-    textClass: 'text-orange-500 dark:text-orange-400',
+    id: 'swiggy', name: 'Swiggy', color: '#FC8019',
     verticals: ['restaurant'], apiStatus: 'partner_gated',
     supports: { orders: true, reviews: false, menu: true },
     description: 'Food and grocery delivery across 500+ cities.',
   },
   {
-    id: 'justdial', name: 'JustDial', color: '#2F80ED', bgClass: 'bg-blue-50 dark:bg-blue-950/30',
-    borderClass: 'border-blue-200 dark:border-blue-800',
-    textClass: 'text-blue-600 dark:text-blue-400',
+    id: 'justdial', name: 'JustDial', color: '#2F80ED',
     verticals: ['restaurant', 'salon', 'clinic', 'gym'], apiStatus: 'partner_gated',
     supports: { orders: false, reviews: true, menu: false },
     description: 'Local business search & lead generation.',
   },
   {
-    id: 'practo', name: 'Practo', color: '#5DB075', bgClass: 'bg-green-50 dark:bg-green-950/30',
-    borderClass: 'border-green-200 dark:border-green-800',
-    textClass: 'text-green-600 dark:text-green-400',
+    id: 'practo', name: 'Practo', color: '#5DB075',
     verticals: ['clinic'], apiStatus: 'partner_gated',
     supports: { orders: true, reviews: true, menu: false },
     description: 'Online doctor consultations and clinic discovery.',
   },
   {
-    id: 'urban_company', name: 'Urban Company', color: '#7C3AED', bgClass: 'bg-purple-50 dark:bg-purple-950/30',
-    borderClass: 'border-purple-200 dark:border-purple-800',
-    textClass: 'text-purple-600 dark:text-purple-400',
+    id: 'urban_company', name: 'Urban Company', color: '#7C3AED',
     verticals: ['salon', 'spa', 'cleaning', 'gym'], apiStatus: 'unavailable',
     supports: { orders: true, reviews: true, menu: false },
     description: 'At-home beauty, wellness, and repair services.',
   },
   {
-    id: 'tripadvisor', name: 'TripAdvisor', color: '#00AA6C', bgClass: 'bg-emerald-50 dark:bg-emerald-950/30',
-    borderClass: 'border-emerald-200 dark:border-emerald-800',
-    textClass: 'text-emerald-600 dark:text-emerald-400',
+    id: 'tripadvisor', name: 'TripAdvisor', color: '#00AA6C',
     verticals: ['restaurant', 'hotel'], apiStatus: 'open',
     supports: { orders: false, reviews: true, menu: false },
     description: 'Global travel and restaurant review platform.',
@@ -64,16 +52,16 @@ const PLATFORMS = [
 ];
 
 const STATUS_LABELS = {
-  active: { label: 'Live API', cls: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' },
-  manual: { label: 'Manual import', cls: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' },
-  inactive: { label: 'Paused', cls: 'bg-muted text-muted-foreground' },
-  error: { label: 'Error', cls: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300' },
+  active: { label: 'Live API', cls: 'bg-green-500/15 text-green-400' },
+  manual: { label: 'Manual import', cls: 'bg-amber-500/15 text-amber-400' },
+  inactive: { label: 'Paused', cls: 'bg-white/8 text-gray-500' },
+  error: { label: 'Error', cls: 'bg-red-500/15 text-red-400' },
 };
 
 const API_STATUS_LABEL = {
-  open: { label: 'API available', cls: 'text-green-600 dark:text-green-400' },
-  partner_gated: { label: 'Partner API', cls: 'text-amber-600 dark:text-amber-400' },
-  unavailable: { label: 'No API', cls: 'text-muted-foreground' },
+  open: { label: 'API available', cls: 'text-green-400' },
+  partner_gated: { label: 'Partner API', cls: 'text-amber-400' },
+  unavailable: { label: 'No API', cls: 'text-gray-500' },
 };
 
 // ---------------------------------------------------------------------------
@@ -125,8 +113,8 @@ function ConnectModal({ platform, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[59] flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-3xl shadow-2xl w-full max-w-md z-[60]">
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-border">
+      <div className="bg-[#13161D] border border-white/8 rounded-3xl shadow-2xl w-full max-w-md z-[60]">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/8">
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black text-white"
@@ -135,18 +123,18 @@ function ConnectModal({ platform, onClose, onSave }) {
               {platform.name[0]}
             </div>
             <div>
-              <p className="font-semibold text-foreground text-sm">Connect {platform.name}</p>
-              <p className="text-xs text-muted-foreground">{API_STATUS_LABEL[platform.apiStatus]?.label}</p>
+              <p className="font-semibold text-white text-sm">Connect {platform.name}</p>
+              <p className="text-xs text-gray-500">{API_STATUS_LABEL[platform.apiStatus]?.label}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-muted text-muted-foreground">
+          <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-white/8 text-gray-500">
             <X size={16} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Import method</label>
+            <label className="text-xs font-medium text-gray-500 mb-1.5 block">Import method</label>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { val: 'manual', label: 'Manual import', desc: 'Upload order exports from the platform dashboard' },
@@ -158,13 +146,13 @@ function ConnectModal({ platform, onClose, onSave }) {
                   onClick={() => setStatus(opt.val)}
                   className={`text-left p-3 rounded-2xl border text-xs transition-colors ${
                     status === opt.val
-                      ? 'border-border bg-card shadow-sm ring-2 ring-offset-1 ring-offset-background'
-                      : 'border-border/50 bg-background hover:bg-muted'
+                      ? 'border-white/8 bg-[#13161D] shadow-sm ring-2 ring-offset-1 ring-offset-[#13161D]'
+                      : 'border-white/[0.05] bg-[#0D0F17] hover:bg-white/8'
                   }`}
                   style={status === opt.val ? { '--tw-ring-color': platform.color } : {}}
                 >
-                  <p className="font-semibold text-foreground mb-0.5">{opt.label}</p>
-                  <p className="text-muted-foreground leading-tight">{opt.desc}</p>
+                  <p className="font-semibold text-white mb-0.5">{opt.label}</p>
+                  <p className="text-gray-500 leading-tight">{opt.desc}</p>
                 </button>
               ))}
             </div>
@@ -172,16 +160,16 @@ function ConnectModal({ platform, onClose, onSave }) {
 
           {status === 'active' && (
             <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">API Key / Partner Token</label>
+              <label className="text-xs font-medium text-gray-500 mb-1.5 block">API Key / Partner Token</label>
               <input
                 value={apiKey}
                 onChange={e => setApiKey(e.target.value)}
                 placeholder="Paste your partner API key…"
-                className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-background"
+                className="w-full px-3 py-2.5 text-sm rounded-xl border border-white/8 bg-[#0D0F17] text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-[#13161D]"
                 style={{ '--tw-ring-color': platform.color }}
               />
               {platform.apiStatus === 'partner_gated' && (
-                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1.5 flex items-center gap-1">
+                <p className="text-xs text-amber-400 mt-1.5 flex items-center gap-1">
                   <AlertCircle size={11} />
                   {platform.name} Partner API requires prior approval. Contact their partner team.
                 </p>
@@ -199,7 +187,7 @@ function ConnectModal({ platform, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors"
+              className="flex-1 px-4 py-2.5 rounded-xl border border-white/8 text-sm font-medium text-white hover:bg-white/8 transition-colors"
             >
               Cancel
             </button>
@@ -250,31 +238,31 @@ function ImportModal({ connections, onClose, onImport }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[59] flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-3xl shadow-2xl w-full max-w-2xl z-[60] flex flex-col max-h-[80vh]">
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-border shrink-0">
+      <div className="bg-[#13161D] border border-white/8 rounded-3xl shadow-2xl w-full max-w-2xl z-[60] flex flex-col max-h-[80vh]">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/8 shrink-0">
           <div>
-            <p className="font-semibold text-foreground text-sm">Import Orders</p>
-            <p className="text-xs text-muted-foreground">Paste a JSON array exported from your aggregator dashboard</p>
+            <p className="font-semibold text-white text-sm">Import Orders</p>
+            <p className="text-xs text-gray-500">Paste a JSON array exported from your aggregator dashboard</p>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-muted text-muted-foreground">
+          <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-white/8 text-gray-500">
             <X size={16} />
           </button>
         </div>
 
         <div className="px-6 py-4 space-y-3 overflow-y-auto">
-          <div className="rounded-2xl border border-border bg-muted/30 p-3 text-xs text-muted-foreground space-y-1">
-            <p className="font-medium text-foreground">Required fields per order:</p>
-            <p><code className="bg-muted px-1 rounded">platform</code> — zomato, swiggy, justdial, practo, urban_company, tripadvisor</p>
-            <p><code className="bg-muted px-1 rounded">external_order_id</code> — unique order ID from the platform</p>
-            <p className="text-muted-foreground">Optional: customer_name, customer_phone, customer_email, amount, items, status, ordered_at (ISO 8601)</p>
+          <div className="rounded-2xl border border-white/8 bg-white/4 p-3 text-xs text-gray-500 space-y-1">
+            <p className="font-medium text-white">Required fields per order:</p>
+            <p><code className="bg-white/8 px-1 rounded">platform</code> — zomato, swiggy, justdial, practo, urban_company, tripadvisor</p>
+            <p><code className="bg-white/8 px-1 rounded">external_order_id</code> — unique order ID from the platform</p>
+            <p className="text-gray-500">Optional: customer_name, customer_phone, customer_email, amount, items, status, ordered_at (ISO 8601)</p>
           </div>
 
           {result ? (
-            <div className="rounded-2xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/30 p-4 space-y-1">
-              <p className="text-sm font-semibold text-green-800 dark:text-green-300 flex items-center gap-2">
+            <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4 space-y-1">
+              <p className="text-sm font-semibold text-green-400 flex items-center gap-2">
                 <CheckCircle size={14} /> Import complete
               </p>
-              <p className="text-xs text-green-700 dark:text-green-400">{result.imported} orders imported · {result.skipped} skipped (duplicates) · {result.auto_resolved} auto-matched to customers</p>
+              <p className="text-xs text-green-400">{result.imported} orders imported · {result.skipped} skipped (duplicates) · {result.auto_resolved} auto-matched to customers</p>
             </div>
           ) : (
             <textarea
@@ -282,7 +270,7 @@ function ImportModal({ connections, onClose, onImport }) {
               onChange={e => setRaw(e.target.value)}
               rows={12}
               placeholder={`[\n  {\n    "platform": "zomato",\n    "external_order_id": "ZO-12345",\n    "customer_name": "Priya S",\n    "customer_phone": "+919876543210",\n    "amount": 485,\n    "status": "delivered",\n    "ordered_at": "2026-05-01T19:30:00Z"\n  }\n]`}
-              className="w-full px-3 py-2.5 text-xs font-mono rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-border resize-none"
+              className="w-full px-3 py-2.5 text-xs font-mono rounded-xl border border-white/8 bg-[#0D0F17] text-white placeholder:text-gray-500/50 focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
             />
           )}
 
@@ -296,7 +284,7 @@ function ImportModal({ connections, onClose, onImport }) {
         <div className="px-6 pb-5 pt-2 flex gap-2 shrink-0">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-white/8 text-sm font-medium text-white hover:bg-white/8 transition-colors"
           >
             {result ? 'Close' : 'Cancel'}
           </button>
@@ -331,7 +319,7 @@ function ConnectionsTab({ connections, onConnect, onDisconnect, onSync, syncing 
           <div
             key={p.id}
             className={`rounded-2xl border p-4 flex items-center gap-4 ${
-              conn ? 'bg-card border-border' : 'bg-background border-border/50'
+              conn ? 'bg-[#13161D] border-white/8' : 'bg-[#0D0F17] border-white/[0.05]'
             }`}
           >
             <div
@@ -343,7 +331,7 @@ function ConnectionsTab({ connections, onConnect, onDisconnect, onSync, syncing 
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-sm font-semibold text-foreground">{p.name}</p>
+                <p className="text-sm font-semibold text-white">{p.name}</p>
                 <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${apiMeta.cls}`}>
                   {apiMeta.label}
                 </span>
@@ -353,18 +341,18 @@ function ConnectionsTab({ connections, onConnect, onDisconnect, onSync, syncing 
                   </span>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">{p.description}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{p.description}</p>
               {conn && (
-                <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                   <span>{conn.order_count} orders</span>
                   <span>·</span>
                   <span>Last sync: {relTime(conn.last_sync_at)}</span>
                 </div>
               )}
-              <div className="flex gap-2 mt-1 flex-wrap">
-                {p.supports.orders && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">Orders</span>}
-                {p.supports.reviews && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">Reviews</span>}
-                {p.supports.menu && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">Menu sync</span>}
+              <div className="flex gap-1.5 mt-2 flex-wrap">
+                {p.supports.orders && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 font-medium">Orders</span>}
+                {p.supports.reviews && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 font-medium">Reviews</span>}
+                {p.supports.menu && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-500/15 text-violet-400 font-medium">Menu sync</span>}
               </div>
             </div>
 
@@ -374,14 +362,14 @@ function ConnectionsTab({ connections, onConnect, onDisconnect, onSync, syncing 
                   <button
                     onClick={() => onSync(conn.id)}
                     disabled={syncing === conn.id}
-                    className="p-2 rounded-xl hover:bg-muted text-muted-foreground transition-colors"
+                    className="p-2 rounded-xl hover:bg-white/8 text-gray-500 transition-colors"
                     title="Sync now"
                   >
                     <RefreshCw size={14} className={syncing === conn.id ? 'animate-spin' : ''} />
                   </button>
                   <button
                     onClick={() => onDisconnect(conn.id)}
-                    className="p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30 text-muted-foreground hover:text-red-500 transition-colors"
+                    className="p-2 rounded-xl hover:bg-red-500/10 text-gray-500 hover:text-red-500 transition-colors"
                     title="Disconnect"
                   >
                     <Link2Off size={14} />
@@ -412,7 +400,7 @@ function OrderStreamTab({ orders, loading, onResolve, onBridge, onImportClick })
     return (
       <div className="space-y-2">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-16 rounded-2xl bg-muted animate-pulse" />
+          <div key={i} className="h-16 rounded-2xl bg-white/8 animate-pulse" />
         ))}
       </div>
     );
@@ -424,8 +412,8 @@ function OrderStreamTab({ orders, loading, onResolve, onBridge, onImportClick })
         <div className="w-12 h-12 rounded-2xl accent-gradient-bg flex items-center justify-center mb-4">
           <ShoppingBag size={20} className="text-white" />
         </div>
-        <p className="text-sm font-semibold text-foreground">No orders yet</p>
-        <p className="text-xs text-muted-foreground mt-1 max-w-xs">Connect a platform and import your order history to start resolving customers.</p>
+        <p className="text-sm font-semibold text-white">No orders yet</p>
+        <p className="text-xs text-gray-500 mt-1 max-w-xs">Connect a platform and import your order history to start resolving customers.</p>
         <button
           onClick={onImportClick}
           className="mt-4 flex items-center gap-2 accent-gradient-bg px-4 py-2 rounded-xl text-xs font-semibold text-white"
@@ -441,7 +429,7 @@ function OrderStreamTab({ orders, loading, onResolve, onBridge, onImportClick })
       {orders.map(order => {
         const p = PLATFORMS.find(pl => pl.id === order.platform);
         return (
-          <div key={order.id} className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3">
+          <div key={order.id} className="bg-[#13161D] border border-white/8 rounded-2xl p-4 flex items-center gap-3">
             <div
               className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-xs font-black text-white"
               style={{ backgroundColor: p?.color || '#888' }}
@@ -451,20 +439,20 @@ function OrderStreamTab({ orders, loading, onResolve, onBridge, onImportClick })
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-medium text-foreground truncate">
+                <p className="text-sm font-medium text-white truncate">
                   {order.customer_name || 'Unknown customer'}
                 </p>
                 {order.resolved_customer_id ? (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300 shrink-0">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-500/15 text-green-400 shrink-0">
                     Matched
                   </span>
                 ) : (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground shrink-0">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/8 text-gray-500 shrink-0">
                     Unmatched
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-500">
                 <span>{p?.name || order.platform}</span>
                 <span>·</span>
                 <span>#{order.external_order_id}</span>
@@ -477,7 +465,7 @@ function OrderStreamTab({ orders, loading, onResolve, onBridge, onImportClick })
               {!order.resolved_customer_id && (
                 <button
                   onClick={() => onResolve(order.id)}
-                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-border text-xs font-medium text-foreground hover:bg-muted transition-colors"
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-white/8 text-xs font-medium text-white hover:bg-white/8 transition-colors"
                   title="Try to match this order to a known customer"
                 >
                   <Users size={11} /> Match
@@ -493,7 +481,7 @@ function OrderStreamTab({ orders, loading, onResolve, onBridge, onImportClick })
                 </button>
               )}
               {order.first_party_bridge_sent && (
-                <span className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium px-2">
+                <span className="flex items-center gap-1 text-xs text-emerald-400 font-medium px-2">
                   <CheckCircle size={11} /> Bridged
                 </span>
               )}
@@ -513,7 +501,7 @@ function AttributionTab({ attribution, loading }) {
     return (
       <div className="space-y-3">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-20 rounded-2xl bg-muted animate-pulse" />
+          <div key={i} className="h-20 rounded-2xl bg-white/8 animate-pulse" />
         ))}
       </div>
     );
@@ -525,8 +513,8 @@ function AttributionTab({ attribution, loading }) {
         <div className="w-12 h-12 rounded-2xl accent-gradient-bg flex items-center justify-center mb-4">
           <BarChart2 size={20} className="text-white" />
         </div>
-        <p className="text-sm font-semibold text-foreground">No attribution data yet</p>
-        <p className="text-xs text-muted-foreground mt-1">Import orders to see your aggregator vs direct customer cohorts.</p>
+        <p className="text-sm font-semibold text-white">No attribution data yet</p>
+        <p className="text-xs text-gray-500 mt-1">Import orders to see your aggregator vs direct customer cohorts.</p>
       </div>
     );
   }
@@ -543,22 +531,22 @@ function AttributionTab({ attribution, loading }) {
           { label: 'Identity match rate', value: pct(resolution_rate) },
           { label: 'Bridge sent rate', value: pct(bridge_sent_rate) },
         ].map(s => (
-          <div key={s.label} className="bg-card border border-border rounded-2xl p-4 text-center">
-            <p className="text-xl font-black text-foreground">{s.value}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
+          <div key={s.label} className="bg-[#13161D] border border-white/8 rounded-2xl p-4 text-center">
+            <p className="text-xl font-black text-white">{s.value}</p>
+            <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Per-platform breakdown */}
       <div>
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">By platform</p>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">By platform</p>
         <div className="space-y-2">
           {by_platform.map(row => {
             const p = PLATFORMS.find(pl => pl.id === row.platform);
             const share = total_orders > 0 ? row.order_count / total_orders : 0;
             return (
-              <div key={row.platform} className="bg-card border border-border rounded-2xl p-4">
+              <div key={row.platform} className="bg-[#13161D] border border-white/8 rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <div
@@ -567,13 +555,13 @@ function AttributionTab({ attribution, loading }) {
                     >
                       {(p?.name || row.platform)[0]}
                     </div>
-                    <p className="text-sm font-semibold text-foreground">{p?.name || row.platform}</p>
+                    <p className="text-sm font-semibold text-white">{p?.name || row.platform}</p>
                   </div>
-                  <p className="text-sm font-bold text-foreground">{row.order_count} orders</p>
+                  <p className="text-sm font-bold text-white">{row.order_count} orders</p>
                 </div>
 
                 {/* Bar */}
-                <div className="h-1.5 rounded-full bg-muted mb-3">
+                <div className="h-1.5 rounded-full bg-white/8 mb-3">
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{ width: `${(share * 100).toFixed(1)}%`, backgroundColor: p?.color || '#888' }}
@@ -582,20 +570,20 @@ function AttributionTab({ attribution, loading }) {
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   <div>
-                    <p className="text-muted-foreground">GMV</p>
-                    <p className="font-semibold text-foreground">{fmt(row.gmv)}</p>
+                    <p className="text-gray-500">GMV</p>
+                    <p className="font-semibold text-white">{fmt(row.gmv)}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Identity match</p>
-                    <p className="font-semibold text-foreground">{pct(row.resolution_rate)}</p>
+                    <p className="text-gray-500">Identity match</p>
+                    <p className="font-semibold text-white">{pct(row.resolution_rate)}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Repeat customers</p>
-                    <p className="font-semibold text-foreground">{row.repeat_customer_count}</p>
+                    <p className="text-gray-500">Repeat customers</p>
+                    <p className="font-semibold text-white">{row.repeat_customer_count}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Bridge sent</p>
-                    <p className="font-semibold text-foreground">{pct(row.bridge_sent_rate)}</p>
+                    <p className="text-gray-500">Bridge sent</p>
+                    <p className="font-semibold text-white">{pct(row.bridge_sent_rate)}</p>
                   </div>
                 </div>
               </div>
@@ -617,13 +605,13 @@ function FirstPartyBridgeTab({ orders, onBridge }) {
   return (
     <div className="space-y-5">
       {/* Explainer */}
-      <div className="rounded-2xl border border-border bg-card p-4 flex gap-3">
+      <div className="rounded-2xl border border-white/8 bg-[#13161D] p-4 flex gap-3">
         <div className="w-9 h-9 shrink-0 rounded-xl accent-gradient-bg flex items-center justify-center">
           <Zap size={16} className="text-white" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-foreground">First-party bridge</p>
-          <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+          <p className="text-sm font-semibold text-white">First-party bridge</p>
+          <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
             When an aggregator customer is matched to a known contact, you can send them a direct offer — turning their next order into a first-party relationship. Track which matched orders have been bridged here.
           </p>
         </div>
@@ -632,7 +620,7 @@ function FirstPartyBridgeTab({ orders, onBridge }) {
       {/* Pending bridges */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             Ready to bridge ({pending.length})
           </p>
           {pending.length > 0 && (
@@ -646,15 +634,15 @@ function FirstPartyBridgeTab({ orders, onBridge }) {
         </div>
 
         {pending.length === 0 ? (
-          <div className="rounded-2xl border border-border bg-background p-6 text-center">
-            <p className="text-xs text-muted-foreground">No orders waiting to bridge. Import more orders and run identity resolution.</p>
+          <div className="rounded-2xl border border-white/8 bg-[#0D0F17] p-6 text-center">
+            <p className="text-xs text-gray-500">No orders waiting to bridge. Import more orders and run identity resolution.</p>
           </div>
         ) : (
           <div className="space-y-2">
             {pending.slice(0, 20).map(order => {
               const p = PLATFORMS.find(pl => pl.id === order.platform);
               return (
-                <div key={order.id} className="bg-card border border-border rounded-2xl px-4 py-3 flex items-center gap-3">
+                <div key={order.id} className="bg-[#13161D] border border-white/8 rounded-2xl px-4 py-3 flex items-center gap-3">
                   <div
                     className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center text-xs font-black text-white"
                     style={{ backgroundColor: p?.color || '#888' }}
@@ -662,8 +650,8 @@ function FirstPartyBridgeTab({ orders, onBridge }) {
                     {(p?.name || order.platform)[0]}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{order.customer_name || 'Unknown'}</p>
-                    <p className="text-xs text-muted-foreground">{p?.name} · #{order.external_order_id}</p>
+                    <p className="text-sm font-medium text-white truncate">{order.customer_name || 'Unknown'}</p>
+                    <p className="text-xs text-gray-500">{p?.name} · #{order.external_order_id}</p>
                   </div>
                   <button
                     onClick={() => onBridge(order.id)}
@@ -675,7 +663,7 @@ function FirstPartyBridgeTab({ orders, onBridge }) {
               );
             })}
             {pending.length > 20 && (
-              <p className="text-xs text-muted-foreground text-center pt-1">+{pending.length - 20} more</p>
+              <p className="text-xs text-gray-500 text-center pt-1">+{pending.length - 20} more</p>
             )}
           </div>
         )}
@@ -684,22 +672,22 @@ function FirstPartyBridgeTab({ orders, onBridge }) {
       {/* Already bridged */}
       {sent.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
             Already bridged ({sent.length})
           </p>
           <div className="space-y-1.5">
             {sent.slice(0, 10).map(order => {
               const p = PLATFORMS.find(pl => pl.id === order.platform);
               return (
-                <div key={order.id} className="bg-background border border-border/50 rounded-xl px-4 py-2.5 flex items-center gap-3 opacity-70">
+                <div key={order.id} className="bg-[#0D0F17] border border-white/[0.05] rounded-xl px-4 py-2.5 flex items-center gap-3 opacity-70">
                   <div
                     className="w-6 h-6 shrink-0 rounded-md flex items-center justify-center text-xs font-black text-white"
                     style={{ backgroundColor: p?.color || '#888' }}
                   >
                     {(p?.name || order.platform)[0]}
                   </div>
-                  <p className="text-xs text-foreground flex-1 truncate">{order.customer_name || 'Unknown'} · #{order.external_order_id}</p>
-                  <span className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium shrink-0">
+                  <p className="text-xs text-white flex-1 truncate">{order.customer_name || 'Unknown'} · #{order.external_order_id}</p>
+                  <span className="flex items-center gap-1 text-xs text-emerald-400 font-medium shrink-0">
                     <CheckCircle size={10} /> Bridged
                   </span>
                 </div>
@@ -818,17 +806,17 @@ export default function AggregatorChannels() {
   const totalOrders = connections.reduce((s, c) => s + (c.order_count || 0), 0);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0D0F17]">
       {/* Page header */}
-      <div className="px-6 pt-6 pb-4 border-b border-border">
+      <div className="px-6 pt-6 pb-4 border-b border-white/8">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-2xl accent-gradient-bg flex items-center justify-center">
               <TrendingUp size={17} className="text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-black text-foreground">Aggregator Channels</h1>
-              <p className="text-xs text-muted-foreground">
+              <h1 className="text-lg font-black text-white">Aggregator Channels</h1>
+              <p className="text-xs text-gray-500">
                 {connectedCount} platform{connectedCount !== 1 ? 's' : ''} connected · {totalOrders.toLocaleString()} orders imported
               </p>
             </div>
@@ -842,7 +830,7 @@ export default function AggregatorChannels() {
         </div>
 
         {err && (
-          <div className="mt-3 rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30 px-3 py-2 flex items-center gap-2 text-xs text-red-600 dark:text-red-400">
+          <div className="mt-3 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2 flex items-center gap-2 text-xs text-red-400">
             <AlertCircle size={12} />
             {err}
             <button onClick={() => setErr('')} className="ml-auto"><X size={12} /></button>
@@ -850,7 +838,7 @@ export default function AggregatorChannels() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1 mt-4 bg-muted rounded-xl p-1 w-fit">
+        <div className="flex gap-1 mt-4 bg-white/8 rounded-xl p-1 w-fit">
           {TABS.map(t => (
             <button
               key={t.id}
@@ -858,7 +846,7 @@ export default function AggregatorChannels() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 tab === t.id
                   ? 'accent-gradient-bg text-white shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  : 'text-gray-500 hover:text-white'
               }`}
             >
               <t.icon size={12} />

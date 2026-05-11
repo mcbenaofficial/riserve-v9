@@ -1568,3 +1568,919 @@ INFO:     127.0.0.1:56821 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd
 INFO:     127.0.0.1:56821 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
 INFO:     127.0.0.1:56836 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
 INFO:     127.0.0.1:56836 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56861 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56861 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56864 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56881 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56881 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56893 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56893 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56911 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56911 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56914 - "OPTIONS /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56916 - "OPTIONS /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56918 - "OPTIONS /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56914 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56914 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56916 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56916 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56914 - "OPTIONS /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56918 - "OPTIONS /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56920 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56916 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56916 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56918 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56916 - "OPTIONS /api/campaign-tag-groups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56920 - "OPTIONS /api/campaign-tag-groups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56918 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56920 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56914 - "GET /api/campaign-tag-groups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56914 - "GET /api/campaign-tag-groups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56940 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56940 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56953 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56953 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56966 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56966 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56982 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56982 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56989 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56988 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56989 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56988 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57009 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57009 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57028 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57028 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57101 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57101 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57127 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57127 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57155 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57155 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57169 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57169 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57188 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57188 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57199 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57199 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57215 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57215 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57232 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57234 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57234 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57256 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57256 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57274 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57274 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57288 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57288 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57306 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57306 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57324 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57324 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57345 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57345 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57361 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57361 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57374 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57374 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57389 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57389 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57402 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57402 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57414 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57414 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57425 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57425 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57447 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57447 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57462 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57462 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57480 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57483 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57497 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57497 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57517 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57517 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57535 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57535 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57550 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57550 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57570 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57570 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57583 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57583 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57598 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57598 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57614 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57614 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57628 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57628 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57643 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57643 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57658 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57658 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57672 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57672 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57693 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57693 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57698 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57698 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57712 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57712 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57730 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57742 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57742 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57759 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57759 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57778 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57778 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57802 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57802 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57814 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57814 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57831 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57831 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57845 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57845 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57857 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57857 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57872 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57880 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57880 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57898 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57898 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57915 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57915 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57931 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57931 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57949 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57949 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57967 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57967 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57988 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57988 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58000 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58000 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58019 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58019 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58037 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58037 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58049 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58049 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58069 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58069 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58088 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58088 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58107 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58107 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58120 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58120 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58135 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58135 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58150 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58150 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58167 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58167 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58178 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58178 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58194 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58194 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58212 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58212 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58227 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58227 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58242 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58242 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58260 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58260 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58277 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58277 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58294 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58294 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58309 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58309 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58324 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58324 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58343 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58345 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58345 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58376 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58376 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58392 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58392 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58408 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58408 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58421 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58421 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58435 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58435 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58458 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58458 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58474 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58474 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58490 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58490 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58518 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58518 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58533 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58533 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58549 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58549 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58570 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58570 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58590 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58590 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58605 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58605 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58620 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58620 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58633 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58633 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58652 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58656 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58656 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58671 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58671 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58688 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58688 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58706 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58706 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58717 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58717 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58739 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58739 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58769 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58769 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58776 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58776 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58781 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58781 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58786 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58786 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58794 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58796 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58804 - "OPTIONS /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "OPTIONS /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58808 - "OPTIONS /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58804 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58804 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58821 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58821 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58810 - "OPTIONS /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58830 - "OPTIONS /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58810 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58810 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58810 - "OPTIONS /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58830 - "GET /api/aggregators/connections HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 172, in list_connections
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58810 - "GET /api/aggregators/connections HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 172, in list_connections
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58834 - "OPTIONS /api/aggregators/orders?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58834 - "GET /api/aggregators/orders?limit=100 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 331, in list_orders
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58838 - "OPTIONS /api/aggregators/attribution HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/aggregators/attribution HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 540, in get_attribution
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58841 - "GET /api/aggregators/orders?limit=100 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 331, in list_orders
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58845 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58845 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58853 - "OPTIONS /api/whatsapp/acquisition/subscribers?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58856 - "OPTIONS /api/whatsapp/acquisition/config/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58858 - "OPTIONS /api/whatsapp/acquisition/subscribers?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58859 - "OPTIONS /api/whatsapp/acquisition/config/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58861 - "GET /api/whatsapp/acquisition/config/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58853 - "GET /api/whatsapp/acquisition/subscribers?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58861 - "GET /api/whatsapp/acquisition/config/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58853 - "GET /api/whatsapp/acquisition/subscribers?limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58853 - "GET /api/aggregators/connections HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 172, in list_connections
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58861 - "GET /api/aggregators/connections HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 172, in list_connections
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58859 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58859 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58859 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58858 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58859 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58858 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58859 - "OPTIONS /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58856 - "OPTIONS /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58858 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58859 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58858 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58856 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58867 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58867 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58872 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58872 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58881 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58881 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58893 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58893 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58932 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58932 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58951 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58951 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58953 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58956 - "GET /api/aggregators/connections HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/h11_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 121, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 107, in app
+    response = await f(request)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 426, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 314, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/joshualawrence/Documents/riserve-v9/backend/routes/aggregators.py", line 172, in list_connections
+    company_id = current_user["company_id"]
+TypeError: 'User' object is not subscriptable
+INFO:     127.0.0.1:58983 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58983 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59001 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59001 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59022 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59022 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'routes/aggregators.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-11 06:54:22,634 - server - INFO - Shutting down Ri'Serve API...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29638]
+INFO:     Started server process [35352]
+INFO:     Waiting for application startup.
+2026-05-11 06:54:25,698 - server - INFO - Starting Ri'Serve API (PostgreSQL Mode)...
+2026-05-11 06:54:25,782 - server - INFO - No expired trials found
+INFO:     Application startup complete.
+2026-05-11 06:54:25,799 - server - INFO - No expired trials found
+INFO:     127.0.0.1:59052 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59052 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59080 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59080 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59098 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59098 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59109 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59109 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59118 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59118 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59129 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59131 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59133 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59133 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59146 - "OPTIONS /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59146 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59170 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59170 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59175 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59175 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59184 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59185 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59193 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59193 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59204 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59204 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59221 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59221 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59231 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59231 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59249 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "OPTIONS /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "OPTIONS /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59253 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59249 - "OPTIONS /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "OPTIONS /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "OPTIONS /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/outlets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "GET /api/services HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "OPTIONS /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "OPTIONS /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "OPTIONS /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "OPTIONS /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/company/features HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59249 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59253 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59247 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/transactions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "GET /api/bookings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59255 - "OPTIONS /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "OPTIONS /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "OPTIONS /api/aggregators/orders?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "GET /api/aggregators/orders?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59246 - "OPTIONS /api/aggregators/attribution HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59268 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /api/aggregators/attribution HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59269 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59252 - "GET /api/aggregators/orders?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59274 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59274 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59279 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59279 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59284 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59286 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59284 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59286 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59294 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59294 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59301 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59301 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59304 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59304 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59312 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59312 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59319 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59319 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59324 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59324 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59338 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59338 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59357 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59357 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59398 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59398 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59416 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59416 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59444 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59444 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59472 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59472 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59487 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59487 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59493 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59493 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59505 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59505 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59514 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59514 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59523 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59523 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59531 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59537 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59537 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59560 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59568 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59575 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59575 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59595 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59595 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59613 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59618 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59620 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59620 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59630 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59630 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59650 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59656 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59656 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59658 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59689 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59689 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59707 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59709 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59714 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59714 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59722 - "GET /api/inventory/low-stock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59732 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59732 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59738 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59744 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59766 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59766 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59769 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59784 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59784 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59792 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59792 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59807 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59807 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59816 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59816 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59832 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59837 - "OPTIONS /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59837 - "GET /api/aggregators/connections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59845 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59845 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59858 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59858 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59880 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59880 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59919 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59919 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59930 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59930 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59951 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59951 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59963 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59963 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59973 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59973 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59978 - "OPTIONS /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59980 - "OPTIONS /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59983 - "OPTIONS /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "OPTIONS /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59978 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59978 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59978 - "OPTIONS /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "OPTIONS /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59983 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "GET /api/campaign-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "OPTIONS /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/submissions/stuck HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /api/campaigns HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "GET /api/submissions?limit=50&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59998 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59998 - "GET /api/public/order/1fde7ad0-6524-473c-8653-84efd4a0714e HTTP/1.1" 200 OK

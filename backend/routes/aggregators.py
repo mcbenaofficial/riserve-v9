@@ -169,7 +169,7 @@ async def list_connections(
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     stmt = select(AggregatorConnection).where(AggregatorConnection.company_id == company_id)
     if outlet_id:
         stmt = stmt.where(AggregatorConnection.outlet_id == outlet_id)
@@ -189,7 +189,7 @@ async def create_connection(
     if body.status not in VALID_STATUSES:
         raise HTTPException(400, f"status must be one of {VALID_STATUSES}")
 
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
 
     # Prevent duplicate platform+outlet
     existing = await db.execute(
@@ -225,7 +225,7 @@ async def update_connection(
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     result = await db.execute(
         select(AggregatorConnection).where(
             AggregatorConnection.id == connection_id,
@@ -259,7 +259,7 @@ async def delete_connection(
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     result = await db.execute(
         select(AggregatorConnection).where(
             AggregatorConnection.id == connection_id,
@@ -280,7 +280,7 @@ async def sync_connection(
     db: AsyncSession = Depends(get_db),
 ):
     """Attempt live API sync. Returns status; most platforms fall back to manual."""
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     result = await db.execute(
         select(AggregatorConnection).where(
             AggregatorConnection.id == connection_id,
@@ -328,7 +328,7 @@ async def list_orders(
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     stmt = select(AggregatorOrder).where(AggregatorOrder.company_id == company_id)
 
     if platform:
@@ -365,7 +365,7 @@ async def import_orders(
     Bulk manual import. Skips duplicates (same platform + external_order_id).
     Attempts auto-resolution against existing customers on import.
     """
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     imported = 0
     skipped = 0
     resolved = 0
@@ -444,7 +444,7 @@ async def resolve_order(
     db: AsyncSession = Depends(get_db),
 ):
     """Re-run customer identity resolution for a single order."""
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     result = await db.execute(
         select(AggregatorOrder).where(
             AggregatorOrder.id == order_id,
@@ -473,7 +473,7 @@ async def resolve_order_manual(
     db: AsyncSession = Depends(get_db),
 ):
     """Manually link an order to a specific Customer record."""
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     result = await db.execute(
         select(AggregatorOrder).where(
             AggregatorOrder.id == order_id,
@@ -504,7 +504,7 @@ async def mark_bridge_sent(
     db: AsyncSession = Depends(get_db),
 ):
     """Mark that a first-party re-capture offer was sent for this aggregator order."""
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
     result = await db.execute(
         select(AggregatorOrder).where(
             AggregatorOrder.id == order_id,
@@ -537,7 +537,7 @@ async def get_attribution(
     - Repeat customer rate per platform (orders with resolved_customer also having
       a second aggregator order — rough proxy for retention)
     """
-    company_id = current_user["company_id"]
+    company_id = current_user.company_id
 
     base = select(AggregatorOrder).where(AggregatorOrder.company_id == company_id)
     if outlet_id:

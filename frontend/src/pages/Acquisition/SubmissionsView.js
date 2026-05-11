@@ -454,13 +454,19 @@ export default function SubmissionsView() {
   // Dropdown open states
   const [stageDropOpen, setStageDropOpen] = useState(false);
   const [channelDropOpen, setChannelDropOpen] = useState(false);
+  const [campaignDropOpen, setCampaignDropOpen] = useState(false);
+  const [scoreDropOpen, setScoreDropOpen] = useState(false);
   const stageRef = useRef(null);
   const channelRef = useRef(null);
+  const campaignRef = useRef(null);
+  const scoreRef = useRef(null);
 
   useEffect(() => {
     function handleClick(e) {
       if (stageRef.current && !stageRef.current.contains(e.target)) setStageDropOpen(false);
       if (channelRef.current && !channelRef.current.contains(e.target)) setChannelDropOpen(false);
+      if (campaignRef.current && !campaignRef.current.contains(e.target)) setCampaignDropOpen(false);
+      if (scoreRef.current && !scoreRef.current.contains(e.target)) setScoreDropOpen(false);
     }
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
@@ -601,27 +607,66 @@ export default function SubmissionsView() {
           </div>
 
           {/* Min score */}
-          <input
-            type="number"
-            value={filterMinScore}
-            onChange={(e) => setFilterMinScore(e.target.value)}
-            placeholder="Min score"
-            min={0}
-            max={100}
-            className="w-28 bg-white/8 border border-white/10 rounded-xl px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-indigo-500/50"
-          />
+          <div className="relative" ref={scoreRef}>
+            <button
+              onClick={() => setScoreDropOpen((v) => !v)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/8 hover:bg-white/12 text-sm text-gray-300 transition-colors"
+            >
+              <Star size={13} className="text-gray-500" />
+              {filterMinScore ? `${filterMinScore}+ score` : 'Any Score'}
+              <ChevronDown size={13} className="text-gray-500" />
+            </button>
+            {scoreDropOpen && (
+              <div className="absolute left-0 top-9 z-20 w-36 rounded-xl bg-[#1C1F2A] border border-white/10 shadow-xl py-1">
+                {[['', 'Any Score'], ['40', '40+'], ['60', '60+'], ['70', '70+'], ['80', '80+'], ['90', '90+']].map(([val, label]) => (
+                  <button
+                    key={val}
+                    onClick={() => { setFilterMinScore(val); setScoreDropOpen(false); }}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-white/8 transition-colors ${filterMinScore === val ? 'text-white' : 'text-gray-400'}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Campaign filter */}
-          <select
-            value={filterCampaign}
-            onChange={(e) => setFilterCampaign(e.target.value)}
-            className="bg-white/8 border border-white/10 rounded-xl px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-indigo-500/50 max-w-[200px]"
-          >
-            <option value="">All Campaigns</option>
-            {campaigns.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
+          <div className="relative" ref={campaignRef}>
+            <button
+              onClick={() => setCampaignDropOpen((v) => !v)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/8 hover:bg-white/12 text-sm text-gray-300 transition-colors max-w-[200px]"
+            >
+              <span className="truncate">
+                {filterCampaign
+                  ? (campaigns.find((c) => c.id === filterCampaign)?.name || 'Campaign')
+                  : 'All Campaigns'}
+              </span>
+              <ChevronDown size={13} className="text-gray-500 flex-shrink-0" />
+            </button>
+            {campaignDropOpen && (
+              <div className="absolute left-0 top-9 z-20 w-52 rounded-xl bg-[#1C1F2A] border border-white/10 shadow-xl py-1 max-h-60 overflow-y-auto">
+                <button
+                  onClick={() => { setFilterCampaign(''); setCampaignDropOpen(false); }}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-white/8 transition-colors ${!filterCampaign ? 'text-white' : 'text-gray-400'}`}
+                >
+                  All Campaigns
+                </button>
+                {campaigns.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => { setFilterCampaign(c.id); setCampaignDropOpen(false); }}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-white/8 transition-colors truncate ${filterCampaign === c.id ? 'text-white' : 'text-gray-400'}`}
+                  >
+                    {c.name}
+                  </button>
+                ))}
+                {campaigns.length === 0 && (
+                  <p className="px-4 py-2 text-xs text-gray-600">No campaigns</p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
