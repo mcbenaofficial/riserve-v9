@@ -95,7 +95,7 @@ export default function IdentityGate({ outletId, outlet, company, children }: Id
             />
           )}
           <h1 className="text-4xl font-black tracking-tight mb-1.5 text-white" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
-            {company?.name || 'Welcome'}
+            {(config.portalNameMode === 'company' ? company?.name : outlet?.name) || 'Welcome'}
           </h1>
           <p className="text-sm font-medium text-white/55">
             {outlet?.location || 'Please identify yourself to continue'}

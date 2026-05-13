@@ -787,7 +787,8 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
   const logoUrl = outlet?.portal_logo_url
     ? (outlet.portal_logo_url.startsWith('/') ? `${BACKEND_URL}${outlet.portal_logo_url}` : outlet.portal_logo_url)
     : null;
-  const restaurantName = company?.name || 'Restaurant';
+  const portalCfg = outlet?.portal_color_scheme || {};
+  const restaurantName = (portalCfg.portalNameMode === 'company' ? company?.name : outlet?.name) || 'Restaurant';
   const cuisineType = outlet?.cuisine_type || '';
   const openingHours = outlet?.opening_hours || '';
   const openStatus = isOpenNow(openingHours);
@@ -1588,7 +1589,7 @@ export default function MenuClient({ outletId, outlet, company, categories, cate
   const menuLayout = colors.menuLayout || 'classic';
   const requireIdentity = colors.requireIdentity !== false;
   const logoUrl = outlet?.portal_logo_url || null;
-  const restaurantName = company?.name || 'Restaurant';
+  const restaurantName = (colors.portalNameMode === 'company' ? company?.name : outlet?.name) || 'Restaurant';
   const outletLocation = outlet?.location || '';
 
   useEffect(() => {

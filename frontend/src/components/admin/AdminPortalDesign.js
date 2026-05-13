@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { api, getImageUrl } from '../../services/api';
 import {
   Palette, Image as ImageIcon, LayoutTemplate, Type, Save, CheckCircle2, Loader2,
   Link as LinkIcon, QrCode, Copy, ExternalLink, ShieldCheck, Smartphone,
   Scissors, Coffee, CalendarCheck, UtensilsCrossed, UserCircle, Phone,
-  MessageCircle, ToggleLeft, ToggleRight, Eye, Globe, Lock, LayoutGrid, List, Grid3x3, ChevronsUpDown
+  MessageCircle, ToggleLeft, ToggleRight, Eye, Globe, Lock, LayoutGrid, List, Grid3x3, ChevronsUpDown,
+  Upload, X, ImagePlus
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -50,6 +51,106 @@ const Section = ({ icon: Icon, iconColor = 'text-purple-500', title, subtitle, c
     {children}
   </div>
 );
+
+// ─── Image Upload Zone ──────────────────────────────────────────
+const ImageUploadZone = ({ label, hint, value, onChange, aspect = 'square' }) => {
+  const [dragging, setDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const inputRef = useRef(null);
+
+  const upload = async (file) => {
+    if (!file) return;
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowed.includes(file.type)) { alert('Only JPG, PNG, WEBP, or GIF files are allowed.'); return; }
+    setUploading(true);
+    try {
+      const data = new FormData();
+      data.append('files', file);
+      const res = await api.uploadFiles(data);
+      if (res.data.urls?.length > 0) onChange(res.data.urls[0]);
+    } catch {
+      alert('Upload failed. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) upload(file);
+  };
+
+  const previewH = aspect === 'wide' ? 'h-28' : 'h-28';
+  const previewW = aspect === 'square' ? 'w-28' : 'w-full';
+
+  return (
+    <div className="space-y-2">
+      <label className="block text-[10px] font-bold text-gray-500 dark:text-[#7D8590] uppercase tracking-wider">
+        {label}
+      </label>
+
+      {value ? (
+        <div className={`relative ${previewH} ${previewW} rounded-2xl overflow-hidden border border-gray-200 dark:border-[#1F2630] bg-white dark:bg-black/20 group`}>
+          <img
+            src={getImageUrl(value)}
+            alt={label}
+            className={`w-full h-full ${aspect === 'square' ? 'object-contain p-2' : 'object-cover'}`}
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="w-8 h-8 rounded-full bg-white/90 text-gray-900 flex items-center justify-center hover:bg-white transition-colors shadow-md"
+              title="Replace image"
+            >
+              <Upload size={13} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange('')}
+              className="w-8 h-8 rounded-full bg-red-500/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors shadow-md"
+              title="Remove image"
+            >
+              <X size={13} />
+            </button>
+          </div>
+          <input ref={inputRef} type="file" className="hidden" accept="image/*" onChange={(e) => upload(e.target.files[0])} />
+        </div>
+      ) : (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={handleDrop}
+          onClick={() => !uploading && inputRef.current?.click()}
+          className={`relative cursor-pointer ${previewH} ${previewW} rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2
+            ${dragging
+              ? 'border-purple-400 bg-purple-50 dark:bg-purple-900/10 scale-[1.01]'
+              : 'border-gray-200 dark:border-[#1F2630] hover:border-purple-300 dark:hover:border-purple-500/30 bg-gray-50/50 dark:bg-black/10 hover:bg-purple-50/50 dark:hover:bg-purple-900/5'
+            }`}
+        >
+          {uploading ? (
+            <Loader2 size={20} className="animate-spin text-purple-400" />
+          ) : (
+            <>
+              <div className={`p-2.5 rounded-xl transition-colors ${dragging ? 'bg-purple-100 dark:bg-purple-500/20' : 'bg-gray-100 dark:bg-white/5'}`}>
+                <ImagePlus size={18} className={dragging ? 'text-purple-500' : 'text-gray-400 dark:text-[#7D8590]'} />
+              </div>
+              <div className="text-center px-4">
+                <p className="text-xs font-semibold text-gray-700 dark:text-[#E6E8EB]">
+                  {dragging ? 'Drop to upload' : 'Click or drag & drop'}
+                </p>
+                <p className="text-[10px] text-gray-400 dark:text-[#7D8590] mt-0.5">{hint}</p>
+              </div>
+            </>
+          )}
+          <input ref={inputRef} type="file" className="hidden" accept="image/*" onChange={(e) => upload(e.target.files[0])} />
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ─── Main Component ─────────────────────────────────────────────
 const AdminPortalDesign = () => {
@@ -138,22 +239,6 @@ const AdminPortalDesign = () => {
         const hasBook = licensedModules.includes('booking');
         setPortalType(hasMenu && hasBook ? 'both' : hasBook ? 'booking' : 'order');
       }
-    }
-  };
-
-  const handleFileUpload = async (file, type) => {
-    if (!file) return;
-    try {
-      const data = new FormData();
-      data.append('files', file);
-      const res = await api.uploadFiles(data);
-      if (res.data.urls?.length > 0) {
-        if (type === 'logo') setLogoUrl(res.data.urls[0]);
-        if (type === 'hero') setHeroImageUrl(res.data.urls[0]);
-      }
-    } catch (error) {
-      console.error('Upload failed', error);
-      alert('Failed to upload image.');
     }
   };
 
@@ -482,35 +567,21 @@ const AdminPortalDesign = () => {
             title="Brand Assets"
             subtitle="Upload your logo and hero banner"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className="block text-[10px] font-bold text-gray-500 dark:text-[#7D8590] uppercase tracking-wider mb-2">Portal Logo</label>
-                <div className="flex items-center gap-4">
-                  <label className="flex-1 px-4 py-2.5 bg-purple-50 dark:bg-purple-900/10 border border-purple-200 dark:border-purple-500/20 text-purple-700 dark:text-purple-400 rounded-xl text-center cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900/20 transition-colors font-semibold text-sm">
-                    Upload Logo
-                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e.target.files[0], 'logo')} />
-                  </label>
-                  {logoUrl && (
-                    <div className="w-12 h-12 rounded-lg bg-white dark:bg-black/20 border border-gray-200 dark:border-[#1F2630] p-1 flex items-center justify-center shrink-0">
-                      <img src={getImageUrl(logoUrl)} alt="Logo" className="max-w-full max-h-full object-contain" />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div>
-                <label className="block text-[10px] font-bold text-gray-500 dark:text-[#7D8590] uppercase tracking-wider mb-2">Hero Banner</label>
-                <div className="flex items-center gap-4">
-                  <label className="flex-1 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 rounded-xl text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/20 transition-colors font-semibold text-sm">
-                    Upload Image
-                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e.target.files[0], 'hero')} />
-                  </label>
-                  {heroImageUrl && (
-                    <div className="w-16 h-12 rounded-lg overflow-hidden shrink-0 border border-gray-200 dark:border-[#1F2630]">
-                      <img src={getImageUrl(heroImageUrl)} alt="Hero" className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                </div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
+              <ImageUploadZone
+                label="Portal Logo"
+                hint="PNG or SVG · transparent background works best"
+                value={logoUrl}
+                onChange={setLogoUrl}
+                aspect="square"
+              />
+              <ImageUploadZone
+                label="Hero Banner"
+                hint="JPG or PNG · 1200 × 400 px recommended"
+                value={heroImageUrl}
+                onChange={setHeroImageUrl}
+                aspect="wide"
+              />
             </div>
           </Section>
 

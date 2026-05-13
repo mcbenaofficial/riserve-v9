@@ -23,7 +23,7 @@ export default function Header({ title }: { title: string }) {
       <div className="container flex h-16 items-center justify-between mx-auto px-4 md:px-8">
         <div className="flex gap-4 items-center">
             {branding?.logo_url ? (
-               <img src={branding.logo_url} alt="Logo" className="w-8 h-8 rounded-full object-cover" />
+               <img src={branding.logo_url} alt="Logo" className="h-9 w-auto max-w-[120px] object-contain" />
             ) : null}
             <Link href="/" className="font-bold text-xl tracking-tight">
               {branding?.custom_domain ? branding.custom_domain.split('.')[0].toUpperCase() : title}

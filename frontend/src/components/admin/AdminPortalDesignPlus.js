@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../services/api';
+import { api, getImageUrl } from '../../services/api';
 import { useTheme } from '../../contexts/ThemeContext';
 import {
   Sparkles, Palette, LayoutGrid, List, Grid3x3, ChevronsUpDown,
   Save, CheckCircle2, Loader2, Copy, ExternalLink, QrCode,
   Smartphone, Wand2, ShieldCheck, MessageCircle, UtensilsCrossed,
-  User, Star, Hash, ShoppingCart
+  User, Star, Hash, ShoppingCart, Upload, X, ImagePlus
 } from 'lucide-react';
 
 // ─── Theme Presets ──────────────────────────────────────────────────────────
@@ -89,6 +89,95 @@ const Section = ({ icon: Icon, title, subtitle, children, iconColor = 'text-viol
     {children}
   </div>
 );
+
+// ─── Image Upload Zone ───────────────────────────────────────────────────────
+const ImageUploadZone = ({ label, hint, value, onChange, aspect = 'square' }) => {
+  const [dragging, setDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const inputRef = useRef(null);
+
+  const upload = async (file) => {
+    if (!file) return;
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowed.includes(file.type)) { alert('Only JPG, PNG, WEBP, or GIF files are allowed.'); return; }
+    setUploading(true);
+    try {
+      const data = new FormData();
+      data.append('files', file);
+      const res = await api.uploadFiles(data);
+      if (res.data.urls?.length > 0) onChange(res.data.urls[0]);
+    } catch {
+      alert('Upload failed. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) upload(file);
+  };
+
+  const previewW = aspect === 'square' ? 'w-28' : 'w-full';
+
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-xs font-bold text-gray-700 dark:text-[#E6E8EB]">{label}</label>
+
+      {value ? (
+        <div className={`relative h-28 ${previewW} rounded-2xl overflow-hidden border border-gray-200 dark:border-[#1F2630] bg-white dark:bg-black/20 group`}>
+          <img
+            src={getImageUrl(value)}
+            alt={label}
+            className={`w-full h-full ${aspect === 'square' ? 'object-contain p-2' : 'object-cover'}`}
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+            <button type="button" onClick={() => inputRef.current?.click()}
+              className="w-8 h-8 rounded-full bg-white/90 text-gray-900 flex items-center justify-center hover:bg-white transition-colors shadow-md" title="Replace">
+              <Upload size={13} />
+            </button>
+            <button type="button" onClick={() => onChange('')}
+              className="w-8 h-8 rounded-full bg-red-500/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors shadow-md" title="Remove">
+              <X size={13} />
+            </button>
+          </div>
+          <input ref={inputRef} type="file" className="hidden" accept="image/*" onChange={(e) => upload(e.target.files[0])} />
+        </div>
+      ) : (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={handleDrop}
+          onClick={() => !uploading && inputRef.current?.click()}
+          className={`relative cursor-pointer h-28 ${previewW} rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2
+            ${dragging
+              ? 'border-violet-400 bg-violet-50 dark:bg-violet-900/10 scale-[1.01]'
+              : 'border-gray-200 dark:border-[#1F2630] hover:border-violet-300 dark:hover:border-violet-500/30 bg-gray-50/50 dark:bg-black/10'
+            }`}
+        >
+          {uploading ? (
+            <Loader2 size={20} className="animate-spin text-violet-400" />
+          ) : (
+            <>
+              <div className={`p-2.5 rounded-xl transition-colors ${dragging ? 'bg-violet-100 dark:bg-violet-500/20' : 'bg-gray-100 dark:bg-white/5'}`}>
+                <ImagePlus size={18} className={dragging ? 'text-violet-500' : 'text-gray-400 dark:text-[#7D8590]'} />
+              </div>
+              <div className="text-center px-4">
+                <p className="text-xs font-semibold text-gray-700 dark:text-[#E6E8EB]">
+                  {dragging ? 'Drop to upload' : 'Click or drag & drop'}
+                </p>
+                <p className="text-[10px] text-gray-400 dark:text-[#7D8590] mt-0.5">{hint}</p>
+              </div>
+            </>
+          )}
+          <input ref={inputRef} type="file" className="hidden" accept="image/*" onChange={(e) => upload(e.target.files[0])} />
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ─── Mobile Preview ──────────────────────────────────────────────────────────
 const MobilePreview = ({ colors, fontFamily, logoUrl, restaurantName, menuLayout, menuItems = [] }) => {
@@ -249,14 +338,20 @@ export default function AdminPortalDesignPlus() {
   const [aiDishSuggestion, setAiDishSuggestion] = useState(true);
   const [whatsappOptIn, setWhatsappOptIn] = useState(true);
   const [portalType, setPortalType] = useState('order');
+  const [portalNameMode, setPortalNameMode] = useState('outlet'); // 'outlet' | 'company'
+  const [companyName, setCompanyName] = useState('');
 
   useEffect(() => { fetchData(); }, []);
 
   const fetchData = async () => {
     try {
-      const res = await api.getOutlets();
-      const list = res.data || [];
+      const [outletsRes, companyRes] = await Promise.all([
+        api.getOutlets(),
+        api.getCompanySettings().catch(() => ({ data: {} })),
+      ]);
+      const list = outletsRes.data || [];
       setOutlets(list);
+      setCompanyName(companyRes.data?.name || '');
       if (list.length > 0) {
         const first = list.find(o => o.status === 'Active') || list[0];
         loadOutlet(first.id, list);
@@ -290,6 +385,7 @@ export default function AdminPortalDesignPlus() {
     setAiDishSuggestion(cfg.aiDishSuggestion !== false);
     setWhatsappOptIn(cfg.whatsappOptIn !== false);
     setPortalType(cfg.portalType || 'order');
+    setPortalNameMode(cfg.portalNameMode || 'outlet');
   };
 
   const applyPreset = (preset) => {
@@ -359,6 +455,7 @@ export default function AdminPortalDesignPlus() {
           aiDishSuggestion,
           whatsappOptIn,
           portalType,
+          portalNameMode,
         },
       });
       setSaveSuccess(true);
@@ -474,19 +571,52 @@ export default function AdminPortalDesignPlus() {
             </Section>
 
             {/* Restaurant identity */}
-            <Section icon={Smartphone} title="Restaurant Identity" subtitle="Hero banner, cuisine type, and opening hours shown on the portal header" iconColor="text-blue-500">
+            <Section icon={Smartphone} title="Restaurant Identity" subtitle="Logo, hero banner, cuisine type, and opening hours" iconColor="text-blue-500">
               <div className="space-y-4">
+                {/* Name display mode */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700 dark:text-[#E6E8EB]">Cover / Hero Image URL</label>
-                  <input type="text" value={coverImageUrl} onChange={e => setCoverImageUrl(e.target.value)}
-                    placeholder="https://your-cdn.com/hero.jpg"
-                    className="w-full text-sm px-3 py-2.5 rounded-xl border border-gray-200 dark:border-[#1F2630] bg-transparent text-gray-700 dark:text-[#E6E8EB] focus:outline-none focus:border-violet-400 transition-colors" />
-                  {coverImageUrl && (
-                    <div className="mt-2 rounded-xl overflow-hidden h-24 border border-gray-200 dark:border-[#1F2630]">
-                      <img src={coverImageUrl} alt="Cover preview" className="w-full h-full object-cover" onError={e => e.target.style.display = 'none'} />
-                    </div>
-                  )}
-                  <p className="text-[10px] text-gray-400 dark:text-[#7D8590]">Wide landscape image (1200×400px recommended). Shown as a full-bleed hero on the portal.</p>
+                  <label className="text-xs font-bold text-gray-700 dark:text-[#E6E8EB]">Portal Display Name</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { value: 'outlet', label: 'Outlet Name', preview: outlets.find(o => o.id === selectedOutletId)?.name || '—' },
+                      { value: 'company', label: 'Account Name', preview: companyName || '—' },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setPortalNameMode(opt.value)}
+                        className={`p-3 rounded-xl border-2 text-left transition-all ${
+                          portalNameMode === opt.value
+                            ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10'
+                            : 'border-gray-200 dark:border-[#1F2630] hover:border-gray-300 dark:hover:border-white/10'
+                        }`}
+                      >
+                        <div className={`text-[10px] font-bold uppercase tracking-wider mb-0.5 ${
+                          portalNameMode === opt.value ? 'text-violet-600 dark:text-violet-400' : 'text-gray-400 dark:text-[#7D8590]'
+                        }`}>{opt.label}</div>
+                        <div className={`text-xs font-semibold truncate ${
+                          portalNameMode === opt.value ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-[#7D8590]'
+                        }`}>{opt.preview}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                  <ImageUploadZone
+                    label="Portal Logo"
+                    hint="PNG or SVG · transparent bg recommended"
+                    value={logoUrl}
+                    onChange={setLogoUrl}
+                    aspect="square"
+                  />
+                  <ImageUploadZone
+                    label="Cover / Hero Image"
+                    hint="JPG or PNG · 1200 × 400 px recommended"
+                    value={coverImageUrl}
+                    onChange={setCoverImageUrl}
+                    aspect="wide"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
@@ -680,7 +810,7 @@ export default function AdminPortalDesignPlus() {
                 colors={colors}
                 fontFamily={fontFamily}
                 logoUrl={logoUrl}
-                restaurantName={selectedOutlet?.name || 'Restaurant'}
+                restaurantName={(portalNameMode === 'company' ? companyName : selectedOutlet?.name) || 'Restaurant'}
                 menuLayout={menuLayout}
                 menuItems={menuItems}
               />
