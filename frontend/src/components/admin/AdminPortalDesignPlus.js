@@ -6,7 +6,7 @@ import {
   Sparkles, Palette, LayoutGrid, List, Grid3x3, ChevronsUpDown,
   Save, CheckCircle2, Loader2, Copy, ExternalLink, QrCode,
   Smartphone, Wand2, ShieldCheck, MessageCircle, UtensilsCrossed,
-  User, Star, Hash, ShoppingCart, Upload, X, ImagePlus
+  User, Star, Hash, ShoppingCart, Upload, X, ImagePlus, SlidersHorizontal
 } from 'lucide-react';
 
 // ─── Theme Presets ──────────────────────────────────────────────────────────
@@ -89,6 +89,115 @@ const Section = ({ icon: Icon, title, subtitle, children, iconColor = 'text-viol
     {children}
   </div>
 );
+
+// ─── Logo Adjust Panel ───────────────────────────────────────────────────────
+const LogoAdjustPanel = ({ logoUrl, adjust, onChange }) => {
+  const [dragging, setDragging] = useState(false);
+  const dragRef = useRef({ startX: 0, startY: 0, startAdjX: 0, startAdjY: 0 });
+
+  const { x = 0, y = 0, scale = 1, fit = 'contain' } = adjust;
+
+  const onMouseDown = (e) => {
+    e.preventDefault();
+    dragRef.current = { startX: e.clientX, startY: e.clientY, startAdjX: x, startAdjY: y };
+    setDragging(true);
+  };
+
+  useEffect(() => {
+    if (!dragging) return;
+    const onMove = (e) => {
+      const dx = ((e.clientX - dragRef.current.startX) / 128) * 100;
+      const dy = ((e.clientY - dragRef.current.startY) / 128) * 100;
+      onChange({ ...adjust, x: dragRef.current.startAdjX + dx, y: dragRef.current.startAdjY + dy });
+    };
+    const onUp = () => setDragging(false);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+  }, [dragging, adjust, onChange]);
+
+  const onWheel = (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    onChange({ ...adjust, scale: Math.round(Math.max(0.3, Math.min(4, scale + delta)) * 10) / 10 });
+  };
+
+  return (
+    <div className="p-4 rounded-2xl border border-gray-200 dark:border-[#1F2630] bg-gray-50 dark:bg-black/20 space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-bold text-gray-700 dark:text-[#E6E8EB]">Adjust Logo</span>
+        <button type="button" onClick={() => onChange({ x: 0, y: 0, scale: 1, fit: 'contain' })}
+          className="text-[10px] font-bold text-violet-500 hover:text-violet-600 transition-colors">
+          Reset
+        </button>
+      </div>
+
+      {/* Drag canvas */}
+      <div className="flex flex-col items-center gap-1.5">
+        <div
+          onMouseDown={onMouseDown}
+          onWheel={onWheel}
+          className={`relative w-32 h-32 rounded-2xl overflow-hidden select-none ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+          style={{ background: 'repeating-conic-gradient(#80808018 0% 25%, transparent 0% 50%) 0 0 / 12px 12px', border: '1.5px dashed rgba(128,128,128,0.3)' }}
+        >
+          {logoUrl && (
+            <img
+              src={getImageUrl(logoUrl)}
+              alt="Logo"
+              draggable={false}
+              style={{
+                position: 'absolute', inset: 0, width: '100%', height: '100%',
+                objectFit: fit,
+                transform: `translate(${x}%, ${y}%) scale(${scale})`,
+                transformOrigin: 'center center',
+                pointerEvents: 'none',
+              }}
+            />
+          )}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 w-full h-px -translate-y-px" style={{ background: 'rgba(255,255,255,0.12)' }} />
+            <div className="absolute left-1/2 h-full w-px -translate-x-px" style={{ background: 'rgba(255,255,255,0.12)' }} />
+          </div>
+        </div>
+        <p className="text-[10px] text-gray-400 dark:text-[#7D8590]">Drag to reposition · Scroll to zoom</p>
+      </div>
+
+      {/* Zoom slider */}
+      <div className="space-y-1.5">
+        <div className="flex justify-between items-center">
+          <span className="text-[10px] font-semibold text-gray-500 dark:text-[#7D8590]">Zoom</span>
+          <span className="text-[10px] font-mono text-gray-500 dark:text-[#7D8590]">{Number(scale).toFixed(1)}×</span>
+        </div>
+        <input type="range" min="0.3" max="4" step="0.1" value={scale}
+          onChange={e => onChange({ ...adjust, scale: parseFloat(e.target.value) })}
+          className="w-full cursor-pointer accent-violet-500"
+        />
+      </div>
+
+      {/* Fit mode */}
+      <div className="space-y-1.5">
+        <span className="text-[10px] font-semibold text-gray-500 dark:text-[#7D8590]">Fit Mode</span>
+        <div className="flex gap-2">
+          {[
+            { v: 'contain', label: 'Contain', sub: 'Full logo visible' },
+            { v: 'cover',   label: 'Cover',   sub: 'Fill the frame' },
+          ].map(o => (
+            <button key={o.v} type="button" onClick={() => onChange({ ...adjust, fit: o.v })}
+              className={`flex-1 py-2 px-3 rounded-xl border text-left transition-all ${
+                fit === o.v
+                  ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/10'
+                  : 'border-gray-200 dark:border-[#1F2630] hover:border-gray-300 dark:hover:border-white/10'
+              }`}
+            >
+              <div className={`text-xs font-bold ${fit === o.v ? 'text-violet-700 dark:text-violet-300' : 'text-gray-600 dark:text-[#E6E8EB]'}`}>{o.label}</div>
+              <div className="text-[9px] text-gray-400 dark:text-[#7D8590] mt-0.5">{o.sub}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ─── Image Upload Zone ───────────────────────────────────────────────────────
 const ImageUploadZone = ({ label, hint, value, onChange, aspect = 'square' }) => {
@@ -340,6 +449,8 @@ export default function AdminPortalDesignPlus() {
   const [portalType, setPortalType] = useState('order');
   const [portalNameMode, setPortalNameMode] = useState('outlet'); // 'outlet' | 'company'
   const [companyName, setCompanyName] = useState('');
+  const [logoAdjust, setLogoAdjust] = useState({ x: 0, y: 0, scale: 1, fit: 'contain' });
+  const [showLogoAdjust, setShowLogoAdjust] = useState(false);
 
   useEffect(() => { fetchData(); }, []);
 
@@ -386,6 +497,8 @@ export default function AdminPortalDesignPlus() {
     setWhatsappOptIn(cfg.whatsappOptIn !== false);
     setPortalType(cfg.portalType || 'order');
     setPortalNameMode(cfg.portalNameMode || 'outlet');
+    setLogoAdjust(cfg.logoAdjust || { x: 0, y: 0, scale: 1, fit: 'contain' });
+    setShowLogoAdjust(false);
   };
 
   const applyPreset = (preset) => {
@@ -456,6 +569,7 @@ export default function AdminPortalDesignPlus() {
           whatsappOptIn,
           portalType,
           portalNameMode,
+          logoAdjust,
         },
       });
       setSaveSuccess(true);
@@ -603,13 +717,34 @@ export default function AdminPortalDesignPlus() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
-                  <ImageUploadZone
-                    label="Portal Logo"
-                    hint="PNG or SVG · transparent bg recommended"
-                    value={logoUrl}
-                    onChange={setLogoUrl}
-                    aspect="square"
-                  />
+                  <div className="space-y-2">
+                    <ImageUploadZone
+                      label="Portal Logo"
+                      hint="PNG or SVG · transparent bg recommended"
+                      value={logoUrl}
+                      onChange={(v) => { setLogoUrl(v); if (!v) setShowLogoAdjust(false); }}
+                      aspect="square"
+                    />
+                    {logoUrl && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => setShowLogoAdjust(v => !v)}
+                          className="flex items-center gap-1.5 text-[11px] font-bold text-violet-500 hover:text-violet-600 transition-colors"
+                        >
+                          <SlidersHorizontal size={12} />
+                          {showLogoAdjust ? 'Hide adjustments' : 'Reposition & zoom'}
+                        </button>
+                        {showLogoAdjust && (
+                          <LogoAdjustPanel
+                            logoUrl={logoUrl}
+                            adjust={logoAdjust}
+                            onChange={setLogoAdjust}
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
                   <ImageUploadZone
                     label="Cover / Hero Image"
                     hint="JPG or PNG · 1200 × 400 px recommended"

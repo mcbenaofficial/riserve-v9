@@ -873,7 +873,12 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
         <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 flex items-end gap-3">
           {logoUrl && (
             <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0 shadow-xl ring-2 ring-white/30 mb-1">
-              <img src={logoUrl} alt={restaurantName} className="w-full h-full object-cover" />
+              <img src={logoUrl} alt={restaurantName} style={{
+                width: '100%', height: '100%',
+                objectFit: portalCfg.logoAdjust?.fit || 'cover',
+                transform: `translate(${portalCfg.logoAdjust?.x ?? 0}%, ${portalCfg.logoAdjust?.y ?? 0}%) scale(${portalCfg.logoAdjust?.scale ?? 1})`,
+                transformOrigin: 'center center',
+              }} />
             </div>
           )}
           <div className="flex-1 min-w-0">
