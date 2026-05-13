@@ -386,6 +386,21 @@ export const api = {
   updateSuperAdminRazorpayConfig: (companyId, data) => axios.put(`${API}/super-admin/razorpay/config/${companyId}`, data, { headers: getHeaders() }),
   superAdminCreateRazorpayAccount: (companyId) => axios.post(`${API}/super-admin/razorpay/create-account/${companyId}`, {}, { headers: getHeaders() }),
 
+  // ── Stripe Connect ────────────────────────────────────────────────
+  getStripeConfig: () => axios.get(`${API}/stripe/config`, { headers: getHeaders() }),
+  updateStripeConfig: (data) => axios.put(`${API}/stripe/config`, data, { headers: getHeaders() }),
+  createStripeConnectAccount: (data) => axios.post(`${API}/stripe/connect/account`, data, { headers: getHeaders() }),
+  refreshStripeOnboardingLink: () => axios.post(`${API}/stripe/connect/account/refresh`, {}, { headers: getHeaders() }),
+  getStripeDashboardLink: () => axios.get(`${API}/stripe/connect/account/dashboard`, { headers: getHeaders() }),
+  refreshStripeAccountStatus: () => axios.get(`${API}/stripe/connect/account/status`, { headers: getHeaders() }),
+  getStripeFeePreview: (amount) => axios.get(`${API}/stripe/fee-preview`, { params: { amount }, headers: getHeaders() }),
+  createStripePaymentIntent: (data) => axios.post(`${API}/stripe/payment-intent`, data, { headers: getHeaders() }),
+
+  // ── Super Admin: Stripe ───────────────────────────────────────────
+  getSuperAdminStripeStats: () => axios.get(`${API}/super-admin/stripe/stats`, { headers: getHeaders() }),
+  getSuperAdminStripeConfig: (companyId) => axios.get(`${API}/super-admin/stripe/config/${companyId}`, { headers: getHeaders() }),
+  updateSuperAdminStripeConfig: (companyId, data) => axios.put(`${API}/super-admin/stripe/config/${companyId}`, data, { headers: getHeaders() }),
+
   // ── Invoices ──────────────────────────────────────────────────────
   getInvoices: (params) => axios.get(`${API}/invoices`, { headers: getHeaders(), params }),
   getInvoice: (id) => axios.get(`${API}/invoices/${id}`, { headers: getHeaders() }),

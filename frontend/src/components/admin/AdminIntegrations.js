@@ -7,13 +7,14 @@ import { api } from '../../services/api';
 import AdminWhatsApp from './AdminWhatsApp';
 import AdminRazorpay from './AdminRazorpay';
 import AdminPetPooja from './AdminPetPooja';
+import AdminStripe from './AdminStripe';
 
 // Integrations that have a real config screen — always show Configure, not just Connect
-const CONFIGURABLE = new Set(['WhatsApp Business', 'Razorpay', 'PetPooja']);
+const CONFIGURABLE = new Set(['WhatsApp Business', 'Razorpay', 'PetPooja', 'Stripe']);
 
 const STATIC_INTEGRATIONS = [
   { id: 1,  name: 'Google Calendar',   icon: Calendar,        iconBg: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',   description: 'Sync bookings with Google Calendar',            connected: true,  status: 'healthy' },
-  { id: 2,  name: 'Stripe',            icon: CreditCard,      iconBg: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400', description: 'Payment processing',                        connected: true,  status: 'healthy' },
+  { id: 2,  name: 'Stripe',            icon: CreditCard,      iconBg: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400', description: 'Payment processing via Stripe Connect Express', connected: false, status: 'disconnected' },
   { id: 3,  name: 'Razorpay',          icon: CreditCard,      iconBg: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400', description: 'Payment gateway for India',                  connected: false, status: 'disconnected' },
   { id: 4,  name: 'WhatsApp Business', icon: MessageCircle,   iconBg: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',  description: 'Send WhatsApp notifications',                  connected: true,  status: 'healthy' },
   { id: 5,  name: 'Zoho CRM',          icon: Users,           iconBg: 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400',  description: 'Customer relationship management',              connected: false, status: 'disconnected' },
@@ -28,31 +29,47 @@ const AdminIntegrations = ({ onNavigateToTab }) => {
   const [integrations, setIntegrations] = useState(STATIC_INTEGRATIONS);
   const [loadingStatus, setLoadingStatus] = useState(true);
 
-  // Load real PetPooja connection status from the API on mount
+  // Load real connection status from APIs on mount
   useEffect(() => {
+    let done = 0;
+    const maybeFinish = () => { done++; if (done >= 2) setLoadingStatus(false); };
+
+    // PetPooja status
     api.getPetPoojaConfigs()
       .then(r => {
         const configs = r.data || [];
-        // Connected = at least one outlet is in "connected" state
-        // Error = at least one is in "error" state but none connected
         let ppStatus = 'disconnected';
         for (const cfg of configs) {
           if (cfg.status === 'connected') { ppStatus = 'healthy'; break; }
           if (cfg.status === 'error')     ppStatus = 'warning';
         }
-        const ppConnected = ppStatus === 'healthy';
         setIntegrations(prev =>
-          prev.map(i => i.name === 'PetPooja' ? { ...i, connected: ppConnected, status: ppStatus } : i)
+          prev.map(i => i.name === 'PetPooja' ? { ...i, connected: ppStatus === 'healthy', status: ppStatus } : i)
         );
       })
-      .catch(() => { /* leave default disconnected state */ })
-      .finally(() => setLoadingStatus(false));
+      .catch(() => {})
+      .finally(maybeFinish);
+
+    // Stripe status
+    api.getStripeConfig()
+      .then(r => {
+        const cfg = r.data || {};
+        let stripeStatus = 'disconnected';
+        if (cfg.connect_charges_enabled)                          stripeStatus = 'healthy';
+        else if (cfg.connect_account_id && !cfg.connect_charges_enabled) stripeStatus = 'warning';
+        setIntegrations(prev =>
+          prev.map(i => i.name === 'Stripe' ? { ...i, connected: stripeStatus === 'healthy', status: stripeStatus } : i)
+        );
+      })
+      .catch(() => {})
+      .finally(maybeFinish);
   }, []);
 
   const handleNavigate = (name) => {
     if (name === 'WhatsApp Business') setActiveIntegration('whatsapp');
     else if (name === 'Razorpay')     setActiveIntegration('razorpay');
     else if (name === 'PetPooja')     setActiveIntegration('petpooja');
+    else if (name === 'Stripe')       setActiveIntegration('stripe');
   };
 
   const getStatusBadge = (status) => {
@@ -75,6 +92,16 @@ const AdminIntegrations = ({ onNavigateToTab }) => {
 
   if (activeIntegration === 'whatsapp')  return <AdminWhatsApp onBack={() => setActiveIntegration(null)} />;
   if (activeIntegration === 'razorpay')  return <AdminRazorpay onBack={() => setActiveIntegration(null)} />;
+  if (activeIntegration === 'stripe')    return <AdminStripe onBack={() => {
+    setActiveIntegration(null);
+    api.getStripeConfig().then(r => {
+      const cfg = r.data || {};
+      let stripeStatus = 'disconnected';
+      if (cfg.connect_charges_enabled)                               stripeStatus = 'healthy';
+      else if (cfg.connect_account_id && !cfg.connect_charges_enabled) stripeStatus = 'warning';
+      setIntegrations(prev => prev.map(i => i.name === 'Stripe' ? { ...i, connected: stripeStatus === 'healthy', status: stripeStatus } : i));
+    }).catch(() => {});
+  }} />;
   if (activeIntegration === 'petpooja')  return <AdminPetPooja onBack={() => { setActiveIntegration(null); /* refresh status on return */ api.getPetPoojaConfigs().then(r => { const configs = r.data || []; let ppStatus = 'disconnected'; for (const cfg of configs) { if (cfg.status === 'connected') { ppStatus = 'healthy'; break; } if (cfg.status === 'error') ppStatus = 'warning'; } setIntegrations(prev => prev.map(i => i.name === 'PetPooja' ? { ...i, connected: ppStatus === 'healthy', status: ppStatus } : i)); }).catch(() => {}); }} />;
 
   return (

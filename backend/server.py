@@ -211,6 +211,7 @@ from routes import (
     users, company, inventory, customers, slots, transactions, promotions, hitl, portal, suppliers, analytics, hq,
     orders, menu, upload, omni, whatsapp, razorpay, invoices, mobile
 )
+from routes.stripe_payments import router as stripe_payments_router
 from routes.superadmin import router as superadmin
 from routes.conversations import router as conversations_router
 from routes.webhooks_ingestion import router as webhooks_router
@@ -261,6 +262,7 @@ app.include_router(upload.router, prefix="/api")
 app.include_router(omni.router, prefix="/api")
 app.include_router(whatsapp.router, prefix="/api")
 app.include_router(razorpay.router, prefix="/api")
+app.include_router(stripe_payments_router, prefix="/api")
 app.include_router(invoices.router, prefix="/api")
 app.include_router(mobile.router, prefix="/api")
 app.include_router(conversations_router, prefix="/api")

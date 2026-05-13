@@ -74,6 +74,7 @@ class Company(Base):
     restaurant_orders = relationship("RestaurantOrder", back_populates="company")
     invoices = relationship("Invoice", back_populates="company")
     invoice_settings = relationship("InvoiceSettings", back_populates="company", uselist=False)
+    stripe_config = relationship("StripeConfig", back_populates="company", uselist=False)
 
 class User(Base):
     __tablename__ = "users"
@@ -1164,6 +1165,32 @@ class RazorpayConfig(Base):
                         onupdate=lambda: datetime.now(timezone.utc))
 
     company = relationship("Company", backref="razorpay_config", uselist=False)
+
+
+class StripeConfig(Base):
+    """Per-company Stripe Connect Express configuration."""
+    __tablename__ = "stripe_configs"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), unique=True, nullable=False)
+    enabled = Column(Boolean, default=False, nullable=False)
+
+    # ── Stripe Connect Express account ─────────────────────────────────────
+    connect_account_id = Column(String, nullable=True)
+    connect_account_status = Column(String, default="not_started")
+    # not_started | pending | active | restricted
+    connect_details_submitted = Column(Boolean, default=False, nullable=False)
+    connect_charges_enabled = Column(Boolean, default=False, nullable=False)
+    connect_payouts_enabled = Column(Boolean, default=False, nullable=False)
+
+    # ── Platform fee (set by super admin) ──────────────────────────────────
+    platform_fee_pct = Column(Float, default=1.5, nullable=False)
+
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
+
+    company = relationship("Company", back_populates="stripe_config")
 
 
 # ─── Invoices ─────────────────────────────────────────────────────────────────
