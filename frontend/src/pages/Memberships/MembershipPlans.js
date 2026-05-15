@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Crown, Plus, Edit2, Trash2, Users, Check, Star } from 'lucide-react';
+import { Crown, Plus, Edit2, Trash2, Users, Check, Star, Power } from 'lucide-react';
 import { membershipsApi } from '../../services/membershipsApi';
 import CreatePlanModal from './CreatePlanModal';
 
@@ -41,6 +41,15 @@ const MembershipPlans = () => {
       console.error('Failed to fetch plans', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleActive = async (plan) => {
+    try {
+      const res = await membershipsApi.togglePlanActive(plan.id);
+      setPlans((prev) => prev.map((p) => (p.id === plan.id ? { ...p, is_active: res.data.is_active } : p)));
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to update plan');
     }
   };
 
@@ -111,7 +120,7 @@ const MembershipPlans = () => {
           {plans.map((plan) => {
             const grad = COLOR_GRADIENTS[plan.color] || COLOR_GRADIENTS.purple;
             return (
-              <div key={plan.id} className="bg-card border border-border rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-black/10 transition-all group">
+              <div key={plan.id} className={`bg-card border border-border rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-black/10 transition-all group ${!plan.is_active ? 'opacity-60' : ''}`}>
                 {/* Color band */}
                 <div className={`bg-gradient-to-r ${grad} h-2`} />
 
@@ -127,6 +136,13 @@ const MembershipPlans = () => {
                         className="p-1.5 rounded-lg hover:bg-muted/30 text-muted-foreground hover:text-foreground transition-colors"
                       >
                         <Edit2 size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleToggleActive(plan)}
+                        className={`p-1.5 rounded-lg transition-colors ${plan.is_active ? 'hover:bg-amber-500/10 text-muted-foreground hover:text-amber-400' : 'text-amber-400 hover:bg-amber-500/10'}`}
+                        title={plan.is_active ? 'Deactivate plan' : 'Activate plan'}
+                      >
+                        <Power size={14} />
                       </button>
                       <button
                         onClick={() => handleDelete(plan)}

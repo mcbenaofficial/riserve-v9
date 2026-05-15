@@ -2487,7 +2487,7 @@ class MembershipPlan(Base):
     benefits = Column(JSONB, default=list)
     color = Column(String(50), nullable=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime(timezone=True), nullable=True)
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
 
     memberships = relationship("Membership", back_populates="plan")
 
@@ -2507,7 +2507,7 @@ class Membership(Base):
     notes = Column(Text, nullable=True)
     credits_balance = Column(Numeric(10, 2), default=0)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime(timezone=True), nullable=True)
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
 
     plan = relationship("MembershipPlan", back_populates="memberships")
     events = relationship("MembershipEvent", back_populates="membership", cascade="all, delete-orphan")

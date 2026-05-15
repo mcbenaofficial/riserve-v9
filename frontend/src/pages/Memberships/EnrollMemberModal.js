@@ -18,6 +18,7 @@ const EnrollMemberModal = ({ isOpen, onClose, onEnrolled }) => {
   const [customerSearch, setCustomerSearch] = useState('');
   const [customers, setCustomers] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -40,7 +41,8 @@ const EnrollMemberModal = ({ isOpen, onClose, onEnrolled }) => {
       try {
         const res = await membershipsApi.searchCustomers(customerSearch);
         setCustomers(res.data?.customers || res.data || []);
-      } catch { setCustomers([]); }
+        setSearchError('');
+      } catch { setCustomers([]); setSearchError('Could not load customers. Check your plan includes CRM access.'); }
       finally { setSearchLoading(false); }
     }, 300);
   }, [customerSearch]);
@@ -134,6 +136,9 @@ const EnrollMemberModal = ({ isOpen, onClose, onEnrolled }) => {
                   />
                 </div>
                 {searchLoading && <p className="text-xs text-muted-foreground text-center">Searching...</p>}
+                {searchError && (
+                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 text-sm">{searchError}</div>
+                )}
                 <div className="space-y-1 max-h-60 overflow-y-auto">
                   {customers.map((c) => (
                     <button

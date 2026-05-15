@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Users, Search, Filter, UserPlus, CheckCircle2, XCircle,
   Clock, PauseCircle, ChevronLeft, ChevronRight
@@ -23,6 +23,8 @@ const MemberDirectory = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const searchTimeout = useRef(null);
   const [statusFilter, setStatusFilter] = useState('');
   const [planFilter, setPlanFilter] = useState('');
   const [selectedMember, setSelectedMember] = useState(null);
@@ -33,7 +35,7 @@ const MemberDirectory = () => {
     setLoading(true);
     try {
       const params = { page, per_page: perPage };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (statusFilter) params.status = statusFilter;
       if (planFilter) params.plan_id = planFilter;
       const res = await membershipsApi.getMembers(params);
@@ -44,15 +46,23 @@ const MemberDirectory = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, search, statusFilter, planFilter]);
+  }, [page, debouncedSearch, statusFilter, planFilter]);
 
   useEffect(() => {
     membershipsApi.getPlans().then((r) => setPlans(r.data)).catch(() => {});
   }, []);
 
   useEffect(() => {
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(searchTimeout.current);
+  }, [search]);
+
+  useEffect(() => {
     setPage(1);
-  }, [search, statusFilter, planFilter]);
+  }, [debouncedSearch, statusFilter, planFilter]);
 
   useEffect(() => {
     fetchMembers();
@@ -190,7 +200,7 @@ const MemberDirectory = () => {
                       </td>
                       <td className="px-5 py-4 text-sm text-muted-foreground">{fmt(m.enrolled_at)}</td>
                       <td className="px-5 py-4 text-sm text-muted-foreground">{fmt(m.expires_at)}</td>
-                      <td className="px-5 py-4 text-sm text-foreground">₹{(m.credits_balance || 0).toFixed(2)}</td>
+                      <td className="px-5 py-4 text-sm text-foreground">{(m.credits_balance || 0).toFixed(2)} cr</td>
                     </tr>
                   );
                 })

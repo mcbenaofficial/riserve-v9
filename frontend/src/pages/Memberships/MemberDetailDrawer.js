@@ -89,17 +89,17 @@ const MemberDetailDrawer = ({ membership, onClose, onUpdated }) => {
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-purple-500/20">
-                  {(membership.customer_name || '?').charAt(0).toUpperCase()}
+                  {(detail?.customer_name || membership.customer_name || '?').charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-foreground">{membership.customer_name}</h2>
+                  <h2 className="text-lg font-bold text-foreground">{detail?.customer_name || membership.customer_name}</h2>
                   <div className="flex items-center gap-2 mt-0.5">
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border ${sc.class}`}>
                       <StatusIcon size={11} />
                       {sc.label}
                     </span>
-                    {membership.plan_name && (
-                      <span className="text-xs text-muted-foreground">{membership.plan_name}</span>
+                    {(detail?.plan_name || membership.plan_name) && (
+                      <span className="text-xs text-muted-foreground">{detail?.plan_name || membership.plan_name}</span>
                     )}
                   </div>
                 </div>
@@ -144,7 +144,7 @@ const MemberDetailDrawer = ({ membership, onClose, onUpdated }) => {
                     <div className="grid grid-cols-2 gap-3">
                       {[
                         { icon: Crown, label: 'Plan', value: detail.plan_name || '—' },
-                        { icon: CreditCard, label: 'Credits', value: `₹${detail.credits_balance?.toFixed(2) || '0.00'}` },
+                        { icon: CreditCard, label: 'Credits', value: `${detail.credits_balance?.toFixed(2) || '0.00'} cr` },
                         { icon: Calendar, label: 'Enrolled', value: fmt(detail.enrolled_at) },
                         { icon: Clock, label: 'Expires', value: fmt(detail.expires_at) },
                         { icon: User, label: 'Email', value: detail.customer_email || '—' },
@@ -298,7 +298,7 @@ const MemberDetailDrawer = ({ membership, onClose, onUpdated }) => {
                             </div>
                           </div>
                           <span className={`text-sm font-semibold ${tx.amount >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {tx.amount >= 0 ? '+' : ''}₹{Math.abs(tx.amount).toFixed(2)}
+                            {tx.amount >= 0 ? '+' : '-'}{Math.abs(tx.amount).toFixed(2)} cr
                           </span>
                         </div>
                       ))

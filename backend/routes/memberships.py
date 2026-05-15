@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone
+from decimal import Decimal
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -188,6 +189,15 @@ async def create_plan(
         is_active=True,
         created_at=now,
     )
+    # Check slug uniqueness within company
+    slug_check = await db.execute(
+        select(models_pg.MembershipPlan).where(
+            models_pg.MembershipPlan.company_id == current_user.company_id,
+            models_pg.MembershipPlan.slug == body.slug,
+        )
+    )
+    if slug_check.scalar_one_or_none():
+        raise HTTPException(status_code=409, detail=f"A plan with slug '{body.slug}' already exists.")
     db.add(plan)
     await db.commit()
     d = _plan_dict(plan)
@@ -211,6 +221,18 @@ async def update_plan(
     if not plan:
         raise HTTPException(status_code=404, detail="Plan not found")
 
+    # Check slug uniqueness (excluding self)
+    if body.slug != plan.slug:
+        slug_check = await db.execute(
+            select(models_pg.MembershipPlan).where(
+                models_pg.MembershipPlan.company_id == current_user.company_id,
+                models_pg.MembershipPlan.slug == body.slug,
+                models_pg.MembershipPlan.id != plan_id,
+            )
+        )
+        if slug_check.scalar_one_or_none():
+            raise HTTPException(status_code=409, detail=f"A plan with slug '{body.slug}' already exists.")
+
     plan.name = body.name
     plan.slug = body.slug
     plan.description = body.description
@@ -231,16 +253,16 @@ async def delete_plan(
     current_user: User = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    # Check no active members
+    # Check no active or paused members
     count_stmt = select(func.count(models_pg.Membership.id)).where(
         models_pg.Membership.plan_id == plan_id,
         models_pg.Membership.company_id == current_user.company_id,
-        models_pg.Membership.status == "active",
+        models_pg.Membership.status.in_(["active", "paused"]),
     )
     count_res = await db.execute(count_stmt)
     count = count_res.scalar()
     if count > 0:
-        raise HTTPException(status_code=400, detail=f"Cannot delete plan with {count} active members. Reassign or cancel them first.")
+        raise HTTPException(status_code=400, detail=f"Cannot delete plan with {count} active or paused members. Reassign or cancel them first.")
 
     stmt = delete(models_pg.MembershipPlan).where(
         models_pg.MembershipPlan.id == plan_id,
@@ -251,6 +273,29 @@ async def delete_plan(
         raise HTTPException(status_code=404, detail="Plan not found")
     await db.commit()
     return {"message": "Plan deleted"}
+
+
+@router.patch("/plans/{plan_id}/toggle-active")
+async def toggle_plan_active(
+    plan_id: str,
+    current_user: User = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    res = await db.execute(
+        select(models_pg.MembershipPlan).where(
+            models_pg.MembershipPlan.id == plan_id,
+            models_pg.MembershipPlan.company_id == current_user.company_id,
+        )
+    )
+    plan = res.scalar_one_or_none()
+    if not plan:
+        raise HTTPException(status_code=404, detail="Plan not found")
+    plan.is_active = not plan.is_active
+    plan.updated_at = datetime.now(timezone.utc)
+    await db.commit()
+    d = _plan_dict(plan)
+    d["active_member_count"] = 0
+    return d
 
 
 # ─── Members ─────────────────────────────────────────────────────────────────
@@ -324,6 +369,17 @@ async def enroll_member(
     plan = plan_res.scalar_one_or_none()
     if not plan:
         raise HTTPException(status_code=404, detail="Plan not found")
+
+    # Guard: one active/paused membership per customer per company
+    existing_stmt = select(models_pg.Membership).where(
+        models_pg.Membership.company_id == current_user.company_id,
+        models_pg.Membership.customer_id == body.customer_id,
+        models_pg.Membership.status.in_(["active", "paused"]),
+    )
+    existing_res = await db.execute(existing_stmt)
+    existing = existing_res.scalar_one_or_none()
+    if existing:
+        raise HTTPException(status_code=409, detail=f"Customer already has an active membership (ID: {existing.id}). Cancel or pause it before enrolling again.")
 
     now = datetime.now(timezone.utc)
     membership = models_pg.Membership(
@@ -410,6 +466,15 @@ async def update_member(
 
     old_plan_id = m.plan_id
     if body.plan_id is not None:
+        # Verify the new plan belongs to this company
+        plan_check = await db.execute(
+            select(models_pg.MembershipPlan).where(
+                models_pg.MembershipPlan.id == body.plan_id,
+                models_pg.MembershipPlan.company_id == current_user.company_id,
+            )
+        )
+        if not plan_check.scalar_one_or_none():
+            raise HTTPException(status_code=404, detail="Plan not found")
         m.plan_id = body.plan_id
     if body.renewal_mode is not None:
         m.renewal_mode = body.renewal_mode
@@ -452,7 +517,10 @@ async def renew_member(
     await _log_event(db, m.id, current_user.company_id, "renewed",
                      {"new_expires_at": body.expires_at.isoformat(), "notes": body.notes}, current_user.id)
     await db.commit()
-    return _membership_dict(m)
+    cust_res = await db.execute(select(models_pg.Customer).where(models_pg.Customer.id == m.customer_id))
+    customer = cust_res.scalar_one_or_none()
+    plan = (await db.execute(select(models_pg.MembershipPlan).where(models_pg.MembershipPlan.id == m.plan_id))).scalar_one_or_none() if m.plan_id else None
+    return _membership_dict(m, customer=customer, plan=plan)
 
 
 @router.post("/members/{membership_id}/cancel")
@@ -471,6 +539,8 @@ async def cancel_member(
     m = res.scalar_one_or_none()
     if not m:
         raise HTTPException(status_code=404, detail="Membership not found")
+    if m.status == "cancelled":
+        raise HTTPException(status_code=400, detail="Membership is already cancelled.")
 
     now = datetime.now(timezone.utc)
     m.status = "cancelled"
@@ -482,7 +552,10 @@ async def cancel_member(
     await _log_event(db, m.id, current_user.company_id, "cancelled",
                      {"notes": body.notes}, current_user.id)
     await db.commit()
-    return _membership_dict(m)
+    cust_res = await db.execute(select(models_pg.Customer).where(models_pg.Customer.id == m.customer_id))
+    customer = cust_res.scalar_one_or_none()
+    plan = (await db.execute(select(models_pg.MembershipPlan).where(models_pg.MembershipPlan.id == m.plan_id))).scalar_one_or_none() if m.plan_id else None
+    return _membership_dict(m, customer=customer, plan=plan)
 
 
 @router.post("/members/{membership_id}/pause")
@@ -500,12 +573,17 @@ async def pause_member(
     m = res.scalar_one_or_none()
     if not m:
         raise HTTPException(status_code=404, detail="Membership not found")
+    if m.status != "active":
+        raise HTTPException(status_code=400, detail=f"Cannot pause a membership with status '{m.status}'. Only active memberships can be paused.")
 
     m.status = "paused"
     m.updated_at = datetime.now(timezone.utc)
     await _log_event(db, m.id, current_user.company_id, "paused", {}, current_user.id)
     await db.commit()
-    return _membership_dict(m)
+    cust_res = await db.execute(select(models_pg.Customer).where(models_pg.Customer.id == m.customer_id))
+    customer = cust_res.scalar_one_or_none()
+    plan = (await db.execute(select(models_pg.MembershipPlan).where(models_pg.MembershipPlan.id == m.plan_id))).scalar_one_or_none() if m.plan_id else None
+    return _membership_dict(m, customer=customer, plan=plan)
 
 
 @router.post("/members/{membership_id}/resume")
@@ -523,12 +601,17 @@ async def resume_member(
     m = res.scalar_one_or_none()
     if not m:
         raise HTTPException(status_code=404, detail="Membership not found")
+    if m.status != "paused":
+        raise HTTPException(status_code=400, detail=f"Cannot resume a membership with status '{m.status}'. Only paused memberships can be resumed.")
 
     m.status = "active"
     m.updated_at = datetime.now(timezone.utc)
     await _log_event(db, m.id, current_user.company_id, "resumed", {}, current_user.id)
     await db.commit()
-    return _membership_dict(m)
+    cust_res = await db.execute(select(models_pg.Customer).where(models_pg.Customer.id == m.customer_id))
+    customer = cust_res.scalar_one_or_none()
+    plan = (await db.execute(select(models_pg.MembershipPlan).where(models_pg.MembershipPlan.id == m.plan_id))).scalar_one_or_none() if m.plan_id else None
+    return _membership_dict(m, customer=customer, plan=plan)
 
 
 @router.post("/members/{membership_id}/credits")
@@ -549,7 +632,7 @@ async def issue_credits(
         raise HTTPException(status_code=404, detail="Membership not found")
 
     tx_type = "credit_issued" if body.amount > 0 else "credit_redeemed"
-    m.credits_balance = float(m.credits_balance or 0) + body.amount
+    m.credits_balance = Decimal(str(m.credits_balance or 0)) + Decimal(str(body.amount))
     m.updated_at = datetime.now(timezone.utc)
 
     tx = models_pg.MembershipTransaction(
@@ -623,6 +706,7 @@ async def get_stats(
         select(models_pg.MembershipPlan.name, func.count(models_pg.Membership.id))
         .join(models_pg.Membership, models_pg.Membership.plan_id == models_pg.MembershipPlan.id)
         .where(
+            models_pg.MembershipPlan.company_id == cid,
             models_pg.Membership.company_id == cid,
             models_pg.Membership.status == "active",
         )

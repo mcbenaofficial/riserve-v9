@@ -18,6 +18,8 @@ export const membershipsApi = {
     axios.put(`${API}/memberships/plans/${id}`, data, { headers: getHeaders() }),
   deletePlan: (id) =>
     axios.delete(`${API}/memberships/plans/${id}`, { headers: getHeaders() }),
+  togglePlanActive: (id) =>
+    axios.patch(`${API}/memberships/plans/${id}/toggle-active`, {}, { headers: getHeaders() }),
 
   // Members
   getMembers: (params) =>

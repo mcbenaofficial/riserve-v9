@@ -144,6 +144,43 @@ async def media_cleanup_background_task():
             logger.error(f"Media cleanup error: {e}")
 
 
+async def membership_expiry_background_task():
+    """Check for memberships past their expires_at and flip status to expired every hour."""
+    while True:
+        await asyncio.sleep(3600)
+        try:
+            async with AsyncSession(engine) as db:
+                now = datetime.now(timezone.utc)
+                result = await db.execute(
+                    select(models_pg.Membership).where(
+                        models_pg.Membership.status == "active",
+                        models_pg.Membership.expires_at.isnot(None),
+                        models_pg.Membership.expires_at < now,
+                    )
+                )
+                expired = result.scalars().all()
+                count = 0
+                for m in expired:
+                    m.status = "expired"
+                    m.updated_at = now
+                    ev = models_pg.MembershipEvent(
+                        id=str(uuid.uuid4()),
+                        company_id=m.company_id,
+                        membership_id=m.id,
+                        event_type="expired",
+                        event_metadata={"auto": True},
+                        created_by="system",
+                        created_at=now,
+                    )
+                    db.add(ev)
+                    count += 1
+                if count:
+                    await db.commit()
+                    logger.info(f"Membership expiry: flipped {count} membership(s) to expired")
+        except Exception as e:
+            logger.error(f"Membership expiry task error: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
@@ -161,6 +198,7 @@ async def lifespan(app: FastAPI):
     media_task = asyncio.create_task(media_cleanup_background_task())
     wa_scheduler_task = asyncio.create_task(acquisition_scheduler_background_task())
     petpooja_task = asyncio.create_task(petpooja_polling_background_task())
+    membership_expiry_task = asyncio.create_task(membership_expiry_background_task())
 
     yield
 
@@ -169,6 +207,7 @@ async def lifespan(app: FastAPI):
     media_task.cancel()
     wa_scheduler_task.cancel()
     petpooja_task.cancel()
+    membership_expiry_task.cancel()
     logger.info("Shutting down Ri'Serve API...")
 
 
