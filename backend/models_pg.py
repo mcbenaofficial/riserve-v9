@@ -2543,3 +2543,148 @@ class MembershipEvent(Base):
 
     membership = relationship("Membership", back_populates="events")
 
+
+# ---------------------------------------------------------------------------
+# Virtual Team Marketplace
+# ---------------------------------------------------------------------------
+
+class Flow(Base):
+    __tablename__ = "flows"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    status = Column(String(20), default="draft", index=True)  # draft|active|paused|error
+    nodes = Column(JSONB, default=list)
+    edges = Column(JSONB, default=list)
+    viewport = Column(JSONB, default=dict)
+    created_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+    custom_agent = relationship("VirtualAgent", back_populates="flow", uselist=False)
+
+
+class AgentCategory(Base):
+    """C-Suite role categories — global, seeded once."""
+    __tablename__ = "agent_categories"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    key = Column(String(20), unique=True, nullable=False)   # ceo, cfo, cro, …
+    name = Column(String(100), nullable=False)
+    description = Column(Text, nullable=True)
+    icon_key = Column(String(50), nullable=True)
+    accent_color = Column(String(20), nullable=True)
+    sort_order = Column(Integer, default=0)
+
+    agents = relationship("VirtualAgent", back_populates="category")
+
+
+class VirtualAgent(Base):
+    """Agent catalog — NULL company_id = system agent; set = Corp custom agent."""
+    __tablename__ = "virtual_agents"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    category_id = Column(String, ForeignKey("agent_categories.id", ondelete="SET NULL"), nullable=True, index=True)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=True, index=True)
+    flow_id = Column(String, ForeignKey("flows.id", ondelete="SET NULL"), nullable=True)
+    name = Column(String(255), nullable=False)
+    slug = Column(String(100), nullable=False)
+    tagline = Column(String(255), nullable=True)
+    description = Column(Text, nullable=True)
+    capabilities = Column(JSONB, default=list)
+    system_prompt = Column(JSONB, default=dict)   # {role, instructions, output_format}
+    agent_tier = Column(String(20), default="basic")      # basic|standard|advanced|elite
+    tier_required = Column(String(20), default="indie")   # indie|startup|studio|firm|corp
+    value_metric_type = Column(String(50), nullable=True) # leads_qualified|time_saved_min|…
+    price_per_1k_tokens = Column(Numeric(10, 6), default=0)
+    base_token_estimate = Column(Integer, default=500)
+    is_active = Column(Boolean, default=True, index=True)
+    is_featured = Column(Boolean, default=False)
+    is_free_eligible = Column(Boolean, default=False)     # can be chosen as Indie free pick
+    sort_order = Column(Integer, default=0)
+    accent_color = Column(String(20), nullable=True)
+    thumbnail_url = Column(String(500), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('slug', 'company_id', name='uq_virtual_agents_slug_company'),
+    )
+
+    category = relationship("AgentCategory", back_populates="agents")
+    flow = relationship("Flow", back_populates="custom_agent")
+    subscriptions = relationship("CompanyAgentSubscription", back_populates="agent")
+    marketplace_runs = relationship("MarketplaceAgentRun", back_populates="agent")
+
+
+class CompanyAgentTier(Base):
+    """One row per company — tracks their agent marketplace tier and token budget."""
+    __tablename__ = "company_agent_tiers"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, unique=True, index=True)
+    tier_key = Column(String(20), default="indie", nullable=False)  # indie|startup|studio|firm|corp
+    total_agent_limit = Column(Integer, default=3)
+    allows_custom_agents = Column(Boolean, default=False)
+    token_allowance_monthly = Column(Integer, default=500000)
+    token_used_this_cycle = Column(Integer, default=0)
+    billing_cycle_start = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    next_billing_date = Column(DateTime(timezone=True), nullable=True)
+    price_monthly = Column(Numeric(10, 2), default=0)
+    currency = Column(String(10), default="INR")
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+    subscriptions = relationship("CompanyAgentSubscription", back_populates="tier")
+
+
+class CompanyAgentSubscription(Base):
+    """Per-agent subscription per company."""
+    __tablename__ = "company_agent_subscriptions"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    agent_id = Column(String, ForeignKey("virtual_agents.id", ondelete="CASCADE"), nullable=False, index=True)
+    tier_id = Column(String, ForeignKey("company_agent_tiers.id", ondelete="CASCADE"), nullable=True)
+    status = Column(String(20), default="active", index=True)   # active|paused|cancelled
+    is_free_pick = Column(Boolean, default=False)               # one of the 3 Indie free choices
+    subscribed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    cancelled_at = Column(DateTime(timezone=True), nullable=True)
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('company_id', 'agent_id', name='uq_company_agent_subscriptions'),
+    )
+
+    agent = relationship("VirtualAgent", back_populates="subscriptions")
+    tier = relationship("CompanyAgentTier", back_populates="subscriptions")
+    marketplace_runs = relationship("MarketplaceAgentRun", back_populates="subscription")
+
+
+class MarketplaceAgentRun(Base):
+    """Per-execution log for marketplace agents — append-only."""
+    __tablename__ = "marketplace_agent_runs"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    agent_id = Column(String, ForeignKey("virtual_agents.id", ondelete="CASCADE"), nullable=False, index=True)
+    subscription_id = Column(String, ForeignKey("company_agent_subscriptions.id", ondelete="SET NULL"), nullable=True)
+    triggered_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    trigger_type = Column(String(20), default="manual")  # manual|scheduled|webhook
+    status = Column(String(20), default="running", index=True)  # running|success|failure|timeout
+    input_payload = Column(JSONB, default=dict)
+    output_payload = Column(JSONB, default=dict)
+    tokens_in = Column(Integer, default=0)
+    tokens_out = Column(Integer, default=0)
+    model_used = Column(String(100), nullable=True)
+    estimated_cost_usd = Column(Numeric(10, 6), default=0)
+    value_metric_amount = Column(Numeric(10, 2), nullable=True)
+    duration_ms = Column(Integer, nullable=True)
+    error_message = Column(Text, nullable=True)
+    started_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+
+    agent = relationship("VirtualAgent", back_populates="marketplace_runs")
+    subscription = relationship("CompanyAgentSubscription", back_populates="marketplace_runs")
+

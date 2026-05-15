@@ -38,6 +38,7 @@ import StaffHolidaysPage from './pages/staff/StaffHolidays';
 import StaffTrainingPage from './pages/staff/StaffTraining';
 import Customers from './pages/Customers';
 import Memberships from './pages/Memberships';
+import Marketplace from './pages/Marketplace';
 import MembershipPlans from './pages/Memberships/MembershipPlans';
 import MemberDirectory from './pages/Memberships/MemberDirectory';
 import Support from './pages/Support';
@@ -237,6 +238,7 @@ function MainLayout() {
               <Route path="/staff/holidays" element={<ProtectedRoute><StaffHolidaysPage /></ProtectedRoute>} />
               <Route path="/staff/training" element={<ProtectedRoute><StaffTrainingPage /></ProtectedRoute>} />
               <Route path="/customers" element={<Customers />} /> {/* SaaS Customers */}
+              <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
               <Route path="/memberships" element={<ProtectedRoute><Memberships /></ProtectedRoute>} />
               <Route path="/memberships/plans" element={<ProtectedRoute><MembershipPlans /></ProtectedRoute>} />
               <Route path="/memberships/members" element={<ProtectedRoute><MemberDirectory /></ProtectedRoute>} />

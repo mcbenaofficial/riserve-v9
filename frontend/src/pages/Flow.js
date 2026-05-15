@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import ReactFlow, {
     addEdge,
     Background,
@@ -21,7 +21,7 @@ import {
     Globe, Route, User, CircleDot, CheckCircle2, AlertCircle, Loader2
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MOCK_FLOWS } from '../data/mockFlows';
+import { flowsApi } from '../services/marketplaceApi';
 
 // Expanded Node types for the agent builder
 const NODE_TYPES = [
@@ -177,21 +177,28 @@ const Flow = () => {
     const isDark = theme === 'dark';
     const navigate = useNavigate();
 
-    // Check if we're loading a specific flow
-    const initialFlow = useMemo(() => {
-        if (id) {
-            return MOCK_FLOWS.find(f => f.id === id);
-        }
-        return null;
-    }, [id]);
-
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialFlow?.nodes || []);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialFlow?.edges || []);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [selectedNode, setSelectedNode] = useState(null);
-    const [showTemplates, setShowTemplates] = useState(!initialFlow);
+    const [showTemplates, setShowTemplates] = useState(!id);
     const [showNodePalette, setShowNodePalette] = useState(true);
-    const [flowName, setFlowName] = useState(initialFlow?.name || 'Untitled Flow');
+    const [flowName, setFlowName] = useState('Untitled Flow');
+    const [flowDbId, setFlowDbId] = useState(id || null);
     const [isRunning, setIsRunning] = useState(false);
+
+    // Load existing flow from API
+    useEffect(() => {
+        if (!id) return;
+        flowsApi.get(id)
+            .then(res => {
+                const f = res.data;
+                setFlowName(f.name || 'Untitled Flow');
+                setNodes(f.nodes || []);
+                setEdges(f.edges || []);
+                setShowTemplates(false);
+            })
+            .catch(() => {});
+    }, [id]);
     const [expandedCategories, setExpandedCategories] = useState(['core', 'ai']);
 
     // New state for Save, Templates modal, and Run
@@ -348,27 +355,21 @@ const Flow = () => {
     const handleSaveFlow = async () => {
         setIsSaving(true);
         setSaveSuccess(false);
-
-        const flowData = {
-            id: `flow-${Date.now()}`,
-            name: flowName,
-            nodes: nodes,
-            edges: edges,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Save to localStorage
-        const savedFlows = JSON.parse(localStorage.getItem('riserve_flows') || '[]');
-        savedFlows.push(flowData);
-        localStorage.setItem('riserve_flows', JSON.stringify(savedFlows));
-
-        setIsSaving(false);
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 2000);
+        try {
+            if (flowDbId) {
+                await flowsApi.update(flowDbId, { name: flowName, nodes, edges });
+            } else {
+                const res = await flowsApi.create({ name: flowName, nodes, edges });
+                setFlowDbId(res.data.id);
+                navigate(`/flow/builder/${res.data.id}`, { replace: true });
+            }
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 2000);
+        } catch (err) {
+            console.error('Save failed', err);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     // Run Flow Handler

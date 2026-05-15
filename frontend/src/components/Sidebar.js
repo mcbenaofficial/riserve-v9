@@ -68,7 +68,8 @@ import {
   Timer,
   CalendarDays,
   Gift,
-  AlertTriangle
+  AlertTriangle,
+  BarChart3
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -171,6 +172,7 @@ const Sidebar = () => {
     { id: 'staff', name: 'Staff Management', icon: Users, feature: 'staff_management' },
     { id: 'crm', name: 'CRM & Loyalty', icon: Crown, feature: 'crm' },
     { id: 'inventory', name: 'Inventory & Procurement', icon: Package, feature: 'inventory' },
+    { id: 'marketplace', name: 'Virtual Team', icon: Bot, feature: 'agents_marketplace' },
     { id: 'flow', name: 'Flows Engine', icon: SiriNewIcon, feature: 'ai_flows' },
     { id: 'restaurant', name: 'Restaurant Orders', icon: UtensilsCrossed, feature: 'restaurant_orders' },
     { id: 'hq', name: 'HQ Intelligence', icon: Brain, feature: 'hq_intelligence' },
@@ -282,6 +284,9 @@ const Sidebar = () => {
         { key: 'hq-copilot', label: 'Copilot', icon: MessageCircle, path: '/hq/copilot' },
       ]
     },
+    { key: 'marketplace', label: 'Marketplace', icon: Store, path: '/marketplace', condition: (features) => features.includes('agents_marketplace'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketplace' },
+    { key: 'marketplace-team', label: 'My Team', icon: Bot, path: '/marketplace?tab=team', condition: (features) => features.includes('agents_marketplace'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketplace' },
+    { key: 'marketplace-analytics', label: 'Analytics', icon: BarChart3, path: '/marketplace?tab=analytics', condition: (features) => features.includes('agents_marketplace'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketplace' },
     { key: 'flow', label: 'Flow', icon: SiriNewIcon, path: '/flow', condition: (features) => features.includes('ai_flows'), roles: ['SuperAdmin', 'Admin'], appId: 'flow' },
     { key: 'conversations', label: 'Conversations', icon: Inbox, path: '/conversations', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'marketing' },
     { key: 'marketing-segments', label: 'Segments', icon: Users2, path: '/marketing/segments', condition: (features) => features.includes('marketing'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'marketing' },
@@ -516,6 +521,7 @@ const Sidebar = () => {
                             if (app.id === 'hq') navigate('/hq');
                             else if (app.id === 'crm') navigate('/customers');
                             else if (app.id === 'inventory') navigate('/inventory');
+                            else if (app.id === 'marketplace') navigate('/marketplace');
                             else if (app.id === 'flow') navigate('/flow');
                             else if (app.id === 'staff') navigate('/staff/directory');
                             else if (app.id === 'reputation') navigate('/feedback');

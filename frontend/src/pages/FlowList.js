@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { SiriNewIcon } from 'hugeicons-react';
 
-import { MOCK_FLOWS } from '../data/mockFlows';
+import { flowsApi } from '../services/marketplaceApi';
 
 const statusConfig = {
     active: { color: 'text-green-400', bg: 'bg-green-500/10', icon: CheckCircle2, label: 'Active' },
@@ -132,14 +132,22 @@ const FlowList = () => {
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const navigate = useNavigate();
-    const [flows] = useState(MOCK_FLOWS);
+    const [flows, setFlows] = useState([]);
+    const [loadingFlows, setLoadingFlows] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [showFilterMenu, setShowFilterMenu] = useState(false);
 
+    useEffect(() => {
+        flowsApi.list()
+            .then(res => setFlows(res.data))
+            .catch(() => setFlows([]))
+            .finally(() => setLoadingFlows(false));
+    }, []);
+
     const filteredFlows = flows.filter(flow => {
         const matchesSearch = flow.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            flow.description.toLowerCase().includes(searchQuery.toLowerCase());
+            (flow.description || '').toLowerCase().includes(searchQuery.toLowerCase());
         const matchesStatus = statusFilter === 'all' || flow.status === statusFilter;
         return matchesSearch && matchesStatus;
     });
@@ -149,7 +157,7 @@ const FlowList = () => {
         active: flows.filter(f => f.status === 'active').length,
         paused: flows.filter(f => f.status === 'paused').length,
         error: flows.filter(f => f.status === 'error').length,
-        totalRuns: flows.reduce((sum, f) => sum + f.runs, 0)
+        totalRuns: 0,
     };
 
     const handleOpenFlow = (flowId) => {
@@ -160,12 +168,25 @@ const FlowList = () => {
         navigate('/flow/builder');
     };
 
-    const handleDuplicate = (flowId) => {
-        console.log('Duplicate flow:', flowId);
+    const handleDuplicate = async (flowId) => {
+        const flow = flows.find(f => f.id === flowId);
+        if (!flow) return;
+        try {
+            const res = await flowsApi.create({ name: `${flow.name} (copy)`, description: flow.description });
+            setFlows(prev => [res.data, ...prev]);
+        } catch (err) {
+            console.error('Duplicate failed', err);
+        }
     };
 
-    const handleDelete = (flowId) => {
-        console.log('Delete flow:', flowId);
+    const handleDelete = async (flowId) => {
+        if (!window.confirm('Delete this flow?')) return;
+        try {
+            await flowsApi.delete(flowId);
+            setFlows(prev => prev.filter(f => f.id !== flowId));
+        } catch (err) {
+            console.error('Delete failed', err);
+        }
     };
 
     return (

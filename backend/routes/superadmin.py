@@ -288,7 +288,18 @@ async def create_company(
         status="Active"
     )
     db.add(admin_user)
-    
+
+    # Auto-assign Indie agent tier for every new company
+    indie_tier = models_pg.CompanyAgentTier(
+        company_id=company_id,
+        tier_key="indie",
+        total_agent_limit=3,
+        allows_custom_agents=False,
+        token_allowance_monthly=500_000,
+        price_monthly=0,
+    )
+    db.add(indie_tier)
+
     await db.commit()
     
     # Log audit

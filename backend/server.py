@@ -270,6 +270,8 @@ from routes.whatsapp_acquisition import router as wa_acquisition_router, acquisi
 from routes.submissions import router as submissions_router
 from routes.petpooja import router as petpooja_router, petpooja_polling_background_task
 from routes.memberships import router as memberships_router
+from routes.marketplace import router as marketplace_router
+from routes.flows import router as flows_router
 
 # Include Routers
 app.include_router(auth.router, prefix="/api")
@@ -323,6 +325,8 @@ app.include_router(wa_acquisition_router, prefix="/api")
 app.include_router(submissions_router, prefix="/api")
 app.include_router(petpooja_router, prefix="/api")
 app.include_router(memberships_router, prefix="/api")
+app.include_router(marketplace_router, prefix="/api")
+app.include_router(flows_router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy
