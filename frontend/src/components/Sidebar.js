@@ -187,7 +187,7 @@ const Sidebar = () => {
     if (path.startsWith('/flow')) return 'flow';
     if (path.startsWith('/orders')) return 'restaurant';
     if (path.startsWith('/inventory') || path.startsWith('/suppliers')) return 'inventory';
-    if (path.startsWith('/customers')) return 'crm';
+    if (path.startsWith('/customers') || path.startsWith('/memberships')) return 'crm';
     if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling') || path.startsWith('/staff')) return 'staff';
     if (path.startsWith('/feedback') || path.startsWith('/reviews')) return 'reputation';
     if (path.startsWith('/conversations') || path.startsWith('/marketing')) return 'marketing';
@@ -241,6 +241,9 @@ const Sidebar = () => {
     { key: 'invoices', label: 'Invoices', icon: Receipt, path: '/invoices', roles: ['Admin', 'Manager'], appId: 'core' },
     { key: 'customers', label: 'Customer Database', icon: Users, path: '/customers', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'crm' },
     { key: 'customer-segments', label: 'Segments', icon: User, path: '/customers/segments', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'crm' },
+    { key: 'memberships', label: 'Memberships', icon: Crown, path: '/memberships', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'crm' },
+    { key: 'membership-plans', label: 'Plans & Benefits', icon: Star, path: '/memberships/plans', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin'], appId: 'crm' },
+    { key: 'member-directory', label: 'Member Directory', icon: Users, path: '/memberships/members', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'crm' },
     { key: 'staff-directory', label: 'Staff Directory', icon: Users, path: '/staff/directory', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
     { key: 'staff-attendance', label: 'Attendance', icon: Timer, path: '/staff/attendance', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },
     { key: 'staff-leave-policies', label: 'Leave Policies', icon: FileText, path: '/staff/leave-policies', condition: (features) => features.includes('staff_management'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'staff' },

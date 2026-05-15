@@ -2470,3 +2470,76 @@ class PetPoojaMenuItem(Base):
         __import__('sqlalchemy').UniqueConstraint('outlet_id', 'external_id', name='uq_petpooja_menu_items_outlet_external'),
     )
 
+
+class MembershipPlan(Base):
+    __tablename__ = "membership_plans"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    slug = Column(String(100), nullable=False)
+    description = Column(Text, nullable=True)
+    price_monthly = Column(Numeric(10, 2), default=0)
+    price_yearly = Column(Numeric(10, 2), default=0)
+    currency = Column(String(10), default="INR")
+    is_active = Column(Boolean, default=True)
+    sort_order = Column(Integer, default=0)
+    benefits = Column(JSONB, default=list)
+    color = Column(String(50), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True)
+
+    memberships = relationship("Membership", back_populates="plan")
+
+
+class Membership(Base):
+    __tablename__ = "memberships"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    customer_id = Column(String, ForeignKey("customers.id", ondelete="CASCADE"), nullable=False, index=True)
+    plan_id = Column(String, ForeignKey("membership_plans.id", ondelete="SET NULL"), nullable=True, index=True)
+    status = Column(String(50), default="active", index=True)
+    enrolled_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    expires_at = Column(DateTime(timezone=True), nullable=True)
+    renewal_mode = Column(String(20), default="manual")
+    cancelled_at = Column(DateTime(timezone=True), nullable=True)
+    notes = Column(Text, nullable=True)
+    credits_balance = Column(Numeric(10, 2), default=0)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True)
+
+    plan = relationship("MembershipPlan", back_populates="memberships")
+    events = relationship("MembershipEvent", back_populates="membership", cascade="all, delete-orphan")
+    transactions = relationship("MembershipTransaction", back_populates="membership", cascade="all, delete-orphan")
+
+
+class MembershipTransaction(Base):
+    __tablename__ = "membership_transactions"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    membership_id = Column(String, ForeignKey("memberships.id", ondelete="CASCADE"), nullable=False, index=True)
+    customer_id = Column(String, nullable=False, index=True)
+    transaction_type = Column(String(50), nullable=False)
+    amount = Column(Numeric(10, 2), nullable=False)
+    description = Column(Text, nullable=True)
+    reference_id = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    membership = relationship("Membership", back_populates="transactions")
+
+
+class MembershipEvent(Base):
+    __tablename__ = "membership_events"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    membership_id = Column(String, ForeignKey("memberships.id", ondelete="CASCADE"), nullable=False, index=True)
+    event_type = Column(String(50), nullable=False)
+    event_metadata = Column(JSONB, default=dict)
+    created_by = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    membership = relationship("Membership", back_populates="events")
+
