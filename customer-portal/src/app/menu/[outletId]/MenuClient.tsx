@@ -875,7 +875,7 @@ function MenuTab({ outlet, company, categories, category_info, allItems, getQty,
             <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0 shadow-xl ring-2 ring-white/30 mb-1">
               <img src={logoUrl} alt={restaurantName} style={{
                 width: '100%', height: '100%',
-                objectFit: portalCfg.logoAdjust?.fit || 'cover',
+                objectFit: portalCfg.logoAdjust?.fit || 'contain',
                 transform: `translate(${portalCfg.logoAdjust?.x ?? 0}%, ${portalCfg.logoAdjust?.y ?? 0}%) scale(${portalCfg.logoAdjust?.scale ?? 1})`,
                 transformOrigin: 'center center',
               }} />
@@ -1660,13 +1660,18 @@ export default function MenuClient({ outletId, outlet, company, categories, cate
     : 'min-h-screen flex flex-col';
 
   const contentClass = isMobile
-    ? 'flex-1 flex flex-col overflow-hidden w-full max-w-sm mx-auto'
-    : 'w-full max-w-sm mx-auto flex flex-col';
+    ? 'flex-1 flex flex-col overflow-hidden w-full'
+    : 'w-full flex flex-col';
 
   return (
     <div className={shellClass} style={{ fontFamily: `${fontFamily}, system-ui, sans-serif`, backgroundColor: bgColor }}>
       <style dangerouslySetInnerHTML={{ __html: `@import url('https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}:wght@300;400;500;600;700;900&display=swap');` }} />
       <BgBlobs primary={primary} secondary={secondary} bg={bgColor} />
+      {/* Dynamic Island diffuse — z-20 keeps it below the sticky category strip (z-30) */}
+      <div className="fixed inset-x-0 top-0 pointer-events-none" style={{
+        zIndex: 20, height: 90,
+        background: `linear-gradient(to bottom, ${primary}BB 0%, transparent 100%)`,
+      }} />
 
       <div className={contentClass}>
         {activeTab === 'menu' && (

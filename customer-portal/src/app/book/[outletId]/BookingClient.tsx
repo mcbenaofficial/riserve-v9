@@ -173,7 +173,13 @@ export default function BookingClient({ outletId, outlet, services, staff, initi
       <div className="sticky top-0 z-30 border-b" style={{ backgroundColor: 'var(--brand-surface)', borderColor: 'var(--brand-primary)20' }}>
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
           {logoUrl ? (
-            <img src={logoUrl} alt={outletName} className="h-8 w-auto object-contain" />
+            <img src={logoUrl} alt={outletName}
+              style={{
+                height: '2rem', width: 'auto', maxWidth: '120px',
+                objectFit: cs.logoAdjust?.fit || 'contain',
+                transform: `translate(${cs.logoAdjust?.x ?? 0}%, ${cs.logoAdjust?.y ?? 0}%) scale(${cs.logoAdjust?.scale ?? 1})`,
+                transformOrigin: 'center center',
+              }} />
           ) : (
             <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
               style={{ backgroundColor: 'var(--brand-primary)' }}>

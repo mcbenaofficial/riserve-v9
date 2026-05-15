@@ -1293,6 +1293,7 @@ function InlineIdentityGate({ outlet, colors, outletId, onIdentity }: {
   const [error, setError] = useState('');
 
   const logoUrl = outlet.portal_logo_url;
+  const logoAdjust = outlet.portal_color_scheme?.logoAdjust || { x: 0, y: 0, scale: 1, fit: 'contain' };
 
   const handleSubmit = () => {
     if (!name.trim()) { setError('Please enter your name'); return; }
@@ -1314,7 +1315,13 @@ function InlineIdentityGate({ outlet, colors, outletId, onIdentity }: {
           {logoUrl ? (
             <div className="w-24 h-24 rounded-3xl mx-auto mb-4 overflow-hidden shadow-2xl ring-4 ring-white/20">
               <img src={logoUrl.startsWith('/') ? `${BACKEND_URL}${logoUrl}` : logoUrl}
-                alt={outlet.name} className="w-full h-full object-cover" />
+                alt={outlet.name}
+                style={{
+                  width: '100%', height: '100%',
+                  objectFit: logoAdjust.fit || 'contain',
+                  transform: `translate(${logoAdjust.x ?? 0}%, ${logoAdjust.y ?? 0}%) scale(${logoAdjust.scale ?? 1})`,
+                  transformOrigin: 'center center',
+                }} />
             </div>
           ) : (
             <div className="w-24 h-24 rounded-3xl mx-auto mb-4 flex items-center justify-center text-4xl font-black shadow-2xl ring-4 ring-white/20"
@@ -1434,13 +1441,17 @@ export default function BookingClient({ outletId, outlet, company, services, slo
     : { minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: `${fontFamily}, system-ui, sans-serif` };
 
   const contentStyle: React.CSSProperties = isMobile
-    ? { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%', maxWidth: '384px', margin: '0 auto' }
-    : { width: '100%', maxWidth: '384px', margin: '0 auto', display: 'flex', flexDirection: 'column' };
+    ? { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%' }
+    : { width: '100%', display: 'flex', flexDirection: 'column' };
 
   return (
     <div style={shellStyle}>
       <style dangerouslySetInnerHTML={{ __html: `@import url('https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g, '+')}:wght@300;400;500;600;700;900&display=swap');` }} />
       <BgBlobs primary={colors.primary} secondary={colors.secondary} bg={colors.bgColor} />
+      <div className="fixed inset-x-0 top-0 pointer-events-none" style={{
+        zIndex: 20, height: 90,
+        background: `linear-gradient(to bottom, ${colors.primary}BB 0%, transparent 100%)`,
+      }} />
 
       <div style={contentStyle}>
         {tab === 'book' && (

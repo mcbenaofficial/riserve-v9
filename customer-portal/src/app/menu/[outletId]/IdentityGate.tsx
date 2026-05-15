@@ -87,8 +87,7 @@ export default function IdentityGate({ outletId, outlet, company, children }: Id
         {/* Logo + Name */}
         <div className="text-center mb-8">
           {outlet?.portal_logo_url && (
-            <div className="w-24 h-24 mx-auto mb-5 overflow-hidden rounded-2xl"
-              style={{ filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.45))' }}>
+            <div className="w-24 h-24 mx-auto mb-5 overflow-hidden">
               <img
                 src={outlet.portal_logo_url.startsWith('/') ? `${BACKEND}${outlet.portal_logo_url}` : outlet.portal_logo_url}
                 alt="Logo"
@@ -97,6 +96,7 @@ export default function IdentityGate({ outletId, outlet, company, children }: Id
                   objectFit: (config.logoAdjust?.fit as any) || 'contain',
                   transform: `translate(${config.logoAdjust?.x ?? 0}%, ${config.logoAdjust?.y ?? 0}%) scale(${config.logoAdjust?.scale ?? 1})`,
                   transformOrigin: 'center center',
+                  filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.45))',
                 }}
               />
             </div>

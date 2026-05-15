@@ -20,6 +20,7 @@ export default async function PortalLandingPage({
 
   const cs = outlet?.portal_color_scheme || {};
   const logoUrl = outlet?.portal_logo_url;
+  const logoAdjust = cs.logoAdjust || { x: 0, y: 0, scale: 1, fit: 'contain' };
   const outletName = outlet?.name || 'Welcome';
   const primary = cs.primary || '#1A1A1A';
   const secondary = cs.secondary || '#F59E0B';
@@ -60,7 +61,13 @@ export default async function PortalLandingPage({
         )}
         <div className="relative z-10 space-y-4">
           {logoUrl ? (
-            <img src={logoUrl} alt={outletName} className="h-16 mx-auto object-contain drop-shadow-lg" />
+            <img src={logoUrl} alt={outletName} className="h-16 mx-auto"
+              style={{
+                objectFit: logoAdjust.fit || 'contain',
+                transform: `translate(${logoAdjust.x ?? 0}%, ${logoAdjust.y ?? 0}%) scale(${logoAdjust.scale ?? 1})`,
+                transformOrigin: 'center center',
+                filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.35))',
+              }} />
           ) : (
             <div
               className="w-20 h-20 rounded-2xl mx-auto flex items-center justify-center text-3xl font-black shadow-xl"

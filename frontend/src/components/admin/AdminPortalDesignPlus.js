@@ -103,17 +103,32 @@ const LogoAdjustPanel = ({ logoUrl, adjust, onChange }) => {
     setDragging(true);
   };
 
+  const onTouchStart = (e) => {
+    const t = e.touches[0];
+    dragRef.current = { startX: t.clientX, startY: t.clientY, startAdjX: x, startAdjY: y };
+    setDragging(true);
+  };
+
   useEffect(() => {
     if (!dragging) return;
     const onMove = (e) => {
-      const dx = ((e.clientX - dragRef.current.startX) / 128) * 100;
-      const dy = ((e.clientY - dragRef.current.startY) / 128) * 100;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const dx = ((clientX - dragRef.current.startX) / 128) * 100;
+      const dy = ((clientY - dragRef.current.startY) / 128) * 100;
       onChange({ ...adjust, x: dragRef.current.startAdjX + dx, y: dragRef.current.startAdjY + dy });
     };
     const onUp = () => setDragging(false);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
-    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('touchend', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onUp);
+    };
   }, [dragging, adjust, onChange]);
 
   const onWheel = (e) => {
@@ -136,6 +151,7 @@ const LogoAdjustPanel = ({ logoUrl, adjust, onChange }) => {
       <div className="flex flex-col items-center gap-1.5">
         <div
           onMouseDown={onMouseDown}
+          onTouchStart={onTouchStart}
           onWheel={onWheel}
           className={`relative w-32 h-32 rounded-2xl overflow-hidden select-none ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           style={{ background: 'repeating-conic-gradient(#80808018 0% 25%, transparent 0% 50%) 0 0 / 12px 12px', border: '1.5px dashed rgba(128,128,128,0.3)' }}
@@ -168,10 +184,17 @@ const LogoAdjustPanel = ({ logoUrl, adjust, onChange }) => {
           <span className="text-[10px] font-semibold text-gray-500 dark:text-[#7D8590]">Zoom</span>
           <span className="text-[10px] font-mono text-gray-500 dark:text-[#7D8590]">{Number(scale).toFixed(1)}×</span>
         </div>
-        <input type="range" min="0.3" max="4" step="0.1" value={scale}
-          onChange={e => onChange({ ...adjust, scale: parseFloat(e.target.value) })}
-          className="w-full cursor-pointer accent-violet-500"
-        />
+        <div className="flex items-center gap-2">
+          <button type="button"
+            onClick={() => onChange({ ...adjust, scale: Math.max(0.3, Math.round((scale - 0.1) * 10) / 10) })}
+            className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-[#E6E8EB] font-bold text-base flex items-center justify-center hover:bg-gray-200 dark:hover:bg-white/20 transition-colors shrink-0">−</button>
+          <input type="range" min="0.3" max="4" step="0.1" value={scale}
+            onChange={e => onChange({ ...adjust, scale: parseFloat(e.target.value) })}
+            className="flex-1 cursor-pointer accent-violet-500" />
+          <button type="button"
+            onClick={() => onChange({ ...adjust, scale: Math.min(4, Math.round((scale + 0.1) * 10) / 10) })}
+            className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-[#E6E8EB] font-bold text-base flex items-center justify-center hover:bg-gray-200 dark:hover:bg-white/20 transition-colors shrink-0">+</button>
+        </div>
       </div>
 
       {/* Fit mode */}
@@ -289,7 +312,7 @@ const ImageUploadZone = ({ label, hint, value, onChange, aspect = 'square' }) =>
 };
 
 // ─── Mobile Preview ──────────────────────────────────────────────────────────
-const MobilePreview = ({ colors, fontFamily, logoUrl, restaurantName, menuLayout, menuItems = [] }) => {
+const MobilePreview = ({ colors, fontFamily, logoUrl, logoAdjust = {}, restaurantName, menuLayout, menuItems = [] }) => {
   const primary = colors.primary || '#1A1A1A';
   const secondary = colors.secondary || '#F59E0B';
   const bg = colors.bgColor || '#FAFAFA';
@@ -326,8 +349,18 @@ const MobilePreview = ({ colors, fontFamily, logoUrl, restaurantName, menuLayout
         {/* Header bar */}
         <div className="flex items-center gap-2 px-3 py-2.5 sticky top-0 z-10"
           style={{ backgroundColor: `${surface}E0`, backdropFilter: 'blur(12px)', borderBottom: `1px solid ${itemBorder}` }}>
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0"
-            style={{ backgroundColor: primary }}>{(restaurantName || 'R')[0]}</div>
+          {logoUrl ? (
+            <div className="w-7 h-7 rounded-lg overflow-hidden shrink-0" style={{ backgroundColor: primary }}>
+              <img src={getImageUrl(logoUrl)} alt={restaurantName} draggable={false}
+                style={{ width: '100%', height: '100%',
+                  objectFit: logoAdjust.fit || 'contain',
+                  transform: `translate(${logoAdjust.x ?? 0}%, ${logoAdjust.y ?? 0}%) scale(${logoAdjust.scale ?? 1})`,
+                  transformOrigin: 'center center' }} />
+            </div>
+          ) : (
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-black shrink-0"
+              style={{ backgroundColor: primary }}>{(restaurantName || 'R')[0]}</div>
+          )}
           <div className="flex-1 min-w-0">
             <div className="text-[9px] font-black leading-none truncate" style={{ color: text }}>{restaurantName || 'Restaurant'}</div>
           </div>
@@ -447,10 +480,13 @@ export default function AdminPortalDesignPlus() {
   const [aiDishSuggestion, setAiDishSuggestion] = useState(true);
   const [whatsappOptIn, setWhatsappOptIn] = useState(true);
   const [portalType, setPortalType] = useState('order');
-  const [portalNameMode, setPortalNameMode] = useState('outlet'); // 'outlet' | 'company'
+  const [portalNameMode, setPortalNameMode] = useState('outlet');
   const [companyName, setCompanyName] = useState('');
+  const [companyLoading, setCompanyLoading] = useState(true);
   const [logoAdjust, setLogoAdjust] = useState({ x: 0, y: 0, scale: 1, fit: 'contain' });
   const [showLogoAdjust, setShowLogoAdjust] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const isLoadingOutlet = useRef(false);
 
   useEffect(() => { fetchData(); }, []);
 
@@ -463,6 +499,7 @@ export default function AdminPortalDesignPlus() {
       const list = outletsRes.data || [];
       setOutlets(list);
       setCompanyName(companyRes.data?.name || '');
+      setCompanyLoading(false);
       if (list.length > 0) {
         const first = list.find(o => o.status === 'Active') || list[0];
         loadOutlet(first.id, list);
@@ -472,6 +509,8 @@ export default function AdminPortalDesignPlus() {
   };
 
   const loadOutlet = (id, list = outlets) => {
+    isLoadingOutlet.current = true;
+    setIsDirty(false);
     setSelectedOutletId(id);
     setItemTagEdits({});
     const outlet = list.find(o => o.id === id);
@@ -499,7 +538,14 @@ export default function AdminPortalDesignPlus() {
     setPortalNameMode(cfg.portalNameMode || 'outlet');
     setLogoAdjust(cfg.logoAdjust || { x: 0, y: 0, scale: 1, fit: 'contain' });
     setShowLogoAdjust(false);
+    setTimeout(() => { isLoadingOutlet.current = false; }, 0);
   };
+
+  useEffect(() => {
+    if (isLoadingOutlet.current) return;
+    setIsDirty(true);
+  }, [logoUrl, coverImageUrl, fontFamily, colors, logoAdjust, portalEnabled, requireIdentity,
+      aiDishSuggestion, whatsappOptIn, menuLayout, portalType, portalNameMode, cuisineType, openingHours]);
 
   const applyPreset = (preset) => {
     setColors(preset.colors);
@@ -572,6 +618,7 @@ export default function AdminPortalDesignPlus() {
           logoAdjust,
         },
       });
+      setIsDirty(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (e) {
@@ -640,52 +687,8 @@ export default function AdminPortalDesignPlus() {
           {/* Left: Controls */}
           <div className="space-y-5">
 
-            {/* Portal status */}
-            <Section icon={ShieldCheck} title="Portal Access" subtitle="Control who can access your ordering portal" iconColor="text-teal-500">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">Portal Enabled</p>
-                    <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Allow customers to access and order from the portal</p>
-                  </div>
-                  <Toggle enabled={portalEnabled} onChange={() => setPortalEnabled(!portalEnabled)} />
-                </div>
-                <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">Identity Gate</p>
-                    <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Ask for name & phone before showing the menu</p>
-                  </div>
-                  <Toggle enabled={requireIdentity} onChange={() => setRequireIdentity(!requireIdentity)} />
-                </div>
-                <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">WhatsApp Opt-In</p>
-                    <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Show WhatsApp update opt-in at gate & checkout</p>
-                  </div>
-                  <Toggle enabled={whatsappOptIn} onChange={() => setWhatsappOptIn(!whatsappOptIn)} />
-                </div>
-              </div>
-            </Section>
-
-            {/* AI suggestion */}
-            <Section icon={Sparkles} title="AI Dish Suggestions" subtitle="Let customers describe their mood and get AI-powered dish picks" iconColor="text-fuchsia-500">
-              <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
-                <div>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">Enable AI Dish Suggestions</p>
-                  <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Adds the AI tab to the customer portal's bottom navigation</p>
-                </div>
-                <Toggle enabled={aiDishSuggestion} onChange={() => setAiDishSuggestion(!aiDishSuggestion)} />
-              </div>
-              {aiDishSuggestion && (
-                <div className="px-4 py-3 rounded-xl text-xs font-medium"
-                  style={{ background: 'rgba(217,70,239,0.08)', border: '1px solid rgba(217,70,239,0.2)', color: '#a855f7' }}>
-                  Customers will see a middle AI tab in the bottom nav. They can pick a mood (Comfort Food, Spicy, Sweet, etc.) and get instant dish recommendations powered by your menu + AI.
-                </div>
-              )}
-            </Section>
-
-            {/* Restaurant identity */}
-            <Section icon={Smartphone} title="Restaurant Identity" subtitle="Logo, hero banner, cuisine type, and opening hours" iconColor="text-blue-500">
+            {/* Restaurant identity — first, it's the most important branding step */}
+            <Section icon={Smartphone} title="Restaurant Identity" subtitle="Logo, hero banner, display name, cuisine type, and opening hours" iconColor="text-blue-500">
               <div className="space-y-4">
                 {/* Name display mode */}
                 <div className="space-y-1.5">
@@ -693,7 +696,7 @@ export default function AdminPortalDesignPlus() {
                   <div className="grid grid-cols-2 gap-2">
                     {[
                       { value: 'outlet', label: 'Outlet Name', preview: outlets.find(o => o.id === selectedOutletId)?.name || '—' },
-                      { value: 'company', label: 'Account Name', preview: companyName || '—' },
+                      { value: 'company', label: 'Account Name', preview: companyLoading ? '…' : (companyName || 'Not set') },
                     ].map(opt => (
                       <button
                         key={opt.value}
@@ -768,6 +771,50 @@ export default function AdminPortalDesignPlus() {
                   </div>
                 </div>
               </div>
+            </Section>
+
+            {/* Portal status */}
+            <Section icon={ShieldCheck} title="Portal Access" subtitle="Control who can access your ordering portal" iconColor="text-teal-500">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">Portal Enabled</p>
+                    <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Allow customers to access and order from the portal</p>
+                  </div>
+                  <Toggle enabled={portalEnabled} onChange={() => setPortalEnabled(!portalEnabled)} />
+                </div>
+                <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">Identity Gate</p>
+                    <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Ask for name & phone before showing the menu</p>
+                  </div>
+                  <Toggle enabled={requireIdentity} onChange={() => setRequireIdentity(!requireIdentity)} />
+                </div>
+                <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">WhatsApp Opt-In</p>
+                    <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Show WhatsApp update opt-in at gate & checkout</p>
+                  </div>
+                  <Toggle enabled={whatsappOptIn} onChange={() => setWhatsappOptIn(!whatsappOptIn)} />
+                </div>
+              </div>
+            </Section>
+
+            {/* AI suggestion */}
+            <Section icon={Sparkles} title="AI Dish Suggestions" subtitle="Let customers describe their mood and get AI-powered dish picks" iconColor="text-fuchsia-500">
+              <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-white/5">
+                <div>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-[#E6E8EB]">Enable AI Dish Suggestions</p>
+                  <p className="text-xs text-gray-400 dark:text-[#7D8590] mt-0.5">Adds the AI tab to the customer portal's bottom navigation</p>
+                </div>
+                <Toggle enabled={aiDishSuggestion} onChange={() => setAiDishSuggestion(!aiDishSuggestion)} />
+              </div>
+              {aiDishSuggestion && (
+                <div className="px-4 py-3 rounded-xl text-xs font-medium"
+                  style={{ background: 'rgba(217,70,239,0.08)', border: '1px solid rgba(217,70,239,0.2)', color: '#a855f7' }}>
+                  Customers will see a middle AI tab in the bottom nav. They can pick a mood (Comfort Food, Spicy, Sweet, etc.) and get instant dish recommendations powered by your menu + AI.
+                </div>
+              )}
             </Section>
 
             {/* Theme presets */}
@@ -945,6 +992,7 @@ export default function AdminPortalDesignPlus() {
                 colors={colors}
                 fontFamily={fontFamily}
                 logoUrl={logoUrl}
+                logoAdjust={logoAdjust}
                 restaurantName={(portalNameMode === 'company' ? companyName : selectedOutlet?.name) || 'Restaurant'}
                 menuLayout={menuLayout}
                 menuItems={menuItems}
@@ -974,6 +1022,26 @@ export default function AdminPortalDesignPlus() {
           </div>
         </div>
       </div>
+
+      {/* Floating unsaved-changes bar */}
+      {isDirty && (
+        <div className="fixed bottom-6 inset-x-0 z-[60] flex justify-center pointer-events-none px-4">
+          <div className="flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl border border-amber-200 dark:border-amber-500/20 bg-white dark:bg-[#12161C] pointer-events-auto">
+            <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            <span className="text-sm font-semibold text-gray-500 dark:text-[#7D8590]">Unsaved changes</span>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-sm hover:shadow-lg transition-all disabled:opacity-50 ml-1"
+            >
+              {saving ? <Loader2 size={14} className="animate-spin" />
+                : saveSuccess ? <CheckCircle2 size={14} className="text-green-400" />
+                : <Save size={14} />}
+              {saveSuccess ? 'Saved!' : 'Save'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
