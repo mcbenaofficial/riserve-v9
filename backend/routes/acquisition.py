@@ -21,6 +21,7 @@ from services.storage import StorageService
 import models_pg
 
 _LLM_MODEL = os.environ.get("LITELLM_MODEL", "openrouter/openai/gpt-4o")
+_HEADLINE_MODEL = os.environ.get("LITELLM_HEADLINE_MODEL", "openrouter/google/gemma-3-27b-it")
 
 # ---------------------------------------------------------------------------
 # Media validation rules
@@ -729,6 +730,60 @@ async def generate_caption(
         raise HTTPException(502, f"Caption generation failed: {e}")
 
     return {"caption": text, "length": body.length}
+
+
+class HeadlineGenerateBody(BaseModel):
+    theme: str
+    campaign_type: str
+    audience: Optional[str] = None
+
+
+@router.post("/generate-headline")
+async def generate_headline(
+    body: HeadlineGenerateBody,
+    current_user=Depends(get_current_user),
+):
+    import litellm
+    import json as _json
+
+    audience_clause = f" targeting {body.audience}" if body.audience else ""
+    type_label = body.campaign_type.replace("_", " ")
+
+    system = (
+        "You are a direct-response copywriter specialising in lead generation campaigns. "
+        "Write punchy, benefit-driven headlines that create urgency or curiosity. "
+        "No clickbait. No exclamation marks. Maximum 12 words per headline."
+    )
+    user_prompt = (
+        f"Write exactly 3 headline options for a {type_label} campaign{audience_clause}.\n"
+        f"Campaign theme: {body.theme}\n\n"
+        "Return ONLY a JSON array of 3 strings. No explanation, no markdown, no extra text. "
+        'Example: ["Headline one", "Headline two", "Headline three"]'
+    )
+
+    try:
+        response = await litellm.acompletion(
+            model=_HEADLINE_MODEL,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user_prompt},
+            ],
+            max_tokens=200,
+            temperature=0.85,
+        )
+        text = response.choices[0].message.content.strip()
+        # Strip markdown code fences if the model wraps the JSON
+        if text.startswith("```"):
+            text = text.split("```")[1]
+            if text.startswith("json"):
+                text = text[4:]
+        headlines = _json.loads(text.strip())
+        if not isinstance(headlines, list) or len(headlines) == 0:
+            raise ValueError("unexpected format")
+    except Exception as e:
+        raise HTTPException(502, f"Headline generation failed: {e}")
+
+    return {"headlines": [str(h) for h in headlines[:3]]}
 
 
 @router.get("/go/{slug}")

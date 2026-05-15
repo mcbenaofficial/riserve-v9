@@ -99,3 +99,5 @@ export const createTrigger = (data) => request('POST', `${BASE}/lead-triggers`, 
 export const updateTrigger = (id, data) => request('PUT', `${BASE}/lead-triggers/${id}`, data);
 export const deleteTrigger = (id) => request('DELETE', `${BASE}/lead-triggers/${id}`);
 export const toggleTrigger = (id) => request('POST', `${BASE}/lead-triggers/${id}/toggle`);
+
+export const generateHeadline = (data) => request('POST', `${BASE}/acquisition/generate-headline`, data);

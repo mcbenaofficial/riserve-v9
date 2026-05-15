@@ -88,6 +88,7 @@ import TriggersFlows from './pages/Acquisition/TriggersFlows';
 import AggregatorChannels from './pages/Acquisition/AggregatorChannels';
 import WhatsAppAcquisition from './pages/Acquisition/WhatsAppAcquisition';
 import CampaignsList from './pages/Acquisition/CampaignsList';
+import CampaignChat from './pages/Acquisition/CampaignChat';
 import CampaignWizard from './pages/Acquisition/CampaignWizard';
 import SubmissionsView from './pages/Acquisition/SubmissionsView';
 import StuckSubmissions from './pages/Acquisition/StuckSubmissions';
@@ -245,7 +246,8 @@ function MainLayout() {
               <Route path="/acquisition/aggregators" element={<ProtectedRoute><AggregatorChannels /></ProtectedRoute>} />
               <Route path="/acquisition/whatsapp" element={<ProtectedRoute><WhatsAppAcquisition /></ProtectedRoute>} />
               <Route path="/acquisition/campaigns" element={<ProtectedRoute><CampaignsList /></ProtectedRoute>} />
-              <Route path="/acquisition/campaigns/new" element={<ProtectedRoute><CampaignWizard /></ProtectedRoute>} />
+              <Route path="/acquisition/campaigns/new" element={<ProtectedRoute><CampaignChat /></ProtectedRoute>} />
+              <Route path="/acquisition/campaigns/new/advanced" element={<ProtectedRoute><CampaignWizard /></ProtectedRoute>} />
               <Route path="/acquisition/campaigns/:id/edit" element={<ProtectedRoute><CampaignWizard /></ProtectedRoute>} />
               <Route path="/acquisition/submissions" element={<ProtectedRoute><SubmissionsView /></ProtectedRoute>} />
               <Route path="/acquisition/stuck" element={<ProtectedRoute><StuckSubmissions /></ProtectedRoute>} />
