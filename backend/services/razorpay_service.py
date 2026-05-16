@@ -233,6 +233,35 @@ async def create_order_with_transfer(
 
 
 # ────────────────────────────────────────────────────────────────────────────
+# Simple platform order (no Route transfer — used for marketplace tier billing)
+# ────────────────────────────────────────────────────────────────────────────
+async def create_platform_order(amount_inr: float, receipt: str, notes: dict) -> dict:
+    """Create a basic Razorpay order payable directly to the platform."""
+    key_id, key_secret = _auth()
+    if not key_id:
+        return {"success": False, "error": "Razorpay not configured"}
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.post(
+                f"{RAZORPAY_BASE_V1}/orders",
+                auth=(key_id, key_secret),
+                json={
+                    "amount": int(amount_inr * 100),  # paise
+                    "currency": "INR",
+                    "receipt": receipt[:40],
+                    "notes": notes,
+                },
+            )
+        data = resp.json()
+        if resp.status_code == 200:
+            return {"success": True, "order_id": data["id"], "amount": amount_inr, "key_id": key_id}
+        return {"success": False, "error": data.get("error", {}).get("description", "Order creation failed")}
+    except Exception as e:
+        logger.error(f"[Razorpay] create_platform_order error: {e}")
+        return {"success": False, "error": str(e)}
+
+
+# ────────────────────────────────────────────────────────────────────────────
 # Payment signature verification
 # ────────────────────────────────────────────────────────────────────────────
 def verify_payment_signature(order_id: str, payment_id: str, signature: str) -> bool:

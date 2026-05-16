@@ -82,7 +82,7 @@ const Bookings = () => {
         api.getOutlets(),
         api.getSlotConfigs()
       ]);
-      setBookings(bookingsRes.data);
+      setBookings(bookingsRes.data.items || bookingsRes.data || []);
       setServices(servicesRes.data);
       setOutlets(outletsRes.data);
       setSlotConfigs(configsRes.data);
@@ -242,7 +242,7 @@ const Bookings = () => {
       // Optimistic update or refetch
       // Refetching is safer
       const bookingsRes = await api.getBookings(); // Ideally just fetch incremental, but full refresh is easier for consistency
-      setBookings(bookingsRes.data);
+      setBookings(bookingsRes.data.items || bookingsRes.data || []);
     } catch (e) {
       console.error("Reschedule failed", e);
       alert("Failed to reschedule booking");

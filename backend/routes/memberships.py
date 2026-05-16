@@ -9,9 +9,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete, func, and_
 import models_pg
 
-from .dependencies import get_db, get_current_user, require_admin, User
+from .dependencies import get_db, get_current_user, require_admin, require_feature, User
+from services.books_ledger import post_financial_event
 
-router = APIRouter(prefix="/memberships", tags=["Memberships"])
+router = APIRouter(
+    prefix="/memberships",
+    tags=["Memberships"],
+    dependencies=[Depends(require_feature("memberships"))],
+)
 
 
 # ─── Schemas ────────────────────────────────────────────────────────────────
@@ -400,6 +405,18 @@ async def enroll_member(
 
     await _log_event(db, membership.id, current_user.company_id, "enrolled",
                      {"plan_id": body.plan_id, "plan_name": plan.name}, current_user.id)
+    price = float(plan.price_monthly or 0)
+    await post_financial_event(
+        db,
+        company_id=current_user.company_id,
+        event_type="membership_enrollment",
+        source_id=membership.id,
+        amount=price,
+        metadata={
+            "monthly_portion": price,
+            "description": f"Membership enrollment — {plan.name}",
+        },
+    )
     await db.commit()
     return _membership_dict(membership, customer=customer, plan=plan)
 
@@ -488,7 +505,14 @@ async def update_member(
         await _log_event(db, m.id, current_user.company_id, "plan_changed",
                          {"old_plan_id": old_plan_id, "new_plan_id": body.plan_id}, current_user.id)
     await db.commit()
-    return _membership_dict(m)
+    cust_res = await db.execute(select(models_pg.Customer).where(models_pg.Customer.id == m.customer_id))
+    customer = cust_res.scalar_one_or_none()
+    plan = None
+    if m.plan_id:
+        plan = (await db.execute(
+            select(models_pg.MembershipPlan).where(models_pg.MembershipPlan.id == m.plan_id)
+        )).scalar_one_or_none()
+    return _membership_dict(m, customer=customer, plan=plan)
 
 
 # ─── Lifecycle Actions ───────────────────────────────────────────────────────
@@ -520,6 +544,17 @@ async def renew_member(
     cust_res = await db.execute(select(models_pg.Customer).where(models_pg.Customer.id == m.customer_id))
     customer = cust_res.scalar_one_or_none()
     plan = (await db.execute(select(models_pg.MembershipPlan).where(models_pg.MembershipPlan.id == m.plan_id))).scalar_one_or_none() if m.plan_id else None
+    price = float(plan.price_monthly or 0) if plan else 0
+    if price > 0:
+        await post_financial_event(
+            db,
+            company_id=current_user.company_id,
+            event_type="membership_renewal",
+            source_id=f"{m.id}_renew_{body.expires_at.isoformat()}",
+            amount=price,
+            metadata={"description": f"Membership renewal — {plan.name if plan else m.id}"},
+        )
+        await db.commit()
     return _membership_dict(m, customer=customer, plan=plan)
 
 

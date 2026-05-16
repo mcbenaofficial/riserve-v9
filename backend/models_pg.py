@@ -2688,3 +2688,212 @@ class MarketplaceAgentRun(Base):
     agent = relationship("VirtualAgent", back_populates="marketplace_runs")
     subscription = relationship("CompanyAgentSubscription", back_populates="marketplace_runs")
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Books Module
+# ─────────────────────────────────────────────────────────────────────────────
+
+class BooksSettings(Base):
+    __tablename__ = "books_settings"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, unique=True)
+    fiscal_year_start_month = Column(Integer, default=4)
+    default_currency = Column(String(10), default="INR")
+    gstin = Column(String(50), nullable=True)
+    pan = Column(String(20), nullable=True)
+    tax_scheme = Column(String(20), default="GST")
+    auto_post_bookings = Column(Boolean, default=True)
+    auto_post_memberships = Column(Boolean, default=True)
+    auto_post_marketplace = Column(Boolean, default=True)
+    auto_post_inventory = Column(Boolean, default=True)
+    next_entry_number = Column(Integer, default=1)
+    next_bill_number = Column(Integer, default=1)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+
+class BooksAccount(Base):
+    __tablename__ = "books_accounts"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    code = Column(String(20), nullable=False)
+    name = Column(String(255), nullable=False)
+    account_type = Column(String(50), nullable=False)   # asset|liability|equity|income|expense
+    account_subtype = Column(String(50), nullable=True)
+    is_system = Column(Boolean, default=True)
+    is_active = Column(Boolean, default=True)
+    description = Column(Text, nullable=True)
+    parent_id = Column(String, ForeignKey("books_accounts.id", ondelete="SET NULL"), nullable=True)
+    currency = Column(String(10), default="INR")
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('company_id', 'code', name='uq_books_accounts_company_code'),
+    )
+
+    children = relationship("BooksAccount", backref=__import__('sqlalchemy.orm', fromlist=['backref']).backref('parent', remote_side='BooksAccount.id'))
+    journal_lines = relationship("BooksJournalLine", back_populates="account", foreign_keys="BooksJournalLine.account_id")
+    balances = relationship("BooksAccountBalance", back_populates="account")
+
+
+class BooksTaxCode(Base):
+    __tablename__ = "books_tax_codes"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(100), nullable=False)
+    code = Column(String(20), nullable=False)
+    rate = Column(Numeric(6, 3), default=0)
+    tax_type = Column(String(20), default="gst")    # gst|igst|sgst|cgst|vat|none
+    component_cgst = Column(Numeric(6, 3), default=0)
+    component_sgst = Column(Numeric(6, 3), default=0)
+    is_active = Column(Boolean, default=True)
+    is_system = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint('company_id', 'code', name='uq_books_tax_codes_company_code'),
+    )
+
+
+class BooksJournalEntry(Base):
+    __tablename__ = "books_journal_entries"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    entry_number = Column(String(30), nullable=True)
+    entry_date = Column(Date, nullable=False, index=True)
+    description = Column(Text, nullable=False)
+    source_module = Column(String(50), nullable=True)   # booking|membership|marketplace|inventory|manual|invoice
+    source_id = Column(String, nullable=True)
+    source_type = Column(String(50), nullable=True)
+    status = Column(String(20), default="posted")       # draft|posted|voided
+    voided_at = Column(DateTime(timezone=True), nullable=True)
+    voided_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    void_reason = Column(Text, nullable=True)
+    created_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    is_auto_posted = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+    lines = relationship("BooksJournalLine", back_populates="entry", cascade="all, delete-orphan")
+
+
+class BooksJournalLine(Base):
+    __tablename__ = "books_journal_lines"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    entry_id = Column(String, ForeignKey("books_journal_entries.id", ondelete="CASCADE"), nullable=False, index=True)
+    account_id = Column(String, ForeignKey("books_accounts.id", ondelete="RESTRICT"), nullable=False, index=True)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    debit = Column(Numeric(14, 2), default=0)
+    credit = Column(Numeric(14, 2), default=0)
+    description = Column(Text, nullable=True)
+    tax_code_id = Column(String, ForeignKey("books_tax_codes.id", ondelete="SET NULL"), nullable=True)
+    tax_amount = Column(Numeric(14, 2), default=0)
+    currency = Column(String(10), default="INR")
+    line_order = Column(Integer, default=0)
+
+    entry = relationship("BooksJournalEntry", back_populates="lines")
+    account = relationship("BooksAccount", back_populates="journal_lines", foreign_keys=[account_id])
+
+
+class BooksAccountBalance(Base):
+    __tablename__ = "books_account_balances"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
+    account_id = Column(String, ForeignKey("books_accounts.id", ondelete="CASCADE"), nullable=False)
+    fiscal_year = Column(Integer, nullable=False)
+    period_month = Column(Integer, nullable=False)
+    opening_balance = Column(Numeric(14, 2), default=0)
+    total_debits = Column(Numeric(14, 2), default=0)
+    total_credits = Column(Numeric(14, 2), default=0)
+    closing_balance = Column(Numeric(14, 2), default=0)
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint(
+            'company_id', 'account_id', 'fiscal_year', 'period_month',
+            name='uq_books_account_balances'
+        ),
+    )
+
+    account = relationship("BooksAccount", back_populates="balances")
+
+
+class BooksBankAccount(Base):
+    __tablename__ = "books_bank_accounts"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    account_name = Column(String(255), nullable=False)
+    account_type = Column(String(20), default="bank")   # bank|cash|credit_card|wallet
+    bank_name = Column(String(255), nullable=True)
+    account_number_last4 = Column(String(4), nullable=True)
+    ifsc_code = Column(String(20), nullable=True)
+    currency = Column(String(10), default="INR")
+    opening_balance = Column(Numeric(14, 2), default=0)
+    current_balance = Column(Numeric(14, 2), default=0)
+    is_default = Column(Boolean, default=False)
+    books_account_id = Column(String, ForeignKey("books_accounts.id", ondelete="SET NULL"), nullable=True)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+
+class BooksBudget(Base):
+    __tablename__ = "books_budgets"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    fiscal_year = Column(Integer, nullable=False)
+    period_month = Column(Integer, nullable=True)
+    account_id = Column(String, ForeignKey("books_accounts.id", ondelete="CASCADE"), nullable=False)
+    budgeted_amount = Column(Numeric(14, 2), default=0)
+    notes = Column(Text, nullable=True)
+    created_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        __import__('sqlalchemy').UniqueConstraint(
+            'company_id', 'fiscal_year', 'period_month', 'account_id',
+            name='uq_books_budgets'
+        ),
+    )
+
+
+class BooksBill(Base):
+    __tablename__ = "books_bills"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="SET NULL"), nullable=True)
+    bill_number = Column(String(50), nullable=True)
+    vendor_name = Column(String(255), nullable=False)
+    vendor_id = Column(String, ForeignKey("suppliers.id", ondelete="SET NULL"), nullable=True)
+    category = Column(String(100), nullable=True)
+    description = Column(Text, nullable=True)
+    items = Column(JSONB, default=list)
+    subtotal = Column(Numeric(14, 2), default=0)
+    tax_amount = Column(Numeric(14, 2), default=0)
+    total_amount = Column(Numeric(14, 2), nullable=False)
+    currency = Column(String(10), default="INR")
+    bill_date = Column(Date, nullable=False)
+    due_date = Column(Date, nullable=True)
+    status = Column(String(20), default="unpaid", index=True)   # unpaid|paid|partial|void
+    paid_amount = Column(Numeric(14, 2), default=0)
+    paid_at = Column(DateTime(timezone=True), nullable=True)
+    payment_method = Column(String(50), nullable=True)
+    payment_reference = Column(String(255), nullable=True)
+    expense_account_id = Column(String, ForeignKey("books_accounts.id", ondelete="SET NULL"), nullable=True)
+    attachment_url = Column(String(500), nullable=True)
+    created_by = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    journal_entry_id = Column(String, ForeignKey("books_journal_entries.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+

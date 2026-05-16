@@ -4,26 +4,25 @@ import { Filter, Download, DollarSign, TrendingUp, Percent } from 'lucide-react'
 
 const Finance = () => {
   const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [statusFilter, setStatusFilter] = useState('All');
-  const [dateFilter, setDateFilter] = useState('All');
   const perPage = 15;
 
   useEffect(() => {
     fetchTransactions();
-  }, []);
-
-  useEffect(() => {
-    filterTransactions();
-  }, [transactions, statusFilter, dateFilter]);
+  }, [page, statusFilter]);
 
   const fetchTransactions = async () => {
     try {
-      const response = await api.getTransactions();
-      setTransactions(response.data);
-      setFilteredTransactions(response.data);
+      setLoading(true);
+      const params = { page, page_size: perPage };
+      if (statusFilter !== 'All') params.status = statusFilter;
+      const response = await api.getTransactions(params);
+      const data = response.data;
+      setTransactions(data.items || data || []);
+      setTotal(data.total || 0);
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
     } finally {
@@ -31,37 +30,10 @@ const Finance = () => {
     }
   };
 
-  const filterTransactions = () => {
-    let filtered = transactions;
+  const pageCount = Math.ceil(total / perPage) || 1;
+  const pageItems = transactions;
 
-    if (statusFilter !== 'All') {
-      filtered = filtered.filter(t => t.status === statusFilter);
-    }
-
-    if (dateFilter !== 'All') {
-      const now = new Date();
-      filtered = filtered.filter(t => {
-        const transDate = new Date(t.date);
-        if (dateFilter === 'Today') {
-          return transDate.toDateString() === now.toDateString();
-        } else if (dateFilter === 'This Week') {
-          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          return transDate >= weekAgo;
-        } else if (dateFilter === 'This Month') {
-          return transDate.getMonth() === now.getMonth() && transDate.getFullYear() === now.getFullYear();
-        }
-        return true;
-      });
-    }
-
-    setFilteredTransactions(filtered);
-    setPage(1);
-  };
-
-  const pageCount = Math.ceil(filteredTransactions.length / perPage);
-  const pageItems = filteredTransactions.slice((page - 1) * perPage, page * perPage);
-
-  const totals = filteredTransactions.reduce(
+  const totals = transactions.reduce(
     (acc, t) => ({
       gross: acc.gross + (t.gross || 0),
       commission: acc.commission + (t.commission || 0),
@@ -93,7 +65,7 @@ const Finance = () => {
           <div>
             <h2 className="text-2xl font-bold text-[#0E1116] dark:text-[#E6E8EB]">Transactions</h2>
             <p className="text-sm text-[#4B5563] dark:text-[#7D8590] mt-1">
-              {filteredTransactions.length} total transactions
+              {total} total transactions
             </p>
           </div>
 
@@ -101,28 +73,13 @@ const Finance = () => {
           <div className="flex items-center gap-3 flex-wrap">
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
               className="px-4 py-2 bg-white dark:bg-white/5 border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm focus:ring-2 focus:ring-[#5FA8D3] transition-all backdrop-blur-sm"
             >
-              <option>All</option>
-              <option>Settled</option>
-              <option>Held</option>
+              <option value="All">All</option>
+              <option value="Settled">Settled</option>
+              <option value="Held">Held</option>
             </select>
-
-            <select
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className="px-4 py-2 bg-white dark:bg-white/5 border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl text-[#0E1116] dark:text-[#E6E8EB] text-sm focus:ring-2 focus:ring-[#5FA8D3] transition-all backdrop-blur-sm"
-            >
-              <option>All</option>
-              <option>Today</option>
-              <option>This Week</option>
-              <option>This Month</option>
-            </select>
-
-            <button className="p-2 bg-[#ECEFF3] dark:bg-white/5 border border-[#D9DEE5] dark:border-[#1F2630] rounded-xl hover:bg-[#D9DEE5] dark:hover:bg-[#1F2630] transition-all">
-              <Filter size={20} className="text-[#4B5563] dark:text-[#E6E8EB]" />
-            </button>
           </div>
         </div>
 
@@ -195,9 +152,9 @@ const Finance = () => {
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-[#ECEFF3] dark:bg-white/5 border-t border-[#D9DEE5] dark:border-[#1F2630]">
           <div className="text-sm text-[#4B5563] dark:text-[#7D8590]">
-            Showing <span className="font-semibold text-[#0E1116] dark:text-[#E6E8EB]">{(page - 1) * perPage + 1}</span> to{' '}
-            <span className="font-semibold text-[#0E1116] dark:text-[#E6E8EB]">{Math.min(page * perPage, filteredTransactions.length)}</span> of{' '}
-            <span className="font-semibold text-[#0E1116] dark:text-[#E6E8EB]">{filteredTransactions.length}</span> results
+            Showing <span className="font-semibold text-[#0E1116] dark:text-[#E6E8EB]">{total === 0 ? 0 : (page - 1) * perPage + 1}</span> to{' '}
+            <span className="font-semibold text-[#0E1116] dark:text-[#E6E8EB]">{Math.min(page * perPage, total)}</span> of{' '}
+            <span className="font-semibold text-[#0E1116] dark:text-[#E6E8EB]">{total}</span> results
           </div>
 
           <div className="flex items-center gap-2">

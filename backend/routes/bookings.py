@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone, date
 import uuid
+import math
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete, func, or_
@@ -13,6 +14,7 @@ from .dependencies import (
     get_current_user, User, SUBSCRIPTION_PLANS,
     enforce_outlet_access
 )
+from services.books_ledger import post_financial_event
 
 router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
@@ -42,32 +44,43 @@ class BookingReschedule(BaseModel):
 
 @router.get("")
 async def get_bookings(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    status: Optional[str] = Query(None),
+    outlet_id: Optional[str] = Query(None),
+    date_from: Optional[str] = Query(None),
+    date_to: Optional[str] = Query(None),
     current_user: User = Depends(get_current_user),
     db_session: AsyncSession = Depends(get_db)
 ):
     stmt = select(models_pg.Booking)
-    
-    # Filter by company_id for non-SuperAdmin users
+
     if current_user.role != "SuperAdmin":
         stmt = stmt.where(models_pg.Booking.company_id == current_user.company_id)
-        
+
     if current_user.role in ["Manager", "User"]:
         if current_user.outlets:
             stmt = stmt.where(models_pg.Booking.outlet_id.in_(current_user.outlets))
         else:
-            return [] # No outlets assigned, can't see bookings
-            
-    stmt = stmt.order_by(models_pg.Booking.created_at.desc())
-        
-    res = await db_session.execute(stmt)
-    bookings = res.scalars().all()
-    
-    # Load relationships conceptually or just return raw dictionary formats
-    return_data = []
-    for b in bookings:
-        # Reconstruct "service_ids" optionally if needed by pulling from the association
-        # But for list view we usually just need basic data
-        return_data.append({
+            return {"items": [], "total": 0, "page": page, "pages": 0}
+
+    if status:
+        stmt = stmt.where(models_pg.Booking.status == status)
+    if outlet_id:
+        stmt = stmt.where(models_pg.Booking.outlet_id == outlet_id)
+    if date_from:
+        stmt = stmt.where(models_pg.Booking.date >= date_from)
+    if date_to:
+        stmt = stmt.where(models_pg.Booking.date <= date_to)
+
+    count_result = await db_session.execute(select(func.count()).select_from(stmt.subquery()))
+    total = count_result.scalar() or 0
+
+    stmt = stmt.order_by(models_pg.Booking.created_at.desc()).offset((page - 1) * page_size).limit(page_size)
+    bookings = (await db_session.execute(stmt)).scalars().all()
+
+    items = [
+        {
             "id": b.id,
             "customer_id": b.customer_id,
             "customer": b.customer_name,
@@ -85,10 +98,12 @@ async def get_bookings(
             "status": b.status,
             "source": b.source,
             "company_id": b.company_id,
-            "created_at": b.created_at.isoformat() if b.created_at else None
-        })
-        
-    return return_data
+            "created_at": b.created_at.isoformat() if b.created_at else None,
+        }
+        for b in bookings
+    ]
+
+    return {"items": items, "total": total, "page": page, "pages": math.ceil(total / page_size) if total else 0}
 
 
 @router.post("")
@@ -391,6 +406,27 @@ async def update_booking(
     # Auto-generate invoice when booking transitions to Completed
     if booking.status == "Completed" and old_status != "Completed":
         await _auto_invoice_booking(booking, db_session)
+        await post_financial_event(
+            db_session,
+            company_id=booking.company_id,
+            event_type="booking_payment",
+            source_id=booking.id,
+            amount=float(booking.amount or 0),
+            metadata={
+                "service_amount": float(booking.service_amount or booking.amount or 0),
+                "items_total": float(booking.items_total or 0),
+                "description": f"Booking #{booking.id[:8]} — {booking.customer_name or ''}",
+            },
+        )
+        # Increment customer lifetime stats
+        if booking.customer_id:
+            customer = (await db_session.execute(
+                select(models_pg.Customer).where(models_pg.Customer.id == booking.customer_id)
+            )).scalar_one_or_none()
+            if customer:
+                customer.total_bookings = (customer.total_bookings or 0) + 1
+                customer.total_revenue = float(customer.total_revenue or 0) + float(booking.amount or 0)
+        await db_session.commit()
 
     return {
         "id": booking.id,
@@ -444,10 +480,16 @@ async def _auto_invoice_booking(booking: models_pg.Booking, db: AsyncSession) ->
     tax_rate = float(inv_settings.default_tax_rate or 0)
     tax_amount = round(amount * tax_rate / 100, 2)
 
-    # Increment invoice counter
-    number = inv_settings.next_number
-    invoice_number = f"{inv_settings.prefix}-{number:04d}"
-    inv_settings.next_number = number + 1
+    # Atomic increment — eliminates duplicate number race condition
+    from sqlalchemy import update as _sql_update
+    num_result = await db.execute(
+        _sql_update(models_pg.InvoiceSettings)
+        .where(models_pg.InvoiceSettings.company_id == booking.company_id)
+        .values(next_number=models_pg.InvoiceSettings.next_number + 1)
+        .returning(models_pg.InvoiceSettings.next_number, models_pg.InvoiceSettings.prefix)
+    )
+    num_row = num_result.fetchone()
+    invoice_number = f"{num_row[1]}-{num_row[0]:04d}" if num_row else f"INV-{inv_settings.next_number:04d}"
 
     inv = models_pg.Invoice(
         id=str(uuid.uuid4()),
@@ -482,7 +524,8 @@ async def _auto_invoice_booking(booking: models_pg.Booking, db: AsyncSession) ->
         sent_at=datetime.now(timezone.utc) if inv_settings.auto_send_on_generate else None,
     )
     db.add(inv)
-    await db.commit()
+    # No commit here — caller is responsible for the final commit so all writes
+    # (invoice, Books entry, customer stats) land in a single transaction.
 
 
 @router.put("/{booking_id}/reschedule")

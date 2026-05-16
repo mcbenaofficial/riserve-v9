@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime, timezone
 import uuid
+import math
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, desc
+from sqlalchemy import select, update, func
 import models_pg
 
 from .dependencies import get_current_user, User, get_db
@@ -15,18 +16,23 @@ router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
 @router.get("")
 async def get_transactions(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    status: Optional[str] = Query(None),
     current_user: User = Depends(get_current_user),
     db_session: AsyncSession = Depends(get_db)
 ):
     stmt = select(models_pg.Transaction)
     if current_user.role != "SuperAdmin":
         stmt = stmt.where(models_pg.Transaction.company_id == current_user.company_id)
-        
-    stmt = stmt.order_by(models_pg.Transaction.date.desc())
-    res = await db_session.execute(stmt)
-    transactions = res.scalars().all()
-    
-    return [
+    if status:
+        stmt = stmt.where(models_pg.Transaction.status == status)
+
+    total = (await db_session.execute(select(func.count()).select_from(stmt.subquery()))).scalar() or 0
+    stmt = stmt.order_by(models_pg.Transaction.date.desc()).offset((page - 1) * page_size).limit(page_size)
+    transactions = (await db_session.execute(stmt)).scalars().all()
+
+    items = [
         {
             "id": t.id,
             "booking_id": t.booking_id,
@@ -42,9 +48,12 @@ async def get_transactions(
             "items": t.items,
             "customer_id": t.customer_id,
             "created_by": t.created_by,
-            "created_at": t.created_at.isoformat() if t.created_at else None
-        } for t in transactions
+            "created_at": t.created_at.isoformat() if t.created_at else None,
+        }
+        for t in transactions
     ]
+
+    return {"items": items, "total": total, "page": page, "pages": math.ceil(total / page_size) if total else 0}
 
 
 @router.get("/booking/{booking_id}")

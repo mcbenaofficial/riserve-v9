@@ -35,14 +35,14 @@ export const api = {
   deleteService: (id) => axios.delete(`${API}/services/${id}`, { headers: getHeaders() }),
 
   // Bookings
-  getBookings: () => axios.get(`${API}/bookings`, { headers: getHeaders() }),
+  getBookings: (params = {}) => axios.get(`${API}/bookings`, { params, headers: getHeaders() }),
   createBooking: (data) => axios.post(`${API}/bookings`, data, { headers: getHeaders() }),
   updateBooking: (id, data) => axios.put(`${API}/bookings/${id}`, typeof data === 'string' ? { status: data } : data, { headers: getHeaders() }),
   deleteBooking: (id) => axios.delete(`${API}/bookings/${id}`, { headers: getHeaders() }),
   rescheduleBooking: (id, time, date, resource_id) => axios.put(`${API}/bookings/${id}/reschedule`, { time, date, resource_id }, { headers: getHeaders() }),
 
   // Transactions
-  getTransactions: () => axios.get(`${API}/transactions`, { headers: getHeaders() }),
+  getTransactions: (params = {}) => axios.get(`${API}/transactions`, { params, headers: getHeaders() }),
   getTransactionByBooking: (bookingId) => axios.get(`${API}/transactions/booking/${bookingId}`, { headers: getHeaders() }),
   processPOSCheckout: (data) => axios.post(`${API}/transactions/pos`, data, { headers: getHeaders() }),
 

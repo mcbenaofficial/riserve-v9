@@ -33,6 +33,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import models_pg
 from database_pg import get_db
 from routes.dependencies import get_current_user, get_super_admin
+from services.books_ledger import post_financial_event
 from services.razorpay_service import (
     create_linked_account,
     create_order_with_transfer,
@@ -283,7 +284,7 @@ async def verify_razorpay_payment(
 
 
 @router.post("/razorpay/webhook")
-async def razorpay_webhook(request: Request):
+async def razorpay_webhook(request: Request, db: AsyncSession = Depends(get_db)):
     """
     Receive and validate Razorpay webhooks.
     Razorpay signs the body with X-Razorpay-Signature (HMAC-SHA256 using webhook secret).
@@ -308,7 +309,23 @@ async def razorpay_webhook(request: Request):
     # Handle key events — extend as needed
     if event_type == "payment.captured":
         payment = event.get("payload", {}).get("payment", {}).get("entity", {})
-        logger.info(f"[Razorpay] payment captured: {payment.get('id')}")
+        payment_id = payment.get("id")
+        logger.info(f"[Razorpay] payment captured: {payment_id}")
+
+        # Post to Books ledger if company_id is in payment notes
+        company_id = (payment.get("notes") or {}).get("company_id")
+        if company_id and payment_id:
+            amount_paise = payment.get("amount", 0)
+            amount_inr = amount_paise / 100
+            await post_financial_event(
+                db,
+                company_id=company_id,
+                event_type="booking_payment",
+                source_id=f"rzp_{payment_id}",
+                amount=amount_inr,
+                metadata={"description": f"Razorpay payment {payment_id}"},
+            )
+            await db.commit()
 
     elif event_type == "transfer.processed":
         transfer = event.get("payload", {}).get("transfer", {}).get("entity", {})

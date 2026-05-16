@@ -18,11 +18,16 @@ from models_pg import (
     AgentCategory, VirtualAgent, CompanyAgentTier,
     CompanyAgentSubscription, MarketplaceAgentRun,
 )
-from routes.dependencies import get_current_user, require_admin
+from routes.dependencies import get_current_user, require_admin, require_feature
+from services.books_ledger import post_financial_event
 from ai_runtime.gateway import call_model
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/marketplace", tags=["marketplace"])
+router = APIRouter(
+    prefix="/marketplace",
+    tags=["marketplace"],
+    dependencies=[Depends(require_feature("agents_marketplace"))],
+)
 
 _AGENT_MODEL = os.environ.get("AGENT_MODEL", "openrouter/google/gemma-3-27b-it")
 
@@ -182,6 +187,9 @@ class OnboardingSelectBody(BaseModel):
 
 class TierUpgradeBody(BaseModel):
     tier_key: str
+    razorpay_order_id: Optional[str] = None
+    razorpay_payment_id: Optional[str] = None
+    razorpay_signature: Optional[str] = None
 
 class RunAgentBody(BaseModel):
     input: dict = {}
@@ -578,6 +586,39 @@ async def onboarding_select(
 # Tier upgrade
 # ---------------------------------------------------------------------------
 
+@router.post("/tier/order")
+async def create_tier_upgrade_order(
+    body: TierUpgradeBody,
+    current_user=Depends(get_current_user),
+):
+    """Create a Razorpay payment order for a tier upgrade. Frontend completes payment then calls /tier/upgrade."""
+    if body.tier_key not in TIER_DEFS:
+        raise HTTPException(400, f"Invalid tier: {body.tier_key}")
+
+    defn = TIER_DEFS[body.tier_key]
+    price = float(defn["price_monthly"] or 0)
+    if price == 0:
+        raise HTTPException(400, "This tier is free — call /tier/upgrade directly")
+
+    from services.razorpay_service import create_platform_order
+    result = await create_platform_order(
+        amount_inr=price,
+        receipt=f"mkt_{body.tier_key}_{current_user.company_id[:8]}",
+        notes={"company_id": current_user.company_id, "tier_key": body.tier_key},
+    )
+    if not result["success"]:
+        raise HTTPException(500, f"Could not create payment order: {result.get('error', 'Unknown error')}")
+
+    return {
+        "order_id": result["order_id"],
+        "amount": price,
+        "currency": "INR",
+        "key_id": result["key_id"],
+        "tier_key": body.tier_key,
+        "tier_label": defn["label"],
+    }
+
+
 @router.post("/tier/upgrade")
 async def upgrade_tier(
     body: TierUpgradeBody,
@@ -593,13 +634,42 @@ async def upgrade_tier(
         raise HTTPException(400, "Can only upgrade to a higher tier")
 
     defn = TIER_DEFS[body.tier_key]
+    price = float(defn["price_monthly"] or 0)
+
+    # Verify Razorpay payment before upgrading for paid tiers
+    if price > 0:
+        if not body.razorpay_order_id or not body.razorpay_payment_id or not body.razorpay_signature:
+            raise HTTPException(
+                402,
+                detail={
+                    "message": f"Payment required to upgrade to {defn['label']} (₹{price:,.0f}/mo). Call POST /marketplace/tier/order first.",
+                    "price": price,
+                    "tier_key": body.tier_key,
+                }
+            )
+        from services.razorpay_service import verify_payment_signature
+        if not verify_payment_signature(body.razorpay_order_id, body.razorpay_payment_id, body.razorpay_signature):
+            raise HTTPException(400, "Invalid payment signature — upgrade rejected")
+
     tier.tier_key = body.tier_key
     tier.total_agent_limit = defn["total_limit"]
     tier.allows_custom_agents = defn["allows_custom"]
     tier.token_allowance_monthly = defn["token_allowance"]
     tier.price_monthly = defn["price_monthly"]
+    tier.billing_cycle_start = datetime.now(timezone.utc)
     tier.updated_at = datetime.now(timezone.utc)
     await db.commit()
+
+    if price > 0:
+        await post_financial_event(
+            db,
+            company_id=current_user.company_id,
+            event_type="marketplace_subscription",
+            source_id=body.razorpay_payment_id or f"{current_user.company_id}_tier_{body.tier_key}_{datetime.now(timezone.utc).strftime('%Y%m')}",
+            amount=price,
+            metadata={"description": f"Marketplace tier upgrade — {defn['label']}"},
+        )
+        await db.commit()
 
     count = await _active_subscription_count(current_user.company_id, db)
     return {"message": f"Upgraded to {defn['label']}", "tier": _tier_dict(tier, count)}

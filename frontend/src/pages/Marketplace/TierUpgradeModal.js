@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { X, Check, Crown, Loader2, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Check, Crown, Loader2, Zap, CreditCard } from 'lucide-react';
 import { marketplaceApi } from '../../services/marketplaceApi';
 
 const TIER_DETAILS = {
-  indie:   { label: 'Indie',   color: '#6b7280', agents: 3,  tokens: '500K',  price: 0 },
-  startup: { label: 'Startup', color: '#3b82f6', agents: 10, tokens: '2M',    price: 2999 },
-  studio:  { label: 'Studio',  color: '#8b5cf6', agents: 15, tokens: '5M',    price: 6999 },
-  firm:    { label: 'Firm',    color: '#f59e0b', agents: 28, tokens: '15M',   price: 14999 },
+  indie:   { label: 'Indie',   color: '#6b7280', agents: 3,    tokens: '500K',      price: 0 },
+  startup: { label: 'Startup', color: '#3b82f6', agents: 10,   tokens: '2M',        price: 2999 },
+  studio:  { label: 'Studio',  color: '#8b5cf6', agents: 15,   tokens: '5M',        price: 6999 },
+  firm:    { label: 'Firm',    color: '#f59e0b', agents: 28,   tokens: '15M',       price: 14999 },
   corp:    { label: 'Corp',    color: '#ef4444', agents: '∞', tokens: 'Unlimited', price: 29999 },
 };
 
@@ -17,27 +17,92 @@ const TIER_FEATURES = {
   corp:    ['Unlimited agents', 'Unlimited tokens', 'Custom agents via Flow builder', 'Dedicated support', 'Custom SLA'],
 };
 
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (document.getElementById('razorpay-sdk')) { resolve(true); return; }
+    const script = document.createElement('script');
+    script.id = 'razorpay-sdk';
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 export default function TierUpgradeModal({ currentTier, upgradeOptions, onClose, onUpgraded }) {
   const [selectedTier, setSelectedTier] = useState(upgradeOptions[0]?.tier_key || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const detail = TIER_DETAILS[selectedTier] || {};
+  const features = TIER_FEATURES[selectedTier] || [];
+  const isFree = (detail.price || 0) === 0;
+
   const handleUpgrade = async () => {
     if (!selectedTier) return;
     setLoading(true);
     setError(null);
+
     try {
-      await marketplaceApi.upgradeTier(selectedTier);
-      onUpgraded();
-      onClose();
+      if (isFree) {
+        // Free tier — direct upgrade, no payment
+        await marketplaceApi.upgradeTier(selectedTier);
+        onUpgraded();
+        onClose();
+        return;
+      }
+
+      // Paid tier: create Razorpay order first
+      const orderRes = await marketplaceApi.createTierOrder(selectedTier);
+      const { order_id, amount, key_id } = orderRes.data;
+
+      const sdkLoaded = await loadRazorpayScript();
+      if (!sdkLoaded) {
+        setError('Could not load payment SDK. Please check your internet connection.');
+        setLoading(false);
+        return;
+      }
+
+      await new Promise((resolve, reject) => {
+        const rzp = new window.Razorpay({
+          key: key_id,
+          amount: amount * 100, // paise
+          currency: 'INR',
+          order_id,
+          name: "Ri'Serve Marketplace",
+          description: `${detail.label} Plan — ₹${(detail.price || 0).toLocaleString('en-IN')}/mo`,
+          handler: async (response) => {
+            try {
+              await marketplaceApi.upgradeTier(selectedTier, {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              });
+              onUpgraded();
+              onClose();
+              resolve();
+            } catch (err) {
+              reject(err);
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              setLoading(false);
+              reject(new Error('dismissed'));
+            },
+          },
+          theme: { color: '#0E1116' },
+        });
+        rzp.open();
+      });
     } catch (err) {
-      setError(err.response?.data?.detail || 'Upgrade failed');
+      if (err?.message === 'dismissed') return;
+      const detail = err?.response?.data?.detail;
+      const msg = typeof detail === 'object' ? detail.message : (detail || 'Upgrade failed. Please try again.');
+      setError(msg);
       setLoading(false);
     }
   };
-
-  const detail = TIER_DETAILS[selectedTier] || {};
-  const features = TIER_FEATURES[selectedTier] || [];
 
   return (
     <>
@@ -89,7 +154,7 @@ export default function TierUpgradeModal({ currentTier, upgradeOptions, onClose,
                     </div>
                     <div className="text-right shrink-0">
                       <p className="font-bold text-foreground text-sm">
-                        {d.price === 0 ? 'Free' : `₹${d.price.toLocaleString('en-IN')}`}
+                        {d.price === 0 ? 'Free' : `₹${(d.price || 0).toLocaleString('en-IN')}`}
                       </p>
                       <p className="text-[10px] text-muted-foreground">/month</p>
                     </div>
@@ -127,15 +192,16 @@ export default function TierUpgradeModal({ currentTier, upgradeOptions, onClose,
             >
               {loading ? (
                 <Loader2 size={18} className="animate-spin" />
+              ) : isFree ? (
+                <><Zap size={18} /> Upgrade to {detail.label}</>
               ) : (
-                <>
-                  <Zap size={18} />
-                  Upgrade to {TIER_DETAILS[selectedTier]?.label || ''}
-                </>
+                <><CreditCard size={18} /> Pay ₹{(detail.price || 0).toLocaleString('en-IN')} &amp; Upgrade</>
               )}
             </button>
             <p className="text-center text-[11px] text-muted-foreground mt-3">
-              Billing is handled manually. Your team limit unlocks immediately.
+              {isFree
+                ? 'Your team limit unlocks immediately.'
+                : 'Secured by Razorpay. Cancel anytime from settings.'}
             </p>
           </div>
         </div>

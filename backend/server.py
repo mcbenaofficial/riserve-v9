@@ -181,6 +181,76 @@ async def membership_expiry_background_task():
             logger.error(f"Membership expiry task error: {e}")
 
 
+async def marketplace_token_reset_background_task():
+    """Monthly on the 1st: reset token_used_this_cycle for all company tiers."""
+    while True:
+        await asyncio.sleep(86400)
+        now = datetime.now(timezone.utc)
+        if now.day != 1:
+            continue
+        try:
+            async with AsyncSession(engine) as db:
+                result = await db.execute(select(models_pg.CompanyAgentTier))
+                tiers = result.scalars().all()
+                count = 0
+                for tier in tiers:
+                    tier.token_used_this_cycle = 0
+                    tier.billing_cycle_start = now
+                    count += 1
+                if count:
+                    await db.commit()
+                    logger.info(f"Marketplace token reset: cleared cycles for {count} company tier(s)")
+        except Exception as e:
+            logger.error(f"Marketplace token reset error: {e}")
+
+
+async def membership_amortization_background_task():
+    """Monthly: post deferred revenue → membership revenue for active memberships."""
+    while True:
+        # Run once a day; only posts on the 1st of each month
+        await asyncio.sleep(86400)
+        now = datetime.now(timezone.utc)
+        if now.day != 1:
+            continue
+        try:
+            from services.books_ledger import post_financial_event
+            async with AsyncSession(engine) as db:
+                result = await db.execute(
+                    select(models_pg.Membership, models_pg.MembershipPlan).join(
+                        models_pg.MembershipPlan,
+                        models_pg.Membership.plan_id == models_pg.MembershipPlan.id,
+                        isouter=True,
+                    ).where(
+                        models_pg.Membership.status == "active",
+                    )
+                )
+                rows = result.all()
+                count = 0
+                for membership, plan in rows:
+                    if not plan or not plan.price_monthly:
+                        continue
+                    price = float(plan.price_monthly)
+                    source_id = f"{membership.id}_amort_{now.year}_{now.month:02d}"
+                    entry = await post_financial_event(
+                        db,
+                        company_id=membership.company_id,
+                        event_type="membership_amortization",
+                        source_id=source_id,
+                        amount=price,
+                        metadata={
+                            "description": f"Membership revenue recognition — {plan.name} ({now.strftime('%b %Y')})",
+                            "entry_date": now.date().isoformat(),
+                        },
+                    )
+                    if entry:
+                        count += 1
+                if count:
+                    await db.commit()
+                    logger.info(f"Membership amortization: posted {count} revenue recognition entries for {now.strftime('%b %Y')}")
+        except Exception as e:
+            logger.error(f"Membership amortization task error: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
@@ -199,6 +269,8 @@ async def lifespan(app: FastAPI):
     wa_scheduler_task = asyncio.create_task(acquisition_scheduler_background_task())
     petpooja_task = asyncio.create_task(petpooja_polling_background_task())
     membership_expiry_task = asyncio.create_task(membership_expiry_background_task())
+    membership_amortization_task = asyncio.create_task(membership_amortization_background_task())
+    marketplace_token_reset_task = asyncio.create_task(marketplace_token_reset_background_task())
 
     yield
 
@@ -208,6 +280,8 @@ async def lifespan(app: FastAPI):
     wa_scheduler_task.cancel()
     petpooja_task.cancel()
     membership_expiry_task.cancel()
+    membership_amortization_task.cancel()
+    marketplace_token_reset_task.cancel()
     logger.info("Shutting down Ri'Serve API...")
 
 
@@ -272,6 +346,8 @@ from routes.petpooja import router as petpooja_router, petpooja_polling_backgrou
 from routes.memberships import router as memberships_router
 from routes.marketplace import router as marketplace_router
 from routes.flows import router as flows_router
+from routes.books import router as books_router
+from routes.customer_portal_auth import router as customer_portal_auth_router
 
 # Include Routers
 app.include_router(auth.router, prefix="/api")
@@ -327,6 +403,8 @@ app.include_router(petpooja_router, prefix="/api")
 app.include_router(memberships_router, prefix="/api")
 app.include_router(marketplace_router, prefix="/api")
 app.include_router(flows_router, prefix="/api")
+app.include_router(books_router, prefix="/api")
+app.include_router(customer_portal_auth_router, prefix="/api")
 
 # Special endpoint for resource-bookings
 # Moved to using SQLAlchemy

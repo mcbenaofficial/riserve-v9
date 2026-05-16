@@ -5,10 +5,12 @@ from datetime import datetime, timezone, date
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, func, case as sa_case, and_
+import math
 import models_pg
 
 from .dependencies import get_current_user, User, get_db
+from services.books_ledger import post_financial_event
 
 router = APIRouter(prefix="/invoices", tags=["Invoices"])
 
@@ -186,11 +188,17 @@ async def _get_or_create_settings(company_id: str, db: AsyncSession) -> models_p
 
 
 async def _next_invoice_number(company_id: str, db: AsyncSession) -> str:
+    from sqlalchemy import update as _update
     settings = await _get_or_create_settings(company_id, db)
-    number = settings.next_number
-    invoice_number = f"{settings.prefix}-{number:04d}"
-    settings.next_number = number + 1
-    return invoice_number
+    result = await db.execute(
+        _update(models_pg.InvoiceSettings)
+        .where(models_pg.InvoiceSettings.company_id == company_id)
+        .values(next_number=models_pg.InvoiceSettings.next_number + 1)
+        .returning(models_pg.InvoiceSettings.next_number, models_pg.InvoiceSettings.prefix)
+    )
+    row = result.fetchone()
+    number, prefix = (row[0], row[1]) if row else (settings.next_number, settings.prefix)
+    return f"{prefix}-{number:04d}"
 
 
 def _compute_status(inv: models_pg.Invoice) -> str:
@@ -242,33 +250,56 @@ async def get_invoice_stats(
     if current_user.role == "SuperAdmin":
         raise HTTPException(status_code=403, detail="Not available for SuperAdmin")
     company_id = current_user.company_id
-    stmt = select(models_pg.Invoice).where(models_pg.Invoice.company_id == company_id)
-    invoices = (await db.execute(stmt)).scalars().all()
+    today_val = date.today()
 
-    today = date.today()
-    total_invoiced = sum(float(i.total_amount or 0) for i in invoices if i.status != "void")
-    total_paid = sum(float(i.paid_amount or 0) for i in invoices if i.status != "void")
-    total_outstanding = sum(
-        float(i.total_amount or 0) - float(i.paid_amount or 0)
-        for i in invoices
-        if i.status not in ("paid", "void", "cancelled")
+    paid_amount_col = func.coalesce(models_pg.Invoice.paid_amount, 0)
+    is_overdue = and_(
+        models_pg.Invoice.status.in_(["sent", "partially_paid"]),
+        models_pg.Invoice.due_date.isnot(None),
+        models_pg.Invoice.due_date < today_val,
     )
-    total_overdue = sum(
-        float(i.total_amount or 0) - float(i.paid_amount or 0)
-        for i in invoices
-        if i.status in ("sent", "partially_paid") and i.due_date and i.due_date < today
-    )
-    counts = {"draft": 0, "sent": 0, "paid": 0, "partially_paid": 0, "overdue": 0, "cancelled": 0, "void": 0}
-    for inv in invoices:
-        s = _compute_status(inv)
-        counts[s] = counts.get(s, 0) + 1
 
+    row = (await db.execute(
+        select(
+            func.coalesce(func.sum(sa_case(
+                (models_pg.Invoice.status != "void", models_pg.Invoice.total_amount), else_=0
+            )), 0).label("total_invoiced"),
+            func.coalesce(func.sum(sa_case(
+                (models_pg.Invoice.status != "void", paid_amount_col), else_=0
+            )), 0).label("total_paid"),
+            func.coalesce(func.sum(sa_case(
+                (models_pg.Invoice.status.notin_(["paid", "void", "cancelled"]),
+                 models_pg.Invoice.total_amount - paid_amount_col), else_=0
+            )), 0).label("total_outstanding"),
+            func.coalesce(func.sum(sa_case(
+                (is_overdue, models_pg.Invoice.total_amount - paid_amount_col), else_=0
+            )), 0).label("total_overdue"),
+            func.count(sa_case((models_pg.Invoice.status == "draft", 1), else_=None)).label("cnt_draft"),
+            func.count(sa_case((models_pg.Invoice.status == "paid", 1), else_=None)).label("cnt_paid"),
+            func.count(sa_case((models_pg.Invoice.status == "cancelled", 1), else_=None)).label("cnt_cancelled"),
+            func.count(sa_case((models_pg.Invoice.status == "void", 1), else_=None)).label("cnt_void"),
+            func.count(sa_case((models_pg.Invoice.status == "sent", 1), else_=None)).label("cnt_sent_all"),
+            func.count(sa_case((models_pg.Invoice.status == "partially_paid", 1), else_=None)).label("cnt_partial_all"),
+            func.count(sa_case((and_(models_pg.Invoice.status == "sent", is_overdue), 1), else_=None)).label("cnt_sent_overdue"),
+            func.count(sa_case((and_(models_pg.Invoice.status == "partially_paid", is_overdue), 1), else_=None)).label("cnt_partial_overdue"),
+        ).where(models_pg.Invoice.company_id == company_id)
+    )).one()
+
+    overdue_count = (row.cnt_sent_overdue or 0) + (row.cnt_partial_overdue or 0)
     return {
-        "total_invoiced": total_invoiced,
-        "total_paid": total_paid,
-        "total_outstanding": total_outstanding,
-        "total_overdue": total_overdue,
-        "counts": counts,
+        "total_invoiced": float(row.total_invoiced or 0),
+        "total_paid": float(row.total_paid or 0),
+        "total_outstanding": float(row.total_outstanding or 0),
+        "total_overdue": float(row.total_overdue or 0),
+        "counts": {
+            "draft": row.cnt_draft or 0,
+            "sent": (row.cnt_sent_all or 0) - (row.cnt_sent_overdue or 0),
+            "paid": row.cnt_paid or 0,
+            "partially_paid": (row.cnt_partial_all or 0) - (row.cnt_partial_overdue or 0),
+            "overdue": overdue_count,
+            "cancelled": row.cnt_cancelled or 0,
+            "void": row.cnt_void or 0,
+        },
     }
 
 
@@ -279,9 +310,12 @@ async def list_invoices(
     date_from: Optional[str] = Query(None),
     date_to: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    from sqlalchemy import or_
     stmt = select(models_pg.Invoice)
     if current_user.role != "SuperAdmin":
         stmt = stmt.where(models_pg.Invoice.company_id == current_user.company_id)
@@ -293,7 +327,6 @@ async def list_invoices(
         stmt = stmt.where(models_pg.Invoice.issue_date <= date_to)
     if search:
         like = f"%{search}%"
-        from sqlalchemy import or_
         stmt = stmt.where(
             or_(
                 models_pg.Invoice.customer_name.ilike(like),
@@ -301,25 +334,31 @@ async def list_invoices(
                 models_pg.Invoice.customer_email.ilike(like),
             )
         )
-    stmt = stmt.order_by(desc(models_pg.Invoice.created_at))
+    # Push non-computed status filter to SQL where possible
+    if status and status not in ("all", "overdue"):
+        stmt = stmt.where(models_pg.Invoice.status == status)
+
+    total_count = (await db.execute(select(func.count()).select_from(stmt.subquery()))).scalar() or 0
+    stmt = stmt.order_by(desc(models_pg.Invoice.created_at)).offset((page - 1) * page_size).limit(page_size)
     invoices = (await db.execute(stmt)).scalars().all()
 
     result = []
+    needs_commit = False
     for inv in invoices:
         computed_status = _compute_status(inv)
-        if status and status != "all" and computed_status != status:
+        if status == "overdue" and computed_status != "overdue":
             continue
-        # Update overdue status in DB lazily
         if computed_status == "overdue" and inv.status != "overdue":
             inv.status = "overdue"
+            needs_commit = True
         d = _fmt_invoice(inv)
         d["status"] = computed_status
         result.append(d)
 
-    if any(inv.status == "overdue" for inv in invoices):
+    if needs_commit:
         await db.commit()
 
-    return result
+    return {"items": result, "total": total_count, "page": page, "pages": math.ceil(total_count / page_size) if total_count else 0}
 
 
 @router.get("/{invoice_id}")
@@ -458,6 +497,53 @@ async def send_invoice(
     inv.sent_at = datetime.now(timezone.utc)
     await db.commit()
     await db.refresh(inv)
+
+    # Deliver invoice via email and/or WhatsApp (best-effort, non-blocking)
+    settings = await _get_or_create_settings(current_user.company_id, db)
+    company_name = settings.invoice_company_name or current_user.company_id
+    due_str = inv.due_date.isoformat() if inv.due_date else None
+    ctx = dict(
+        to_email=inv.customer_email,
+        customer_name=inv.customer_name or "Customer",
+        invoice_number=inv.invoice_number,
+        total_amount=float(inv.total_amount or 0),
+        currency_symbol=inv.currency_symbol or "₹",
+        due_date=due_str,
+        company_name=company_name,
+    )
+    from services.invoice_delivery import send_invoice_email, send_invoice_whatsapp
+    if inv.customer_email:
+        await send_invoice_email(
+            **ctx,
+            subject_template=settings.email_subject or "Invoice {invoice_number} from {company_name}",
+            body_template=settings.email_body or "Dear {customer_name},\n\nPlease find invoice {invoice_number} for {total_amount} due {due_date}.\n\nThank you,\n{company_name}",
+        )
+    if inv.customer_phone:
+        await send_invoice_whatsapp(
+            to_phone=inv.customer_phone,
+            customer_name=ctx["customer_name"],
+            invoice_number=ctx["invoice_number"],
+            total_amount=ctx["total_amount"],
+            currency_symbol=ctx["currency_symbol"],
+            due_date=ctx["due_date"],
+            company_name=ctx["company_name"],
+        )
+
+    # Post AR entry: DR Accounts Receivable / CR Revenue + GST
+    await post_financial_event(
+        db,
+        company_id=current_user.company_id,
+        event_type="invoice_ar_posted",
+        source_id=f"invoice_ar_{inv.id}",
+        amount=float(inv.total_amount or 0),
+        metadata={
+            "subtotal": float(inv.subtotal or 0),
+            "tax_amount": float(inv.tax_amount or 0),
+            "description": f"Invoice {inv.invoice_number} — {inv.customer_name}",
+            "entry_date": inv.issue_date.isoformat() if inv.issue_date else None,
+        },
+    )
+    await db.commit()
     return _fmt_invoice(inv)
 
 
@@ -477,11 +563,21 @@ async def mark_invoice_paid(
     if inv.status in ("void", "cancelled"):
         raise HTTPException(status_code=400, detail="Cannot mark a voided or cancelled invoice as paid")
 
+    paid_amount = float(inv.total_amount or 0)
     inv.paid_amount = inv.total_amount
     inv.status = "paid"
     inv.paid_at = datetime.now(timezone.utc)
     await db.commit()
     await db.refresh(inv)
+    await post_financial_event(
+        db,
+        company_id=current_user.company_id,
+        event_type="invoice_payment",
+        source_id=inv.id,
+        amount=paid_amount,
+        metadata={"description": f"Invoice marked paid — {inv.invoice_number or invoice_id[:8]}"},
+    )
+    await db.commit()
     return _fmt_invoice(inv)
 
 
@@ -533,6 +629,16 @@ async def record_payment(
 
     await db.commit()
     await db.refresh(inv)
+
+    await post_financial_event(
+        db,
+        company_id=current_user.company_id,
+        event_type="invoice_payment",
+        source_id=payment.id,
+        amount=body.amount,
+        metadata={"description": f"Invoice payment — {inv.invoice_number or invoice_id[:8]}"},
+    )
+    await db.commit()
 
     pay_stmt = select(models_pg.InvoicePayment).where(models_pg.InvoicePayment.invoice_id == invoice_id)
     payments = (await db.execute(pay_stmt)).scalars().all()
@@ -628,12 +734,19 @@ async def create_invoice_from_booking(
             customer_email = c.email
             customer_phone = c.phone
 
-    # Build line item from booking
-    amount = float(booking.price or 0)
+    # Build line item from booking — use actual amount and resolve service name
+    amount = float(booking.total_amount or booking.amount or 0)
     tax_rate = float(settings.default_tax_rate or 0)
     tax_amount = round(amount * tax_rate / 100, 2)
+    service_label = "Service"
+    if booking.service_id:
+        svc = (await db.execute(
+            select(models_pg.Service).where(models_pg.Service.id == booking.service_id)
+        )).scalar_one_or_none()
+        if svc:
+            service_label = svc.name
     items = [{
-        "description": booking.service_name or "Service",
+        "description": service_label,
         "quantity": 1,
         "unit_price": amount,
         "tax_rate": tax_rate,

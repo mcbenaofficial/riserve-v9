@@ -35,9 +35,11 @@ export const marketplaceApi = {
   selectOnboardingAgents: (agentIds) =>
     axios.post(`${API}/marketplace/onboarding/select`, { agent_ids: agentIds }, { headers: getHeaders() }),
 
-  // Tier upgrade
-  upgradeTier: (tierKey) =>
-    axios.post(`${API}/marketplace/tier/upgrade`, { tier_key: tierKey }, { headers: getHeaders() }),
+  // Tier upgrade — two-step for paid tiers: createTierOrder first, then upgradeTier with payment proof
+  createTierOrder: (tierKey) =>
+    axios.post(`${API}/marketplace/tier/order`, { tier_key: tierKey }, { headers: getHeaders() }),
+  upgradeTier: (tierKey, paymentData = {}) =>
+    axios.post(`${API}/marketplace/tier/upgrade`, { tier_key: tierKey, ...paymentData }, { headers: getHeaders() }),
 
   // Execution
   runAgent: (slug, input = {}) =>

@@ -69,7 +69,8 @@ import {
   CalendarDays,
   Gift,
   AlertTriangle,
-  BarChart3
+  BarChart3,
+  Landmark
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -239,7 +240,8 @@ const Sidebar = () => {
       roles: ['SuperAdmin', 'Admin', 'Manager'],
       appId: 'inventory'
     },
-    { key: 'finance', label: 'Finance', icon: DollarSign, path: '/finance', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
+    { key: 'books', label: 'Books', icon: Landmark, path: '/books', condition: (features) => features.includes('books'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
+    { key: 'finance', label: 'Transactions', icon: DollarSign, path: '/finance', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'core' },
     { key: 'invoices', label: 'Invoices', icon: Receipt, path: '/invoices', roles: ['Admin', 'Manager'], appId: 'core' },
     { key: 'customers', label: 'Customer Database', icon: Users, path: '/customers', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager', 'User'], appId: 'crm' },
     { key: 'customer-segments', label: 'Segments', icon: User, path: '/customers/segments', condition: (features) => features.includes('crm'), roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'crm' },

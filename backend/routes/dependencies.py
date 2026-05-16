@@ -90,7 +90,7 @@ SUBSCRIPTION_PLANS = {
             "outlets": 3,
             "bookings_per_month": 500
         },
-        "features": ["basic_booking", "slot_manager", "reports", "feedback", "ai_assistant", "agents_marketplace", "ai_flows"]
+        "features": ["basic_booking", "slot_manager", "reports", "feedback", "ai_assistant", "agents_marketplace", "ai_flows", "memberships"]
     },
     "pro": {
         "name": "Pro",
@@ -99,7 +99,7 @@ SUBSCRIPTION_PLANS = {
             "outlets": -1,  # Unlimited
             "bookings_per_month": -1  # Unlimited
         },
-        "features": ["basic_booking", "slot_manager", "reports", "feedback", "ai_assistant", "api_access", "priority_support", "agents_marketplace", "ai_flows"]
+        "features": ["basic_booking", "slot_manager", "reports", "feedback", "ai_assistant", "api_access", "priority_support", "agents_marketplace", "ai_flows", "memberships", "books"]
     },
     "custom": {
         "name": "Custom/Enterprise",

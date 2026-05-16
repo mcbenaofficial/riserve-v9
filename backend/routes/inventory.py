@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete, and_, or_, func, desc
 from sqlalchemy.orm import selectinload
 from .dependencies import get_current_user, get_db, require_manager_or_admin, enforce_outlet_access, User, require_feature
+from services.books_ledger import post_financial_event
 
 router = APIRouter(
     prefix="/inventory", 
@@ -362,8 +363,36 @@ async def adjust_stock(
     # Check for low stock alert
     if new_quantity <= product.reorder_level:
         await create_low_stock_alert(db, product, new_quantity, current_user.company_id)
-    
+
     await db.commit()
+
+    cost = float(product.cost or 0)
+    qty = abs(adjustment.quantity)
+    if cost > 0 and qty > 0:
+        total_cost = cost * qty
+        if adjustment.quantity > 0:
+            await post_financial_event(
+                db,
+                company_id=current_user.company_id,
+                event_type="inventory_purchase",
+                source_id=f"{adjustment.product_id}_in_{datetime.now(timezone.utc).isoformat()}",
+                amount=total_cost,
+                metadata={
+                    "description": f"Stock received — {product.name} x{qty}",
+                    "is_cash": True,
+                },
+            )
+        else:
+            await post_financial_event(
+                db,
+                company_id=current_user.company_id,
+                event_type="inventory_cogs",
+                source_id=f"{adjustment.product_id}_cogs_{adjustment.booking_id or datetime.now(timezone.utc).isoformat()}",
+                amount=total_cost,
+                metadata={"description": f"COGS — {product.name} x{qty}"},
+            )
+        await db.commit()
+
     return {"message": "Stock adjusted successfully", "new_quantity": new_quantity}
 
 @router.get("/low-stock")

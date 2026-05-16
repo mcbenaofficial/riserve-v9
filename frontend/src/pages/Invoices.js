@@ -775,7 +775,7 @@ const Invoices = () => {
         api.getInvoiceSettings(),
         api.getOutlets(),
       ]);
-      setInvoices(invRes.data);
+      setInvoices(invRes.data.items || invRes.data || []);
       setStats(statsRes.data);
       setSettings(settingsRes.data);
       setOutlets(outletsRes.data || []);
