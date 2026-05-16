@@ -79,7 +79,7 @@ export default function AgentDetailDrawer({ agent, onClose, onSubscribe, onCance
               {data.tagline && <p className="text-xs text-muted-foreground">{data.tagline}</p>}
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-muted transition-colors duration-200">
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-muted/20 transition-colors duration-200">
             <X size={18} className="text-muted-foreground" />
           </button>
         </div>
@@ -99,7 +99,7 @@ export default function AgentDetailDrawer({ agent, onClose, onSubscribe, onCance
                     { label: 'Success Rate', value: `${metrics.success_rate}%` },
                     { label: VALUE_METRIC_LABEL[data.value_metric_type] || 'Value', value: Math.round(metrics.total_value || 0) },
                   ].map(({ label, value }) => (
-                    <div key={label} className="bg-muted rounded-xl p-3 text-center border border-border">
+                    <div key={label} className="bg-card rounded-xl p-3 text-center border border-border">
                       <p className="text-lg font-bold text-foreground">{value}</p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">{label}</p>
                     </div>
@@ -131,7 +131,7 @@ export default function AgentDetailDrawer({ agent, onClose, onSubscribe, onCance
               )}
 
               {/* Pricing */}
-              <div className="bg-muted rounded-xl p-4 border border-border space-y-2">
+              <div className="bg-card rounded-xl p-4 border border-border space-y-2">
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Usage & Pricing</h3>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Avg tokens per run</span>
@@ -172,7 +172,7 @@ export default function AgentDetailDrawer({ agent, onClose, onSubscribe, onCance
                     value={runInput}
                     onChange={e => setRunInput(e.target.value)}
                     placeholder="Type your request for this agent…"
-                    className="w-full bg-muted border border-border rounded-xl px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-accent"
+                    className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                   <button
                     onClick={handleRun}
@@ -184,7 +184,7 @@ export default function AgentDetailDrawer({ agent, onClose, onSubscribe, onCance
                   </button>
 
                   {runResult && (
-                    <div className="bg-muted border border-emerald-500/20 rounded-xl p-4 space-y-2">
+                    <div className="bg-card border border-emerald-500/20 rounded-xl p-4 space-y-2">
                       <div className="flex items-center gap-2 text-emerald-400 text-xs font-medium">
                         <CheckCircle2 size={13} />
                         Completed in {runResult.duration_ms}ms · {runResult.tokens_used} tokens
@@ -224,7 +224,7 @@ export default function AgentDetailDrawer({ agent, onClose, onSubscribe, onCance
           ) : isActive ? (
             <button
               onClick={() => onCancel(data)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-muted border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 font-medium transition-colors duration-200"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-card border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 font-medium transition-colors duration-200"
             >
               Remove from Team
             </button>

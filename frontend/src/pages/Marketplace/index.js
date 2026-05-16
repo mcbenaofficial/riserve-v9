@@ -49,7 +49,7 @@ function AnalyticsView({ teamData, metrics }) {
               {tier.token_pct_used}% used
             </span>
           </div>
-          <div className="h-2.5 bg-muted rounded-full overflow-hidden">
+          <div className="h-2.5 bg-border rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${tier.token_pct_used > 80 ? 'bg-amber-500' : 'accent-gradient-bg'}`}
               style={{ width: `${Math.min(100, tier.token_pct_used)}%` }}
@@ -79,7 +79,7 @@ function AnalyticsView({ teamData, metrics }) {
                     </div>
                     <span className="text-muted-foreground text-xs">{m.total_runs || 0} runs</span>
                   </div>
-                  <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-border rounded-full overflow-hidden">
                     <div
                       className="h-full accent-gradient-bg rounded-full"
                       style={{ width: `${Math.round(((m.total_runs || 0) / maxRuns) * 100)}%` }}
@@ -188,7 +188,7 @@ export default function Marketplace() {
         {tier && (
           <button
             onClick={() => setShowUpgrade(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-muted border border-border text-sm text-foreground hover:border-accent transition-colors duration-200 shrink-0"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border text-sm text-foreground hover:border-accent transition-colors duration-200 shrink-0"
           >
             <Crown size={14} className="text-amber-400" />
             {tier.tier_label}
@@ -200,7 +200,7 @@ export default function Marketplace() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 bg-muted border border-border rounded-xl p-1 w-fit">
+      <div className="flex items-center gap-1 bg-card border border-border rounded-xl p-1 w-fit">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}

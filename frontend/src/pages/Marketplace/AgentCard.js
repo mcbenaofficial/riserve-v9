@@ -79,7 +79,7 @@ export default function AgentCard({ agent, onSelect, onSubscribe, onCancel, canS
       {agent.capabilities?.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {agent.capabilities.slice(0, 3).map((cap, i) => (
-            <span key={i} className="text-[10px] text-muted-foreground bg-muted rounded-full px-2 py-0.5 border border-border">
+            <span key={i} className="text-[10px] text-muted-foreground bg-card rounded-full px-2 py-0.5 border border-border">
               {cap}
             </span>
           ))}

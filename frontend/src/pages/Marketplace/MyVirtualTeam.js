@@ -80,7 +80,7 @@ function AgentTeamCard({ agent, onCancel, onPause, onRun }) {
       </div>
 
       {/* Metrics row */}
-      <div className="grid grid-cols-4 gap-2 bg-muted rounded-xl p-3 border border-border">
+      <div className="grid grid-cols-4 gap-2 bg-background rounded-xl p-3 border border-border">
         <MetricPill label="Runs" value={metrics.total_runs ?? 0} />
         <MetricPill
           label="Success"
@@ -121,7 +121,7 @@ function AgentTeamCard({ agent, onCancel, onPause, onRun }) {
                 value={runInput}
                 onChange={e => setRunInput(e.target.value)}
                 placeholder="Type your request…"
-                className="w-full bg-muted border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full bg-background border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-accent"
               />
               <div className="flex gap-2">
                 <button
@@ -137,7 +137,7 @@ function AgentTeamCard({ agent, onCancel, onPause, onRun }) {
                 </button>
               </div>
               {runResult && (
-                <div className="bg-muted border border-emerald-500/20 rounded-xl p-3 text-xs text-foreground/80 whitespace-pre-wrap leading-relaxed">
+                <div className="bg-card border border-emerald-500/20 rounded-xl p-3 text-xs text-foreground/80 whitespace-pre-wrap leading-relaxed">
                   {runResult.output}
                 </div>
               )}
@@ -198,7 +198,7 @@ export default function MyVirtualTeam({ teamData, onRefresh }) {
   if (agents.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center space-y-3">
-        <div className="w-14 h-14 rounded-2xl bg-muted border border-border flex items-center justify-center">
+        <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center">
           <Bot size={28} className="text-muted-foreground" />
         </div>
         <h3 className="font-semibold text-foreground">No agents yet</h3>
@@ -227,14 +227,14 @@ export default function MyVirtualTeam({ teamData, onRefresh }) {
             </div>
           </div>
           {/* Slot bar */}
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+          <div className="h-1.5 bg-border rounded-full overflow-hidden">
             <div
               className="h-full accent-gradient-bg rounded-full transition-all duration-500"
               style={{ width: `${Math.min(100, (tier.active_agent_count / tier.total_agent_limit) * 100)}%` }}
             />
           </div>
           {/* Token bar */}
-          <div className="h-1 bg-muted rounded-full overflow-hidden">
+          <div className="h-1 bg-border rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${tier.token_pct_used > 80 ? 'bg-amber-500' : 'bg-emerald-500'}`}
               style={{ width: `${Math.min(100, tier.token_pct_used)}%` }}

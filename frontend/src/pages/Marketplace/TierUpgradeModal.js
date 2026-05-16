@@ -50,14 +50,14 @@ export default function TierUpgradeModal({ currentTier, upgradeOptions, onClose,
               <Crown size={20} className="text-amber-400" />
               <h2 className="font-bold text-foreground text-lg">Upgrade Your Team</h2>
             </div>
-            <button onClick={onClose} className="p-2 rounded-lg hover:bg-muted transition-colors duration-200">
+            <button onClick={onClose} className="p-2 rounded-lg hover:bg-muted/20 transition-colors duration-200">
               <X size={18} className="text-muted-foreground" />
             </button>
           </div>
 
           <div className="p-6 space-y-5">
             {/* Current plan */}
-            <div className="flex items-center justify-between bg-muted rounded-xl px-4 py-3 border border-border">
+            <div className="flex items-center justify-between bg-background rounded-xl px-4 py-3 border border-border">
               <span className="text-sm text-muted-foreground">Current plan</span>
               <span className="text-sm font-semibold text-foreground capitalize">{currentTier?.tier_label}</span>
             </div>
@@ -100,7 +100,7 @@ export default function TierUpgradeModal({ currentTier, upgradeOptions, onClose,
 
             {/* Selected tier features */}
             {features.length > 0 && (
-              <div className="bg-muted rounded-xl p-4 border border-border space-y-2">
+              <div className="bg-card rounded-xl p-4 border border-border space-y-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">What you get</p>
                 {features.map((f, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm text-foreground/80">

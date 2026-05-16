@@ -73,7 +73,7 @@ export default function AgentOnboarding({ onComplete }) {
             className={`w-9 h-9 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
               selected[i]
                 ? 'accent-gradient-bg border-transparent'
-                : 'border-border bg-muted'
+                : 'border-border bg-card'
             }`}
           >
             {selected[i] ? (
@@ -100,7 +100,7 @@ export default function AgentOnboarding({ onComplete }) {
                 isSelected
                   ? 'border-accent bg-accent/5'
                   : isDisabled
-                  ? 'border-border bg-muted opacity-40 cursor-not-allowed'
+                  ? 'border-border bg-card opacity-40 cursor-not-allowed'
                   : 'border-border bg-card hover:border-border/80 hover:shadow-md cursor-pointer'
               }`}
             >
