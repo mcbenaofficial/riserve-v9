@@ -102,6 +102,7 @@ import VisibilityListings from './pages/Visibility/VisibilityListings';
 import VisibilityReviews from './pages/Visibility/VisibilityReviews';
 import VisibilityGEO from './pages/Visibility/VisibilityGEO';
 import VisibilityKnowledge from './pages/Visibility/VisibilityKnowledge';
+import FloorPage from './pages/Floor';
 import './App.css';
 
 function App() {
@@ -303,6 +304,9 @@ function MainLayout() {
               <Route path="/super-admin/audit" element={<AuditLogs theme={theme} />} />
               <Route path="/super-admin/users" element={<SuperAdminUsers theme={theme} />} />
               <Route path="/super-admin/partner-integrations" element={<SuperAdminPartnerIntegrations theme={theme} />} />
+              {/* Floor Plan */}
+              <Route path="/floor" element={<ProtectedRoute><FloorPage /></ProtectedRoute>} />
+              <Route path="/floor/*" element={<ProtectedRoute><FloorPage /></ProtectedRoute>} />
               {/* Restaurant Orders */}
               <Route path="/orders" element={<OrdersDashboard theme={theme} />} />
               <Route path="/orders/kitchen" element={<KitchenDisplay theme={theme} />} />

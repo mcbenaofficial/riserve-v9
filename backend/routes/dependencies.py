@@ -99,7 +99,7 @@ SUBSCRIPTION_PLANS = {
             "outlets": -1,  # Unlimited
             "bookings_per_month": -1  # Unlimited
         },
-        "features": ["basic_booking", "slot_manager", "reports", "feedback", "ai_assistant", "api_access", "priority_support", "agents_marketplace", "ai_flows", "memberships", "books"]
+        "features": ["basic_booking", "slot_manager", "reports", "feedback", "ai_assistant", "api_access", "priority_support", "agents_marketplace", "ai_flows", "memberships", "books", "floor_plan"]
     },
     "custom": {
         "name": "Custom/Enterprise",

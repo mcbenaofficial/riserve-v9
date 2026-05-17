@@ -89,7 +89,7 @@ const Dashboard = () => {
         api.getOrderStats().catch(() => ({ data: null })),
         api.getActiveOrders().catch(() => ({ data: [] })),
       ]);
-      setReports(reportsRes.data); setBookings(bookingsRes.data); setOutlets(outletsRes.data);
+      setReports(reportsRes.data); setBookings(bookingsRes.data?.items ?? bookingsRes.data ?? []); setOutlets(outletsRes.data);
       setServices(servicesRes.data); setTransactions(transactionsRes.data); setFeedbackStats(feedbackRes.data);
       if (configRes.data?.length > 0) setConfig(configRes.data[0]);
       if (featuresRes.data?.features) setEnabledFeatures(featuresRes.data.features);

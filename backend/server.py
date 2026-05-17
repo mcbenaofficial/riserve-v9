@@ -347,6 +347,7 @@ from routes.memberships import router as memberships_router
 from routes.marketplace import router as marketplace_router
 from routes.flows import router as flows_router
 from routes.books import router as books_router
+from routes.floor import router as floor_router
 from routes.customer_portal_auth import router as customer_portal_auth_router
 
 # Include Routers
@@ -404,6 +405,7 @@ app.include_router(memberships_router, prefix="/api")
 app.include_router(marketplace_router, prefix="/api")
 app.include_router(flows_router, prefix="/api")
 app.include_router(books_router, prefix="/api")
+app.include_router(floor_router, prefix="/api")
 app.include_router(customer_portal_auth_router, prefix="/api")
 
 # Special endpoint for resource-bookings

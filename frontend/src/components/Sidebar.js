@@ -70,7 +70,8 @@ import {
   Gift,
   AlertTriangle,
   BarChart3,
-  Landmark
+  Landmark,
+  Grid3x3
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -188,7 +189,7 @@ const Sidebar = () => {
     if (path.startsWith('/omni')) return 'portal';
     if (path.startsWith('/hq')) return 'hq';
     if (path.startsWith('/flow')) return 'flow';
-    if (path.startsWith('/orders')) return 'restaurant';
+    if (path.startsWith('/orders') || path.startsWith('/floor')) return 'restaurant';
     if (path.startsWith('/inventory') || path.startsWith('/suppliers')) return 'inventory';
     if (path.startsWith('/customers') || path.startsWith('/memberships')) return 'crm';
     if (path.startsWith('/team') || path.startsWith('/analytics/staff-scheduling') || path.startsWith('/staff')) return 'staff';
@@ -376,6 +377,16 @@ const Sidebar = () => {
     { key: 'omni-content', label: 'Content Manager', icon: FileText, path: '/omni/content', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
     { key: 'omni-config', label: 'Site Config & AI', icon: Settings2, path: '/omni/config', roles: ['SuperAdmin', 'Admin'], appId: 'portal' },
     { key: 'omni-preview', label: 'Live Preview', icon: MonitorPlay, path: '/omni/preview', roles: ['SuperAdmin', 'Admin', 'Manager'], appId: 'portal' },
+    // Floor Plan
+    {
+      key: 'floor',
+      label: 'Floor Plan',
+      icon: Grid3x3,
+      path: '/floor',
+      condition: (features) => features.includes('floor_plan'),
+      roles: ['SuperAdmin', 'Admin', 'Manager'],
+      appId: 'restaurant'
+    },
     // Restaurant Orders App
     {
       key: 'orders-dashboard',
@@ -530,6 +541,7 @@ const Sidebar = () => {
                             else if (app.id === 'marketing') navigate('/conversations');
                             else if (app.id === 'acquisition') navigate('/acquisition/content');
                             else if (app.id === 'restaurant') navigate('/orders');
+                            else if (app.id === 'floor') navigate('/floor');
                             else if (app.id === 'portal') navigate('/omni/portal-design-plus');
                             else navigate('/');
                           }

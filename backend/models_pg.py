@@ -2897,3 +2897,141 @@ class BooksBill(Base):
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
 
+
+# ---------------------------------------------------------------------------
+# Floor Plan Module
+# ---------------------------------------------------------------------------
+
+class FloorZone(Base):
+    __tablename__ = "floor_zones"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(100), nullable=False)
+    sort_order = Column(Integer, default=0)
+    color = Column(String(20), default="#6366f1")
+    layout_meta = Column(JSONB, default=dict)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class FloorTable(Base):
+    __tablename__ = "floor_tables"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, index=True)
+    zone_id = Column(String, ForeignKey("floor_zones.id", ondelete="SET NULL"), nullable=True)
+    label = Column(String(20), nullable=False)          # e.g. "T4", "PD1"
+    seats_default = Column(Integer, default=2)
+    seats_max = Column(Integer, default=2)
+    shape = Column(String(20), default="rect")          # round|rect|booth
+    x_pct = Column(Numeric(6, 3), default=0)
+    y_pct = Column(Numeric(6, 3), default=0)
+    w_pct = Column(Numeric(6, 3), default=10)
+    h_pct = Column(Numeric(6, 3), default=10)
+    rotation_deg = Column(Integer, default=0)
+    is_combinable = Column(Boolean, default=False)
+    combine_group = Column(String(50), nullable=True)
+    status = Column(String(30), default="available")    # available|reserved|occupied|settling|cleaning|blocked|out_of_service
+    status_since = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    current_session_id = Column(String, nullable=True)
+    assigned_server_id = Column(String, nullable=True)
+    qr_token = Column(String, unique=True, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+
+class FloorTableLog(Base):
+    __tablename__ = "floor_table_logs"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    table_id = Column(String, ForeignKey("floor_tables.id", ondelete="CASCADE"), nullable=False, index=True)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    from_status = Column(String(30), nullable=True)
+    to_status = Column(String(30), nullable=True)
+    session_id = Column(String, nullable=True)
+    server_id = Column(String, nullable=True)
+    changed_by_user_id = Column(String, nullable=True)
+    changed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    duration_prev_ms = Column(Integer, nullable=True)
+    source = Column(String(20), default="manual")       # manual|qr|auto|api
+
+
+class FloorSession(Base):
+    __tablename__ = "floor_sessions"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    table_id = Column(String, ForeignKey("floor_tables.id", ondelete="CASCADE"), nullable=False, index=True)
+    reservation_id = Column(String, nullable=True)
+    guest_id = Column(String, nullable=True)
+    party_size = Column(Integer, default=1)
+    seated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    expected_settle_at = Column(DateTime(timezone=True), nullable=True)
+    actual_settle_at = Column(DateTime(timezone=True), nullable=True)
+    phase = Column(String(20), default="seated")        # seated|ordering|dining|billing|paid
+    merged_table_ids = Column(JSONB, default=list)
+    pos_ticket_id = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class FloorServer(Base):
+    __tablename__ = "floor_servers"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, index=True)
+    staff_id = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    name = Column(String(100), nullable=False)
+    code = Column(String(20), nullable=True)
+    active_sections = Column(JSONB, default=list)
+    shift_start = Column(DateTime(timezone=True), nullable=True)
+    shift_end = Column(DateTime(timezone=True), nullable=True)
+    current_load_count = Column(Integer, default=0)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+
+class FloorReservation(Base):
+    __tablename__ = "floor_reservations"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    outlet_id = Column(String, ForeignKey("outlets.id", ondelete="CASCADE"), nullable=False, index=True)
+    guest_id = Column(String, nullable=True)
+    channel = Column(String(30), default="direct")      # direct|google|zomato|whatsapp|walk_in
+    party_size = Column(Integer, default=1)
+    guest_name = Column(String(100), nullable=True)
+    guest_phone = Column(String(30), nullable=True)
+    requested_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    arrival_at = Column(DateTime(timezone=True), nullable=False)
+    expected_duration_min = Column(Integer, default=90)
+    table_id = Column(String, ForeignKey("floor_tables.id", ondelete="SET NULL"), nullable=True)
+    status = Column(String(30), default="confirmed")    # inquiry|tentative|confirmed|seated|completed|no_show|cancelled
+    occasion = Column(String(50), nullable=True)
+    special_requests = Column(Text, nullable=True)
+    source_meta = Column(JSONB, default=dict)
+    no_show_risk_score = Column(Numeric(5, 4), nullable=True)
+    no_show_risk_factors = Column(JSONB, nullable=True)
+    wa_lifecycle_stage = Column(Integer, default=0)     # 0=none,1=confirmed,2=reminded,3=pre_arrival
+    magic_link_token = Column(String, unique=True, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=lambda: datetime.now(timezone.utc))
+
+
+class FloorEvent(Base):
+    __tablename__ = "floor_events"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    company_id = Column(String, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    event_type = Column(String(60), nullable=False)
+    actor_type = Column(String(20), nullable=True)
+    actor_id = Column(String, nullable=True)
+    payload = Column(JSONB, default=dict)
+    occurred_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        __import__('sqlalchemy').Index('ix_floor_events_company_occurred', 'company_id', 'occurred_at'),
+    )
+
